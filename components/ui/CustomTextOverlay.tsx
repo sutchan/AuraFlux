@@ -15,13 +15,18 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
   const sizeVw = settings.customTextSize || 12;
   const sizePx = sizeVw * 13; 
 
-  // 使用 hook 更新 CSS 变量，并传递基础透明度
+  const pulseEnabled = settings.showCustomText && !!settings.customText && settings.textPulse;
+  
+  // Always use the optimized 'beat' mode which now includes breathing/hybrid behavior
   useAudioPulse({
     elementRef: textRef,
     analyser,
     settings,
-    isEnabled: settings.showCustomText && !!settings.customText && settings.textPulse,
-    baseOpacity: settings.customTextOpacity, // FIX: Pass baseOpacity to the hook
+    isEnabled: pulseEnabled,
+    baseOpacity: settings.customTextOpacity,
+    mode: 'beat', 
+    pulseStrength: 0.6, 
+    opacityStrength: 0.5
   });
   
   useEffect(() => {
@@ -47,7 +52,7 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
     if (settings.customTextCycleColor) {
       rafId = requestAnimationFrame(animateColor);
     } else if (textRef.current) {
-      // FIX: Ensure color is correctly set when cycling is off
+      // FIX: Ensure color resets correctly when cycling is toggled off
       textRef.current.style.color = settings.customTextColor || '#ffffff';
       lastTimeRef.current = 0;
     }
@@ -90,9 +95,9 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
             whiteSpace: 'pre-wrap', 
             lineHeight: 1.1,
             fontFamily: settings.customTextFont || 'Inter, sans-serif',
-            // FIX: Always rely on CSS variable for transform and opacity for consistency with useAudioPulse
-            transform: `rotate(${rotation}deg) scale(var(--pulse-scale, 1))`,
-            opacity: 'var(--pulse-opacity, 1)' // Ensure opacity is always controlled by the CSS variable
+            // FIX: Use fallback values when pulse is disabled to ensure settings are respected immediately
+            transform: `rotate(${rotation}deg) ${pulseEnabled ? 'scale(var(--pulse-scale, 1))' : ''}`,
+            opacity: pulseEnabled ? 'var(--pulse-opacity, 1)' : settings.customTextOpacity
         } as React.CSSProperties}
       >
         {settings.customText}

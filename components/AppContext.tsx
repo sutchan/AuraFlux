@@ -1,3 +1,4 @@
+
 /**
  * File: components/AppContext.tsx
  * Version: 0.8.1
@@ -113,7 +114,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setStorage('deviceId', selectedDeviceId);
   }, [settings, selectedDeviceId, setStorage]);
 
-  const resetTextSettings = useCallback(() => setSettings(p => ({ ...p, customText: DEFAULT_SETTINGS.customText, showCustomText: DEFAULT_SETTINGS.showCustomText, textPulse: DEFAULT_SETTINGS.textPulse, customTextRotation: DEFAULT_SETTINGS.customTextRotation, customTextSize: DEFAULT_SETTINGS.customTextSize, customTextFont: DEFAULT_SETTINGS.customTextFont, customTextOpacity: DEFAULT_SETTINGS.customTextOpacity, customTextColor: DEFAULT_SETTINGS.customTextColor, customTextPosition: DEFAULT_SETTINGS.customTextPosition, customTextCycleColor: DEFAULT_SETTINGS.customTextCycleColor, customTextCycleInterval: DEFAULT_SETTINGS.customTextCycleInterval })), [setSettings]);
+  const resetTextSettings = useCallback(() => setSettings(p => ({ 
+    ...p, 
+    customText: DEFAULT_SETTINGS.customText, 
+    showCustomText: DEFAULT_SETTINGS.showCustomText, 
+    textPulse: DEFAULT_SETTINGS.textPulse,
+    customTextRotation: DEFAULT_SETTINGS.customTextRotation, 
+    customTextSize: DEFAULT_SETTINGS.customTextSize, 
+    customTextFont: DEFAULT_SETTINGS.customTextFont, 
+    customTextOpacity: DEFAULT_SETTINGS.customTextOpacity, 
+    customTextColor: DEFAULT_SETTINGS.customTextColor, 
+    customTextPosition: DEFAULT_SETTINGS.customTextPosition, 
+    customTextCycleColor: DEFAULT_SETTINGS.customTextCycleColor, 
+    customTextCycleInterval: DEFAULT_SETTINGS.customTextCycleInterval 
+  })), [setSettings]);
+  
   const resetAudioSettings = useCallback(() => setSettings(p => ({ ...p, sensitivity: DEFAULT_SETTINGS.sensitivity, smoothing: DEFAULT_SETTINGS.smoothing, fftSize: DEFAULT_SETTINGS.fftSize })), [setSettings]);
 
   useEffect(() => {

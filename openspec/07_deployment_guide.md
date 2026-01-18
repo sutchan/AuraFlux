@@ -26,6 +26,12 @@
 ## 3. 生产环境部署
 部署的核心是将 `npm run build` 命令生成的静态文件托管到服务器上。
 
+### 关键：依赖稳定性 (Dependency Stability)
+由于 `@react-three/postprocessing` 对 `three.js` 版本有严格的 Peer Dependency 限制 (通常 `< 0.163.0`)，在生产环境构建时必须确保版本锁定：
+- **Three.js 版本:** 必须明确锁定为 **0.162.0**。
+- **构建错误:** 如果遇到 `ERESOLVE unable to resolve dependency tree`，请检查 `package.json` 是否误升级了 `three`。
+- **解决方案:** 在 `package.json` 中强制指定版本 `"three": "0.162.0"`，避免使用 `^` 前缀。
+
 ### 构建步骤
 在部署之前，你必须先构建项目。此命令会将 `API_KEY` 嵌入到最终的静态文件中。
 ```bash
@@ -55,4 +61,4 @@ EdgeOne 适合需要在中国大陆地区实现低延迟访问的用户。
 6.  **发布**: 发布站点。
 
 ---
-*Aura Flux Deployment Guide - Version 0.8.0*
+*Aura Flux Deployment Guide - Version 1.0.3*

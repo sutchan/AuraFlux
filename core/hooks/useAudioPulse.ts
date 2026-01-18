@@ -1,5 +1,7 @@
+
 import React, { useRef, useEffect } from 'react';
 import { VisualizerSettings } from '../types';
+import { BeatDetector } from '../services/beatDetector';
 
 interface UseAudioPulseProps {
   elementRef: React.RefObject<HTMLElement | null>;
@@ -9,11 +11,12 @@ interface UseAudioPulseProps {
   pulseStrength?: number;
   opacityStrength?: number;
   baseOpacity?: number;
+  mode?: 'volume' | 'beat';
 }
 
 /**
  * 使用 CSS 变量应用音频响应式脉冲效果。
- * 这种方式避免了直接覆盖 transform 属性，从而允许组件独立维护旋转等其他变换。
+ * 支持 'volume' (振幅) 和 'beat' (节拍检测) 两种模式。
  */
 export const useAudioPulse = ({
   elementRef,
@@ -23,10 +26,18 @@ export const useAudioPulse = ({
   pulseStrength = 0.5,
   opacityStrength = 0.4,
   baseOpacity = 1.0,
+  mode = 'volume'
 }: UseAudioPulseProps) => {
   const requestRef = useRef<number>(0);
+  const beatDetectorRef = useRef<BeatDetector | null>(null);
+  const beatScaleRef = useRef(1.0);
 
   useEffect(() => {
+    // Lazy init beat detector
+    if (!beatDetectorRef.current) {
+        beatDetectorRef.current = new BeatDetector();
+    }
+
     const cleanup = () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       const el = elementRef.current;
@@ -45,7 +56,6 @@ export const useAudioPulse = ({
     const el = elementRef.current;
     if (el) {
       el.style.willChange = 'transform, opacity';
-      // 初始化默认值
       el.style.setProperty('--pulse-scale', '1');
       el.style.setProperty('--pulse-opacity', baseOpacity.toString());
     }
@@ -55,13 +65,38 @@ export const useAudioPulse = ({
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(dataArray);
         
+        let scale = 1;
+        let opacity = baseOpacity;
+
+        // Common bass calculation for breathing/volume mode
         let bass = 0;
         const bassBins = 10;
         for (let i = 0; i < bassBins; i++) bass += dataArray[i];
         const bassNormalized = (bass / bassBins) / 255;
 
-        const scale = 1 + (bassNormalized * pulseStrength * settings.sensitivity);
-        const opacity = Math.min(1, (1.0 - opacityStrength + bassNormalized * opacityStrength) * baseOpacity);
+        if (mode === 'beat') {
+            const isBeat = beatDetectorRef.current?.detect(dataArray);
+            
+            if (isBeat) {
+                // Strong punch on beat
+                beatScaleRef.current = 1.0 + (pulseStrength * settings.sensitivity);
+            }
+            // Slower decay for better visibility (0.15 -> 0.1)
+            beatScaleRef.current += (1.0 - beatScaleRef.current) * 0.1;
+            
+            // Combine beat punch with subtle breathing so it's never completely static
+            const breathing = bassNormalized * 0.15 * settings.sensitivity;
+            scale = beatScaleRef.current + breathing;
+            
+            // Opacity flash
+            const flash = (scale - 1.0) * opacityStrength; 
+            opacity = Math.min(1, baseOpacity + flash);
+
+        } else {
+            // Volume-based linear reaction
+            scale = 1 + (bassNormalized * pulseStrength * settings.sensitivity);
+            opacity = Math.min(1, (1.0 - opacityStrength + bassNormalized * opacityStrength) * baseOpacity);
+        }
 
         elementRef.current.style.setProperty('--pulse-scale', scale.toFixed(3));
         elementRef.current.style.setProperty('--pulse-opacity', opacity.toFixed(3));
@@ -72,5 +107,5 @@ export const useAudioPulse = ({
     requestRef.current = requestAnimationFrame(animate);
 
     return cleanup;
-  }, [isEnabled, analyser, settings.sensitivity, pulseStrength, opacityStrength, baseOpacity, elementRef]);
+  }, [isEnabled, analyser, settings.sensitivity, pulseStrength, opacityStrength, baseOpacity, elementRef, mode]);
 };

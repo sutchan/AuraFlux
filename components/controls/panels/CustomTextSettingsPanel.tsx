@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { AVAILABLE_FONTS, getPositionOptions } from '../../../core/constants';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
@@ -48,7 +47,18 @@ export const CustomTextSettingsPanel: React.FC = () => {
                   className="w-full bg-white/[0.04] rounded-xl px-3 py-2 text-sm font-bold text-white tracking-widest uppercase focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all resize-none min-h-[60px]" 
                 />
             </div>
-            <div className="space-y-5 pt-2">
+            
+            <div className="pt-2 pb-1 border-t border-white/5 space-y-1">
+                <SettingsToggle
+                    label={t?.textAudioReactive || "Audio Reactive"}
+                    value={settings.textPulse}
+                    onChange={() => setSettings({...settings, textPulse: !settings.textPulse})}
+                    variant="clean"
+                    hintText="Scale text based on audio amplitude & rhythm"
+                />
+            </div>
+
+            <div className="space-y-5 pt-2 border-t border-white/5">
               <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
               <Slider label={t?.textSize || "Size"} value={settings.customTextSize ?? 12} min={2} max={60} step={1} onChange={(v: number) => setSettings({...settings, customTextSize: v})} />
               <Slider label={t?.textRotation || "Rotate"} value={settings.customTextRotation ?? 0} min={-180} max={180} step={5} onChange={(v: number) => setSettings({...settings, customTextRotation: v})} unit="°" />

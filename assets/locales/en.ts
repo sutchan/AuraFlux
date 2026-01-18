@@ -104,6 +104,7 @@ export const en = {
   customTextPlaceholder: 'ENTER TEXT',
   showText: 'Show Overlay',
   pulseBeat: 'Pulse with Beat',
+  textAudioReactive: 'Audio Reactive',
   textSize: 'Font Size',
   textRotation: 'Rotation',
   textFont: 'Font Family',

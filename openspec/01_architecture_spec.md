@@ -8,7 +8,8 @@
 - **Styling:** Tailwind CSS 3.4 (PostCSS)
 - **Engine:** 
   - **2D (Optimized):** OffscreenCanvas API + Web Workers (ESM 模块化加载)
-  - **3D:** Three.js (r160) / @react-three/fiber v9
+  - **3D:** Three.js (**Locked at 0.162.0**) / @react-three/fiber v9
+    *   *注意：Three.js 版本必须锁定在 0.163.0 以下以满足 postprocessing 的对等依赖要求。*
 - **Intelligence:** Google Gemini 3 (Flash Preview)
 - **Audio:** Web Audio API (实时频域分析)
 
@@ -22,4 +23,4 @@
 - **Initialization Locks:** 在 `VisualizerCanvas` 等关键组件中通过 `initializedRef` 防止双重挂载引起的 Worker 多实例冲突。
 
 ---
-*Aura Flux Architecture - Version 1.2.0*
+*Aura Flux Architecture - Version 1.2.1*
