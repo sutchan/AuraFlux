@@ -1,10 +1,5 @@
-# OpenSpec: 音频引擎规范
 
-**文件名：** 02_audio_engine_spec.md
-**版本号：** 0.8.0
-**更新日期：** 2026-01-18 10:00
-**文件编码：** UTF-8
-**行尾序列：** CRLF
+# OpenSpec: 音频引擎规范
 
 ## 1. 采集规范
 - **采样源:** 
@@ -42,4 +37,4 @@
 - **流程:** 快照 -> Base64 -> Offline Context 解码 -> FFT 扫描 -> 特征 Set。
 
 ---
-*Aura Vision Audio Engine - Version 0.8.0*
+*Aura Flux Audio Engine - Version 0.7.5*

@@ -1,10 +1,5 @@
-# OpenSpec: AI 集成规范
 
-**文件名：** 04_ai_integration_spec.md
-**版本号：** 0.8.0
-**更新日期：** 2026-01-18 10:00
-**文件编码：** UTF-8
-**行尾序列：** CRLF
+# OpenSpec: AI 集成规范
 
 ## 1. 模型与工具配置
 - **模型:** `gemini-3-flash-preview`。
@@ -28,7 +23,7 @@ AI 必须返回格式如下的 JSON：
 
 ## 3. 噪声鲁棒性与区域感知
 - **采样策略:** 录制 6 秒高质量 WebM/Opus 音频片段，确保包含足够的旋律特征。
-- **品牌化指令 (v0.7.5):** 指令集中必须明确引擎定位为 **"AI Synesthesia Engine" (AI 通感引擎)**，强调声光转化的艺术性。
+- **品牌化指令 (v0.7.5):** 指令集中必须明确引擎定位为 **"Aura Flux AI Synesthesia Engine"**，强调声光转化的艺术性。
 - **Linguistic Policy:** 针对全球化市场（中、日、韩、西、德、法、俄、阿），要求返回对应的原文脚本（如 漢字、한글）并匹配对应的语言风格。
 
 ## 4. 歌曲识别流程
@@ -37,4 +32,4 @@ AI 必须返回格式如下的 JSON：
 3. **情绪分析:** 模型需返回 2-3 个词的情绪标签（如 "Cyberpunk Phonk", "Ethereal Ambient"）。
 
 ---
-*Aura Vision AI Integration - Version 0.8.0*
+*Aura Flux AI Integration - Version 0.7.5*

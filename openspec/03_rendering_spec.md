@@ -1,10 +1,5 @@
-# OpenSpec: 渲染规范
 
-**文件名：** 03_rendering_spec.md
-**版本号：** 0.8.0
-**更新日期：** 2026-01-18 10:00
-**文件编码：** UTF-8
-**行尾序列：** CRLF
+# OpenSpec: 渲染规范
 
 ## 1. 节拍检测算法 (True Beat Detection) - v0.8.0
 - **算法:** 谱通量 (Spectral Flux) 差分分析。
@@ -38,4 +33,4 @@
 - **精度控制:** `settings.quality` 控制粒子数量上限 (High: 250, Low: 80)。
 
 ---
-*Aura Vision Rendering - Version 0.8.0*
+*Aura Flux Rendering - Version 0.8.0*

@@ -1,12 +1,6 @@
 
 # OpenSpec: 部署与环境规范
 
-**文件名：** 07_deployment_guide.md
-**版本号：** 0.8.0
-**更新日期：** 2026-01-18 10:00
-**文件编码：** UTF-8
-**行尾序列：** CRLF
-
 ## 1. 先决条件
 - **Node.js**: 18.x 或更高版本 (LTS)。
 - **包管理器**: `npm` 或 `pnpm`。
@@ -38,7 +32,7 @@
 # 确保在环境中设置了 API_KEY
 API_KEY=你的_GEMINI_API_KEY npm run build
 ```
-构建产物将位于 `dist/` 目录中。
+构建产物将位于 `build/` 目录中。
 
 ### 部署平台
 
@@ -47,7 +41,7 @@ API_KEY=你的_GEMINI_API_KEY npm run build
 2.  配置项目设置：
     -   **框架预设 (Framework Preset):** `Vite`
     -   **构建命令 (Build Command):** `npm run build`
-    -   **输出目录 (Output Directory):** `dist`
+    -   **输出目录 (Output Directory):** `build`
 3.  在 Vercel 项目设置中，添加 `API_KEY` 作为一个环境变量。
 4.  部署。Vercel 将自动处理构建流程和 HTTPS 配置。
 
@@ -56,7 +50,7 @@ EdgeOne 适合需要在中国大陆地区实现低延迟访问的用户。
 1.  **本地构建**: 在你的本地计算机上运行 `API_KEY=你的_GEMINI_API_KEY npm run build`。
 2.  **访问 EdgeOne 控制台**: 登录腾讯云控制台，进入 EdgeOne 服务。
 3.  **创建站点**: 新建一个静态站点托管实例。
-4.  **上传文件**: 将本地 `dist/` 目录下的所有文件上传到站点的文件管理器中。
+4.  **上传文件**: 将本地 `build/` 目录下的所有文件上传到站点的文件管理器中。
 5.  **配置域名**: 绑定你的自定义域名，并确保开启 HTTPS 以支持麦克风功能。
 6.  **发布**: 发布站点。
 

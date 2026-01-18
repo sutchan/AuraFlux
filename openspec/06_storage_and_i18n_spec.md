@@ -1,10 +1,5 @@
-# OpenSpec: 持久化与本地化规范
 
-**文件名：** 06_storage_and_i18n_spec.md
-**版本号：** 0.8.0
-**更新日期：** 2026-01-18 10:00
-**文件编码：** UTF-8
-**行尾序列：** CRLF
+# OpenSpec: 持久化与本地化规范
 
 ## 1. 持久化存储 (LocalStorage)
 - **前缀:** `av_v1_` (版本号用于隔离破坏性变更)。
@@ -35,4 +30,4 @@
 - **Linguistic Logic:** 识别结果必须返回原声脚本（如 日语歌曲返回假名/汉字而非罗马音）。
 
 ---
-*Aura Vision Storage & i18n - Version 0.8.0*
+*Aura Flux Storage & i18n - Version 0.7.5*
