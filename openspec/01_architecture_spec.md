@@ -1,6 +1,12 @@
 
 # OpenSpec: 系统架构规范
 
+**文件名：** 01_architecture_spec.md
+**版本号：** 0.8.0
+**更新日期：** 2026-01-18 10:00
+**文件编码：** UTF-8
+**行尾序列：** CRLF
+
 ## 1. 核心技术栈
 - **Build System:** Vite 5.2 (Rollup)
 - **Runtime:** React 19.0.0 (生产环境由构建工具管理依赖，严禁使用浏览器级 importmap 干扰别名解析)
@@ -22,4 +28,4 @@
 - **Initialization Locks:** 在 `VisualizerCanvas` 等关键组件中通过 `initializedRef` 防止双重挂载引起的 Worker 多实例冲突。
 
 ---
-*Aura Flux Architecture - Version 1.2.0*
+*Aura Flux Architecture - Version 0.8.0*

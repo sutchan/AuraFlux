@@ -1,6 +1,12 @@
 
 # Aura Flux - OpenSpec 规范主文档
 
+**文件名：** OPENSPEC.md
+**版本号：** 0.8.0
+**更新日期：** 2026-01-18 10:00
+**文件编码：** UTF-8
+**行尾序列：** CRLF
+
 本项目严格遵循 **OpenSpec** 标准进行架构设计与文档编写。Aura Flux 是一项融合了高性能实时频谱分析与 Google Gemini 3 系列生成式 AI 的沉浸式视听交互实验。
 
 ## 核心规范体系 (Current Standard)

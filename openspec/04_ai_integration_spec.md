@@ -1,5 +1,11 @@
 # OpenSpec: AI 集成规范
 
+**文件名：** 04_ai_integration_spec.md
+**版本号：** 0.8.0
+**更新日期：** 2026-01-18 10:00
+**文件编码：** UTF-8
+**行尾序列：** CRLF
+
 ## 1. 模型与工具配置
 - **模型:** `gemini-3-flash-preview`。
 - **工具:** `googleSearch`（用于实时验证歌曲元数据）。
@@ -31,4 +37,4 @@ AI 必须返回格式如下的 JSON：
 3. **情绪分析:** 模型需返回 2-3 个词的情绪标签（如 "Cyberpunk Phonk", "Ethereal Ambient"）。
 
 ---
-*Aura Vision AI Integration - Version 0.7.5*
+*Aura Vision AI Integration - Version 0.8.0*

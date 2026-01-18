@@ -1,5 +1,11 @@
 # OpenSpec: UI/UX 与交互规范
 
+**文件名：** 05_interface_spec.md
+**版本号：** 0.8.0
+**更新日期：** 2026-01-18 10:00
+**文件编码：** UTF-8
+**行尾序列：** CRLF
+
 ## 1. 视觉层级 (Z-Index)
 - **Z-0:** 核心渲染器 (Canvas/WebGL)。
 - **Z-10:** 歌词覆盖层 (`LyricsOverlay`)。
@@ -23,8 +29,8 @@
 - **Guide Tab (使用指南):** 必须包含以下四个标准步骤，确保与 README 一致：
   1. **Grant Permissions (授权权限):** 引导用户点击“开始”并允许麦克风访问。
   2. **Play Music (播放音乐):** 提示视觉效果将实时响应设备附近的音频。
-  3. **Explore Modes (探索模式):** 指引用户通过快捷键 [H] 切换不同的渲染引擎。
-  4. **AI Recognition (AI 识别):** 指引用户通过快捷键 [L] 识别曲目与情绪。
+  3. **Explore Modes (探索模式):** 指引用户通过控制面板切换不同的渲染引擎。
+  4. **AI Recognition (AI 识别):** 指引用户通过控制面板进行曲目与情绪识别。
 
 ## 5. 键盘映射
 - `Space`: `toggleMicrophone`
@@ -36,4 +42,4 @@
 - `T`: `toggleTrails`
 
 ---
-*Aura Vision Interface - Version 0.7.5*
+*Aura Vision Interface - Version 0.8.0*
