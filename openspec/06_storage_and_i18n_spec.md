@@ -18,11 +18,12 @@
 - **支持列表 (v0.7.5):** 
   - 英语 (en), 简体中文 (zh), 繁体中文 (tw), 日本语 (ja), 西班牙语 (es), 韩语 (ko), 德语 (de), 法语 (fr), 俄语 (ru), 阿拉伯语 (ar)。
 
-## 3. 专业术语标准化 (v1.0.3)
+## 3. 专业术语标准化 (v1.0.4)
 为了对齐 **"AI Synesthesia Engine" (AI 通感引擎)** 的定位并优化用户体验，所有翻译必须遵循以下标准：
 
 ### 核心概念
-- **AI Recognition** -> AI 通感识别 / AI Identification。
+- **AI Recognition** -> AI 通感识别 / AI Synesthesia Recognition。
+- **Enable Recognition** -> 激活通感引擎 / Activate Synesthesia Engine。
 - **Visualizer Mode** -> 视觉引擎 / Visual Engine。
 - **Start** -> 开启体验 / Launch Experience。
 
@@ -37,4 +38,4 @@
 - **Linguistic Logic:** 识别结果必须返回原声脚本（如 日语歌曲返回假名/汉字而非罗马音）。
 
 ---
-*Aura Flux Storage & i18n - Version 1.0.3*
+*Aura Flux Storage & i18n - Version 1.0.4*

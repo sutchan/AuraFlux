@@ -18,9 +18,9 @@
 5.  **[05 UI/UX 与交互规范](./05_interface_spec.md)**
     *   状态转换逻辑、面板布局系统、闲置隐藏策略、快捷键映射表。
 6.  **[06 持久化与国际化规范](./06_storage_and_i18n_spec.md)**
-    *   LocalStorage Schema、多语言字典结构与区域偏好 (v1.0.3)。
+    *   LocalStorage Schema、多语言字典结构与区域偏好 (v1.0.4)。
 7.  **[07 部署与环境规范](./07_deployment_guide.md)**
     *   API 配置、构建流程、依赖冲突解决 (v1.0.3)。
 
 ---
-*Aura Flux Project Specification - Version 1.0.3*
+*Aura Flux Project Specification - Version 1.0.4*

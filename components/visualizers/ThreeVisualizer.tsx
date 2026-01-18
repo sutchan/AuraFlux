@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 0.7.4
+ * Version: 0.7.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
