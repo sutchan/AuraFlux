@@ -1,6 +1,6 @@
 /**
  * File: components/ui/ErrorBoundary.tsx
- * Version: 0.7.6
+ * Version: 0.7.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -79,6 +79,6 @@ export class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    return this.props.children;
+    return this.props.children || null;
   }
 }

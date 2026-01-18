@@ -1,9 +1,9 @@
 
 /**
  * File: core/services/geminiService.ts
- * Version: 0.8.0
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Version: 0.8.5
+ * Author: Aura Flux Team
+ * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -25,15 +25,21 @@ export const identifySongFromAudio = async (
       return { title: "Midnight City", artist: "M83", lyricsSnippet: "Waiting in the car...", mood: "Electric", identified: true, matchSource: 'MOCK', searchUrl: 'https://google.com' };
   }
 
-  // GEMINI Implementation
-  // Note: For other providers (GROK, DEEPSEEK, etc.), we currently use Gemini as the backend engine
-  // but we can adjust the system prompt to simulate different "personalities" if needed.
-  // This ensures the app doesn't crash when users select other providers in the UI.
+  // ROBUSTNESS: Check for API Key presence before initialization
+  const apiKey = process.env.API_KEY;
+  if (!apiKey || apiKey.trim() === '') {
+      console.warn("[AI] API Key is missing or empty. Identification feature disabled.");
+      return null;
+  }
 
-  // Use the API key exclusively from process.env.API_KEY directly when initializing the client.
-  // Assume it is pre-configured, valid, and accessible.
-  const aiClient = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
+  // ROBUSTNESS: Wrap client initialization in try-catch to prevent crashes on invalid keys
+  let aiClient: GoogleGenAI;
+  try {
+      aiClient = new GoogleGenAI({ apiKey });
+  } catch (error) {
+      console.error("[AI] Failed to initialize GoogleGenAI client:", error);
+      return null;
+  }
 
   let features: number[] = [];
   try {
@@ -56,9 +62,8 @@ export const identifySongFromAudio = async (
         };
         const targetLang = langMap[language] || 'English';
 
-        // FIX: Refined system instruction for clarity and branding alignment with OpenSpec.
         const systemInstruction = `
-          You are the "Aura Vision AI Synesthesia Engine". Your specialty is Identifying tracks from low-fidelity 6-second microphone snapshots.
+          You are the "Aura Flux AI Synesthesia Engine". Your specialty is Identifying tracks from low-fidelity 6-second microphone snapshots.
           
           MARKET CONTEXT: The user is in the '${regionName}' market. 
           USER LANGUAGE: ${targetLang}.
@@ -81,7 +86,7 @@ export const identifySongFromAudio = async (
           - Return valid JSON only.
         `;
 
-        const identifyPromise = aiClient.models.generateContent({ // Use aiClient here
+        const identifyPromise = aiClient.models.generateContent({
           model: GEMINI_MODEL,
           contents: { 
             parts: [
@@ -101,12 +106,10 @@ export const identifySongFromAudio = async (
               properties: {
                 title: { 
                   type: Type.STRING, 
-                  // FIX: Concise and clear description for linguistic adaptation
                   description: `The track title. If different from ${targetLang}, keep original script and include ${targetLang} translation in parentheses.` 
                 },
                 artist: { 
                   type: Type.STRING, 
-                  // FIX: Concise and clear description for linguistic adaptation
                   description: `The artist name. If different from ${targetLang}, keep original script and include ${targetLang} translation in parentheses.` 
                 },
                 lyricsSnippet: { type: Type.STRING, description: `A relevant line or chorus translated into ${targetLang}.` },

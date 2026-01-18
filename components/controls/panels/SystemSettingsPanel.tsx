@@ -9,6 +9,13 @@ import { useAppContext } from '../../AppContext';
 export const SystemSettingsPanel: React.FC = () => {
   const { language, setLanguage, settings, setSettings, resetSettings, t } = useAppContext();
   const [confirmReset, setConfirmReset] = useState(false);
+  const [shouldCrash, setShouldCrash] = useState(false); // Robustness Test State
+
+  // ROBUSTNESS TEST: Throw error during render to trigger ErrorBoundary
+  if (shouldCrash) {
+    throw new Error("System Integrity Check: Manual Crash Triggered via Settings Panel");
+  }
+
   const hints = t?.hints || {};
   const sys = t?.systemPanel || {};
   
@@ -130,7 +137,7 @@ export const SystemSettingsPanel: React.FC = () => {
              </div>
         </div>
         
-        <div className="mt-auto space-y-4 pt-4 border-t border-white/5">
+        <div className="mt-auto space-y-3 pt-4 border-t border-white/5">
             <button 
               onClick={handleResetClick} 
               className={`w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 group ${confirmReset ? 'bg-red-600 text-white border-red-400' : 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20'}`}
@@ -139,6 +146,13 @@ export const SystemSettingsPanel: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
               {confirmReset ? (t?.confirmReset || 'Are you sure?') : (t?.reset || "Reset App")}
+            </button>
+            
+            <button 
+                onClick={() => setShouldCrash(true)} 
+                className="w-full py-2 bg-transparent border border-white/5 rounded-lg text-[9px] font-mono text-white/20 uppercase tracking-widest hover:bg-white/5 hover:text-white/50 transition-colors"
+            >
+                Simulate Crash (Test ErrorBoundary)
             </button>
         </div>
       </div>
