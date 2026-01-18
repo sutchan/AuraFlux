@@ -1,9 +1,22 @@
+
 # Changelog
 
 All notable changes to the **Aura Vision** project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [v1.0.3] - Deployment Stability & i18n
+
+### Fixed
+*   **🚨 Critical Dependency Fix:** Downgraded `three` to **0.162.0** to resolve a strict peer dependency conflict with `@react-three/postprocessing`. This fixes the `ERESOLVE` error during deployment on strict package managers (like Vercel/EdgeOne).
+
+### Changed
+*   **🌏 i18n Polish:** Refined Simplified Chinese translations (`zh.ts`) for better clarity.
+    *   "禁止屏幕休眠" -> "屏幕常亮" (Screen Always On).
+    *   "自动隐藏 UI" -> "自动隐藏控制栏" (Auto-Hide Controls).
+    *   "镜像翻转 (适合背投)" -> "镜像翻转" (Mirror Display).
+*   **📦 Version Bump:** Application version updated to **1.0.3**.
 
 ## [v1.0.0] - Robustness and Alignment
 

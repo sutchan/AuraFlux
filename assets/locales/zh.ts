@@ -63,7 +63,7 @@ export const zh = {
   cycleColors: '自动循环配色',
   colorInterval: '切换间隔 (秒)',
   cycleSpeed: '循环周期 (秒)',
-  monitorAudio: '音频监听',
+  monitorAudio: '音频监听 (Monitor)',
   audioInput: '输入源选择',
   lyrics: 'AI 曲目识别',
   showLyrics: '启用自动识别',
@@ -136,7 +136,7 @@ export const zh = {
   showFps: '显示帧率',
   showTooltips: '显示提示',
   doubleClickFullscreen: '双击全屏',
-  autoHideUi: '自动隐藏 UI',
+  autoHideUi: '自动隐藏控制栏',
   mirrorDisplay: '镜像翻转',
   presets: {
     title: '智能预设',
@@ -168,7 +168,7 @@ export const zh = {
       bc: '中下',
       br: '右下'
   },
-  wakeLock: '禁止屏幕休眠',
+  wakeLock: '屏幕常亮',
   system: {
     shortcuts: {
       mic: '麦克风',
