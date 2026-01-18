@@ -164,3 +164,28 @@ declare global {
     }
   }
 }
+
+// Also augment React's internal JSX namespace for newer React versions (18+)
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: any;
+      mesh: any;
+      pointLight: any;
+      spotLight: any;
+      ambientLight: any;
+      group: any;
+      primitive: any;
+      meshPhysicalMaterial: any;
+      meshStandardMaterial: any;
+      rectAreaLight: any;
+      color: any;
+      fog: any;
+      directionalLight: any;
+      points: any;
+      bufferGeometry: any;
+      bufferAttribute: any;
+      shaderMaterial: any;
+    }
+  }
+}
