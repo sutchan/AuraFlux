@@ -68,7 +68,7 @@ export const useAudioPulse = ({
         let scale = 1;
         let opacity = baseOpacity;
 
-        // Common bass calculation for breathing/volume mode
+        // Calculate average bass for breathing
         let bass = 0;
         const bassBins = 10;
         for (let i = 0; i < bassBins; i++) bass += dataArray[i];
@@ -81,19 +81,22 @@ export const useAudioPulse = ({
                 // Strong punch on beat
                 beatScaleRef.current = 1.0 + (pulseStrength * settings.sensitivity);
             }
-            // Slower decay for better visibility (0.15 -> 0.1)
-            beatScaleRef.current += (1.0 - beatScaleRef.current) * 0.1;
+            // Smooth elastic decay (0.12 factor)
+            beatScaleRef.current += (1.0 - beatScaleRef.current) * 0.12;
             
-            // Combine beat punch with subtle breathing so it's never completely static
-            const breathing = bassNormalized * 0.15 * settings.sensitivity;
+            // Enhanced breathing: allow bass to affect scale even between beats
+            // 0.3 factor makes it visible even at moderate volumes
+            const breathing = bassNormalized * 0.3 * settings.sensitivity;
+            
+            // The final scale is the decay envelope + current bass pressure
             scale = beatScaleRef.current + breathing;
             
-            // Opacity flash
+            // Dynamic opacity flash based on scale deviation
             const flash = (scale - 1.0) * opacityStrength; 
             opacity = Math.min(1, baseOpacity + flash);
 
         } else {
-            // Volume-based linear reaction
+            // Standard volume-based linear reaction
             scale = 1 + (bassNormalized * pulseStrength * settings.sensitivity);
             opacity = Math.min(1, (1.0 - opacityStrength + bassNormalized * opacityStrength) * baseOpacity);
         }

@@ -1,6 +1,7 @@
+
 /**
  * File: core/services/beatDetector.ts
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -9,10 +10,11 @@ export class BeatDetector {
   private prevSpectrum: Uint8Array = new Uint8Array(0);
   private fluxHistory: number[] = [];
   private historySize = 30; // ~0.5s at 60fps
-  private minThreshold = 1500; // Minimum flux to register a beat (noise floor)
+  // Lowered threshold from 1500 to 800 to detect beats in quieter audio
+  private minThreshold = 800; 
   private thresholdMult = 1.35; // Sensitivity multiplier above average
   private lastBeatTime = 0;
-  private debounceMs = 250; // Max ~240 BPM
+  private debounceMs = 200; // Reduced debounce for faster rhythm tracking
 
   /**
    * Detects if a beat occurred in the current frame using Spectral Flux.
