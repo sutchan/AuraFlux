@@ -1,6 +1,6 @@
 /**
  * File: components/ui/ErrorBoundary.tsx
- * Version: 0.7.8
+ * Version: 0.7.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -17,6 +17,8 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
+  public declare props: Readonly<Props>;
+
   public state: State = {
     hasError: false,
     error: null,
