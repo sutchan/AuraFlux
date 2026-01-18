@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 0.7.3
+ * Version: 0.7.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -22,8 +22,6 @@ interface ThreeVisualizerProps {
 
 const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  if (!analyser) return null;
 
   const handleContextLost = useCallback((event: Event) => {
     event.preventDefault();
@@ -47,6 +45,9 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         }
     };
   }, [handleContextLost, handleContextRestored]);
+
+  // MOVED: Conditional return must be after all hooks to comply with Rules of Hooks
+  if (!analyser) return null;
 
   const renderScene = () => {
     switch (mode) {

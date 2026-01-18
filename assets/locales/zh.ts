@@ -15,7 +15,7 @@ export const zh = {
     visual: '视觉',
     text: '文字',
     audio: '音频',
-    ai: 'AI 曲目识别',
+    ai: 'AI 通感识别', 
     system: '系统'
   },
   hints: {
@@ -27,7 +27,7 @@ export const zh = {
     sensitivity: '控制音频增益。数值越高，微弱的声音也能引发剧烈的视觉爆发。',
     smoothing: '时域阻尼系数。高数值如液体般柔顺，低数值则反应锐利。',
     fftSize: '频谱采样精度。4096 提供极致细节但消耗更多 CPU 资源。',
-    lyrics: '启用 AI 驱动的曲目识别与歌词同步展示。',
+    lyrics: '启用 AI 驱动的声景分析与歌词同步展示。',
     lyricsStyle: '更改识别结果及歌词的排版风格。',
     region: '针对特定音乐市场优化 AI 搜索的匹配权重。',
     autoRotate: '自动循环切换不同的可视化引擎。',
@@ -65,18 +65,18 @@ export const zh = {
   cycleSpeed: '循环周期 (秒)',
   monitorAudio: '音频监听 (Monitor)',
   audioInput: '输入源选择',
-  lyrics: 'AI 曲目识别',
-  showLyrics: '启用自动识别',
+  lyrics: 'AI 通感识别', 
+  showLyrics: '激活智能感知',
   displaySettings: '显示设置',
   language: '界面语言',
   region: '音乐市场定位',
   startMic: '开启音频监听',
   stopMic: '停止音频监听',
   listening: '监听中',
-  identifying: 'AI 正在解析曲目...',
+  identifying: '正在捕获声景特征...', 
   startExperience: '开启视听盛宴',
   welcomeTitle: 'Aura Flux | 灵动流光',
-  welcomeText: '将旋律凝炼为极光，让节奏跃然屏上。融合 Gemini AI 实时曲目识别，为您开启感官交响的全新维度。',
+  welcomeText: '将旋律凝炼为极光，让节奏跃然屏上。融合 Gemini AI 实时声景分析，为您开启感官交响的全新维度。',
   unsupportedTitle: '浏览器不受支持',
   unsupportedText: 'Aura Flux 需要现代浏览器功能（例如麦克风访问权限）才能运行。请更新到最新版本的 Chrome、Edge 或 Safari。',
   hideOptions: '收起',
@@ -90,8 +90,8 @@ export const zh = {
   randomize: '随机美学组合',
   help: '帮助与说明',
   close: '关闭',
-  betaDisclaimer: 'Beta 功能：识别准确度正在持续优化中。',
-  wrongSong: '识别有误？点击重试',
+  betaDisclaimer: 'Beta 协议：通感神经网路正在校准中。',
+  wrongSong: '特征不匹配？重新采样',
   hideCursor: '隐藏鼠标指针',
   customColor: '文字颜色',
   randomizeTooltip: '随机视觉设置 (快捷键: R)',
@@ -187,8 +187,8 @@ export const zh = {
     tryDemo: '进入演示模式 (无音频)'
   },
   aiState: {
-    active: '识别功能已开启',
-    enable: '开启 AI 识别'
+    active: '通感分析已运行', 
+    enable: '激活通感引擎'
   },
   regions: {
     global: '全球',
@@ -243,7 +243,7 @@ export const zh = {
       '1. 授权权限：点击“开启体验”并允许浏览器访问麦克风。',
       '2. 播放音乐：在设备附近播放音乐，视觉效果将根据实时采样跳动。',
       '3. 探索模式：打开设置面板 (按 H) 切换 12+ 种视觉引擎。',
-      '4. AI 识别：按 L 键开启“AI 曲目识别”以分析当前歌曲及其情绪。'
+      '4. AI 识别：按 L 键激活“AI 通感识别”以解析当前声景。'
     ],
     settingsTitle: '核心参数指南',
     settingsDesc: {
