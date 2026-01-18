@@ -1,11 +1,31 @@
-<div align="center">
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+# Aura Flux 🎵👁️
 
-  <h1>Built with AI Studio</h2>
+### AI-Powered 3D Music Visualizer & Identifier (v1.0.0)
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+[中文文档](README_ZH.md) | [Live Demo](https://aura.tanox.net/) | [Changelog](CHANGELOG.md)
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+<!-- README.md -->
 
-</div>
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/Three.js-WebGL-white?logo=three.js&logoColor=black" />
+  <img src="https://img.shields.io/badge/AI-Gemini%203.0-8E75B2?logo=google&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-GPL%20v2-blue.svg" />
+</p>
+
+**Aura Flux** is a cutting-edge web application that transforms live audio into immersive 3D generative art. It delivers buttery smooth visuals while identifying music and adapting its mood in real-time using Google Gemini AI.
+
+---
+
+## 🎮 How to Use
+
+**🚀 Instant Access:** Simply open the **[Live Demo](https://aura.tanox.net/)** on any modern device.
+
+1.  **Grant Permissions:** Click "Start" and allow the browser to access your audio input.
+2.  **Play Music:** Play audio near your device. The visuals react to the microphone in real-time.
+3.  **Explore Modes:** Open the **Options** panel (or press `H`) to switch visual engines.
+4.  **AI Recognition:** Press `L` to identify the current song and its mood.
+
+---
+*Made with 💜 using React and Google Gemini API*
