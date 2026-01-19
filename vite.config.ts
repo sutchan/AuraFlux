@@ -19,7 +19,23 @@ export default defineConfig({
     },
   },
   worker: {
-    format: 'es',
+    format: 'iife',
+    plugins() {
+      return [
+        {
+          name: 'worker-alias-resolver',
+          resolveId(source, importer) {
+            // Only apply to worker files
+            if (importer && importer.includes('worker')) {
+              if (source.startsWith('@/')) {
+                return source.replace('@/', './');
+              }
+            }
+            return null;
+          },
+        },
+      ];
+    },
   },
   build: {
     outDir: 'build',
