@@ -1,7 +1,7 @@
 
 /**
  * File: core/hooks/useAudio.ts
- * Version: 1.0.5
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -19,6 +19,7 @@ interface UseAudioProps {
 export const useAudio = ({ settings, language }: UseAudioProps) => {
   const [isListening, setIsListening] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
+  const [isPending, setIsPending] = useState(false); // ROBUSTNESS: Mutex lock
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
@@ -29,19 +30,31 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
   const demoGraphRef = useRef<{ stop: () => void } | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const stopListening = useCallback(() => {
-    if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
-        streamRef.current = null;
+  const stopListening = useCallback(async () => {
+    try {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+        if (demoGraphRef.current) {
+            demoGraphRef.current.stop();
+            demoGraphRef.current = null;
+        }
+        if (audioContextRef.current) {
+            if (audioContextRef.current.state !== 'closed') {
+                await audioContextRef.current.close();
+            }
+            audioContextRef.current = null;
+        }
+    } catch (e) {
+        console.warn("[Audio] Error during cleanup:", e);
+    } finally {
+        setAudioContext(null);
+        setAnalyser(null);
+        setMediaStream(null);
+        setIsListening(false);
+        setIsSimulating(false);
     }
-    if (demoGraphRef.current) demoGraphRef.current.stop();
-    if (audioContextRef.current) {
-        audioContextRef.current.close().catch(e => console.warn("Error closing AudioContext", e));
-        audioContextRef.current = null;
-    }
-    setIsListening(false);
-    setIsSimulating(false);
-    setMediaStream(null);
   }, []);
 
   // Resilience: Monitor AudioContext state changes (especially for mobile focus loss)
@@ -84,7 +97,8 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
 
   const startMicrophone = useCallback(async (deviceId?: string) => {
     setErrorMessage(null);
-    if (isListening) stopListening();
+    // Ensure any previous instance is fully stopped before starting new one
+    await stopListening();
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -107,12 +121,9 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
       
       const context = new (window.AudioContext || (window as any).webkitAudioContext)();
       
-      // Monitor state for debugging and recovery
       context.onstatechange = () => {
-          console.log(`[Audio] State changed: ${context.state}`);
-          if (context.state === 'suspended' && isListening) {
-              // Potential recovery trigger could go here
-          }
+          if (context.state === 'closed') return; // Ignore if intentional
+          // Auto-resume logic if suspended unexpectedly
       };
 
       if (context.state === 'suspended') await context.resume();
@@ -142,11 +153,11 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
           console.error("[Audio] Access Error:", err);
       }
     }
-  }, [settings.fftSize, settings.smoothing, updateAudioDevices, language, isListening, stopListening]);
+  }, [settings.fftSize, settings.smoothing, updateAudioDevices, language, stopListening]);
 
   const startDemoMode = useCallback(async () => {
     setErrorMessage(null);
-    if (isListening) stopListening();
+    await stopListening();
 
     try {
         const context = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -174,15 +185,23 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     } catch (e) {
         console.error("Demo mode synthesis failed", e);
     }
-  }, [settings.fftSize, settings.smoothing, isListening, stopListening]);
+  }, [settings.fftSize, settings.smoothing, stopListening]);
 
-  const toggleMicrophone = useCallback((deviceId: string) => {
-    if (isListening) {
-      stopListening();
-    } else {
-      startMicrophone(deviceId);
+  // ROBUSTNESS: Atomic toggle with locking
+  const toggleMicrophone = useCallback(async (deviceId: string) => {
+    if (isPending) return; // Prevent clicking while processing
+    
+    setIsPending(true);
+    try {
+        if (isListening) {
+          await stopListening();
+        } else {
+          await startMicrophone(deviceId);
+        }
+    } finally {
+        setIsPending(false);
     }
-  }, [isListening, startMicrophone, stopListening]);
+  }, [isListening, isPending, startMicrophone, stopListening]);
   
   useEffect(() => {
     if (analyser) {
@@ -191,5 +210,10 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     }
   }, [settings.smoothing, settings.fftSize, analyser]);
 
-  return { isListening, isSimulating, audioContext, analyser, mediaStream, audioDevices, errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone };
+  return { 
+      isListening, isSimulating, isPending, // Export isPending
+      audioContext, analyser, mediaStream, audioDevices, 
+      errorMessage, setErrorMessage, 
+      startMicrophone, startDemoMode, toggleMicrophone 
+  };
 };

@@ -1,23 +1,11 @@
 
-/**
- * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.0.3
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- */
-
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { VisualizerMode, VisualizerSettings } from '../../core/types/index';
-
-// Direct import of renderers for fallback
 import { 
   BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
   ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
-  LasersRenderer, BeatDetector
+  LasersRenderer, BeatDetector 
 } from '../../core/services/visualizerStrategies';
-
-// WORKER IMPORT (v1.0.3 Standard)
-import VisualizerWorker from '@/core/workers/visualizer.worker.ts?worker';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
@@ -30,159 +18,85 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
   analyser, mode, colors, settings
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const workerRef = useRef<Worker | null>(null);
-  const isOffscreenRef = useRef<boolean>(false);
   const renderersRef = useRef<any>({});
+  // Use inferred type for BeatDetector ref to avoid potential type mismatch issues
   const beatDetectorRef = useRef(new BeatDetector());
-  const requestRef = useRef<number>(0);
+  const requestRef = useRef<number>(0); // Initialize with 0
   const rotationRef = useRef<number>(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
-    setIsTransitioning(true);
-    const timer = setTimeout(() => setIsTransitioning(false), 300);
-    return () => clearTimeout(timer);
-  }, [mode]);
+    // Initialize renderers
+    renderersRef.current = {
+      [VisualizerMode.BARS]: new BarsRenderer(),
+      [VisualizerMode.RINGS]: new RingsRenderer(),
+      [VisualizerMode.PARTICLES]: new ParticlesRenderer(),
+      [VisualizerMode.TUNNEL]: new TunnelRenderer(),
+      [VisualizerMode.PLASMA]: new PlasmaRenderer(),
+      [VisualizerMode.NEBULA]: new NebulaRenderer(),
+      [VisualizerMode.LASERS]: new LasersRenderer(),
+      [VisualizerMode.FLUID_CURVES]: new FluidCurvesRenderer(),
+      [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
+    };
+    
+    Object.values(renderersRef.current).forEach((r: any) => r.init && r.init());
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !analyser) return;
 
-    // Reset offscreen flag
-    isOffscreenRef.current = false;
+    const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+    if (!ctx) return;
 
-    // 1. Attempt to use Worker (OffscreenCanvas)
-    // We check for transferControlToOffscreen support
-    if (!!canvas.transferControlToOffscreen && !workerRef.current) {
-        try {
-            const offscreen = canvas.transferControlToOffscreen();
-            
-            // Initialize Worker
-            const worker = new VisualizerWorker();
-            
-            worker.postMessage({ 
-                type: 'INIT', 
-                canvas: offscreen, 
-                width: canvas.clientWidth, 
-                height: canvas.clientHeight, 
-                devicePixelRatio: window.devicePixelRatio || 1
-            }, [offscreen]);
-            
-            workerRef.current = worker;
-            isOffscreenRef.current = true;
-            console.log("[Visualizer] Worker initialized successfully");
-        } catch (e) {
-            console.warn("[Visualizer] Worker init failed, falling back to main thread:", e);
-            // Fallback logic continues below
-        }
-    }
-
-    // 2. Fallback to Main Thread Rendering if Worker failed or not supported
-    if (!isOffscreenRef.current && Object.keys(renderersRef.current).length === 0) {
-        console.log("[Visualizer] Running in Main Thread Mode");
-        renderersRef.current = {
-          [VisualizerMode.BARS]: new BarsRenderer(),
-          [VisualizerMode.RINGS]: new RingsRenderer(),
-          [VisualizerMode.PARTICLES]: new ParticlesRenderer(),
-          [VisualizerMode.TUNNEL]: new TunnelRenderer(),
-          [VisualizerMode.PLASMA]: new PlasmaRenderer(),
-          [VisualizerMode.NEBULA]: new NebulaRenderer(),
-          [VisualizerMode.LASERS]: new LasersRenderer(),
-          [VisualizerMode.FLUID_CURVES]: new FluidCurvesRenderer(),
-          [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
-        };
-        try {
-            Object.values(renderersRef.current).forEach((r: any) => r.init && r.init(canvas));
-        } catch(e) { console.error("Renderer init failed", e); }
-    }
-
-    // Cleanup
-    return () => {
-      if (workerRef.current) {
-        workerRef.current.terminate();
-        workerRef.current = null;
-      }
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    };
-  }, []); // Run once on mount
-
-  // Update Worker Configuration
-  useEffect(() => {
-      if (workerRef.current) {
-          workerRef.current.postMessage({ 
-              type: 'CONFIG', 
-              mode, 
-              settings: JSON.parse(JSON.stringify(settings)), 
-              colors 
-          });
-      }
-  }, [mode, settings, colors]);
-
-  // Handle Resize
-  useEffect(() => {
-    const handleResize = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
-
-        if (workerRef.current) {
-            workerRef.current.postMessage({ type: 'RESIZE', width: w, height: h });
-        } else if (!isOffscreenRef.current) {
-            canvas.width = w;
-            canvas.height = h;
-        }
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Render Loop
-  useEffect(() => {
-    if (!analyser) return;
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-    const renderLoop = () => {
-      analyser.getByteFrequencyData(dataArray);
-
-      if (workerRef.current) {
-          workerRef.current.postMessage({ type: 'FRAME', data: dataArray });
-      } else if (!isOffscreenRef.current) {
-          const canvas = canvasRef.current;
-          if (canvas) {
-              const ctx = canvas.getContext('2d', { alpha: false });
-              if (ctx) {
-                  const w = canvas.width;
-                  const h = canvas.height;
-                  rotationRef.current += 0.005 * settings.speed;
-                  const isBeat = beatDetectorRef.current.detect(dataArray);
-
-                  if (settings.trails) {
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-                    ctx.fillRect(0, 0, w, h);
-                  } else {
-                    ctx.clearRect(0, 0, w, h);
-                  }
-
-                  const renderer = renderersRef.current[mode];
-                  if (renderer) {
-                    renderer.draw(ctx, dataArray, w, h, colors, settings, rotationRef.current, isBeat);
-                  }
-              }
-          }
+    const render = () => {
+      // Handle resize
+      if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
       }
-      requestRef.current = requestAnimationFrame(renderLoop);
+
+      const width = canvas.width;
+      const height = canvas.height;
+
+      analyser.getByteFrequencyData(dataArray);
+      
+      const isBeat = beatDetectorRef.current.detect(dataArray);
+      rotationRef.current += 0.005 * settings.speed;
+
+      // Clear or Trails
+      if (settings.trails) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.fillRect(0, 0, width, height);
+      } else {
+        ctx.clearRect(0, 0, width, height);
+      }
+
+      const renderer = renderersRef.current[mode];
+      if (renderer) {
+        try {
+          renderer.draw(ctx, dataArray, width, height, colors, settings, rotationRef.current, isBeat);
+        } catch (e) {
+          console.error("Renderer error:", e);
+        }
+      }
+
+      requestRef.current = requestAnimationFrame(render);
     };
-    renderLoop();
-    return () => cancelAnimationFrame(requestRef.current);
+
+    render();
+
+    return () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
   }, [analyser, mode, colors, settings]);
 
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none bg-black overflow-hidden">
       <canvas 
         ref={canvasRef} 
-        className={`w-full h-full block transition-opacity duration-300 ease-in-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+        className="w-full h-full block" 
       />
     </div>
   );

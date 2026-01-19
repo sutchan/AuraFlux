@@ -20,12 +20,11 @@
 
 ## 3. 生产环境部署
 
-### 🚨 关键：Importmap 依赖策略 (Importmap Dependency Strategy)
-项目采用 `index.html` 中的 **Importmap** 作为依赖版本的单一事实来源 (Single Source of Truth)。
-构建配置 (`vite.config.ts`) 已配置为 **Externalize** 主要运行时依赖 (React, Three.js, GenAI SDK)，以便在生产环境中直接使用 CDN 资源。
+### 📦 标准构建策略 (Standard Bundling Strategy)
+项目已弃用 Importmap，转为完全依赖 Vite 的构建与打包机制。这解决了 Worker 环境下模块解析的不一致问题。
 
-- **Three.js 版本:** `^0.182.0` (遵循 importmap 配置)。
-- **构建行为:** 构建产物将保留 `import { ... } from "three"` 等语句，由浏览器根据 `index.html` 解析。
+- **依赖管理:** 所有第三方库 (React, Three.js, GenAI SDK) 均通过 `node_modules` 管理并打包至最终产物中。
+- **Worker 处理:** Web Workers 会被编译为独立的 chunk，并由 Vite 自动处理其内部的 import 路径。
 
 ### 构建步骤
 ```bash
@@ -45,4 +44,4 @@ API_KEY=你的_GEMINI_API_KEY npm run build
 - 确保域名启用 **HTTPS**。现代浏览器的 `getUserMedia` (麦克风权限) 只能在 HTTPS 或 localhost 环境下工作。HTTP 环境下应用将无法启动音频采集。
 
 ---
-*Aura Flux Deployment Guide - Version 1.0.6*
+*Aura Flux Deployment Guide - Version 1.1.0*

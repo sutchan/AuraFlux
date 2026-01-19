@@ -1,12 +1,12 @@
-
 /**
  * File: components/ui/ErrorBoundary.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { STORAGE_PREFIX } from '../../core/constants';
 
 interface Props {
   children?: ReactNode;
@@ -35,10 +35,9 @@ export class ErrorBoundary extends Component<Props, State> {
 
   private handleFactoryReset = () => {
     if (window.confirm("This will clear all Aura Flux settings and custom text. Continue?")) {
-      // Robustness: Only clear keys belonging to this app (starting with av_v1_)
-      const prefix = 'av_v1_';
+      // Robustness: Only clear keys belonging to this app
       Object.keys(localStorage).forEach(key => {
-        if (key.startsWith(prefix)) {
+        if (key.startsWith(STORAGE_PREFIX)) {
           localStorage.removeItem(key);
         }
       });

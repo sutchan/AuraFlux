@@ -1,7 +1,6 @@
-
 /**
  * File: core/services/geminiService.ts
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
@@ -45,7 +44,10 @@ export const identifySongFromAudio = async (
   try {
     features = await generateFingerprint(base64Audio);
     const localMatch = findLocalMatch(features);
-    if (localMatch) return localMatch;
+    if (localMatch) {
+        console.debug("[AI] Local fingerprint match found:", localMatch.title);
+        return localMatch;
+    }
   } catch (e) {
     console.warn("[Recognition] Local match failed", e);
   }
@@ -142,10 +144,13 @@ export const identifySongFromAudio = async (
         songInfo.matchSource = 'AI';
         return songInfo;
     } catch (error: any) {
-        console.error("[AI] Error:", error.message || error);
+        const errorMsg = error.message || error.toString();
+        console.error(`[AI] Identification Error (Attempt ${retryCount + 1}):`, errorMsg);
         
-        // Don't retry if it's a timeout or explicit API key issue
-        if (error.message === "AI_TIMEOUT") return null;
+        // Don't retry if it's a timeout or explicit API key issue to save quotas/time
+        if (errorMsg === "AI_TIMEOUT" || errorMsg.includes("API key") || errorMsg.includes("401") || errorMsg.includes("403")) {
+            return null;
+        }
         
         if (retryCount < 1) return callGemini(retryCount + 1);
         return null;

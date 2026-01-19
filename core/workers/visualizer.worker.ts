@@ -1,22 +1,16 @@
-
 /**
  * File: core/workers/visualizer.worker.ts
- * Version: 1.0.9
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  *
  * This worker script is responsible for offloading 2D visualizer rendering
- * from the main thread using OffscreenCanvas. It imports all necessary
- * rendering strategies and audio analysis tools.
+ * from the main thread using OffscreenCanvas.
  */
 
-// --- 1. IMPORT DEPENDENCIES ---
+// --- 1. IMPORT DEPENDENCIES (Strictly Relative Paths) ---
 import { VisualizerMode, VisualizerSettings, WorkerMessage, IVisualizerRenderer } from '../types';
-import { 
-  BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
-  ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
-  LasersRenderer, BeatDetector 
-} from '../services/visualizerStrategies';
+import { createVisualizerRenderers, BeatDetector } from '../services/visualizerStrategies';
 
 // --- 2. WORKER MAIN LOGIC ---
 
@@ -29,18 +23,14 @@ let currentColors: string[] = ['#ffffff'];
 let lastFrameData: Uint8Array | null = null;
 let rotation = 0;
 
-// Instantiate renderers
-const renderers: Partial<Record<VisualizerMode, IVisualizerRenderer>> = {
-  [VisualizerMode.BARS]: new BarsRenderer(),
-  [VisualizerMode.RINGS]: new RingsRenderer(),
-  [VisualizerMode.PARTICLES]: new ParticlesRenderer(),
-  [VisualizerMode.TUNNEL]: new TunnelRenderer(),
-  [VisualizerMode.PLASMA]: new PlasmaRenderer(),
-  [VisualizerMode.NEBULA]: new NebulaRenderer(),
-  [VisualizerMode.LASERS]: new LasersRenderer(),
-  [VisualizerMode.FLUID_CURVES]: new FluidCurvesRenderer(),
-  [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
-};
+// Instantiate renderers using the shared factory
+let renderers: Record<string, IVisualizerRenderer> = {};
+
+try {
+    renderers = createVisualizerRenderers();
+} catch (e) {
+    console.error("[Worker] Failed to instantiate renderers:", e);
+}
 
 const beatDetector = new BeatDetector();
 
@@ -52,7 +42,6 @@ const loop = () => {
 
   const smoothColors = currentColors; 
   
-  // Use trails for specific aesthetics, but ensure clean clears for others
   if (currentSettings.trails) {
     ctx.fillStyle = `rgba(0, 0, 0, 0.15)`;
     ctx.fillRect(0, 0, width, height);
@@ -69,9 +58,8 @@ const loop = () => {
     try {
       renderer.draw(ctx, data, width, height, smoothColors, currentSettings, rotation, isBeat);
     } catch (e: any) {
-      console.error(`[Worker] Renderer ${currentMode} failed:`, e.message);
-      // Failsafe: switch to a basic renderer to prevent crash loop
-      currentMode = VisualizerMode.PLASMA;
+      // Prevent worker crash loop, just log once or fallback
+      if (Math.random() < 0.01) console.error(`[Worker] Renderer ${currentMode} error:`, e.message);
     }
   }
 
@@ -85,8 +73,8 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
       canvas = msg.canvas;
       width = msg.width;
       height = msg.height;
+      // 'desynchronized' provides lower latency
       ctx = canvas.getContext('2d', { alpha: false, desynchronized: true }) as OffscreenCanvasRenderingContext2D;
-      // Initialize all renderers (some might not use canvas but need to setup state)
       Object.values(renderers).forEach(r => r?.init(canvas));
       loop();
       break;
@@ -97,17 +85,13 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
       break;
     case 'CONFIG':
       const modeChanged = currentMode !== msg.mode;
-      
       currentMode = msg.mode;
       currentSettings = msg.settings;
       currentColors = msg.colors;
 
       if (modeChanged && ctx) {
-        // Critical: Hard clear the canvas to prevent artifacts from previous mode
         ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, width, height);
-        
-        // Re-initialize the specific renderer to reset particles/physics
         const renderer = renderers[currentMode];
         if (renderer && renderer.init) {
             renderer.init(canvas);

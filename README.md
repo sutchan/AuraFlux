@@ -1,7 +1,7 @@
 
 # Aura Flux 🎵👁️
 
-### AI-Powered 3D Music Visualizer & Identifier (v1.0.9)
+### AI-Powered 3D Music Visualizer & Identifier (v1.0.4)
 
 [中文文档](README_ZH.md) | [Live Demo](https://aura.tanox.net/) | [Changelog](CHANGELOG.md)
 

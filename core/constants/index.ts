@@ -1,15 +1,15 @@
-
 /**
  * File: core/constants/index.ts
- * Version: 1.0.3
+ * Version: 1.0.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { VisualizerMode, Region, Position, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.0.3';
+export const APP_VERSION = '1.0.4';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
+export const STORAGE_PREFIX = 'av_v1_';
 
 export const VISUALIZER_PRESETS = {
   [VisualizerMode.PLASMA]: { name: 'Plasma Flow', description: 'Fluid liquid color gradients' },

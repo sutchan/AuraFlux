@@ -1,13 +1,12 @@
-
 /**
  * File: components/ui/help/ShortcutsContent.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React from 'react';
-import { ShortcutItem } from './ShortcutItem'; // Assuming ShortcutItem is in the same directory
+import { ShortcutItem } from './ShortcutItem';
 
 interface ShortcutsContentProps { 
   h: any; 
