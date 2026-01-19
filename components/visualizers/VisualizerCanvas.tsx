@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.0.37
+ * Version: 1.0.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -16,9 +16,8 @@ import {
   LasersRenderer, BeatDetector
 } from '../../core/services/visualizerStrategies';
 
-// WORKER IMPORT:
-// Strictly using relative path to ensure Vite resolves it correctly without relying on alias config.
-import VisualizerWorker from '../../core/workers/visualizer.worker.ts?worker';
+// WORKER IMPORT (v1.0.3 Standard)
+import VisualizerWorker from '@/core/workers/visualizer.worker.ts?worker';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
@@ -58,7 +57,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
         try {
             const offscreen = canvas.transferControlToOffscreen();
             
-            // Initialize Worker (Bundled IIFE)
+            // Initialize Worker
             const worker = new VisualizerWorker();
             
             worker.postMessage({ 
@@ -71,7 +70,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
             
             workerRef.current = worker;
             isOffscreenRef.current = true;
-            console.log("[Visualizer] Worker initialized successfully (Bundled)");
+            console.log("[Visualizer] Worker initialized successfully");
         } catch (e) {
             console.warn("[Visualizer] Worker init failed, falling back to main thread:", e);
             // Fallback logic continues below
