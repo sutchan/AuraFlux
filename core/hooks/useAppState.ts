@@ -1,7 +1,9 @@
+
 /**
  * File: core/hooks/useAppState.ts
- * Version: 0.7.6
+ * Version: 1.0.5
  * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';

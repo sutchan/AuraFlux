@@ -1,4 +1,11 @@
 
+/**
+ * File: core/services/audioSynthesis.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 export const createDemoAudioGraph = (context: AudioContext, node: AnalyserNode) => {
   // 1. Bass (Sawtooth)
   const oscBass = context.createOscillator();

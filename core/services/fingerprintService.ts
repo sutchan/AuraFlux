@@ -1,3 +1,11 @@
+
+/**
+ * File: core/services/fingerprintService.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { SongInfo } from '../types';
 
 const STORAGE_KEY = 'av_fingerprints_v1';
@@ -22,6 +30,7 @@ export const generateFingerprint = async (base64Audio: string): Promise<number[]
   let offlineCtx: OfflineAudioContext | null = null;
 
   try {
+    // Robustness: Handle invalid base64 strings gracefully
     const binaryString = window.atob(base64Audio);
     const len = binaryString.length;
     const bytes = new Uint8Array(len);

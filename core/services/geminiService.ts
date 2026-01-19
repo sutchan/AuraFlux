@@ -1,7 +1,7 @@
 
 /**
  * File: core/services/geminiService.ts
- * Version: 0.8.5
+ * Version: 1.0.5
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
  */

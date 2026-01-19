@@ -203,6 +203,8 @@ export const ar = {
     [VisualizerMode.LASERS]: 'مصفوفة الليزر',
     [VisualizerMode.FLUID_CURVES]: 'رقصة الشفق',
     [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو (DoF)',
+    [VisualizerMode.KALEIDOSCOPE]: 'مشكال',
+    [VisualizerMode.GRID]: 'شبكة ريترو (Synthwave)',
     [VisualizerMode.SILK]: 'الحرير العائم (WebGL)',
     [VisualizerMode.LIQUID]: 'الكوكب السائل (WebGL)',
     [VisualizerMode.TERRAIN]: 'التضاريس المضلعة (WebGL)'

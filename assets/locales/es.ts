@@ -126,7 +126,10 @@ export const es = {
   systemPanel: {
     interface: 'Interfaz',
     behavior: 'Comportamiento',
-    maintenance: 'Mantenimiento'
+    maintenance: 'Mantenimiento',
+    engine: 'Motor',
+    audio: 'Audio',
+    ai: 'IA'
   },
   showFps: 'Mostrar FPS',
   showTooltips: 'Mostrar Ayuda',
@@ -137,6 +140,7 @@ export const es = {
     title: 'Ajustes Inteligentes',
     hint: 'Aplica combinaciones estéticas profesionales con un clic.',
     select: 'Elige un ambiente...',
+    custom: 'Personalizado / Modificado',
     calm: 'Hipnótico y Calmo',
     party: 'Fiesta Energética',
     ambient: 'Enfoque Ambiental',
@@ -203,6 +207,8 @@ export const es = {
     [VisualizerMode.LASERS]: 'Matriz de Láseres',
     [VisualizerMode.FLUID_CURVES]: 'Danza de Auroras',
     [VisualizerMode.MACRO_BUBBLES]: 'Burbujas Macro (DoF)',
+    [VisualizerMode.KALEIDOSCOPE]: 'Caleidoscopio',
+    [VisualizerMode.GRID]: 'Rejilla Retro (Synthwave)',
     [VisualizerMode.SILK]: 'Seda Flotante (WebGL)',
     [VisualizerMode.LIQUID]: 'Planeta Líquido (WebGL)',
     [VisualizerMode.TERRAIN]: 'Relieve Low-Poly (WebGL)'

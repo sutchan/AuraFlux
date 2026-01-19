@@ -1,3 +1,11 @@
+
+/**
+ * File: components/controls/panels/VisualizerPreview.tsx
+ * Version: 1.0.6
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { memo } from 'react';
 import { VisualizerMode } from '../../../core/types';
 
@@ -18,6 +26,9 @@ const styles: Record<VisualizerMode, React.CSSProperties> = {
     [VisualizerMode.LASERS]: { background: 'linear-gradient(10deg, transparent 48%, #ff00ff 50%, transparent 52%), linear-gradient(170deg, transparent 48%, #00ffff 50%, transparent 52%), black' },
     [VisualizerMode.FLUID_CURVES]: { background: 'linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899)'},
     [VisualizerMode.MACRO_BUBBLES]: { background: 'radial-gradient(circle at 20% 30%, #8b5cf6 20%, transparent 21%), radial-gradient(circle at 75% 80%, #ec4899 15%, transparent 16%), black' },
+    [VisualizerMode.KALEIDOSCOPE]: { background: 'conic-gradient(from 0deg, #3b82f6, #ec4899, #3b82f6, #ec4899, #3b82f6)' },
+    [VisualizerMode.GRID]: { background: 'linear-gradient(to top, #ff00ff 0%, transparent 40%), linear-gradient(to bottom, #00ffff 0%, black 60%)' },
+    [VisualizerMode.RIPPLES]: { background: 'radial-gradient(circle, transparent 20%, #3b82f6 25%, transparent 30%, #8b5cf6 45%, transparent 50%), black' },
     [VisualizerMode.SILK]: { background: 'linear-gradient(45deg, #a3e635, #22c55e, #14532d)' },
     [VisualizerMode.LIQUID]: { background: 'radial-gradient(circle, #4c1d95, #1e1b4b)' },
     [VisualizerMode.TERRAIN]: { background: 'linear-gradient(to top, #1e1b4b, #4c1d95 60%, #fde047)' },

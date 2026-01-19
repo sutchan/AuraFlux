@@ -1,4 +1,11 @@
 
+/**
+ * File: components/controls/panels/CustomTextSettingsPanel.tsx
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React from 'react';
 import { AVAILABLE_FONTS, getPositionOptions } from '../../../core/constants';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';

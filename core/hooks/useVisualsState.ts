@@ -1,4 +1,11 @@
 
+/**
+ * File: core/hooks/useVisualsState.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { VisualizerMode, VisualizerSettings, SmartPreset } from '../types';

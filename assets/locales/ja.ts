@@ -126,7 +126,10 @@ export const ja = {
   systemPanel: {
     interface: 'インターフェース',
     behavior: 'システム挙動',
-    maintenance: 'メンテナンス'
+    maintenance: 'メンテナンス',
+    engine: 'エンジン',
+    audio: 'オーディオ',
+    ai: '人工知能'
   },
   showFps: 'FPSを表示',
   showTooltips: 'ツールチップを表示',
@@ -137,6 +140,7 @@ export const ja = {
     title: 'スマートプリセット',
     hint: '専門家が調整したビジュアル設定を一クリックで適用します。',
     select: 'ムードを選択...',
+    custom: 'カスタム / 変更済み',
     calm: '催眠的・穏やか',
     party: 'エネルギッシュ',
     ambient: 'アンビエント',
@@ -203,6 +207,8 @@ export const ja = {
     [VisualizerMode.LASERS]: 'レーザーマトリクス',
     [VisualizerMode.FLUID_CURVES]: '極光の舞',
     [VisualizerMode.MACRO_BUBBLES]: '微細液胞 (DoF)',
+    [VisualizerMode.KALEIDOSCOPE]: '万華鏡 (Kaleidoscope)',
+    [VisualizerMode.GRID]: 'レトロ・グリッド (Synthwave)',
     [VisualizerMode.SILK]: '流光シルク (WebGL)',
     [VisualizerMode.LIQUID]: '流体惑星 (WebGL)',
     [VisualizerMode.TERRAIN]: 'ポリゴン山脈 (WebGL)'

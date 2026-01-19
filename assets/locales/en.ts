@@ -141,6 +141,7 @@ export const en = {
     title: 'Smart Presets',
     hint: 'Apply a curated aesthetic combination with one click.',
     select: 'Select a mood...',
+    custom: 'Custom / Modified',
     calm: 'Hypnotic & Calm',
     party: 'Energetic Party',
     ambient: 'Ambient Focus',
@@ -207,6 +208,9 @@ export const en = {
     [VisualizerMode.LASERS]: 'Concert Lasers',
     [VisualizerMode.FLUID_CURVES]: 'Aura Waves',
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles (DoF)',
+    [VisualizerMode.KALEIDOSCOPE]: 'Kaleidoscope',
+    [VisualizerMode.GRID]: 'Retro Grid (Synthwave)',
+    [VisualizerMode.RIPPLES]: 'Sonic Ripples',
     [VisualizerMode.SILK]: 'Silk Waves',
     [VisualizerMode.LIQUID]: 'Liquid Sphere',
     [VisualizerMode.TERRAIN]: 'Low-Poly Terrain'

@@ -1,3 +1,11 @@
+
+/**
+ * File: components/ui/SongOverlay.tsx
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { useRef, useMemo } from 'react';
 import { SongInfo, Language } from '../../core/types';
 import { TRANSLATIONS } from '../../core/i18n';

@@ -1,4 +1,11 @@
 
+/**
+ * File: components/visualizers/scenes/LowPolyTerrainScene.tsx
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { useRef, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';

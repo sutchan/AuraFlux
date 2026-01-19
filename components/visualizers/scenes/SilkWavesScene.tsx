@@ -1,4 +1,11 @@
 
+/**
+ * File: components/visualizers/scenes/SilkWavesScene.tsx
+ * Version: 1.0.13
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';

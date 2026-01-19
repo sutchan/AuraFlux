@@ -1,4 +1,11 @@
 
+/**
+ * File: components/controls/panels/VisualSettingsPanel.tsx
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React from 'react';
 import { VisualizerMode } from '../../../core/types';
 import { VISUALIZER_PRESETS, COLOR_THEMES, SMART_PRESETS } from '../../../core/constants';

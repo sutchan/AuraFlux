@@ -15,7 +15,7 @@ export const tw = {
     visual: '視覺',
     text: '文字',
     audio: '音訊',
-    ai: 'AI 曲目辨識',
+    ai: 'AI 通感辨識',
     system: '系統'
   },
   hints: {
@@ -27,7 +27,7 @@ export const tw = {
     sensitivity: '控制音訊增益。數值越高，微弱的聲音也能引發劇烈的視覺爆發。',
     smoothing: '時域阻尼係數。高數值如液體般柔順，低數值則反應銳利。',
     fftSize: '頻譜採樣精度。4096 提供極致細節但消耗更多 CPU 資源。',
-    lyrics: '啟用 AI 驅動的曲目辨識與歌詞同步展示。',
+    lyrics: '激活 AI 驅動的聲景分析與歌詞同步展示。',
     lyricsStyle: '更改辨識結果及歌詞的排版風格。',
     region: '針對特定音樂市場優化 AI 搜尋的匹配權重。',
     autoRotate: '自動循環切換不同的視覺化引擎。',
@@ -64,18 +64,18 @@ export const tw = {
   colorInterval: '切換間隔 (秒)',
   monitorAudio: '音訊監聽',
   audioInput: '輸入來源選擇',
-  lyrics: 'AI 曲目辨識',
-  showLyrics: '啟用自動辨識',
+  lyrics: 'AI 通感辨識',
+  showLyrics: '激活通感引擎',
   displaySettings: '顯示設定',
   language: '介面語言',
   region: '音樂市場定位',
-  startMic: '開啟音訊監聽',
-  stopMic: '停止音訊監聽',
+  startMic: '開啟音訊採集',
+  stopMic: '停止音訊採集',
   listening: '監聽中',
-  identifying: 'AI 正在解析曲目...',
+  identifying: '正在捕獲聲景特徵...',
   startExperience: '開啟視聽盛宴',
   welcomeTitle: 'Aura Flux | 靈動流光',
-  welcomeText: '將律動凝煉為藝術，讓節奏躍然屏上。融合 Gemini AI 實時曲目識別，為您開啟感官交響的全新維度。',
+  welcomeText: '將旋律凝煉為極光，讓節奏躍然屏上。融合 Gemini AI 即時聲景分析，為您開啟感官交響的全新維度。',
   unsupportedTitle: '瀏覽器不受支援',
   unsupportedText: 'Aura Flux 需要現代瀏覽器功能（例如麥克風存取權限）才能運作。請更新至最新版本的 Chrome、Firefox 或 Safari。',
   hideOptions: '收起',
@@ -89,8 +89,8 @@ export const tw = {
   randomize: '隨機美學組合',
   help: '說明與協助',
   close: '關閉',
-  betaDisclaimer: 'Beta 功能：辨識準確度正在持續優化中。',
-  wrongSong: '辨識有誤？點擊重試',
+  betaDisclaimer: 'Beta 協議：通感神經網絡正在校準中。',
+  wrongSong: '特徵不匹配？重新採樣',
   hideCursor: '隱藏滑鼠游標',
   customColor: '文字顏色',
   randomizeTooltip: '隨機視覺設定 (快捷鍵: R)',
@@ -105,6 +105,7 @@ export const tw = {
   customTextPlaceholder: '輸入文字',
   showText: '顯示文字圖層',
   pulseBeat: '隨節奏律動',
+  textAudioReactive: '音訊響應 (大小/透明度)',
   textSize: '字體大小',
   textRotation: '旋轉角度',
   textFont: '字體樣式',
@@ -127,7 +128,10 @@ export const tw = {
   systemPanel: {
     interface: '介面互動',
     behavior: '系統行為',
-    maintenance: '維護與資訊'
+    maintenance: '維護與資訊',
+    engine: '渲染引擎',
+    audio: '音訊架構',
+    ai: '人工智慧'
   },
   showFps: '顯示幀率',
   showTooltips: '顯示提示',
@@ -138,6 +142,7 @@ export const tw = {
     title: '智慧預設',
     hint: '一鍵應用由專家精心調校的視覺參數組合。',
     select: '選擇一種心境...',
+    custom: '自定義 / 已修改',
     calm: '催眠舒緩',
     party: '動感派對',
     ambient: '靜謐氛圍',
@@ -164,7 +169,7 @@ export const tw = {
       bc: '中下',
       br: '右下'
   },
-  wakeLock: '禁止螢幕休眠',
+  wakeLock: '螢幕常亮',
   system: {
     shortcuts: {
       mic: '麥克風',
@@ -182,8 +187,8 @@ export const tw = {
     tryDemo: '嘗試演示模式 (無音訊)'
   },
   aiState: {
-    active: '辨識功能已開啟',
-    enable: '開啟 AI 辨識'
+    active: '通感分析已運行',
+    enable: '激活通感引擎'
   },
   regions: {
     global: '全球',
@@ -203,7 +208,10 @@ export const tw = {
     [VisualizerMode.NEBULA]: '深空星云',
     [VisualizerMode.LASERS]: '舞台雷射矩陣',
     [VisualizerMode.FLUID_CURVES]: '極光之舞',
-    [VisualizerMode.MACRO_BUBBLES]: '微觀液泡 (景深)', 
+    [VisualizerMode.MACRO_BUBBLES]: '微觀液泡 (DoF)', 
+    [VisualizerMode.KALEIDOSCOPE]: '萬花筒 (Kaleidoscope)',
+    [VisualizerMode.GRID]: '復古網格 (Synthwave)',
+    [VisualizerMode.RIPPLES]: '聲波漣漪 (Ripples)',
     [VisualizerMode.SILK]: '流光綢緞 (WebGL)',
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
     [VisualizerMode.TERRAIN]: '低多邊形山脈 (WebGL)'
@@ -238,7 +246,7 @@ export const tw = {
       '1. 授權權限：點擊「開啟體驗」並允許瀏覽器訪問麥克風。',
       '2. 播放音樂：在設備附近播放音樂，視覺效果將根據實時採樣跳動。',
       '3. 探索模式：打開設置面板 (按 H) 切換 12+ 種視覺引擎。',
-      '4. AI 辨識：按 L 鍵開啟「AI 曲目辨識」以分析當前歌曲及其情緒。'
+      '4. AI 辨識：按 L 鍵開啟「AI 通感辨識」以分析當前歌曲及其情緒。'
     ],
     settingsTitle: '核心參數指南',
     settingsDesc: {

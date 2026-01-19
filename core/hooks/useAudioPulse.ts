@@ -1,4 +1,11 @@
 
+/**
+ * File: core/hooks/useAudioPulse.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { useRef, useEffect } from 'react';
 import { VisualizerSettings } from '../types';
 import { BeatDetector } from '../services/beatDetector';

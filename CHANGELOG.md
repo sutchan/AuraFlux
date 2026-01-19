@@ -6,6 +6,31 @@ All notable changes to the **Aura Vision** project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.8] - Hotfix Worker Path
+
+### Fixed
+*   **🚨 Worker Resolution:** Re-applied strict relative path for `VisualizerWorker` import. This definitively resolves the `Failed to resolve module specifier "@/..."` error by bypassing alias resolution for worker files.
+
+## [v1.0.7] - Cleanup & i18n Polish
+
+### Fixed
+*   **🚨 Path Resolution Patch:** Re-verified and enforced strict relative path usage for Web Worker imports to prevent `Failed to resolve module specifier` errors in specific build environments.
+
+### Changed
+*   **🌏 i18n Alignment:** Updated Traditional Chinese (zh-TW) translations to match the elevated, poetic tone of the Simplified Chinese (zh-CN) locale.
+*   **🧹 Cleanup:** Removed deprecated `colorUtils.ts` logic to maintain a clean codebase.
+
+## [v1.0.6] - Path Resolution Patch
+
+### Fixed
+*   **🚨 Critical Worker Import:** Fixed `Uncaught TypeError` by replacing the `@/` alias in `VisualizerCanvas.tsx` with an explicit relative path (`../../`) for importing `visualizer.worker.ts`. This ensures correct module resolution in all browser environments and build targets.
+
+## [v1.0.5] - Stability Patch
+
+### Fixed
+*   **🚨 Runtime Error Fix:** Fixed a module resolution error in `VisualizerCanvas` by using explicit relative paths for the Web Worker import. This resolves the `Failed to resolve module specifier "@/..."` error seen in some browser environments.
+*   **🛡️ Strict Mode Robustness:** Added logic to force a DOM remount if the OffscreenCanvas becomes detached due to React Strict Mode double-invocation, preventing "Canvas is detached" errors.
+
 ## [v1.0.3] - Deployment Stability & i18n
 
 ### Fixed

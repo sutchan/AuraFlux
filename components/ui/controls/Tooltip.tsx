@@ -1,4 +1,11 @@
 
+/**
+ * File: components/ui/controls/Tooltip.tsx
+ * Version: 1.0.13
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { useAppContext } from '../../AppContext';

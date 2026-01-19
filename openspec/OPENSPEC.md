@@ -8,19 +8,19 @@
 以下文档位于 `openspec/` 目录下，代表了本项目的最新技术标准：
 
 1.  **[01 架构与设计规范](./01_architecture_spec.md)**
-    *   技术栈、核心生命周期、模块化数据流 (v1.2.1 / Three.js Locked)。
+    *   技术栈、Worker 路径解析修复、Strict Mode 健壮性设计 (v1.3.0)。
 2.  **[02 音频引擎与信号规范](./02_audio_engine_spec.md)**
-    *   Web Audio 采集、FFT 分析、声学指纹特征提取算法。
+    *   OfflineAudioContext 指纹提取算法、iOS Safari MIME 兼容性 (v0.8.0)。
 3.  **[03 视觉生成渲染规范](./03_rendering_spec.md)**
     *   2D 策略模式渲染器、3D WebGL 顶点位移算法。
 4.  **[04 AI 智能与语义规范](./04_ai_integration_spec.md)**
-    *   Gemini 3 模型配置、搜索增强 (Search Grounding) 与结构化输出 Schema。
+    *   Gemini 3 模型配置、语言自适应策略 (Linguistic Policy) (v0.8.0)。
 5.  **[05 UI/UX 与交互规范](./05_interface_spec.md)**
-    *   状态转换逻辑、面板布局系统、闲置隐藏策略、快捷键映射表。
+    *   状态转换逻辑、面板布局系统、闲置隐藏策略。
 6.  **[06 持久化与国际化规范](./06_storage_and_i18n_spec.md)**
-    *   LocalStorage Schema、多语言字典结构与区域偏好 (v1.0.4)。
+    *   LocalStorage Schema、多语言字典结构 (v1.0.4)。
 7.  **[07 部署与环境规范](./07_deployment_guide.md)**
-    *   API 配置、构建流程、依赖冲突解决 (v1.0.3)。
+    *   Three.js 版本锁定说明、HTTPS 强制要求 (v1.0.5)。
 
 ---
-*Aura Flux Project Specification - Version 1.0.4*
+*Aura Flux Project Specification - Version 1.0.5*

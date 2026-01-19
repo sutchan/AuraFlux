@@ -203,6 +203,8 @@ export const ru = {
     [VisualizerMode.LASERS]: 'Лазерная матрица',
     [VisualizerMode.FLUID_CURVES]: 'Танец полярного сияния',
     [VisualizerMode.MACRO_BUBBLES]: 'Макро-пузырьки (DoF)',
+    [VisualizerMode.KALEIDOSCOPE]: 'Калейдоскоп',
+    [VisualizerMode.GRID]: 'Ретро Сетка (Synthwave)',
     [VisualizerMode.SILK]: 'Мерцающий шелк (WebGL)',
     [VisualizerMode.LIQUID]: 'Жидкая планета (WebGL)',
     [VisualizerMode.TERRAIN]: 'Полигональный ландшафт (WebGL)'

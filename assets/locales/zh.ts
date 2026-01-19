@@ -90,7 +90,7 @@ export const zh = {
   randomize: '随机美学组合',
   help: '帮助与说明',
   close: '关闭',
-  betaDisclaimer: 'Beta 协议：通感神经网路正在校准中。',
+  betaDisclaimer: 'Beta 协议：通感神经网络正在校准中。',
   wrongSong: '特征不匹配？重新采样',
   hideCursor: '隐藏鼠标指针',
   customColor: '文字颜色',
@@ -143,6 +143,7 @@ export const zh = {
     title: '智能预设',
     hint: '一键应用由专家精心调校的视觉参数组合。',
     select: '选择一种心境...',
+    custom: '自定义 / 已修改',
     calm: '催眠舒缓',
     party: '动感派对',
     ambient: '静谧氛围',
@@ -209,9 +210,12 @@ export const zh = {
     [VisualizerMode.LASERS]: '舞台激光矩阵',
     [VisualizerMode.FLUID_CURVES]: '极光之舞',
     [VisualizerMode.MACRO_BUBBLES]: '微观液泡 (景深)', 
+    [VisualizerMode.KALEIDOSCOPE]: '万花筒 (Kaleidoscope)',
+    [VisualizerMode.GRID]: '复古网格 (Synthwave)',
+    [VisualizerMode.RIPPLES]: '声波涟漪 (Ripples)',
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
-    [VisualizerMode.TERRAIN]: '低多边形山脈 (WebGL)'
+    [VisualizerMode.TERRAIN]: '低多边形山脉 (WebGL)'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '标准排版',

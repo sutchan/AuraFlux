@@ -1,3 +1,11 @@
+
+/**
+ * File: components/ui/LyricsOverlay.tsx
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { useRef } from 'react';
 import { VisualizerSettings, SongInfo, LyricsStyle } from '../../core/types';
 import { useAudioPulse } from '../../core/hooks/useAudioPulse';

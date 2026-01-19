@@ -1,6 +1,9 @@
+
 /**
- * Aura Vision - Visualizer Worker
- * Version: 1.0.0
+ * File: core/workers/visualizer.worker.ts
+ * Version: 1.0.7
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
  *
  * This worker script is responsible for offloading 2D visualizer rendering
  * from the main thread using OffscreenCanvas. It imports all necessary
@@ -9,7 +12,12 @@
 
 // --- 1. IMPORT DEPENDENCIES ---
 import { VisualizerMode, VisualizerSettings, WorkerMessage, IVisualizerRenderer } from '../types';
-import { BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, LasersRenderer, BeatDetector } from '../services/visualizerStrategies';
+import { 
+  BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
+  ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
+  LasersRenderer, KaleidoscopeRenderer, GridRenderer, RipplesRenderer,
+  BeatDetector 
+} from '../services/visualizerStrategies';
 
 // --- 2. WORKER MAIN LOGIC ---
 
@@ -33,6 +41,9 @@ const renderers: Partial<Record<VisualizerMode, IVisualizerRenderer>> = {
   [VisualizerMode.LASERS]: new LasersRenderer(),
   [VisualizerMode.FLUID_CURVES]: new FluidCurvesRenderer(),
   [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
+  [VisualizerMode.KALEIDOSCOPE]: new KaleidoscopeRenderer(),
+  [VisualizerMode.GRID]: new GridRenderer(),
+  [VisualizerMode.RIPPLES]: new RipplesRenderer(),
 };
 
 const beatDetector = new BeatDetector();
@@ -45,6 +56,7 @@ const loop = () => {
 
   const smoothColors = currentColors; 
   
+  // Use trails for specific aesthetics, but ensure clean clears for others
   if (currentSettings.trails) {
     ctx.fillStyle = `rgba(0, 0, 0, 0.15)`;
     ctx.fillRect(0, 0, width, height);
@@ -88,13 +100,23 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
       if (canvas) { canvas.width = width; canvas.height = height; }
       break;
     case 'CONFIG':
-      if(currentMode !== msg.mode) {
-        // Clear canvas on mode switch to prevent artifacts
-        if(ctx) ctx.clearRect(0,0,width,height);
-      }
+      const modeChanged = currentMode !== msg.mode;
+      
       currentMode = msg.mode;
       currentSettings = msg.settings;
       currentColors = msg.colors;
+
+      if (modeChanged && ctx) {
+        // Critical: Hard clear the canvas to prevent artifacts from previous mode
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, width, height);
+        
+        // Re-initialize the specific renderer to reset particles/physics
+        const renderer = renderers[currentMode];
+        if (renderer && renderer.init) {
+            renderer.init(canvas);
+        }
+      }
       break;
     case 'FRAME':
       lastFrameData = msg.data;

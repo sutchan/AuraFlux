@@ -1,3 +1,11 @@
+
+/**
+ * File: core/hooks/useIdleTimer.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 const DEFAULT_IDLE_TIMEOUT = 3000;

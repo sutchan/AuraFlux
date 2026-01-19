@@ -1,6 +1,7 @@
+
 /**
  * File: core/services/renderers/PlasmaRenderer.ts
- * Version: 1.0.0
+ * Version: 1.0.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */

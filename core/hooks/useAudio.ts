@@ -1,7 +1,7 @@
 
 /**
  * File: core/hooks/useAudio.ts
- * Version: 0.7.2
+ * Version: 1.0.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -131,9 +131,16 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
       updateAudioDevices();
     } catch (err: any) {
       const t = TRANSLATIONS[language] || TRANSLATIONS['en'];
-      setErrorMessage(err.name === 'NotAllowedError' ? t.errors.accessDenied : t.errors.general);
+      const isPermissionDenied = err.name === 'NotAllowedError' || err.message?.includes('denied');
+      
+      setErrorMessage(isPermissionDenied ? t.errors.accessDenied : t.errors.general);
       setIsListening(false);
-      console.error("[Audio] Access Error:", err);
+      
+      if (isPermissionDenied) {
+          console.warn("[Audio] Permission denied by user.");
+      } else {
+          console.error("[Audio] Access Error:", err);
+      }
     }
   }, [settings.fftSize, settings.smoothing, updateAudioDevices, language, isListening, stopListening]);
 

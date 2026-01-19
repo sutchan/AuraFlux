@@ -1,4 +1,11 @@
 
+/**
+ * File: components/controls/panels/SystemSettingsPanel.tsx
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import React, { useState } from 'react';
 import { Language } from '../../../core/types';
 import { APP_VERSION } from '../../../core/constants';

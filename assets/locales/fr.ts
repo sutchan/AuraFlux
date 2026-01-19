@@ -203,6 +203,8 @@ export const fr = {
     [VisualizerMode.LASERS]: 'Matrice Lasers',
     [VisualizerMode.FLUID_CURVES]: 'Danse des Aurores',
     [VisualizerMode.MACRO_BUBBLES]: 'Macro-bulles (DoF)',
+    [VisualizerMode.KALEIDOSCOPE]: 'Kaléidoscope',
+    [VisualizerMode.GRID]: 'Grille Rétro (Synthwave)',
     [VisualizerMode.SILK]: 'Soie Flottante (WebGL)',
     [VisualizerMode.LIQUID]: 'Sphère Liquide (WebGL)',
     [VisualizerMode.TERRAIN]: 'Relief Low-Poly (WebGL)'

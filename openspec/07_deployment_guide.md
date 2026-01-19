@@ -8,57 +8,41 @@
 
 ## 2. 本地开发
 1.  **克隆仓库**: `git clone <repository-url>`
-2.  **创建 `.env` 文件**: 在项目根目录创建一个名为 `.env` 的文件，并填入你的 API 密钥：
+2.  **创建 `.env` 文件**: 
     ```env
     API_KEY=你的_GEMINI_API_KEY
     ```
-    > **安全警告**: 绝不要将包含真实密钥的 `.env` 文件提交到公共 Git 仓库。
-
 3.  **安装并运行**:
     ```bash
-    # 安装依赖
     npm install
-    # 启动开发服务器
     npm run dev
     ```
-4.  在浏览器中访问 `http://localhost:5173`。请注意，应用必须运行在 `localhost` 或 `https` 协议下才能访问麦克风。
 
 ## 3. 生产环境部署
-部署的核心是将 `npm run build` 命令生成的静态文件托管到服务器上。
 
-### 关键：依赖稳定性 (Dependency Stability)
-由于 `@react-three/postprocessing` 对 `three.js` 版本有严格的 Peer Dependency 限制 (通常 `< 0.163.0`)，在生产环境构建时必须确保版本锁定：
-- **Three.js 版本:** 必须明确锁定为 **0.162.0**。
-- **构建错误:** 如果遇到 `ERESOLVE unable to resolve dependency tree`，请检查 `package.json` 是否误升级了 `three`。
-- **解决方案:** 在 `package.json` 中强制指定版本 `"three": "0.162.0"`，避免使用 `^` 前缀。
+### 🚨 关键：Importmap 依赖策略 (Importmap Dependency Strategy)
+项目采用 `index.html` 中的 **Importmap** 作为依赖版本的单一事实来源 (Single Source of Truth)。
+构建配置 (`vite.config.ts`) 已配置为 **Externalize** 主要运行时依赖 (React, Three.js, GenAI SDK)，以便在生产环境中直接使用 CDN 资源。
+
+- **Three.js 版本:** `^0.182.0` (遵循 importmap 配置)。
+- **构建行为:** 构建产物将保留 `import { ... } from "three"` 等语句，由浏览器根据 `index.html` 解析。
 
 ### 构建步骤
-在部署之前，你必须先构建项目。此命令会将 `API_KEY` 嵌入到最终的静态文件中。
 ```bash
-# 确保在环境中设置了 API_KEY
+# 注入 API Key 并构建
 API_KEY=你的_GEMINI_API_KEY npm run build
 ```
-构建产物将位于 `build/` 目录中。
+构建产物位于 `build/` 目录。
 
-### 部署平台
+### 部署平台适配
 
-#### 方案 A: Vercel (推荐)
-1.  将你的 Git 仓库导入到 Vercel。
-2.  配置项目设置：
-    -   **框架预设 (Framework Preset):** `Vite`
-    -   **构建命令 (Build Command):** `npm run build`
-    -   **输出目录 (Output Directory):** `build`
-3.  在 Vercel 项目设置中，添加 `API_KEY` 作为一个环境变量。
-4.  部署。Vercel 将自动处理构建流程和 HTTPS 配置。
+#### Vercel
+- **Command:** `npm run build`
+- **Output Directory:** `build`
+- **Environment Variables:** 添加 `API_KEY`。
 
-#### 方案 B: 腾讯云 EdgeOne
-EdgeOne 适合需要在中国大陆地区实现低延迟访问的用户。
-1.  **本地构建**: 在你的本地计算机上运行 `API_KEY=你的_GEMINI_API_KEY npm run build`。
-2.  **访问 EdgeOne 控制台**: 登录腾讯云控制台，进入 EdgeOne 服务。
-3.  **创建站点**: 新建一个静态站点托管实例。
-4.  **上传文件**: 将本地 `build/` 目录下的所有文件上传到站点的文件管理器中。
-5.  **配置域名**: 绑定你的自定义域名，并确保开启 HTTPS 以支持麦克风功能。
-6.  **发布**: 发布站点。
+#### 腾讯云 EdgeOne / 静态托管
+- 确保域名启用 **HTTPS**。现代浏览器的 `getUserMedia` (麦克风权限) 只能在 HTTPS 或 localhost 环境下工作。HTTP 环境下应用将无法启动音频采集。
 
 ---
-*Aura Flux Deployment Guide - Version 1.0.3*
+*Aura Flux Deployment Guide - Version 1.0.6*

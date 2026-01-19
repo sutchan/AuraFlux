@@ -1,7 +1,7 @@
 
 # Aura Flux 🎵👁️
 
-### AI-Powered 3D Music Visualizer & Identifier (v1.0.0)
+### AI-Powered 3D Music Visualizer & Identifier (v1.0.6)
 
 [中文文档](README_ZH.md) | [Live Demo](https://aura.tanox.net/) | [Changelog](CHANGELOG.md)
 
@@ -15,6 +15,18 @@
 </p>
 
 **Aura Flux** is a cutting-edge web application that transforms live audio into immersive 3D generative art. It delivers buttery smooth visuals while identifying music and adapting its mood in real-time using Google Gemini AI.
+
+---
+
+## 🌟 Application Scenarios
+
+Unlock the potential of generative audio-reactive art in your daily life and creative workflows:
+
+*   **🎙️ Live Streaming & VTubing:** Enhance your OBS/Streamlabs scenes with a transparent, audio-reactive background that pulses to your voice or game audio.
+*   **🎛️ DJ Sets & VJing:** A lightweight, zero-install visualizer for live electronic music performances. Project it on stage screens without needing heavy VJ software.
+*   **🏠 Home Audio & Parties:** Cast it to your Living Room TV or Projector to turn your space into an immersive audiovisual club or listening lounge.
+*   **🧘 Ambient & Focus:** Switch to "Calm" or "Nebula" modes to create a soothing, hypnotic atmosphere perfect for meditation, coding, or deep work sessions.
+*   **🎨 Interactive Installations:** Create low-cost, high-impact reactive art installations using just a browser and a microphone.
 
 ---
 

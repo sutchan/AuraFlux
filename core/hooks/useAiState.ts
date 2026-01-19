@@ -1,3 +1,11 @@
+
+/**
+ * File: core/hooks/useAiState.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 // FIX: Import React to provide types for React.Dispatch and React.SetStateAction.
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';

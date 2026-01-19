@@ -2,10 +2,7 @@
 # OpenSpec: 音频引擎规范
 
 ## 1. 采集规范
-- **采样源:** 
-  - 默认: 系统默认音频输入设备。
-  - 指定: 通过 `navigator.mediaDevices.enumerateDevices()` 获取并指定的 `deviceId`。
-- **已移除:** `getDisplayMedia` (基于屏幕共享的系统音频采集)。
+- **采样源:** `navigator.mediaDevices.getUserMedia`
 - **约束配置:** 
   ```json
   {
@@ -14,27 +11,30 @@
     "autoGainControl": false
   }
   ```
-  *注意：必须禁用这些功能以获取原始音乐动态。*
+- **格式兼容性 (MIME Types):**
+  - 优先: `audio/webm;codecs=opus` (Chrome/Firefox)
+  - 回退: `audio/mp4` (iOS Safari 17+), `audio/aac`。
+  - *策略：* 运行时动态检测 `MediaRecorder.isTypeSupported` 以选择最佳格式。
 
 ## 2. 路由拓扑 (Routing Topology)
-- **分析链路 (Analysis Path):** `Source -> AnalyserNode`
-  - 用途：提取频域数据供可视化引擎渲染。
-- **浏览器兼容性 (Compatibility):** 
-  - **Resume 强制机制:** 在初始化及每次切换设备后，必须显式调用 `AudioContext.resume()`，以绕过 Chrome/Safari 的自动播放拦截策略。
+- **实时链路:** `Source -> AnalyserNode (FFT) -> Destination`
+- **生命周期管理:** 
+  - 监听 `visibilitychange` 事件。当页面重新获得焦点时，强制调用 `AudioContext.resume()` 以修复 iOS 设备上的静音问题。
 
 ## 3. 频谱分析 (Real-time FFT)
-- **FFT Size:** 默认 512 (256 频段)。
-- **Smoothing:** 默认 0.8，可在 UI 调整。
-- **频段分布:** 
-  - **Bass (0-15):** 驱动脉冲与全局缩放。
-  - **Mids (15-60):** 驱动几何形变与复杂运动。
-  - **Highs (100+):** 驱动粒子加速与光效触发。
+- **FFT Size:** 默认 512 (UI 可调至 4096)。
+- **Smoothing:** 默认 0.8。
+- **数据流:** Uint8Array 频域数据每帧通过 `postMessage` 发送至 Web Worker 驱动视觉效果。
 
-## 4. 声学指纹 (Acoustic Fingerprinting)
-- **采样频率:** 200ms。
-- **特征维度:** 选取 0-4300Hz 范围内的优势峰值索引。
-- **匹配算法:** Jaccard 相似度（阈值 0.25）。
-- **流程:** 快照 -> Base64 -> Offline Context 解码 -> FFT 扫描 -> 特征 Set。
+## 4. 声学指纹 (Acoustic Fingerprinting) - v1.0.0 Refactor
+- **核心技术:** `OfflineAudioContext` + `ScriptProcessorNode`。
+- **流程:**
+  1. **解码:** 将 Base64 音频解码为 AudioBuffer。
+  2. **离线渲染:** 创建与原音频采样率一致的 `OfflineAudioContext`。
+  3. **特征提取:** 在 `ScriptProcessor.onaudioprocess` 回调中实时截获 FFT 数据。
+     *   *注意：* 不再使用 `suspend/resume` 方法，因为无法保证数据同步。
+  4. **特征降维:** 扫描 0-4300Hz 频段 (Bin 2~100) 的能量峰值索引 (Index)。
+  5. **匹配:** Jaccard 相似度算法 (阈值 0.25) 对比本地缓存。
 
 ---
-*Aura Flux Audio Engine - Version 0.7.5*
+*Aura Flux Audio Engine - Version 0.8.0*

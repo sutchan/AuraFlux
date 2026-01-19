@@ -1,3 +1,11 @@
+
+/**
+ * File: core/hooks/useIdentification.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { SongInfo, Language, Region } from '../types';
 import { identifySongFromAudio } from '../services/geminiService';

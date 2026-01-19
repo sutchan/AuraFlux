@@ -1,4 +1,11 @@
 
+/**
+ * File: core/services/renderers/RingsRenderer.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
 
 export class RingsRenderer implements IVisualizerRenderer {

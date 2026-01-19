@@ -1,7 +1,7 @@
 
 /**
  * File: components/AppContext.tsx
- * Version: 0.8.1
+ * Version: 1.0.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */

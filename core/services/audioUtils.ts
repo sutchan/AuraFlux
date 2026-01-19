@@ -1,4 +1,11 @@
 
+/**
+ * File: core/services/audioUtils.ts
+ * Version: 1.0.5
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 export function getAverage(data: Uint8Array, start: number, end: number) {
   let sum = 0;
   const safeEnd = Math.min(end, data.length);
