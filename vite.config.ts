@@ -1,6 +1,6 @@
 /**
  * File: vite.config.ts
- * Version: 1.2.1
+ * Version: 1.3.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -25,13 +25,14 @@ export default defineConfig({
       external: []
     }
   },
-  // Removed optimizeDeps.exclude and build.rollupOptions.external
-  // to fully rely on Vite's bundling. This fixes "Failed to resolve module specifier"
-  // errors caused by mixed importmap/bundler strategies.
   build: {
     outDir: 'build',
     target: 'esnext',
-    minify: 'esbuild'
+    minify: 'esbuild',
+    rollupOptions: {
+      // Externalize three.js to use the CDN version defined in index.html importmap
+      external: ['three']
+    }
   },
   define: {
     'process.env.API_KEY': JSON.stringify(process.env.API_KEY || '')
