@@ -1,6 +1,7 @@
+
 /**
  * File: core/workers/visualizer.worker.ts
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  *
@@ -14,8 +15,7 @@ import { VisualizerMode, VisualizerSettings, WorkerMessage, IVisualizerRenderer 
 import { 
   BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
   ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
-  LasersRenderer, KaleidoscopeRenderer, GridRenderer, RipplesRenderer,
-  BeatDetector 
+  LasersRenderer, BeatDetector 
 } from '../services/visualizerStrategies';
 
 // --- 2. WORKER MAIN LOGIC ---
@@ -40,9 +40,6 @@ const renderers: Partial<Record<VisualizerMode, IVisualizerRenderer>> = {
   [VisualizerMode.LASERS]: new LasersRenderer(),
   [VisualizerMode.FLUID_CURVES]: new FluidCurvesRenderer(),
   [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
-  [VisualizerMode.KALEIDOSCOPE]: new KaleidoscopeRenderer(),
-  [VisualizerMode.GRID]: new GridRenderer(),
-  [VisualizerMode.RIPPLES]: new RipplesRenderer(),
 };
 
 const beatDetector = new BeatDetector();

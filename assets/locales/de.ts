@@ -203,8 +203,6 @@ export const de = {
     [VisualizerMode.LASERS]: 'Konzert-Laser',
     [VisualizerMode.FLUID_CURVES]: 'Aura-Wellen',
     [VisualizerMode.MACRO_BUBBLES]: 'Makro-Blasen (DoF)',
-    [VisualizerMode.KALEIDOSCOPE]: 'Kaleidoskop',
-    [VisualizerMode.GRID]: 'Retro-Gitter (Synthwave)',
     [VisualizerMode.SILK]: 'Seidenwellen (WebGL)',
     [VisualizerMode.LIQUID]: 'Flüssige Sphäre (WebGL)',
     [VisualizerMode.TERRAIN]: 'Low-Poly Terrain (WebGL)'

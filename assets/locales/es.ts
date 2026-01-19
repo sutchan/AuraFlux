@@ -207,8 +207,6 @@ export const es = {
     [VisualizerMode.LASERS]: 'Matriz de Láseres',
     [VisualizerMode.FLUID_CURVES]: 'Danza de Auroras',
     [VisualizerMode.MACRO_BUBBLES]: 'Burbujas Macro (DoF)',
-    [VisualizerMode.KALEIDOSCOPE]: 'Caleidoscopio',
-    [VisualizerMode.GRID]: 'Rejilla Retro (Synthwave)',
     [VisualizerMode.SILK]: 'Seda Flotante (WebGL)',
     [VisualizerMode.LIQUID]: 'Planeta Líquido (WebGL)',
     [VisualizerMode.TERRAIN]: 'Relieve Low-Poly (WebGL)'

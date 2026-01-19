@@ -1,6 +1,7 @@
+
 /**
  * File: core/services/visualizerStrategies.ts
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -15,9 +16,6 @@ export { NebulaRenderer } from './renderers/NebulaRenderer';
 export { TunnelRenderer } from './renderers/GeometryRenderers';
 export { PlasmaRenderer } from './renderers/PlasmaRenderer';
 export { LasersRenderer } from './renderers/LasersRenderer';
-export { KaleidoscopeRenderer } from './renderers/KaleidoscopeRenderer';
-export { GridRenderer } from './renderers/GridRenderer';
-export { RipplesRenderer } from './renderers/RipplesRenderer';
 
 // Also export the BeatDetector as it's used in the worker
 export { BeatDetector } from './beatDetector';

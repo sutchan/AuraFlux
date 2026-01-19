@@ -210,9 +210,6 @@ export const zh = {
     [VisualizerMode.LASERS]: '舞台激光矩阵',
     [VisualizerMode.FLUID_CURVES]: '极光之舞',
     [VisualizerMode.MACRO_BUBBLES]: '微观液泡 (景深)', 
-    [VisualizerMode.KALEIDOSCOPE]: '万花筒 (Kaleidoscope)',
-    [VisualizerMode.GRID]: '复古网格 (Synthwave)',
-    [VisualizerMode.RIPPLES]: '声波涟漪 (Ripples)',
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
     [VisualizerMode.TERRAIN]: '低多边形山脉 (WebGL)'

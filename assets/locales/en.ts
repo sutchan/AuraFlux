@@ -208,9 +208,6 @@ export const en = {
     [VisualizerMode.LASERS]: 'Concert Lasers',
     [VisualizerMode.FLUID_CURVES]: 'Aura Waves',
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles (DoF)',
-    [VisualizerMode.KALEIDOSCOPE]: 'Kaleidoscope',
-    [VisualizerMode.GRID]: 'Retro Grid (Synthwave)',
-    [VisualizerMode.RIPPLES]: 'Sonic Ripples',
     [VisualizerMode.SILK]: 'Silk Waves',
     [VisualizerMode.LIQUID]: 'Liquid Sphere',
     [VisualizerMode.TERRAIN]: 'Low-Poly Terrain'

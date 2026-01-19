@@ -1,7 +1,7 @@
 
 /**
  * File: core/services/renderers/NebulaRenderer.ts
- * Version: 1.0.5
+ * Version: 1.0.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -15,10 +15,13 @@ const createBufferCanvas = (width: number, height: number): OffscreenCanvas | HT
   if (typeof OffscreenCanvas !== 'undefined') {
     return new OffscreenCanvas(width, height);
   }
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  return canvas;
+  if (typeof document !== 'undefined') {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    return canvas;
+  }
+  throw new Error("Canvas creation failed: Neither OffscreenCanvas nor DOM is available.");
 };
 
 export class NebulaRenderer implements IVisualizerRenderer {

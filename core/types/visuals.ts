@@ -1,6 +1,7 @@
+
 /**
  * File: core/types/visuals.ts
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -18,9 +19,6 @@ export enum VisualizerMode {
   LASERS = 'LASERS',
   FLUID_CURVES = 'FLUID_CURVES',
   MACRO_BUBBLES = 'MACRO_BUBBLES',
-  KALEIDOSCOPE = 'KALEIDOSCOPE',
-  GRID = 'GRID',
-  RIPPLES = 'RIPPLES',
   
   // WebGL Modes
   SILK = 'SILK',

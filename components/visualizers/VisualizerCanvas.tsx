@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.0.24
+ * Version: 1.0.26
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -13,14 +13,13 @@ import { VisualizerMode, VisualizerSettings } from '../../core/types/index';
 import { 
   BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
   ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
-  LasersRenderer, KaleidoscopeRenderer, GridRenderer, RipplesRenderer,
-  BeatDetector
+  LasersRenderer, BeatDetector
 } from '../../core/services/visualizerStrategies';
 
 // WORKER IMPORT FIX:
 // We use a strict relative path (../../) to import the worker.
 // Aliases (like @/) can cause resolution failures in the Worker constructor in some environments.
-import VisualizerWorker from '../../core/workers/visualizer.worker.ts?worker';
+import VisualizerWorker from '/core/workers/visualizer.worker.ts?worker';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
@@ -121,9 +120,6 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
           [VisualizerMode.LASERS]: new LasersRenderer(),
           [VisualizerMode.FLUID_CURVES]: new FluidCurvesRenderer(),
           [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
-          [VisualizerMode.KALEIDOSCOPE]: new KaleidoscopeRenderer(),
-          [VisualizerMode.GRID]: new GridRenderer(),
-          [VisualizerMode.RIPPLES]: new RipplesRenderer(),
         };
         try {
             Object.values(renderersRef.current).forEach((r: any) => r.init && r.init(canvas));

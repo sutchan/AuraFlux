@@ -203,8 +203,6 @@ export const ko = {
     [VisualizerMode.LASERS]: '레이저 매트릭스',
     [VisualizerMode.FLUID_CURVES]: '오로라의 춤',
     [VisualizerMode.MACRO_BUBBLES]: '마이크로 버블 (DoF)',
-    [VisualizerMode.KALEIDOSCOPE]: '만화경 (Kaleidoscope)',
-    [VisualizerMode.GRID]: '레트로 그리드 (Synthwave)',
     [VisualizerMode.SILK]: '유광 실크 (WebGL)',
     [VisualizerMode.LIQUID]: '유체 행성 (WebGL)',
     [VisualizerMode.TERRAIN]: '폴리곤 산맥 (WebGL)'

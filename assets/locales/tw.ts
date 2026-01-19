@@ -209,9 +209,6 @@ export const tw = {
     [VisualizerMode.LASERS]: '舞台雷射矩陣',
     [VisualizerMode.FLUID_CURVES]: '極光之舞',
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡 (DoF)', 
-    [VisualizerMode.KALEIDOSCOPE]: '萬花筒 (Kaleidoscope)',
-    [VisualizerMode.GRID]: '復古網格 (Synthwave)',
-    [VisualizerMode.RIPPLES]: '聲波漣漪 (Ripples)',
     [VisualizerMode.SILK]: '流光綢緞 (WebGL)',
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
     [VisualizerMode.TERRAIN]: '低多邊形山脈 (WebGL)'

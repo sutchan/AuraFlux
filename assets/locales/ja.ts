@@ -207,8 +207,6 @@ export const ja = {
     [VisualizerMode.LASERS]: 'レーザーマトリクス',
     [VisualizerMode.FLUID_CURVES]: '極光の舞',
     [VisualizerMode.MACRO_BUBBLES]: '微細液胞 (DoF)',
-    [VisualizerMode.KALEIDOSCOPE]: '万華鏡 (Kaleidoscope)',
-    [VisualizerMode.GRID]: 'レトロ・グリッド (Synthwave)',
     [VisualizerMode.SILK]: '流光シルク (WebGL)',
     [VisualizerMode.LIQUID]: '流体惑星 (WebGL)',
     [VisualizerMode.TERRAIN]: 'ポリゴン山脈 (WebGL)'
