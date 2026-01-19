@@ -16,13 +16,13 @@
     "@react-three/postprocessing": "^2.16.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "three": "^0.164.0",
+    "three": "0.160.0",
     "uuid": "9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
-    "@types/three": "^0.164.0",
+    "@types/three": "^0.160.0",
     "@types/uuid": "9.0.8",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "10.4.19",
