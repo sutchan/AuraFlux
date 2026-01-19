@@ -1,12 +1,12 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
-import React, { Suspense, useCallback, useEffect, useRef } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom, ChromaticAberration, TiltShift } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -21,7 +21,8 @@ interface ThreeVisualizerProps {
 }
 
 const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  // Use state to hold the canvas element reference, ensuring we only attach listeners when it exists
+  const [canvasEl, setCanvasEl] = useState<HTMLCanvasElement | null>(null);
 
   const handleContextLost = useCallback((event: Event) => {
     event.preventDefault();
@@ -33,18 +34,17 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-        canvas.addEventListener('webglcontextlost', handleContextLost, false);
-        canvas.addEventListener('webglcontextrestored', handleContextRestored, false);
+    if (canvasEl) {
+        canvasEl.addEventListener('webglcontextlost', handleContextLost, false);
+        canvasEl.addEventListener('webglcontextrestored', handleContextRestored, false);
     }
     return () => {
-        if (canvas) {
-            canvas.removeEventListener('webglcontextlost', handleContextLost);
-            canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+        if (canvasEl) {
+            canvasEl.removeEventListener('webglcontextlost', handleContextLost);
+            canvasEl.removeEventListener('webglcontextrestored', handleContextRestored);
         }
     };
-  }, [handleContextLost, handleContextRestored]);
+  }, [canvasEl, handleContextLost, handleContextRestored]);
 
   // MOVED: Conditional return must be after all hooks to comply with Rules of Hooks
   if (!analyser) return null;
@@ -79,7 +79,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
     <div className="w-full h-full">
       <Canvas 
         key={settings.quality} // Remount on quality change to reset context with new settings
-        ref={canvasRef}
         camera={{ position: [0, 2, 16], fov: 55 }} 
         dpr={dpr} 
         shadows={false}
@@ -94,8 +93,8 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         }}
         onCreated={({ gl }) => {
           gl.setClearColor('#000000');
-          // Update ref for the effect cleanup
-          canvasRef.current = gl.domElement;
+          // Update state with the actual GL canvas element
+          setCanvasEl(gl.domElement);
         }}
       >
         <Suspense fallback={null}>

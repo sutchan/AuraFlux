@@ -1,7 +1,7 @@
 
 /**
  * File: vite.config.ts
- * Version: 1.0.9
+ * Version: 1.0.12
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -20,22 +20,6 @@ export default defineConfig({
   },
   worker: {
     format: 'iife',
-    plugins() {
-      return [
-        {
-          name: 'worker-alias-resolver',
-          resolveId(source, importer) {
-            // Only apply to worker files
-            if (importer && importer.includes('worker')) {
-              if (source.startsWith('@/')) {
-                return source.replace('@/', './');
-              }
-            }
-            return null;
-          },
-        },
-      ];
-    },
   },
   build: {
     outDir: 'build',

@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.0.28
+ * Version: 1.0.32
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -19,7 +19,7 @@ import {
 // WORKER IMPORT FIX:
 // We use a strict relative path (../../) to import the worker.
 // Aliases (like @/) or root paths (like /core) can cause resolution failures in the Worker constructor.
-import VisualizerWorker from '/core/workers/visualizer.worker.ts?worker';
+import VisualizerWorker from '../../core/workers/visualizer.worker.ts?worker';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
