@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.0.34
+ * Version: 1.0.37
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -16,9 +16,8 @@ import {
   LasersRenderer, BeatDetector
 } from '../../core/services/visualizerStrategies';
 
-// WORKER IMPORT FIX:
-// Using explicit relative path (../../) instead of alias (@/) to prevent resolution errors in the browser.
-// The "?worker" suffix tells Vite to load this as a Web Worker.
+// WORKER IMPORT:
+// Strictly using relative path to ensure Vite resolves it correctly without relying on alias config.
 import VisualizerWorker from '../../core/workers/visualizer.worker.ts?worker';
 
 interface VisualizerCanvasProps {
@@ -50,14 +49,16 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // Reset offscreen flag
     isOffscreenRef.current = false;
 
     // 1. Attempt to use Worker (OffscreenCanvas)
+    // We check for transferControlToOffscreen support
     if (!!canvas.transferControlToOffscreen && !workerRef.current) {
         try {
             const offscreen = canvas.transferControlToOffscreen();
             
-            // Instantiate the worker
+            // Initialize Worker (Bundled IIFE)
             const worker = new VisualizerWorker();
             
             worker.postMessage({ 
@@ -70,14 +71,14 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
             
             workerRef.current = worker;
             isOffscreenRef.current = true;
-            console.log("[Visualizer] Worker initialized successfully");
+            console.log("[Visualizer] Worker initialized successfully (Bundled)");
         } catch (e) {
             console.warn("[Visualizer] Worker init failed, falling back to main thread:", e);
-            // Fallback logic continues below if isOffscreenRef remains false
+            // Fallback logic continues below
         }
     }
 
-    // 2. Fallback to Main Thread Rendering
+    // 2. Fallback to Main Thread Rendering if Worker failed or not supported
     if (!isOffscreenRef.current && Object.keys(renderersRef.current).length === 0) {
         console.log("[Visualizer] Running in Main Thread Mode");
         renderersRef.current = {
@@ -104,7 +105,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
       }
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, []);
+  }, []); // Run once on mount
 
   // Update Worker Configuration
   useEffect(() => {
