@@ -1,12 +1,12 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.0.6
+ * Version: 1.0.4 (Rollback)
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom, ChromaticAberration, TiltShift } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -21,32 +21,6 @@ interface ThreeVisualizerProps {
 }
 
 const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
-  // Use state to hold the canvas element reference, ensuring we only attach listeners when it exists
-  const [canvasEl, setCanvasEl] = useState<HTMLCanvasElement | null>(null);
-
-  const handleContextLost = useCallback((event: Event) => {
-    event.preventDefault();
-    console.warn("[WebGL] Context lost! High GPU pressure detected. Attempting to restore...");
-  }, []);
-
-  const handleContextRestored = useCallback(() => {
-    console.log("[WebGL] Context restored. Re-initializing engine...");
-  }, []);
-
-  useEffect(() => {
-    if (canvasEl) {
-        canvasEl.addEventListener('webglcontextlost', handleContextLost, false);
-        canvasEl.addEventListener('webglcontextrestored', handleContextRestored, false);
-    }
-    return () => {
-        if (canvasEl) {
-            canvasEl.removeEventListener('webglcontextlost', handleContextLost);
-            canvasEl.removeEventListener('webglcontextrestored', handleContextRestored);
-        }
-    };
-  }, [canvasEl, handleContextLost, handleContextRestored]);
-
-  // MOVED: Conditional return must be after all hooks to comply with Rules of Hooks
   if (!analyser) return null;
 
   const renderScene = () => {
@@ -68,17 +42,13 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
       return 1.5;
   };
 
-  // Optimization: Reduce DPR cap to 1.5 for mid/high to save fill-rate on high-res screens
   const dpr = settings.quality === 'low' ? 0.8 : settings.quality === 'med' ? 1.0 : Math.min(window.devicePixelRatio, 1.5);
   const enableTiltShift = settings.quality === 'high' && (mode === VisualizerMode.LIQUID || mode === VisualizerMode.SILK);
   
-  // Optimization: Cap multisampling at 4 (or 0 for performance). 8 is often unstable on WebGL.
-  const multisampling = settings.quality === 'high' ? 4 : 0;
-
   return (
     <div className="w-full h-full">
       <Canvas 
-        key={settings.quality} // Remount on quality change to reset context with new settings
+        key={settings.quality}
         camera={{ position: [0, 2, 16], fov: 55 }} 
         dpr={dpr} 
         shadows={false}
@@ -87,14 +57,10 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             alpha: false,
             stencil: false,
             depth: true,
-            powerPreference: "default", // Changed from high-performance to default to be nicer to GPU
-            preserveDrawingBuffer: false,
-            failIfMajorPerformanceCaveat: true
+            powerPreference: "high-performance"
         }}
         onCreated={({ gl }) => {
           gl.setClearColor('#000000');
-          // Update state with the actual GL canvas element
-          setCanvasEl(gl.domElement);
         }}
       >
         <Suspense fallback={null}>
@@ -103,7 +69,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         
         {settings.glow && (
             <EffectComposer 
-              multisampling={multisampling}
+              multisampling={0} // Disable multisampling for stability
               enableNormalPass={false}
             >
                 <Bloom 
