@@ -1,14 +1,14 @@
 
 /**
  * File: core/constants/index.ts
- * Version: 1.0.6
+ * Version: 1.0.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { VisualizerMode, Region, Position, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.0.6';
+export const APP_VERSION = '1.0.9';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 
 export const VISUALIZER_PRESETS = {
@@ -21,9 +21,9 @@ export const VISUALIZER_PRESETS = {
   [VisualizerMode.LASERS]: { name: 'Concert Lasers', description: 'Converging sweeping light beams' },
   [VisualizerMode.FLUID_CURVES]: { name: 'Aura Waves', description: 'Ethereal flowing gradients' },
   [VisualizerMode.MACRO_BUBBLES]: { name: 'Macro Bubbles', description: 'Liquid bubbles with Depth of Field (DoF)' },
-  [VisualizerMode.KALEIDOSCOPE]: { name: 'Kaleidoscope', description: 'Mirrored symmetric fractals' },
-  [VisualizerMode.GRID]: { name: 'Retro Grid', description: '80s Synthwave perspective landscape' },
-  [VisualizerMode.RIPPLES]: { name: 'Sonic Ripples', description: 'Audio reactive water surface tension' },
+  [VisualizerMode.KALEIDOSCOPE]: { name: 'Kaleidoscope', description: 'Mirrored radial patterns' },
+  [VisualizerMode.GRID]: { name: 'Retro Grid', description: 'Synthwave terrain perspective' },
+  [VisualizerMode.RIPPLES]: { name: 'Sonic Ripples', description: 'Raindrops and expanding circles' },
   [VisualizerMode.SILK]: { name: 'Silk Waves', description: 'Iridescent flowing fabric (WebGL)' },
   [VisualizerMode.LIQUID]: { name: 'Liquid Sphere', description: 'Ferrofluid-like reactive matter (WebGL)' },
   [VisualizerMode.TERRAIN]: { name: 'Low-Poly Terrain', description: 'Flying over reactive mountains (WebGL)' }
@@ -104,7 +104,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
   cyberpunk: {
     nameKey: 'cyberpunk',
     settings: {
-      mode: VisualizerMode.GRID, // Updated to use the new mode
+      mode: VisualizerMode.TUNNEL, // Updated from GRID to TUNNEL
       colorTheme: COLOR_THEMES[1], // Cyan/Magenta
       speed: 2.5,
       sensitivity: 1.8,

@@ -1,7 +1,6 @@
-
 /**
  * File: core/types/visuals.ts
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -22,6 +21,7 @@ export enum VisualizerMode {
   KALEIDOSCOPE = 'KALEIDOSCOPE',
   GRID = 'GRID',
   RIPPLES = 'RIPPLES',
+  
   // WebGL Modes
   SILK = 'SILK',
   LIQUID = 'LIQUID',

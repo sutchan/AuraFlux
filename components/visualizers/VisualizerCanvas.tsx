@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.0.17
+ * Version: 1.0.24
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -13,12 +13,13 @@ import { VisualizerMode, VisualizerSettings } from '../../core/types/index';
 import { 
   BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
   ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
-  LasersRenderer, KaleidoscopeRenderer, BeatDetector, GridRenderer, RipplesRenderer
+  LasersRenderer, KaleidoscopeRenderer, GridRenderer, RipplesRenderer,
+  BeatDetector
 } from '../../core/services/visualizerStrategies';
 
-// FIX: Use explicit relative path. 
-// Do NOT use aliases (e.g. @/core/...) for workers as they may fail to resolve in the worker context.
-// Ensure this path is correct relative to components/visualizers/
+// WORKER IMPORT FIX:
+// We use a strict relative path (../../) to import the worker.
+// Aliases (like @/) can cause resolution failures in the Worker constructor in some environments.
 import VisualizerWorker from '../../core/workers/visualizer.worker.ts?worker';
 
 interface VisualizerCanvasProps {

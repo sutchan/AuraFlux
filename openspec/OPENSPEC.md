@@ -23,4 +23,4 @@
     *   Three.js 版本锁定说明、HTTPS 强制要求 (v1.0.5)。
 
 ---
-*Aura Flux Project Specification - Version 1.0.5*
+*Aura Flux Project Specification - Version 1.0.9*
