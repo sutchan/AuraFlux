@@ -1,13 +1,13 @@
 
 /**
  * File: components/AppContext.tsx
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
-import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset } from '../core/types';
+import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioFeatures } from '../core/types';
 import { useAudio } from '../core/hooks/useAudio';
 import { useLocalStorage } from '../core/hooks/useLocalStorage';
 import { useAppState } from '../core/hooks/useAppState';
@@ -75,6 +75,7 @@ interface AudioContextType {
   toggleMicrophone: (deviceId: string) => void;
   hasAudioPermission: () => Promise<boolean>;
   startDemoMode: () => Promise<void>;
+  audioFeaturesRef: React.MutableRefObject<AudioFeatures>;
 }
 const AudioContext = createContext<AudioContextType | null>(null);
 export const useAudioContext = () => {
@@ -203,7 +204,8 @@ const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
 
   const { 
     isListening, isSimulating, isPending, analyser, mediaStream, audioDevices, 
-    errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone 
+    errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone,
+    audioFeaturesRef
   } = useAudio({ settings, language });
 
   useEffect(() => {
@@ -221,7 +223,8 @@ const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     <AudioContext.Provider value={{
       isListening, isSimulating, isPending, analyser, mediaStream, audioDevices,
       selectedDeviceId, onDeviceChange: setSelectedDeviceId, errorMessage, setErrorMessage,
-      startMicrophone, toggleMicrophone, hasAudioPermission, startDemoMode
+      startMicrophone, toggleMicrophone, hasAudioPermission, startDemoMode,
+      audioFeaturesRef
     }}>
       {children}
     </AudioContext.Provider>

@@ -1,12 +1,13 @@
 
 /**
  * File: core/services/renderers/GeometryRenderers.ts
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
+import { getAverage } from '../audioUtils';
 
 export class TunnelRenderer implements IVisualizerRenderer {
   init() {}
@@ -28,10 +29,14 @@ export class TunnelRenderer implements IVisualizerRenderer {
     }
 
     for (let i = 0; i < shapes; i++) {
-        const value = data[Math.floor((i / shapes) * 40)] * settings.sensitivity;
+        // Use getAverage to sample a range of frequencies rather than a single bin
+        // Spreading sampling across low-mids (bins 0-60 roughly)
+        const startBin = Math.floor((i / shapes) * 60);
+        const value = getAverage(data, startBin, startBin + 5) * settings.sensitivity;
+        
         const depth = (i + (rotation * 5)) % shapes; 
         const scale = Math.pow(depth / shapes, 2); 
-        const radius = maxRadius * scale * (1 + (value / 500)); 
+        const radius = maxRadius * scale * (1 + (value / 255)); 
         
         ctx.strokeStyle = colors[i % colors.length];
         

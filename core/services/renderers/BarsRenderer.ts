@@ -1,12 +1,13 @@
 
 /**
  * File: core/services/renderers/BarsRenderer.ts
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
+import { getAverage } from '../audioUtils';
 
 export class BarsRenderer implements IVisualizerRenderer {
   private peaks: number[] = [];
@@ -38,7 +39,8 @@ export class BarsRenderer implements IVisualizerRenderer {
     // 1. Configuration: Fewer bars, wider stance
     const barCount = 24; // Reduced from 56 for a chunky, retro feel
     const barWidthRatio = 0.8; // Occupy 80% of the slot width
-    const step = Math.floor(data.length / (barCount * 1.5)); // Sampling step
+    // Use max(1, ...) to avoid division by zero or empty step
+    const step = Math.max(1, Math.floor(data.length / (barCount * 1.5))); // Sampling step
     
     // Calculate layout
     const slotWidth = w / barCount;
@@ -60,10 +62,9 @@ export class BarsRenderer implements IVisualizerRenderer {
     const dropRate = (h * 0.005) / Math.max(0.5, settings.sensitivity * 0.5);
 
     for (let i = 0; i < halfCount; i++) {
-        // Get Audio Value
-        // Interpolate slightly for smoothness if possible, otherwise simple sample
-        const dataIndex = Math.floor(i * step);
-        const value = data[dataIndex] * settings.sensitivity * 1.2;
+        // Get Audio Value using Average to ensure we don't skip narrow frequency bands
+        const startBin = Math.floor(i * step);
+        const value = getAverage(data, startBin, startBin + step) * settings.sensitivity * 1.2;
         
         // Target Height for the Bar
         const targetHeight = Math.min(Math.max((value / 255) * h * 0.7, 0), h * 0.85);

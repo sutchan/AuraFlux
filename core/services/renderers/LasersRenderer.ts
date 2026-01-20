@@ -1,7 +1,7 @@
 
 /**
  * File: core/services/renderers/LasersRenderer.ts
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -14,10 +14,10 @@ export class LasersRenderer implements IVisualizerRenderer {
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean) {
     if (colors.length === 0) return;
     
-    // Use imported getAverage function
-    const highs = getAverage(data, 100, 255) / 255;
-    const bass = getAverage(data, 0, 20) / 255;
-    const mids = getAverage(data, 20, 80) / 255;
+    // Apply sensitivity globally to audio features
+    const highs = getAverage(data, 100, 255) / 255 * settings.sensitivity;
+    const bass = getAverage(data, 0, 20) / 255 * settings.sensitivity;
+    const mids = getAverage(data, 20, 80) / 255 * settings.sensitivity;
     
     ctx.save(); 
     ctx.globalCompositeOperation = 'screen';
@@ -31,10 +31,10 @@ export class LasersRenderer implements IVisualizerRenderer {
     origins.forEach((origin, oIdx) => {
       const beams = (oIdx === 2) ? 6 : 8; 
       for (let i = 0; i < beams; i++) {
-        const freqVal = (data[oIdx * 16 + i * 2] || 0) / 255;
+        const freqVal = (data[oIdx * 16 + i * 2] || 0) / 255 * settings.sensitivity;
         
         const angleBase = (oIdx === 0 ? -0.1 : oIdx === 1 ? -Math.PI + 0.1 : -Math.PI/2);
-        // Wide sweep on beat
+        // Wide sweep on beat, now reactive to sensitivity via bass
         const beatSweep = beat ? 0.5 : 0;
         const sweepRange = 1.2 + bass * 0.5 + beatSweep;
         
@@ -44,11 +44,12 @@ export class LasersRenderer implements IVisualizerRenderer {
         const endX = origin.x + Math.cos(angle) * length;
         const endY = origin.y + Math.sin(angle) * length;
 
-        const baseAlpha = (0.1 + freqVal * 0.9) * settings.sensitivity;
+        const baseAlpha = (0.1 + freqVal * 0.9);
         const finalAlpha = Math.min(Math.max(baseAlpha * (0.5 + bass * 2), 0.01), 1.0);
         if (finalAlpha < 0.02) continue;
 
-        const coreWidth = (1 + bass * 25 + mids * 5) * settings.sensitivity;
+        // Base width scales with sensitivity, plus dynamic audio reactivity
+        const coreWidth = settings.sensitivity + bass * 25 + mids * 5;
         
         if (settings.quality !== 'low') {
             const glowWidth = coreWidth * (4 + highs * 6);

@@ -1,12 +1,13 @@
 
 /**
  * File: core/services/renderers/RingsRenderer.ts
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
+import { getAverage } from '../audioUtils';
 
 export class RingsRenderer implements IVisualizerRenderer {
   private beatScale = 1.0;
@@ -27,8 +28,10 @@ export class RingsRenderer implements IVisualizerRenderer {
 
     if (colors.length === 0) return;
     for(let i = 0; i < maxRings; i++) {
-        const freqIndex = i * 8; 
-        const val = data[freqIndex] * settings.sensitivity;
+        // Sample wider frequency bands for more stable response
+        const startBin = i * 6;
+        const val = getAverage(data, startBin, startBin + 5) * settings.sensitivity;
+        
         const baseR = (40 + (i * 25)) * scale;
         const audioR = Math.min(val, 150) * Math.min(scale, 1.5); 
         const radius = baseR + audioR;

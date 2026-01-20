@@ -1,7 +1,7 @@
 
 /**
  * File: core/types/audio.ts
- * Version: 1.0.6
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -25,4 +25,10 @@ export interface SongInfo {
 export interface AudioDevice {
   deviceId: string;
   label: string;
+}
+
+export interface AudioFeatures {
+  rms: number;      // Smoothed volume level (0.0 - 1.0)
+  energy: number;   // Raw instantaneous energy (0.0 - 1.0)
+  timestamp: number;
 }

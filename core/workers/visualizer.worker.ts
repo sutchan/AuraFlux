@@ -1,7 +1,7 @@
 
 /**
  * File: core/workers/visualizer.worker.ts
- * Version: 1.6.2
+ * Version: 1.6.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  *

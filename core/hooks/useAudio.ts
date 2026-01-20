@@ -1,15 +1,18 @@
 
 /**
  * File: core/hooks/useAudio.ts
- * Version: 1.1.0
+ * Version: 1.2.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { AudioDevice, VisualizerSettings, Language } from '../types';
+import { AudioDevice, VisualizerSettings, Language, AudioFeatures } from '../types';
 import { TRANSLATIONS } from '../i18n';
 import { createDemoAudioGraph } from '../services/audioSynthesis';
+
+// Use direct path to public asset to avoid build/alias resolution issues
+const AUDIO_PROCESSOR_URL = './audio-processor.js';
 
 interface UseAudioProps {
   settings: VisualizerSettings;
@@ -26,12 +29,21 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
   const [audioDevices, setAudioDevices] = useState<AudioDevice[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // AudioWorklet Features
+  const featuresRef = useRef<AudioFeatures>({ rms: 0, energy: 0, timestamp: 0 });
+  const workletNodeRef = useRef<AudioWorkletNode | null>(null);
+
   const audioContextRef = useRef<AudioContext | null>(null);
   const demoGraphRef = useRef<{ stop: () => void } | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
   const stopListening = useCallback(async () => {
     try {
+        if (workletNodeRef.current) {
+            workletNodeRef.current.port.onmessage = null;
+            workletNodeRef.current.disconnect();
+            workletNodeRef.current = null;
+        }
         if (streamRef.current) {
             streamRef.current.getTracks().forEach(track => track.stop());
             streamRef.current = null;
@@ -54,6 +66,7 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
         setMediaStream(null);
         setIsListening(false);
         setIsSimulating(false);
+        featuresRef.current = { rms: 0, energy: 0, timestamp: 0 };
     }
   }, []);
 
@@ -95,6 +108,28 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     return () => navigator.mediaDevices?.removeEventListener('devicechange', updateAudioDevices);
   }, [updateAudioDevices]);
 
+  // Helper to init Worklet
+  const initWorklet = async (ctx: AudioContext, source: MediaStreamAudioSourceNode) => {
+    try {
+        await ctx.audioWorklet.addModule(AUDIO_PROCESSOR_URL);
+        const node = new AudioWorkletNode(ctx, 'audio-features-processor');
+        
+        node.port.onmessage = (event) => {
+            if (event.data.type === 'features') {
+                featuresRef.current = event.data.data;
+            }
+        };
+        
+        source.connect(node);
+        // Worklet needs to connect to destination or have keep-alive to run
+        node.connect(ctx.destination); 
+        workletNodeRef.current = node;
+        console.log("[Audio] Worklet initialized.");
+    } catch (e) {
+        console.warn("[Audio] AudioWorklet failed to load, falling back to main thread only:", e);
+    }
+  };
+
   const startMicrophone = useCallback(async (deviceId?: string) => {
     setErrorMessage(null);
     // Ensure any previous instance is fully stopped before starting new one
@@ -131,7 +166,12 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
       const node = context.createAnalyser();
       node.fftSize = settings.fftSize;
       node.smoothingTimeConstant = settings.smoothing;
-      context.createMediaStreamSource(stream).connect(node);
+      
+      const source = context.createMediaStreamSource(stream);
+      source.connect(node);
+
+      // Initialize AudioWorklet
+      await initWorklet(context, source);
 
       audioContextRef.current = context;
       setAudioContext(context);
@@ -214,6 +254,7 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
       isListening, isSimulating, isPending, // Export isPending
       audioContext, analyser, mediaStream, audioDevices, 
       errorMessage, setErrorMessage, 
-      startMicrophone, startDemoMode, toggleMicrophone 
+      startMicrophone, startDemoMode, toggleMicrophone,
+      audioFeaturesRef: featuresRef 
   };
 };

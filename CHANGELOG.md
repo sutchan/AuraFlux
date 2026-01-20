@@ -6,6 +6,16 @@ All notable changes to the **Aura Vision** project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.3] - 2025-01-27
+
+### Added
+*   **📱 Mobile Gestures:** Introduced swipe controls for changing modes (Horizontal) and sensitivity (Vertical), plus long-press for AI activation.
+*   **🌐 i18n & Help:** Updated Help Modal with dedicated touch gesture instructions across all 10 supported languages.
+
+### Fixed
+*   **🛡️ Robustness:** Added `touch-action: none` to the main viewport to prevent unwanted browser scrolling/navigation during gesture interaction.
+*   **🔖 Versioning:** Synchronized version numbers across all project files to v1.6.3.
+
 ## [v1.6.2] - 2025-01-27
 
 ### Fixed

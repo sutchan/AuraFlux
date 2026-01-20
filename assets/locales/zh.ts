@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.1
+ * Version: 1.6.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -232,11 +232,12 @@ export const zh = {
     title: 'Aura Flux 交互指南',
     tabs: {
         guide: '指南',
-        shortcuts: '快捷键',
+        shortcuts: '控制',
         about: '关于'
     },
     intro: 'Aura Flux 是一款沉浸式的视听交互工具，它利用高精度麦克风采样，将音频信号实时转化为数学生成的数字艺术。',
     shortcutsTitle: '快捷操作键',
+    gesturesTitle: '触控手势',
     shortcutItems: {
       toggleMic: '麦克风',
       fullscreen: '全屏',
@@ -247,6 +248,11 @@ export const zh = {
       trails: '动态拖尾',
       changeMode: '切换模式',
       changeTheme: '切换配色'
+    },
+    gestureItems: {
+        swipeMode: '左右滑：切换模式',
+        swipeSens: '上下滑：调节灵敏度',
+        longPress: '长按：AI 通感识别'
     },
     howItWorksTitle: '使用指南',
     howItWorksSteps: [

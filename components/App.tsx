@@ -1,7 +1,7 @@
 
 /**
  * File: components/App.tsx
- * Version: 1.0.6
+ * Version: 1.6.3
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
@@ -19,6 +19,7 @@ import { WelcomeScreen } from './ui/WelcomeScreen';
 import { UnsupportedScreen } from './ui/UnsupportedScreen';
 import { AppProvider, useVisuals, useUI, useAudioContext, useAI } from './AppContext';
 import { APP_VERSION } from '../core/constants';
+import { useMobileGestures } from '../core/hooks/useMobileGestures';
 
 
 const AppContent: React.FC = () => {
@@ -26,6 +27,9 @@ const AppContent: React.FC = () => {
   const { errorMessage, setErrorMessage, isSimulating, analyser, mediaStream, startDemoMode } = useAudioContext();
   const { hasStarted, isUnsupported, showOnboarding, language, setLanguage, handleOnboardingComplete, t, toggleFullscreen } = useUI();
   const { currentSong, showLyrics, lyricsStyle, performIdentification, setCurrentSong } = useAI();
+  
+  // Mobile Gestures
+  const gestureHandlers = useMobileGestures();
 
   const handleDoubleClick = (e: React.MouseEvent) => {
     // Prevent fullscreen trigger if clicking on controls
@@ -49,7 +53,11 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="h-[100dvh] bg-black overflow-hidden relative" onDoubleClick={handleDoubleClick}>
+    <div 
+      className="h-[100dvh] bg-black overflow-hidden relative touch-none" 
+      onDoubleClick={handleDoubleClick}
+      {...gestureHandlers}
+    >
       {settings.showFps && <FPSCounter />}
 
       {/* 画布层：背景渲染 */}

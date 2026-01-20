@@ -30,7 +30,8 @@
   3. **Explore Modes (探索模式):** 指引用户通过快捷键 [H] 切换不同的渲染引擎。
   4. **AI Recognition (AI 识别):** 指引用户通过快捷键 [L] 识别曲目与情绪。
 
-## 5. 键盘映射
+## 5. 输入映射 (v1.6.3)
+### 键盘 (Desktop)
 - `Space`: `toggleMicrophone`
 - `R`: `randomizeSettings`
 - `F`: `toggleFullscreen`
@@ -39,5 +40,11 @@
 - `G`: `toggleGlow`
 - `T`: `toggleTrails`
 
+### 触控手势 (Mobile)
+- **水平滑动 (Swipe Horizontal):** 切换视觉模式 (Mode Cycle)。
+- **垂直滑动 (Swipe Vertical):** 调整灵敏度 (Sensitivity +/-)。
+- **长按 (Long Press 800ms):** 触发 AI 通感识别 (Toggle AI Info)。
+- **双击 (Double Tap):** 切换全屏 (需在设置中启用)。
+
 ---
-*Aura Flux Interface - Version 1.6.1*
+*Aura Flux Interface - Version 1.6.3*

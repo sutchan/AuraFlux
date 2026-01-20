@@ -1,7 +1,7 @@
 
 /**
  * File: core/services/renderers/NebulaRenderer.ts
- * Version: 1.0.9
+ * Version: 1.0.10
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -92,8 +92,9 @@ export class NebulaRenderer implements IVisualizerRenderer {
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean) {
     if (colors.length === 0) return;
     
-    // Use imported getAverage function
-    const bass = getAverage(data, 0, 15) / 255;
+    // Apply sensitivity to bass so movement/vortex scales correctly
+    const bass = getAverage(data, 0, 15) / 255 * settings.sensitivity;
+    
     const maxParticles = settings.quality === 'high' ? 50 : settings.quality === 'med' ? 30 : 15;
 
     while (this.particles.length < maxParticles) {
@@ -115,6 +116,7 @@ export class NebulaRenderer implements IVisualizerRenderer {
         
         const angleToCenter = Math.atan2(vortexCenterY - p.y, vortexCenterX - p.x);
         
+        // Vortex now reactive to sensitivity via bass
         const vortexStrength = 0.02 * p.depth * (1 + bass * 3);
         const windX = Math.cos(angleToCenter) * vortexStrength;
         const windY = Math.sin(angleToCenter) * vortexStrength;
@@ -132,12 +134,19 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
         const fadeInOut = Math.sin((p.life / p.maxLife) * Math.PI); 
         const beatFlash = beat ? 0.3 : 0;
-        const dynamicAlpha = (0.1 + bass * 0.8 + beatFlash) * fadeInOut * settings.sensitivity * p.depth;
+        
+        // Revised alpha calc: 
+        // 1. Base visibility scales with sensitivity (0.1 * sens)
+        // 2. Audio reactivity (bass * 0.8) is already scaled by sens in definition
+        // 3. Beat flash also scaled by sensitivity
+        const dynamicAlpha = (0.1 * settings.sensitivity + bass * 0.8 + beatFlash * settings.sensitivity) * fadeInOut * p.depth;
         
         if (dynamicAlpha < 0.005) continue;
 
         const sprite = this.getSprite(colors[p.colorIndex % colors.length] || '#fff'); 
-        const finalSize = p.size * (1 + bass * 0.8 * settings.sensitivity);
+        
+        // Remove double sensitivity mult (bass is already scaled)
+        const finalSize = p.size * (1 + bass * 0.8);
         
         ctx.globalAlpha = Math.min(0.6, dynamicAlpha); 
         ctx.save(); 

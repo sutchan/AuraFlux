@@ -1,7 +1,7 @@
 
 /**
  * File: core/services/renderers/ParticlesRenderer.ts
- * Version: 1.0.5
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -27,14 +27,15 @@ export class ParticlesRenderer implements IVisualizerRenderer {
     if (colors.length === 0) return;
     
     // Use imported getAverage function
+    // Reduced sensitivity scaling by 50% per user request for smoother experience
+    const bass = getAverage(data, 0, 10) / 255 * (settings.sensitivity * 0.5);
+    const treble = getAverage(data, 100, 200) / 255 * (settings.sensitivity * 0.5);
+    
     const driftX = Math.sin(rotation * 0.5) * (w * 0.15);
     const driftY = Math.cos(rotation * 0.3) * (h * 0.15);
     const centerX = w / 2 + driftX;
     const centerY = h / 2 + driftY;
 
-    const bass = getAverage(data, 0, 10) / 255;
-    const treble = getAverage(data, 100, 200) / 255;
-    
     const maxParticles = settings.quality === 'high' ? 250 : settings.quality === 'med' ? 150 : 80;
 
     if (this.particles.length !== maxParticles) {
@@ -44,10 +45,11 @@ export class ParticlesRenderer implements IVisualizerRenderer {
         }
     }
 
-    const baseSpeed = settings.speed * 10;
+    // Reduced base speed multiplier by 50% (from * 10 to * 5)
+    const baseSpeed = (settings.speed * 0.5) * 10;
     const beatSurge = beat ? 2.5 : 1.0;
     const speed = baseSpeed * (1 + bass * 6 + treble * 2) * beatSurge; 
-    const rotSpeed = 0.001 * settings.speed * (1 + bass * 2);
+    const rotSpeed = 0.001 * (settings.speed * 0.5) * (1 + bass * 2);
 
     ctx.lineCap = 'round';
 

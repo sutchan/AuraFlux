@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/en.ts
- * Version: 1.6.1
+ * Version: 1.6.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -230,11 +230,12 @@ export const en = {
     title: 'Aura Flux Guide',
     tabs: {
         guide: 'Guide',
-        shortcuts: 'Shortcuts',
+        shortcuts: 'Controls',
         about: 'About'
     },
     intro: 'Aura Flux transforms your microphone input into highly responsive, generative digital art using advanced spectral analysis.',
-    shortcutsTitle: 'Keyboard Interaction',
+    shortcutsTitle: 'Keyboard Shortcuts',
+    gesturesTitle: 'Touch Gestures',
     shortcutItems: {
       toggleMic: 'Toggle Audio Input',
       fullscreen: 'Enter Fullscreen',
@@ -245,6 +246,11 @@ export const en = {
       trails: 'Toggle Motion Blur',
       changeMode: 'Cycle Modes',
       changeTheme: 'Cycle Themes'
+    },
+    gestureItems: {
+        swipeMode: 'Swipe Horizontal: Change Mode',
+        swipeSens: 'Swipe Vertical: Adjust Sensitivity',
+        longPress: 'Long Press: AI Identification'
     },
     howItWorksTitle: 'How to Use',
     howItWorksSteps: [
