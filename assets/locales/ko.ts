@@ -9,7 +9,9 @@ export const ko = {
     hidden: '숨김',
     active: '활성화',
     muted: '음소거',
-    beta: 'BETA'
+    beta: 'BETA',
+    simple: '간편',
+    advanced: '고급'
   },
   tabs: {
     visual: '시각 효과',

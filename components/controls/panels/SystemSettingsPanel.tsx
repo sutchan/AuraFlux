@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/SystemSettingsPanel.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -16,7 +16,7 @@ import { useAppContext } from '../../AppContext';
 export const SystemSettingsPanel: React.FC = () => {
   const { language, setLanguage, settings, setSettings, resetSettings, t } = useAppContext();
   const [confirmReset, setConfirmReset] = useState(false);
-  const [shouldCrash, setShouldCrash] = useState(false); // Robustness Test State
+  const [shouldCrash, setShouldCrash] = useState(false); 
 
   // ROBUSTNESS TEST: Throw error during render to trigger ErrorBoundary
   if (shouldCrash) {
@@ -25,6 +25,7 @@ export const SystemSettingsPanel: React.FC = () => {
 
   const hints = t?.hints || {};
   const sys = t?.systemPanel || {};
+  const isAdvanced = settings.uiMode === 'advanced';
   
   const handleResetClick = () => {
     if (confirmReset) {
@@ -55,33 +56,35 @@ export const SystemSettingsPanel: React.FC = () => {
               onChange={(val) => setLanguage(val as Language)} 
             />
             
-            <div className="pt-4 border-t border-white/5">
-                <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{sys?.interface || "Interface"}</span>
-                <div className="space-y-1">
-                   <SettingsToggle 
-                      variant="clean"
-                      label={t?.showTooltips || "Show Tooltips"}
-                      value={settings.showTooltips}
-                      onChange={() => setSettings(p => ({...p, showTooltips: !p.showTooltips}))}
-                      hintText={hints?.showTooltips}
-                   />
-                   <SettingsToggle 
-                      variant="clean"
-                      label={t?.showFps || "Show FPS"}
-                      value={settings.showFps}
-                      onChange={() => setSettings(p => ({...p, showFps: !p.showFps}))}
-                      hintText={hints?.showFps}
-                   />
-                   <SettingsToggle 
-                      variant="clean"
-                      label={t?.mirrorDisplay || "Mirror Display"}
-                      value={settings.mirrorDisplay}
-                      onChange={() => setSettings(p => ({...p, mirrorDisplay: !p.mirrorDisplay}))}
-                      hintText={t?.hints?.mirrorDisplay || "Flip the visual output horizontally."}
-                      activeColor="green"
-                   />
+            {isAdvanced && (
+                <div className="pt-4 border-t border-white/5 animate-fade-in-up">
+                    <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{sys?.interface || "Interface"}</span>
+                    <div className="space-y-1">
+                       <SettingsToggle 
+                          variant="clean"
+                          label={t?.showTooltips || "Show Tooltips"}
+                          value={settings.showTooltips}
+                          onChange={() => setSettings(p => ({...p, showTooltips: !p.showTooltips}))}
+                          hintText={hints?.showTooltips}
+                       />
+                       <SettingsToggle 
+                          variant="clean"
+                          label={t?.showFps || "Show FPS"}
+                          value={settings.showFps}
+                          onChange={() => setSettings(p => ({...p, showFps: !p.showFps}))}
+                          hintText={hints?.showFps}
+                       />
+                       <SettingsToggle 
+                          variant="clean"
+                          label={t?.mirrorDisplay || "Mirror Display"}
+                          value={settings.mirrorDisplay}
+                          onChange={() => setSettings(p => ({...p, mirrorDisplay: !p.mirrorDisplay}))}
+                          hintText={t?.hints?.mirrorDisplay || "Flip the visual output horizontally."}
+                          activeColor="green"
+                       />
+                    </div>
                 </div>
-            </div>
+            )}
          </div>
       </div>
 
@@ -90,34 +93,43 @@ export const SystemSettingsPanel: React.FC = () => {
          <div className="space-y-6 flex-grow overflow-y-auto custom-scrollbar pe-2">
              <span className="text-xs font-bold uppercase text-white/50 tracking-[0.15em] block ms-1 mb-2">{sys?.behavior || "Behavior"}</span>
              <div className="space-y-1">
-                <SettingsToggle 
-                    variant="clean"
-                    label={t?.wakeLock || "Stay Awake"} 
-                    value={settings.wakeLock} 
-                    onChange={() => setSettings(p => ({...p, wakeLock: !p.wakeLock}))} 
-                    hintText={hints?.wakeLock} 
-                />
-                <SettingsToggle 
-                    variant="clean"
-                    label={t?.autoHideUi || "Auto-Hide UI"} 
-                    value={settings.autoHideUi} 
-                    onChange={() => setSettings(p => ({...p, autoHideUi: !p.autoHideUi}))} 
-                    hintText={t?.hints?.autoHideUi || "Automatically hide controls when inactive."} 
-                />
-                <SettingsToggle 
-                    variant="clean"
-                    label={t?.doubleClickFullscreen || "Dbl Click Fullscreen"}
-                    value={settings.doubleClickFullscreen}
-                    onChange={() => setSettings(p => ({...p, doubleClickFullscreen: !p.doubleClickFullscreen}))}
-                    hintText={hints?.doubleClickFullscreen}
-                />
-                <SettingsToggle 
-                    variant="clean"
-                    label={t?.hideCursor || "Hide Cursor"} 
-                    value={settings.hideCursor} 
-                    onChange={() => setSettings(p => ({...p, hideCursor: !p.hideCursor}))} 
-                    hintText={hints?.hideCursor} 
-                />
+                {isAdvanced && (
+                    <div className="space-y-1 animate-fade-in-up">
+                        <SettingsToggle 
+                            variant="clean"
+                            label={t?.wakeLock || "Stay Awake"} 
+                            value={settings.wakeLock} 
+                            onChange={() => setSettings(p => ({...p, wakeLock: !p.wakeLock}))} 
+                            hintText={hints?.wakeLock} 
+                        />
+                        <SettingsToggle 
+                            variant="clean"
+                            label={t?.autoHideUi || "Auto-Hide UI"} 
+                            value={settings.autoHideUi} 
+                            onChange={() => setSettings(p => ({...p, autoHideUi: !p.autoHideUi}))} 
+                            hintText={t?.hints?.autoHideUi || "Automatically hide controls when inactive."} 
+                        />
+                        <SettingsToggle 
+                            variant="clean"
+                            label={t?.doubleClickFullscreen || "Dbl Click Fullscreen"}
+                            value={settings.doubleClickFullscreen}
+                            onChange={() => setSettings(p => ({...p, doubleClickFullscreen: !p.doubleClickFullscreen}))}
+                            hintText={hints?.doubleClickFullscreen}
+                        />
+                        <SettingsToggle 
+                            variant="clean"
+                            label={t?.hideCursor || "Hide Cursor"} 
+                            value={settings.hideCursor} 
+                            onChange={() => setSettings(p => ({...p, hideCursor: !p.hideCursor}))} 
+                            hintText={hints?.hideCursor} 
+                        />
+                    </div>
+                )}
+                {!isAdvanced && (
+                    <div className="text-white/20 text-xs font-mono uppercase tracking-widest text-center py-4">
+                        System Toggles hidden
+                    </div>
+                )}
              </div>
          </div>
       </div>
@@ -155,12 +167,14 @@ export const SystemSettingsPanel: React.FC = () => {
               {confirmReset ? (t?.confirmReset || 'Are you sure?') : (t?.reset || "Reset App")}
             </button>
             
-            <button 
-                onClick={() => setShouldCrash(true)} 
-                className="w-full py-2 bg-transparent border border-white/5 rounded-lg text-[9px] font-mono text-white/20 uppercase tracking-widest hover:bg-white/5 hover:text-white/50 transition-colors"
-            >
-                Simulate Crash (Test ErrorBoundary)
-            </button>
+            {isAdvanced && (
+                <button 
+                    onClick={() => setShouldCrash(true)} 
+                    className="w-full py-2 bg-transparent border border-white/5 rounded-lg text-[9px] font-mono text-white/20 uppercase tracking-widest hover:bg-white/5 hover:text-white/50 transition-colors animate-fade-in-up"
+                >
+                    Simulate Crash
+                </button>
+            )}
         </div>
       </div>
     </>

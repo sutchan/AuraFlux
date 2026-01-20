@@ -1,7 +1,8 @@
+
 {
   "name": "aura-flux",
   "private": true,
-  "version": "1.6.4",
+  "version": "1.6.1",
   "type": "module",
   "scripts": {
     "dev": "vite",

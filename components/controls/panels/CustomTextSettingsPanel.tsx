@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.0.5
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -17,6 +17,7 @@ import { Position } from '../../../core/types';
 
 export const CustomTextSettingsPanel: React.FC = () => {
   const { settings, setSettings, resetTextSettings, t } = useAppContext();
+  const isAdvanced = settings.uiMode === 'advanced';
   
   const positionOptions = getPositionOptions(t);
 
@@ -55,24 +56,15 @@ export const CustomTextSettingsPanel: React.FC = () => {
                 />
             </div>
             
-            <div className="pt-2 pb-1 border-t border-white/5 space-y-1">
-                <SettingsToggle
-                    label={t?.textAudioReactive || "Audio Reactive"}
-                    value={settings.textPulse}
-                    onChange={() => setSettings({...settings, textPulse: !settings.textPulse})}
-                    variant="clean"
-                    hintText="Scale text based on audio amplitude & rhythm"
-                />
-            </div>
-
-            <div className="space-y-5 pt-2 border-t border-white/5">
-              <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
-              <Slider label={t?.textSize || "Size"} value={settings.customTextSize ?? 12} min={2} max={60} step={1} onChange={(v: number) => setSettings({...settings, customTextSize: v})} />
-              <Slider label={t?.textRotation || "Rotate"} value={settings.customTextRotation ?? 0} min={-180} max={180} step={5} onChange={(v: number) => setSettings({...settings, customTextRotation: v})} unit="°" />
-              <div className="pt-2 border-t border-white/5">
-                 <Slider label={t?.textOpacity || "Opacity"} value={settings.customTextOpacity ?? 1.0} min={0} max={1} step={0.05} onChange={(v: number) => setSettings({...settings, customTextOpacity: v})} />
-              </div>
-            </div>
+            {isAdvanced && (
+                <div className="space-y-5 pt-2 border-t border-white/5 animate-fade-in-up">
+                    <Slider label={t?.textSize || "Size"} value={settings.customTextSize ?? 12} min={2} max={60} step={1} onChange={(v: number) => setSettings({...settings, customTextSize: v})} />
+                    <Slider label={t?.textRotation || "Rotate"} value={settings.customTextRotation ?? 0} min={-180} max={180} step={5} onChange={(v: number) => setSettings({...settings, customTextRotation: v})} unit="°" />
+                    <div className="pt-2 border-t border-white/5">
+                        <Slider label={t?.textOpacity || "Opacity"} value={settings.customTextOpacity ?? 1.0} min={0} max={1} step={0.05} onChange={(v: number) => setSettings({...settings, customTextOpacity: v})} />
+                    </div>
+                </div>
+            )}
         </div>
       </div>
 
@@ -82,24 +74,27 @@ export const CustomTextSettingsPanel: React.FC = () => {
             <div className="space-y-3">
                 <span className="text-xs font-bold uppercase text-white/50 tracking-[0.15em] block ml-1">{t?.customColor || 'TEXT COLOR'}</span>
                 
-                <SettingsToggle 
-                  label={t?.cycleColors || "Cycle Color"} 
-                  value={settings.customTextCycleColor} 
-                  onChange={() => setSettings({...settings, customTextCycleColor: !settings.customTextCycleColor})}
-                  variant="clean"
-                />
-                
-                {settings.customTextCycleColor && (
-                    <div className="pl-1 animate-fade-in-up">
-                        <Slider 
-                            label={t?.cycleSpeed || "Cycle Speed (Time)"} 
-                            value={settings.customTextCycleInterval || 5} 
-                            min={1} 
-                            max={60} 
-                            step={1} 
-                            unit="s"
-                            onChange={(v) => setSettings({...settings, customTextCycleInterval: v})} 
+                {isAdvanced && (
+                    <div className="animate-fade-in-up">
+                        <SettingsToggle 
+                          label={t?.cycleColors || "Cycle Color"} 
+                          value={settings.customTextCycleColor} 
+                          onChange={() => setSettings({...settings, customTextCycleColor: !settings.customTextCycleColor})}
+                          variant="clean"
                         />
+                        {settings.customTextCycleColor && (
+                            <div className="pl-1 pt-3 pb-2">
+                                <Slider 
+                                    label={t?.cycleSpeed || "Cycle Speed (Time)"} 
+                                    value={settings.customTextCycleInterval || 5} 
+                                    min={1} 
+                                    max={60} 
+                                    step={1} 
+                                    unit="s"
+                                    onChange={(v) => setSettings({...settings, customTextCycleInterval: v})} 
+                                />
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -127,9 +122,25 @@ export const CustomTextSettingsPanel: React.FC = () => {
       </div>
 
       {/* Col 3: Layout & Actions */}
-      <div className="p-4 h-full flex flex-col pt-6">
-         <div className="flex-grow">
-            <PositionSelector label={t?.textPosition || "Text Position"} value={settings.customTextPosition} onChange={handleTextPositionChange} options={positionOptions} activeColor="blue" />
+      <div className="p-4 h-full flex flex-col pt-6 overflow-hidden">
+         <div className="flex-grow space-y-6 overflow-y-auto custom-scrollbar pr-2">
+            {isAdvanced ? (
+                <div className="animate-fade-in-up space-y-6">
+                    <SettingsToggle
+                        label={t?.textAudioReactive || "Audio Reactive"}
+                        value={settings.textPulse}
+                        onChange={() => setSettings({...settings, textPulse: !settings.textPulse})}
+                        variant="clean"
+                        hintText="Scale text based on audio amplitude & rhythm"
+                    />
+                    <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
+                    <PositionSelector label={t?.textPosition || "Text Position"} value={settings.customTextPosition} onChange={handleTextPositionChange} options={positionOptions} activeColor="blue" />
+                </div>
+            ) : (
+                <div className="flex items-center justify-center h-full text-white/20 text-xs font-mono uppercase tracking-widest text-center">
+                    {t?.common?.advanced || "Advanced Mode Required for Positioning"}
+                </div>
+            )}
          </div>
          
          <div className="mt-auto pt-4">

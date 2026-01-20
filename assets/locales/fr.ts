@@ -9,7 +9,9 @@ export const fr = {
     hidden: 'MASQUÉ',
     active: 'ACTIF',
     muted: 'MUET',
-    beta: 'BÊTA'
+    beta: 'BÊTA',
+    simple: 'Simple',
+    advanced: 'Avancé'
   },
   tabs: {
     visual: 'Visuel',

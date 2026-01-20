@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/en.ts
- * Version: 1.6.0
+ * Version: 1.6.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -16,7 +16,9 @@ export const en = {
     hidden: 'HIDDEN',
     active: 'ACTIVE',
     muted: 'MUTED',
-    beta: 'BETA'
+    beta: 'BETA',
+    simple: 'SIMPLE',
+    advanced: 'ADVANCED'
   },
   tabs: {
     visual: 'Visual',

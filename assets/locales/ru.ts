@@ -9,7 +9,9 @@ export const ru = {
     hidden: 'СКРЫТЬ',
     active: 'АКТИВЕН',
     muted: 'БЕЗ ЗВУКА',
-    beta: 'БЕТА'
+    beta: 'БЕТА',
+    simple: 'Простой',
+    advanced: 'Профи'
   },
   tabs: {
     visual: 'Визуал',

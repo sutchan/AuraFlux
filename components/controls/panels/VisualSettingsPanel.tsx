@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -31,6 +31,8 @@ export const VisualSettingsPanel: React.FC = () => {
   const qualities = t?.qualities || {};
   const presets = t?.presets || {};
   const visualPanel = t?.visualPanel || {};
+
+  const isAdvanced = settings.uiMode === 'advanced';
 
   const handleVisualSettingChange = (key: keyof typeof settings, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }));
@@ -89,18 +91,20 @@ export const VisualSettingsPanel: React.FC = () => {
                 </div>
             </div>
 
-            <div className="pt-2 border-t border-white/5">
-               <div className="py-2">
-                 <div className="flex items-center gap-2 justify-between">
-                      <span className="text-xs font-bold uppercase text-white/60 tracking-wider whitespace-nowrap">{t?.quality || "Quality"}</span>
-                      <div className="flex w-full max-w-[200px] bg-white/[0.04] rounded-lg p-0.5">
-                      {(['low', 'med', 'high'] as const).map(q => (
-                          <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1.5 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
-                      ))}
-                      </div>
-                 </div>
-               </div>
-            </div>
+            {isAdvanced && (
+                <div className="pt-2 border-t border-white/5 animate-fade-in-up">
+                   <div className="py-2">
+                     <div className="flex items-center gap-2 justify-between">
+                          <span className="text-xs font-bold uppercase text-white/60 tracking-wider whitespace-nowrap">{t?.quality || "Quality"}</span>
+                          <div className="flex w-full max-w-[200px] bg-white/[0.04] rounded-lg p-0.5">
+                          {(['low', 'med', 'high'] as const).map(q => (
+                              <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1.5 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
+                          ))}
+                          </div>
+                     </div>
+                   </div>
+                </div>
+            )}
         </div>
       </div>
       
@@ -111,26 +115,31 @@ export const VisualSettingsPanel: React.FC = () => {
             <Slider label={t?.speed || "Speed"} hintText={hints?.speed} value={settings.speed} min={0.1} max={3.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('speed', v)} />
             <Slider label={t?.sensitivity || "Sensitivity"} hintText={hints?.sensitivity} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('sensitivity', v)} />
           </div>
-          <div className="space-y-3 pt-3 border-t border-white/5">
-              <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{visualPanel.effects || "Effects"}</span>
-              <div className="grid grid-cols-2 gap-2">
-                  <SettingsToggle label={t?.glow || "Glow"} value={settings.glow} onChange={() => handleVisualSettingChange('glow', !settings.glow)} hintText={`${hints?.glow || "Glow"} [G]`} />
-                  <SettingsToggle label={t?.trails || "Trails"} value={settings.trails} onChange={() => handleVisualSettingChange('trails', !settings.trails)} hintText={`${hints?.trails || "Trails"} [T]`} />
-              </div>
-          </div>
-          <div className="space-y-2 pt-3 border-t border-white/5">
-            <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{visualPanel.automation || "Automation"}</span>
-            <SettingsToggle label={t?.autoRotate || "Auto Rotate"} value={settings.autoRotate} onChange={() => handleVisualSettingChange('autoRotate', !settings.autoRotate)} hintText={hints?.autoRotate}>
-                <div className="pt-1">
-                    <Slider label={t?.rotateInterval || "Interval"} value={settings.rotateInterval} min={10} max={120} step={5} unit="s" onChange={(v: number) => handleVisualSettingChange('rotateInterval', v)} />
-                </div>
-            </SettingsToggle>
-            <SettingsToggle label={t?.cycleColors || "Cycle Colors"} value={settings.cycleColors} onChange={() => handleVisualSettingChange('cycleColors', !settings.cycleColors)} hintText={hints?.cycleColors}>
-                <div className="pt-1">
-                    <Slider label={t?.colorInterval || "Interval"} value={settings.colorInterval} min={5} max={60} step={5} unit="s" onChange={(v: number) => handleVisualSettingChange('colorInterval', v)} />
-                </div>
-            </SettingsToggle>
-          </div>
+          
+          {isAdvanced && (
+              <>
+                  <div className="space-y-3 pt-3 border-t border-white/5 animate-fade-in-up">
+                      <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{visualPanel.effects || "Effects"}</span>
+                      <div className="grid grid-cols-2 gap-2">
+                          <SettingsToggle label={t?.glow || "Glow"} value={settings.glow} onChange={() => handleVisualSettingChange('glow', !settings.glow)} hintText={`${hints?.glow || "Glow"} [G]`} />
+                          <SettingsToggle label={t?.trails || "Trails"} value={settings.trails} onChange={() => handleVisualSettingChange('trails', !settings.trails)} hintText={`${hints?.trails || "Trails"} [T]`} />
+                      </div>
+                  </div>
+                  <div className="space-y-2 pt-3 border-t border-white/5 animate-fade-in-up">
+                    <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{visualPanel.automation || "Automation"}</span>
+                    <SettingsToggle label={t?.autoRotate || "Auto Rotate"} value={settings.autoRotate} onChange={() => handleVisualSettingChange('autoRotate', !settings.autoRotate)} hintText={hints?.autoRotate}>
+                        <div className="pt-1">
+                            <Slider label={t?.rotateInterval || "Interval"} value={settings.rotateInterval} min={10} max={120} step={5} unit="s" onChange={(v: number) => handleVisualSettingChange('rotateInterval', v)} />
+                        </div>
+                    </SettingsToggle>
+                    <SettingsToggle label={t?.cycleColors || "Cycle Colors"} value={settings.cycleColors} onChange={() => handleVisualSettingChange('cycleColors', !settings.cycleColors)} hintText={hints?.cycleColors}>
+                        <div className="pt-1">
+                            <Slider label={t?.colorInterval || "Interval"} value={settings.colorInterval} min={5} max={60} step={5} unit="s" onChange={(v: number) => handleVisualSettingChange('colorInterval', v)} />
+                        </div>
+                    </SettingsToggle>
+                  </div>
+              </>
+          )}
         </div>
         <div className="mt-auto pt-4">
           <button onClick={resetVisualSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all flex items-center justify-center gap-2 border border-transparent hover:border-white/10"><svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>

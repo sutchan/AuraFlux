@@ -9,7 +9,9 @@ export const ar = {
     hidden: 'مخفي',
     active: 'نشط',
     muted: 'مكتوم',
-    beta: 'بيتا'
+    beta: 'بيتا',
+    simple: 'بسيط',
+    advanced: 'متقدم'
   },
   tabs: {
     visual: 'بصري',

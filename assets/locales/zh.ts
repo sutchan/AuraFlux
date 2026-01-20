@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.0
+ * Version: 1.6.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -16,7 +16,9 @@ export const zh = {
     hidden: '隐藏',
     active: '运行中',
     muted: '静音',
-    beta: '测试版'
+    beta: '测试版',
+    simple: '简洁',
+    advanced: '专业'
   },
   tabs: {
     visual: '视觉',

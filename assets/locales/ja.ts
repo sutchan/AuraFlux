@@ -9,7 +9,9 @@ export const ja = {
     hidden: '非表示',
     active: '有効',
     muted: 'ミュート',
-    beta: 'BETA'
+    beta: 'BETA',
+    simple: '簡易',
+    advanced: '詳細'
   },
   tabs: {
     visual: 'ビジュアル',

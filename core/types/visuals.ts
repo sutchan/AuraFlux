@@ -1,6 +1,7 @@
+
 /**
  * File: core/types/visuals.ts
- * Version: 1.0.10
+ * Version: 1.0.11
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -26,6 +27,7 @@ export enum VisualizerMode {
 }
 
 export interface VisualizerSettings {
+  uiMode: 'simple' | 'advanced';
   sensitivity: number;
   speed: number;
   glow: boolean;

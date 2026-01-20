@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -28,6 +28,7 @@ export const AiSettingsPanel: React.FC = () => {
   const lyricsStyles = t?.lyricsStyles || {};
   const hints = t?.hints || {};
   
+  const isAdvanced = settings.uiMode === 'advanced';
   const previewTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const positionOptions = getPositionOptions(t);
@@ -64,24 +65,26 @@ export const AiSettingsPanel: React.FC = () => {
             </div>
             <SettingsToggle label={t?.showLyrics || "Enable Recognition"} value={showLyrics} onChange={() => setShowLyrics(!showLyrics)} activeColor="green" hintText={`${hints?.lyrics || "Enable AI Lyrics"} [L]`} />
             
-            <div className="space-y-4 pt-1">
-               <CustomSelect 
-                 label={t?.recognitionSource || "AI Source"} 
-                 value={settings.recognitionProvider || 'GEMINI'} 
-                 options={[
-                   { value: 'GEMINI', label: 'Gemini 3.0' }, 
-                   { value: 'GROK', label: 'Grok (xAI)' },
-                   { value: 'DEEPSEEK', label: 'DeepSeek' },
-                   { value: 'QWEN', label: 'Qwen (Alibaba)' },
-                   { value: 'OPENAI', label: 'OpenAI GPT-4' },
-                   { value: 'CLAUDE', label: 'Claude 3.5' },
-                   { value: 'MOCK', label: t?.simulatedDemo || 'Simulated' }
-                 ]} 
-                 onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
-               />
-               
-               <CustomSelect label={t?.region || "Region"} value={settings.region || 'global'} hintText={hints?.region} options={Object.keys(REGION_NAMES).map(r => ({ value: r, label: regions[r] || r }))} onChange={(val) => setSettings({...settings, region: val as Region})} />
-            </div>
+            {isAdvanced && (
+                <div className="space-y-4 pt-1 animate-fade-in-up">
+                   <CustomSelect 
+                     label={t?.recognitionSource || "AI Source"} 
+                     value={settings.recognitionProvider || 'GEMINI'} 
+                     options={[
+                       { value: 'GEMINI', label: 'Gemini 3.0' }, 
+                       { value: 'GROK', label: 'Grok (xAI)' },
+                       { value: 'DEEPSEEK', label: 'DeepSeek' },
+                       { value: 'QWEN', label: 'Qwen (Alibaba)' },
+                       { value: 'OPENAI', label: 'OpenAI GPT-4' },
+                       { value: 'CLAUDE', label: 'Claude 3.5' },
+                       { value: 'MOCK', label: t?.simulatedDemo || 'Simulated' }
+                     ]} 
+                     onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
+                   />
+                   
+                   <CustomSelect label={t?.region || "Region"} value={settings.region || 'global'} hintText={hints?.region} options={Object.keys(REGION_NAMES).map(r => ({ value: r, label: regions[r] || r }))} onChange={(val) => setSettings({...settings, region: val as Region})} />
+                </div>
+            )}
         </div>
       </div>
 
@@ -95,31 +98,43 @@ export const AiSettingsPanel: React.FC = () => {
               options={Object.values(LyricsStyle).map(s => ({ value: s, label: lyricsStyles[s] || s }))} 
               onChange={(val) => setSettings({...settings, lyricsStyle: val as LyricsStyle})} 
             />
-            <CustomSelect 
-                label={t?.lyricsFont || "Font Family"} 
-                value={settings.lyricsFont || 'Inter, sans-serif'} 
-                options={AVAILABLE_FONTS} 
-                onChange={(val) => setSettings({...settings, lyricsFont: val})} 
-            />
-            <Slider 
-                label={t?.lyricsFontSize || "Font Size"} 
-                value={settings.lyricsFontSize ?? 4} 
-                min={1} max={8} step={0.5} 
-                onChange={(v: number) => setSettings({...settings, lyricsFontSize: v})} 
-            />
+            {isAdvanced && (
+                <div className="space-y-4 animate-fade-in-up">
+                    <CustomSelect 
+                        label={t?.lyricsFont || "Font Family"} 
+                        value={settings.lyricsFont || 'Inter, sans-serif'} 
+                        options={AVAILABLE_FONTS} 
+                        onChange={(val) => setSettings({...settings, lyricsFont: val})} 
+                    />
+                    <Slider 
+                        label={t?.lyricsFontSize || "Font Size"} 
+                        value={settings.lyricsFontSize ?? 4} 
+                        min={1} max={8} step={0.5} 
+                        onChange={(v: number) => setSettings({...settings, lyricsFontSize: v})} 
+                    />
+                </div>
+            )}
         </div>
       </div>
 
       {/* Col 3: Position & Actions */}
       <div className="p-4 h-full flex flex-col pt-6">
         <div className="flex-grow">
-            <PositionSelector
-              label={t?.lyricsPosition || "Position"}
-              value={settings.lyricsPosition}
-              onChange={handleLyricsPositionChange}
-              options={positionOptions}
-              activeColor="green"
-            />
+            {isAdvanced ? (
+                <div className="animate-fade-in-up">
+                    <PositionSelector
+                      label={t?.lyricsPosition || "Position"}
+                      value={settings.lyricsPosition}
+                      onChange={handleLyricsPositionChange}
+                      options={positionOptions}
+                      activeColor="green"
+                    />
+                </div>
+            ) : (
+                <div className="flex items-center justify-center h-full text-white/20 text-xs font-mono uppercase tracking-widest text-center px-4">
+                    {t?.common?.advanced || "Advanced Mode Required for Positioning"}
+                </div>
+            )}
         </div>
         <div className="mt-auto pt-6">
           <button onClick={resetAiSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white flex items-center justify-center gap-2 border border-transparent hover:border-white/10 transition-colors">

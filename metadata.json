@@ -1,5 +1,5 @@
 {
-  "name": "Aura Flux V1",
+  "name": "Aura Flux V1 - Coding",
   "description": "Transform live audio into stunning, real-time generative art powered by Gemini AI.",
   "requestFramePermissions": [
     "microphone"

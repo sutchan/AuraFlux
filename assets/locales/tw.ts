@@ -1,4 +1,11 @@
 
+/**
+ * File: assets/locales/tw.ts
+ * Version: 1.6.1
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const tw = {
@@ -9,7 +16,9 @@ export const tw = {
     hidden: '隱藏',
     active: '啟用',
     muted: '靜音',
-    beta: '測試版'
+    beta: '測試版',
+    simple: '簡潔',
+    advanced: '專業'
   },
   tabs: {
     visual: '視覺',

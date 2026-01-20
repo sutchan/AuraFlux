@@ -17,6 +17,9 @@
 - **Mini Bar 转换:** 闲置时透明度降低至 `0.12`，并移除 `backdrop-blur` 以优化移动端性能。
 
 ## 3. 控制面板布局规范 (Panel Layouts)
+- **UI 模式 (v1.6.1):** 引入 `Simple` (简洁) 和 `Advanced` (专业/高级) 模式切换。
+  - **Simple 模式:** 仅展示核心美学选项（模式选择、色彩、基本速度/灵敏度）。隐藏 FFT、平滑度、自定义位置坐标等技术参数。
+  - **Advanced 模式:** 展示所有微调选项。
 - **标签页顺序 (Tabs Order):** `Visual` (视觉), `Text` (文字), `AI` (识别), `Audio` (音频), `System` (系统)。
 - **排版统一:** 所有设置项标题字号统一为 `text-xs` (12px)，保持视觉一致性。
 
@@ -37,4 +40,4 @@
 - `T`: `toggleTrails`
 
 ---
-*Aura Flux Interface - Version 0.7.5*
+*Aura Flux Interface - Version 1.6.1*
