@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -12,11 +12,13 @@ import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { Slider } from '../../ui/controls/Slider';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { PositionSelector } from '../../ui/controls/PositionSelector';
-import { useAppContext } from '../../AppContext';
+import { useVisuals, useUI } from '../../AppContext';
 import { Position } from '../../../core/types';
 
 export const CustomTextSettingsPanel: React.FC = () => {
-  const { settings, setSettings, resetTextSettings, t } = useAppContext();
+  const { settings, setSettings, resetTextSettings } = useVisuals();
+  const { t } = useUI();
+  
   const isAdvanced = settings.uiMode === 'advanced';
   
   const positionOptions = getPositionOptions(t);

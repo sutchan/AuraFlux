@@ -1,13 +1,13 @@
 
 /**
  * File: components/ui/HelpModal.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React, { useState } from 'react';
-import { useAppContext } from '../AppContext';
+import { useUI } from '../AppContext';
 import { GuideContent } from './help/GuideContent';
 import { ShortcutsContent } from './help/ShortcutsContent';
 import { AboutContent } from './help/AboutContent';
@@ -15,7 +15,7 @@ import { AboutContent } from './help/AboutContent';
 type HelpTab = 'guide' | 'shortcuts' | 'about';
 
 export const HelpModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-    const { t } = useAppContext();
+    const { t } = useUI();
     const [activeTab, setActiveTab] = useState<HelpTab>('guide');
     const h = t?.helpModal || {};
     const s = h?.shortcutItems || {};

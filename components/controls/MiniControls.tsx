@@ -1,13 +1,13 @@
 
 /**
  * File: components/controls/MiniControls.tsx
- * Version: 1.0.14
+ * Version: 1.0.15
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React from 'react';
-import { useAppContext } from '../AppContext';
+import { useVisuals, useAudioContext, useAI, useUI } from '../AppContext';
 import { TooltipArea } from '../ui/controls/Tooltip';
 
 interface MiniControlsProps {
@@ -18,7 +18,10 @@ interface MiniControlsProps {
 }
 
 export const MiniControls: React.FC<MiniControlsProps> = ({ isExpanded, isIdle, setIsExpanded, toggleFullscreen }) => {
-  const { isListening, toggleMicrophone, selectedDeviceId, randomizeSettings, t, isIdentifying } = useAppContext();
+  const { isListening, toggleMicrophone, selectedDeviceId } = useAudioContext();
+  const { randomizeSettings } = useVisuals();
+  const { t } = useUI();
+  const { isIdentifying } = useAI();
 
   if (isExpanded) return null;
 

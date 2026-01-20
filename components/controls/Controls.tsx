@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -15,16 +15,16 @@ import { SystemSettingsPanel } from './panels/SystemSettingsPanel';
 import { CustomTextSettingsPanel } from './panels/CustomTextSettingsPanel';
 import { HelpModal } from '../ui/HelpModal';
 import { useIdleTimer } from '../../core/hooks/useIdleTimer';
-import { useAppContext } from '../AppContext';
+import { useVisuals, useAI, useAudioContext, useUI } from '../AppContext';
 import { MiniControls } from './MiniControls';
 
 type TabType = 'visual' | 'text' | 'audio' | 'ai' | 'system';
 
 const Controls: React.FC = () => {
-  const {
-    settings, setSettings, showLyrics, setShowLyrics,
-    toggleMicrophone, randomizeSettings, t, language
-  } = useAppContext();
+  const { settings, setSettings, randomizeSettings } = useVisuals();
+  const { showLyrics, setShowLyrics } = useAI();
+  const { toggleMicrophone } = useAudioContext();
+  const { t, language } = useUI();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('visual');

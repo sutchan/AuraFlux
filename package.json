@@ -1,9 +1,9 @@
-
 {
   "name": "aura-flux",
   "private": true,
-  "version": "1.6.1",
+  "version": "1.6.2",
   "type": "module",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -16,8 +16,7 @@
     "@react-three/postprocessing": "^3.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "three": "^0.173.0",
-    "uuid": "^11.0.5"
+    "three": "^0.173.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",

@@ -1,16 +1,16 @@
 
 /**
  * File: components/ui/UnsupportedScreen.tsx
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React from 'react';
-import { useAppContext } from '../AppContext';
+import { useUI } from '../AppContext';
 
 export const UnsupportedScreen: React.FC = () => {
-    const { t } = useAppContext();
+    const { t } = useUI();
     return (
         <div className="min-h-[100dvh] bg-black flex items-center justify-center p-6 text-center">
             <div className="max-w-md space-y-6 animate-fade-in-up">

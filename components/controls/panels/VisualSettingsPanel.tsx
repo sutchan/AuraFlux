@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -13,7 +13,7 @@ import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { Slider } from '../../ui/controls/Slider';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { VisualizerPreview } from './VisualizerPreview';
-import { useAppContext } from '../../AppContext';
+import { useVisuals, useUI } from '../../AppContext';
 
 export const VisualSettingsPanel: React.FC = () => {
   const { 
@@ -22,9 +22,10 @@ export const VisualSettingsPanel: React.FC = () => {
     settings, setSettings, 
     resetVisualSettings, 
     applyPreset, 
-    activePreset, setActivePreset,
-    t 
-  } = useAppContext();
+    activePreset, setActivePreset
+  } = useVisuals();
+  
+  const { t } = useUI();
   
   const hints = t?.hints || {};
   const modes = t?.modes || {};

@@ -1,6 +1,7 @@
+
 /**
  * File: components/AppContext.tsx
- * Version: 1.0.8
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -13,54 +14,7 @@ import { useAppState } from '../core/hooks/useAppState';
 import { useVisualsState } from '../core/hooks/useVisualsState';
 import { useAiState } from '../core/hooks/useAiState';
 
-// --- Type Definitions for Context (Moved from core/types) ---
-
-interface AppContextType {
-  mode: VisualizerMode; setMode: React.Dispatch<React.SetStateAction<VisualizerMode>>;
-  colorTheme: string[]; setColorTheme: React.Dispatch<React.SetStateAction<string[]>>;
-  settings: VisualizerSettings; setSettings: React.Dispatch<React.SetStateAction<VisualizerSettings>>;
-  lyricsStyle: LyricsStyle; setLyricsStyle: React.Dispatch<React.SetStateAction<LyricsStyle>>;
-  showLyrics: boolean; setShowLyrics: React.Dispatch<React.SetStateAction<boolean>>;
-  language: Language; setLanguage: React.Dispatch<React.SetStateAction<Language>>;
-  region: Region; setRegion: React.Dispatch<React.SetStateAction<Region>>;
-  selectedDeviceId: string; onDeviceChange: React.Dispatch<React.SetStateAction<string>>;
-  
-  activePreset: string; setActivePreset: React.Dispatch<React.SetStateAction<string>>;
-
-  isListening: boolean; isSimulating: boolean; isIdentifying: boolean; isPending: boolean; // Added isPending
-  analyser: AnalyserNode | null; mediaStream: MediaStream | null; audioDevices: AudioDevice[];
-  currentSong: SongInfo | null; setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
-  errorMessage: string | null; setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
-  
-  hasStarted: boolean; setHasStarted: React.Dispatch<React.SetStateAction<boolean>>;
-  isUnsupported: boolean;
-  showOnboarding: boolean;
-  isThreeMode: boolean;
-  
-  startMicrophone: (deviceId?: string) => Promise<void>;
-  toggleMicrophone: (deviceId: string) => void;
-  hasAudioPermission: () => Promise<boolean>;
-  startDemoMode: () => Promise<void>;
-  performIdentification: (stream: MediaStream) => Promise<void>;
-  randomizeSettings: () => void;
-  resetSettings: () => void;
-  resetVisualSettings: () => void;
-  resetTextSettings: () => void;
-  resetAudioSettings: () => void;
-  resetAiSettings: () => void;
-  applyPreset: (preset: SmartPreset) => void;
-  handleOnboardingComplete: () => void;
-  toggleFullscreen: () => void;
-  t: any;
-}
-
-const AppContext = createContext<AppContextType | null>(null);
-export const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (!context) throw new Error("useAppContext must be used within an AppProvider");
-  return context;
-};
-
+// --- Default Settings ---
 const DEFAULT_SETTINGS: VisualizerSettings = {
   uiMode: 'simple',
   sensitivity: 1.5, speed: 1.0, glow: false, trails: true, autoRotate: false, rotateInterval: 30,
@@ -72,7 +26,118 @@ const DEFAULT_SETTINGS: VisualizerSettings = {
   showFps: false, showTooltips: true, doubleClickFullscreen: true, autoHideUi: true, mirrorDisplay: false
 };
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// --- 1. UI Context ---
+interface UIContextType {
+  language: Language; setLanguage: React.Dispatch<React.SetStateAction<Language>>;
+  region: Region; setRegion: React.Dispatch<React.SetStateAction<Region>>;
+  hasStarted: boolean; setHasStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  isUnsupported: boolean;
+  showOnboarding: boolean;
+  handleOnboardingComplete: () => void;
+  resetSettings: () => void;
+  toggleFullscreen: () => void;
+  t: any;
+}
+const UIContext = createContext<UIContextType | null>(null);
+export const useUI = () => {
+  const context = useContext(UIContext);
+  if (!context) throw new Error("useUI must be used within UIProvider");
+  return context;
+};
+
+// --- 2. Visuals Context ---
+interface VisualsContextType {
+  mode: VisualizerMode; setMode: React.Dispatch<React.SetStateAction<VisualizerMode>>;
+  colorTheme: string[]; setColorTheme: React.Dispatch<React.SetStateAction<string[]>>;
+  settings: VisualizerSettings; setSettings: React.Dispatch<React.SetStateAction<VisualizerSettings>>;
+  activePreset: string; setActivePreset: React.Dispatch<React.SetStateAction<string>>;
+  isThreeMode: boolean;
+  randomizeSettings: () => void;
+  resetVisualSettings: () => void;
+  resetTextSettings: () => void;
+  resetAudioSettings: () => void;
+  applyPreset: (preset: SmartPreset) => void;
+}
+const VisualsContext = createContext<VisualsContextType | null>(null);
+export const useVisuals = () => {
+  const context = useContext(VisualsContext);
+  if (!context) throw new Error("useVisuals must be used within VisualsProvider");
+  return context;
+};
+
+// --- 3. Audio Context ---
+interface AudioContextType {
+  isListening: boolean; isSimulating: boolean; isPending: boolean;
+  analyser: AnalyserNode | null; mediaStream: MediaStream | null; audioDevices: AudioDevice[];
+  selectedDeviceId: string; onDeviceChange: React.Dispatch<React.SetStateAction<string>>;
+  errorMessage: string | null; setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
+  startMicrophone: (deviceId?: string) => Promise<void>;
+  toggleMicrophone: (deviceId: string) => void;
+  hasAudioPermission: () => Promise<boolean>;
+  startDemoMode: () => Promise<void>;
+}
+const AudioContext = createContext<AudioContextType | null>(null);
+export const useAudioContext = () => {
+  const context = useContext(AudioContext);
+  if (!context) throw new Error("useAudioContext must be used within AudioProvider");
+  return context;
+};
+
+// --- 4. AI Context ---
+interface AIContextType {
+  lyricsStyle: LyricsStyle; setLyricsStyle: React.Dispatch<React.SetStateAction<LyricsStyle>>;
+  showLyrics: boolean; setShowLyrics: React.Dispatch<React.SetStateAction<boolean>>;
+  isIdentifying: boolean;
+  currentSong: SongInfo | null; setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
+  performIdentification: (stream: MediaStream) => Promise<void>;
+  resetAiSettings: () => void;
+}
+const AIContext = createContext<AIContextType | null>(null);
+export const useAI = () => {
+  const context = useContext(AIContext);
+  if (!context) throw new Error("useAI must be used within AIProvider");
+  return context;
+};
+
+
+// --- Providers ---
+
+const UIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const { 
+    language, setLanguage, region, setRegion, hasStarted, setHasStarted, 
+    showOnboarding, isUnsupported, t, handleOnboardingComplete, resetSettings 
+  } = useAppState();
+
+  const toggleFullscreen = useCallback(() => {
+    const doc = window.document as any;
+    const elem = doc.documentElement as any;
+    const isFullscreen = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+    if (!isFullscreen) {
+        if (elem.requestFullscreen) elem.requestFullscreen();
+        else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+        else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
+        else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+    } else {
+        if (doc.exitFullscreen) doc.exitFullscreen();
+        else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen();
+        else if (doc.mozCancelFullScreen) doc.mozCancelFullScreen();
+        else if (doc.msExitFullscreen) doc.msExitFullscreen();
+    }
+  }, []);
+
+  return (
+    <UIContext.Provider value={{
+      language, setLanguage, region, setRegion, hasStarted, setHasStarted,
+      isUnsupported, showOnboarding, handleOnboardingComplete, resetSettings,
+      toggleFullscreen, t
+    }}>
+      {children}
+    </UIContext.Provider>
+  );
+};
+
+const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const { hasStarted } = useUI();
   const { getStorage, setStorage } = useLocalStorage();
   
   const initialSettings = useMemo(() => {
@@ -80,39 +145,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return { ...DEFAULT_SETTINGS, ...savedSettings, showCustomText: savedSettings.showCustomText ?? false };
   }, [getStorage]);
 
-  const {
-    hasStarted, setHasStarted, showOnboarding, isUnsupported, language, setLanguage,
-    region, setRegion, t, manageWakeLock, handleOnboardingComplete, resetSettings
-  } = useAppState();
-  
   const { 
     mode, setMode, colorTheme, setColorTheme, settings, setSettings, activePreset, setActivePreset,
     randomizeSettings, resetVisualSettings, applyPreset
   } = useVisualsState(hasStarted, initialSettings);
 
-  const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() => getStorage('deviceId', ''));
-  
-  const { 
-    isListening, isSimulating, isPending, analyser, mediaStream, audioDevices, 
-    errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone 
-  } = useAudio({ settings, language });
-
-  const {
-    lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
-    currentSong, setCurrentSong, performIdentification, resetAiSettings
-  } = useAiState({
-      language, region, provider: settings.recognitionProvider,
-      isListening, isSimulating, mediaStream, initialSettings: DEFAULT_SETTINGS, setSettings
-  });
-  
-  useEffect(() => {
-    manageWakeLock(settings.wakeLock);
-  }, [settings.wakeLock, hasStarted, manageWakeLock]);
-
   useEffect(() => {
     setStorage('settings', settings);
-    setStorage('deviceId', selectedDeviceId);
-  }, [settings, selectedDeviceId, setStorage]);
+  }, [settings, setStorage]);
+
+  // WakeLock Effect
+  useEffect(() => {
+    let wakeLock: any = null;
+    const request = async () => {
+      if ('wakeLock' in navigator && settings.wakeLock && hasStarted) {
+        try { wakeLock = await (navigator as any).wakeLock.request('screen'); } catch(e){}
+      }
+    };
+    request();
+    return () => { wakeLock?.release(); };
+  }, [settings.wakeLock, hasStarted]);
 
   const resetTextSettings = useCallback(() => setSettings(p => ({ 
     ...p, 
@@ -131,54 +183,93 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   
   const resetAudioSettings = useCallback(() => setSettings(p => ({ ...p, sensitivity: DEFAULT_SETTINGS.sensitivity, smoothing: DEFAULT_SETTINGS.smoothing, fftSize: DEFAULT_SETTINGS.fftSize })), [setSettings]);
 
+  const isThreeMode = useMemo(() => mode === VisualizerMode.SILK || mode === VisualizerMode.LIQUID || mode === VisualizerMode.TERRAIN, [mode]);
+
+  return (
+    <VisualsContext.Provider value={{
+      mode, setMode, colorTheme, setColorTheme, settings, setSettings, activePreset, setActivePreset,
+      isThreeMode, randomizeSettings, resetVisualSettings, resetTextSettings, resetAudioSettings, applyPreset
+    }}>
+      {children}
+    </VisualsContext.Provider>
+  );
+};
+
+const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const { settings } = useVisuals();
+  const { language } = useUI();
+  const { getStorage, setStorage } = useLocalStorage();
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() => getStorage('deviceId', ''));
+
+  const { 
+    isListening, isSimulating, isPending, analyser, mediaStream, audioDevices, 
+    errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone 
+  } = useAudio({ settings, language });
+
   useEffect(() => {
-    if (analyser) {
-      analyser.smoothingTimeConstant = settings.smoothing;
-      if (analyser.fftSize !== settings.fftSize) analyser.fftSize = settings.fftSize;
-    }
-  }, [settings.smoothing, settings.fftSize, analyser]);
-
-  const toggleFullscreen = useCallback(() => {
-    const doc = window.document as any;
-    const elem = doc.documentElement as any;
-    const isFullscreen = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
-
-    if (!isFullscreen) {
-        if (elem.requestFullscreen) elem.requestFullscreen();
-        else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
-        else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
-        else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
-    } else {
-        if (doc.exitFullscreen) doc.exitFullscreen();
-        else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen();
-        else if (doc.mozCancelFullScreen) doc.mozCancelFullScreen();
-        else if (doc.msExitFullscreen) doc.msExitFullscreen();
-    }
-  }, []);
+    setStorage('deviceId', selectedDeviceId);
+  }, [selectedDeviceId, setStorage]);
 
   const hasAudioPermission = useCallback(async () => {
     try {
       const result = await navigator.permissions.query({ name: 'microphone' as any });
       return result.state === 'granted';
-    } catch (e) {
-      return false;
-    }
+    } catch (e) { return false; }
   }, []);
 
-  const isThreeMode = useMemo(() => mode === VisualizerMode.SILK || mode === VisualizerMode.LIQUID || mode === VisualizerMode.TERRAIN, [mode]);
+  return (
+    <AudioContext.Provider value={{
+      isListening, isSimulating, isPending, analyser, mediaStream, audioDevices,
+      selectedDeviceId, onDeviceChange: setSelectedDeviceId, errorMessage, setErrorMessage,
+      startMicrophone, toggleMicrophone, hasAudioPermission, startDemoMode
+    }}>
+      {children}
+    </AudioContext.Provider>
+  );
+};
 
-  const contextValue: AppContextType = {
-    mode, setMode, colorTheme, setColorTheme, settings, setSettings, lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics,
-    language, setLanguage, region, setRegion, selectedDeviceId, onDeviceChange: setSelectedDeviceId, isListening,
-    isSimulating, isIdentifying, isPending, analyser, mediaStream, audioDevices, currentSong, setCurrentSong, errorMessage, setErrorMessage,
-    startMicrophone, toggleMicrophone, hasAudioPermission, startDemoMode, performIdentification, randomizeSettings, resetSettings,
-    resetVisualSettings, resetTextSettings, resetAudioSettings, resetAiSettings, applyPreset, activePreset, setActivePreset, t,
-    hasStarted, setHasStarted, isUnsupported, showOnboarding, isThreeMode, handleOnboardingComplete, toggleFullscreen
-  };
+const AIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const { language, region } = useUI();
+  const { settings, setSettings } = useVisuals();
+  const { isListening, isSimulating, mediaStream } = useAudioContext();
+
+  const {
+    lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
+    currentSong, setCurrentSong, performIdentification, resetAiSettings
+  } = useAiState({
+      language, region, provider: settings.recognitionProvider,
+      isListening, isSimulating, mediaStream, initialSettings: DEFAULT_SETTINGS, setSettings
+  });
 
   return (
-    <AppContext.Provider value={contextValue}>
+    <AIContext.Provider value={{
+      lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
+      currentSong, setCurrentSong, performIdentification, resetAiSettings
+    }}>
       {children}
-    </AppContext.Provider>
+    </AIContext.Provider>
   );
+};
+
+// --- Main App Provider & Legacy Hook ---
+
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <UIProvider>
+    <VisualsProvider>
+      <AudioProvider>
+        <AIProvider>
+          {children}
+        </AIProvider>
+      </AudioProvider>
+    </VisualsProvider>
+  </UIProvider>
+);
+
+// Legacy God-Hook for backward compatibility
+export const useAppContext = () => {
+  const ui = useUI();
+  const visuals = useVisuals();
+  const audio = useAudioContext();
+  const ai = useAI();
+  return { ...ui, ...visuals, ...audio, ...ai };
 };

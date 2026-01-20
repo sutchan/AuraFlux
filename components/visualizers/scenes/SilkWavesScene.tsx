@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/scenes/SilkWavesScene.tsx
- * Version: 1.0.13
+ * Version: 1.0.14
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -11,7 +11,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
-import { useAppContext } from '../../AppContext';
+import { useAI } from '../../AppContext';
 
 interface SceneProps {
   analyser: AnalyserNode;
@@ -26,7 +26,7 @@ export const SilkWavesScene: React.FC<SceneProps> = ({ analyser, colors, setting
   const light2Ref = useRef<THREE.PointLight>(null);
   const light3Ref = useRef<THREE.SpotLight>(null);
   
-  const { isIdentifying } = useAppContext();
+  const { isIdentifying } = useAI();
   const { bass, treble, smoothedColors } = useAudioReactive({ analyser, colors, settings });
 
   const geometry = useMemo(() => {

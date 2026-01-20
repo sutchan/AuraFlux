@@ -1,11 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
-import { VisualizerMode, VisualizerSettings } from '../../core/types/index';
-import { 
-  BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
-  ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
-  LasersRenderer, BeatDetector 
-} from '../../core/services/visualizerStrategies';
+import { VisualizerMode, VisualizerSettings, IVisualizerRenderer } from '../../core/types/index';
+import { createVisualizerRenderers, BeatDetector } from '../../core/services/visualizerStrategies';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
@@ -18,27 +14,19 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
   analyser, mode, colors, settings
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const renderersRef = useRef<any>({});
-  // Use inferred type for BeatDetector ref to avoid potential type mismatch issues
+  const renderersRef = useRef<Record<string, IVisualizerRenderer>>({});
   const beatDetectorRef = useRef(new BeatDetector());
-  const requestRef = useRef<number>(0); // Initialize with 0
+  const requestRef = useRef<number>(0);
   const rotationRef = useRef<number>(0);
 
   useEffect(() => {
-    // Initialize renderers
-    renderersRef.current = {
-      [VisualizerMode.BARS]: new BarsRenderer(),
-      [VisualizerMode.RINGS]: new RingsRenderer(),
-      [VisualizerMode.PARTICLES]: new ParticlesRenderer(),
-      [VisualizerMode.TUNNEL]: new TunnelRenderer(),
-      [VisualizerMode.PLASMA]: new PlasmaRenderer(),
-      [VisualizerMode.NEBULA]: new NebulaRenderer(),
-      [VisualizerMode.LASERS]: new LasersRenderer(),
-      [VisualizerMode.FLUID_CURVES]: new FluidCurvesRenderer(),
-      [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
-    };
+    // DRY Principle: Use the same factory as the Web Worker
+    renderersRef.current = createVisualizerRenderers();
     
-    Object.values(renderersRef.current).forEach((r: any) => r.init && r.init());
+    // Initialize all renderers if they have an init method
+    // Note: We don't pass canvas here yet, as it might resize. 
+    // Renderers that need canvas context usually get it in draw() or lazily.
+    Object.values(renderersRef.current).forEach((r) => r.init && r.init(null));
   }, []);
 
   useEffect(() => {
@@ -78,7 +66,8 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
         try {
           renderer.draw(ctx, dataArray, width, height, colors, settings, rotationRef.current, isBeat);
         } catch (e) {
-          console.error("Renderer error:", e);
+          // Suppress renderer errors in animation loop to prevent crash spam
+          if (Math.random() < 0.001) console.error("Renderer error:", e);
         }
       }
 

@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/SystemSettingsPanel.tsx
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -11,10 +11,12 @@ import { Language } from '../../../core/types';
 import { APP_VERSION } from '../../../core/constants';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
-import { useAppContext } from '../../AppContext';
+import { useVisuals, useUI } from '../../AppContext';
 
 export const SystemSettingsPanel: React.FC = () => {
-  const { language, setLanguage, settings, setSettings, resetSettings, t } = useAppContext();
+  const { language, setLanguage, resetSettings, t } = useUI();
+  const { settings, setSettings } = useVisuals();
+  
   const [confirmReset, setConfirmReset] = useState(false);
   const [shouldCrash, setShouldCrash] = useState(false); 
 

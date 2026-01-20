@@ -1,19 +1,17 @@
 
 /**
  * File: components/ui/WelcomeScreen.tsx
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React from 'react';
-import { useAppContext } from '../AppContext';
+import { useUI, useAudioContext } from '../AppContext';
 
 export const WelcomeScreen: React.FC = () => {
-  const {
-    t, errorMessage, setErrorMessage, setHasStarted,
-    startMicrophone, startDemoMode, selectedDeviceId
-  } = useAppContext();
+  const { t, setHasStarted } = useUI();
+  const { errorMessage, setErrorMessage, startMicrophone, startDemoMode, selectedDeviceId } = useAudioContext();
 
   // Logic to split title into Brand and Slogan if separated by "|"
   const titleRaw = t?.welcomeTitle || "Aura Flux";

@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -13,7 +13,7 @@ import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { Slider } from '../../ui/controls/Slider';
 import { PositionSelector } from '../../ui/controls/PositionSelector';
-import { useAppContext } from '../../AppContext';
+import { useVisuals, useAI, useUI } from '../../AppContext';
 
 const BetaBadge = ({ label }: { label?: string }) => (
   <span className="ml-2 px-1.5 py-[1px] rounded-[4px] bg-blue-500/20 border border-blue-500/30 text-[9px] font-bold text-blue-300 tracking-wider">
@@ -22,7 +22,10 @@ const BetaBadge = ({ label }: { label?: string }) => (
 );
 
 export const AiSettingsPanel: React.FC = () => {
-  const { settings, setSettings, showLyrics, setShowLyrics, resetAiSettings, currentSong, setCurrentSong, t } = useAppContext();
+  const { settings, setSettings } = useVisuals();
+  const { showLyrics, setShowLyrics, resetAiSettings, currentSong, setCurrentSong } = useAI();
+  const { t } = useUI();
+
   const common = t?.common || {};
   const regions = t?.regions || {};
   const lyricsStyles = t?.lyricsStyles || {};

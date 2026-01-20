@@ -6,6 +6,16 @@ All notable changes to the **Aura Vision** project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.2] - 2025-01-27
+
+### Fixed
+*   **🔖 Versioning:** Synchronized version numbers across all project files to v1.6.2.
+
+## [v1.6.1] - Maintenance & Cleanup
+
+### Fixed
+*   **🧹 Cleanup:** Removed unused `uuid` dependency from `package.json` to reduce project footprint.
+
 ## [v1.0.4] - ROLLBACK (STABLE)
 
 ### Fixed

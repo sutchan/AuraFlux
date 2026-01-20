@@ -1,14 +1,14 @@
 
 /**
  * File: components/ui/controls/Tooltip.tsx
- * Version: 1.0.13
+ * Version: 1.0.14
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
-import { useAppContext } from '../../AppContext';
+import { useVisuals } from '../../AppContext';
 
 interface FloatingTooltipProps {
   text: string | undefined | null;
@@ -79,7 +79,7 @@ export const FloatingTooltip = memo(FloatingTooltipInternal);
 export const TooltipArea = memo(({ children, text }: { children?: React.ReactNode, text: string | undefined | null }) => {
   const [isHovered, setIsHovered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { settings } = useAppContext();
+  const { settings } = useVisuals();
   
   const shouldShow = settings.showTooltips && isHovered;
   

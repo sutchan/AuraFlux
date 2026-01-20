@@ -1,7 +1,7 @@
 
 /**
  * File: components/App.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
@@ -17,18 +17,15 @@ import { OnboardingOverlay } from './ui/OnboardingOverlay';
 import { FPSCounter } from './ui/FPSCounter';
 import { WelcomeScreen } from './ui/WelcomeScreen';
 import { UnsupportedScreen } from './ui/UnsupportedScreen';
-import { AppProvider, useAppContext } from './AppContext';
+import { AppProvider, useVisuals, useUI, useAudioContext, useAI } from './AppContext';
 import { APP_VERSION } from '../core/constants';
 
 
 const AppContent: React.FC = () => {
-  const {
-    settings, errorMessage, setErrorMessage, isSimulating, hasStarted, isUnsupported,
-    showOnboarding, language, setLanguage, handleOnboardingComplete,
-    startDemoMode, t, isThreeMode, analyser, mode, colorTheme,
-    currentSong, showLyrics, lyricsStyle, mediaStream,
-    performIdentification, setCurrentSong, toggleFullscreen
-  } = useAppContext();
+  const { settings, isThreeMode, mode, colorTheme } = useVisuals();
+  const { errorMessage, setErrorMessage, isSimulating, analyser, mediaStream, startDemoMode } = useAudioContext();
+  const { hasStarted, isUnsupported, showOnboarding, language, setLanguage, handleOnboardingComplete, t, toggleFullscreen } = useUI();
+  const { currentSong, showLyrics, lyricsStyle, performIdentification, setCurrentSong } = useAI();
 
   const handleDoubleClick = (e: React.MouseEvent) => {
     // Prevent fullscreen trigger if clicking on controls

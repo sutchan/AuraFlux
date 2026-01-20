@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -9,13 +9,12 @@
 import React from 'react';
 import { SteppedSlider } from '../../ui/controls/SteppedSlider';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
-import { useAppContext } from '../../AppContext';
+import { useVisuals, useAudioContext, useUI } from '../../AppContext';
 
 export const AudioSettingsPanel: React.FC = () => {
-  const { 
-    settings, setSettings, audioDevices, selectedDeviceId, 
-    onDeviceChange, toggleMicrophone, isListening, isPending, resetAudioSettings, setActivePreset, t 
-  } = useAppContext();
+  const { settings, setSettings, resetAudioSettings, setActivePreset } = useVisuals();
+  const { audioDevices, selectedDeviceId, onDeviceChange, toggleMicrophone, isListening, isPending } = useAudioContext();
+  const { t } = useUI();
   
   const hints = t?.hints || {};
   const isAdvanced = settings.uiMode === 'advanced';
