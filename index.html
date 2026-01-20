@@ -1,7 +1,6 @@
-
 <!--
   File: index.html
-  Version: 1.0.3
+  Version: 1.6.4
   Author: Aura Flux Team
   Copyright (c) 2024 Aura Flux. All rights reserved.
 -->
@@ -11,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google Analytics (GA4) - Replace G-MEASUREMENT_ID with your actual ID -->
+    <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B3R0GXSDY8"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -23,54 +22,13 @@
     <!-- Primary Meta Tags -->
     <title>Aura Flux | AI Music Visualizer & 3D Audio Reactor</title>
     <meta name="title" content="Aura Flux | AI Music Visualizer & 3D Audio Reactor">
-    <meta name="description" content="Experience Aura Flux: A next-gen 3D music visualizer powered by Google Gemini AI. Transform microphone input into real-time, audio-reactive WebGL art. Features song recognition, dynamic lyrics, and 12+ immersive modes for VJs and streamers.">
-    <meta name="keywords" content="music visualizer, audio visualizer, AI music recognition, Google Gemini, WebGL, Three.js, React, generative art, real-time audio analysis, VJ tools, browser visualizer, spectrum analyzer, FFT, audio reactive, 3D motion graphics, digital art, Gemini 3.0, lyric visualizer, EDM visuals, streaming background">
-    <meta name="author" content="Aura Flux Team">
-    <meta name="robots" content="index, follow">
+    <meta name="description" content="Experience Aura Flux: A next-gen 3D music visualizer powered by Google Gemini AI. Transform microphone input into real-time, audio-reactive WebGL art.">
+    <meta name="keywords" content="music visualizer, audio visualizer, AI music recognition, Google Gemini, WebGL, Three.js, React, generative art">
     <meta name="theme-color" content="#000000">
 
     <!-- SEO & Identity -->
-    <link rel="canonical" href="https://aura.tanox.net/" />
     <link rel="icon" type="image/svg+xml" href="./assets/images/favicon.svg" />
     <link rel="apple-touch-icon" href="./assets/images/favicon.svg" />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aura.tanox.net/">
-    <meta property="og:title" content="Aura Flux | AI Music Visualizer & 3D Audio Reactor">
-    <meta property="og:description" content="Transform live audio into stunning, real-time generative art powered by Google Gemini AI. Features 3D WebGL scenes and instant song recognition.">
-    <meta property="og:image" content="https://aura.tanox.net/assets/images/banner.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://aura.tanox.net/">
-    <meta property="twitter:title" content="Aura Flux | AI Music Visualizer & 3D Audio Reactor">
-    <meta property="twitter:description" content="Transform live audio into stunning, real-time generative art powered by Google Gemini AI. Features 3D WebGL scenes and instant song recognition.">
-    <meta property="twitter:image" content="https://aura.tanox.net/assets/images/banner.jpg">
-
-    <!-- Structured Data (JSON-LD) for Rich Snippets -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Aura Flux",
-      "url": "https://aura.tanox.net/",
-      "description": "Transform live audio into stunning, real-time generative art powered by Google Gemini AI. Features song recognition and 3D visuals.",
-      "applicationCategory": "MultimediaApplication",
-      "operatingSystem": "Web Browser",
-      "browserRequirements": "Requires WebGL and Web Audio API support (Chrome, Edge, Safari, Firefox)",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "featureList": "Real-time FFT Analysis, AI Song Recognition, 3D WebGL Visualization, Microphone Input, VJ Tools",
-      "author": {
-        "@type": "Organization",
-        "name": "Aura Flux Team"
-      }
-    }
-    </script>
 
     <!-- Browser Shim for process.env to prevent runtime crashes -->
     <script>
@@ -113,6 +71,7 @@
 <script type="importmap">
 {
   "imports": {
+    "three": "https://esm.sh/three@0.173.0",
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
@@ -120,7 +79,6 @@
     "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "@react-three/fiber": "https://esm.sh/@react-three/fiber@^9.5.0",
     "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@^3.0.4",
-    "three": "https://esm.sh/three@^0.182.0",
     "@react-three/drei": "https://esm.sh/@react-three/drei@^10.7.7",
     "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
     "react-dom": "https://esm.sh/react-dom@^19.2.3"
