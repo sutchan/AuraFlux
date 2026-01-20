@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { VisualizerMode, VisualizerSettings } from '../../core/types/index';
 import { 
@@ -18,14 +17,13 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
   analyser, mode, colors, settings
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const renderersRef = useRef<any>({});
-  // Use inferred type for BeatDetector ref to avoid potential type mismatch issues
+  const renderersRef = useRef<Record<string, any>>({});
   const beatDetectorRef = useRef(new BeatDetector());
-  const requestRef = useRef<number>(0); // Initialize with 0
+  const requestRef = useRef<number>(0);
   const rotationRef = useRef<number>(0);
 
+  // Initialize renderers
   useEffect(() => {
-    // Initialize renderers
     renderersRef.current = {
       [VisualizerMode.BARS]: new BarsRenderer(),
       [VisualizerMode.RINGS]: new RingsRenderer(),
@@ -38,12 +36,45 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
       [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
     };
     
-    Object.values(renderersRef.current).forEach((r: any) => r.init && r.init());
+    // Safe initialization with error handling
+    Object.entries(renderersRef.current).forEach(([modeName, renderer]) => {
+      try {
+        renderer.init?.();
+      } catch (e) {
+        console.error(`[Visualizer] Failed to initialize ${modeName} renderer:`, e);
+      }
+    });
   }, []);
 
+  // Handle canvas resize with DPR support
   useEffect(() => {
+    const handleResize = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = canvas.clientWidth * dpr;
+      canvas.height = canvas.clientHeight * dpr;
+      
+      const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+      if (ctx) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset any previous transforms
+        ctx.scale(dpr, dpr);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial size setup
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Main render loop
+  useEffect(() => {
+    if (!analyser) return;
+    
     const canvas = canvasRef.current;
-    if (!canvas || !analyser) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
     if (!ctx) return;
@@ -51,21 +82,15 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
     const render = () => {
-      // Handle resize
-      if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-      }
-
-      const width = canvas.width;
-      const height = canvas.height;
-
+      const width = canvas.clientWidth;   // Use CSS dimensions for logic
+      const height = canvas.clientHeight;
+      
       analyser.getByteFrequencyData(dataArray);
       
       const isBeat = beatDetectorRef.current.detect(dataArray);
-      rotationRef.current += 0.005 * settings.speed;
+      rotationRef.current += 0.005 * (settings.speed || 1);
 
-      // Clear or Trails
+      // Clear or Trails (using CSS coordinates - ctx is scaled by DPR)
       if (settings.trails) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
         ctx.fillRect(0, 0, width, height);

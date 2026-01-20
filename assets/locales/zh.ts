@@ -1,4 +1,11 @@
 
+/**
+ * File: assets/locales/zh.ts
+ * Version: 1.6.0
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const zh = {
