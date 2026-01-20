@@ -1,4 +1,3 @@
-
 # OpenSpec: 部署与环境规范
 
 ## 1. 先决条件
@@ -20,11 +19,11 @@
 
 ## 3. 生产环境部署
 
-### 📦 标准构建策略 (Standard Bundling Strategy)
-项目已弃用 Importmap，转为完全依赖 Vite 的构建与打包机制。这解决了 Worker 环境下模块解析的不一致问题。
+### 📦 CDN 混合构建策略 (CDN Hybrid Strategy)
+项目采用 `importmap` 策略，通过 CDN (`esm.sh`) 加载核心第三方库 (React, Three.js 等)。Vite 负责构建应用本身的代码，并将这些库标记为外部依赖 (`external`)。
 
-- **依赖管理:** 所有第三方库 (React, Three.js, GenAI SDK) 均通过 `node_modules` 管理并打包至最终产物中。
-- **Worker 处理:** Web Workers 会被编译为独立的 chunk，并由 Vite 自动处理其内部的 import 路径。
+- **优势:** 减小了最终构建文件的大小，并可利用浏览器对常用库的缓存。
+- **注意:** 此策略依赖于 `esm.sh` CDN 的可用性和性能。
 
 ### 构建步骤
 ```bash
@@ -44,4 +43,4 @@ API_KEY=你的_GEMINI_API_KEY npm run build
 - 确保域名启用 **HTTPS**。现代浏览器的 `getUserMedia` (麦克风权限) 只能在 HTTPS 或 localhost 环境下工作。HTTP 环境下应用将无法启动音频采集。
 
 ---
-*Aura Flux Deployment Guide - Version 1.1.0*
+*Aura Flux Deployment Guide - Version 1.5.0*

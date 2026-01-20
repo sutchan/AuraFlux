@@ -1,4 +1,3 @@
-
 # OpenSpec: 系统架构规范
 
 ## 1. 核心技术栈
@@ -9,7 +8,7 @@
 - **Engine:** 
   - **2D (Optimized):** OffscreenCanvas API + Web Workers (ESM 模块化加载)
   - **3D:** Three.js (**^0.173.0**) / @react-three/fiber v9
-    *   *Bundled Strategy:* 所有依赖通过 Vite 打包构建，移除 Importmap 以确保 Worker 模块解析的一致性。
+    *   *CDN Strategy (Importmap):* 外部依赖 (React, Three.js 等) 通过 `importmap` 从 CDN (`esm.sh`) 加载，并在 Vite 构建配置中标记为 `external`。这减小了构建产物的大小，并利用了浏览器缓存。
 - **Intelligence:** Google Gemini 3 (Flash Preview)
 - **Audio:** Web Audio API (实时频域分析) + OfflineAudioContext (指纹提取)
 
@@ -27,4 +26,4 @@
 - **Web Context Loss:** 3D 渲染器监听 `webglcontextlost` 与 `webglcontextrestored` 事件，实现 GPU 崩溃后的自动恢复。
 
 ---
-*Aura Flux Architecture - Version 1.4.0*
+*Aura Flux Architecture - Version 1.5.0*

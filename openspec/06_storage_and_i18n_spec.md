@@ -38,4 +38,4 @@
 - **Linguistic Logic:** 识别结果必须返回原声脚本（如 日语歌曲返回假名/汉字而非罗马音）。
 
 ---
-*Aura Flux Storage & i18n - Version 1.0.4*
+*Aura Flux Storage & i18n - Version 1.6.0*

@@ -1,7 +1,6 @@
-
 /**
  * File: core/types/visuals.ts
- * Version: 1.0.9
+ * Version: 1.0.10
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -108,6 +107,6 @@ export interface IVisualizerRenderer {
 // Worker Messages
 export type WorkerMessage = 
   | { type: 'INIT'; canvas: OffscreenCanvas; width: number; height: number; devicePixelRatio: number }
-  | { type: 'RESIZE'; width: number; height: number }
+  | { type: 'RESIZE'; width: number; height: number; devicePixelRatio: number }
   | { type: 'FRAME'; data: Uint8Array }
   | { type: 'CONFIG'; mode: VisualizerMode; settings: VisualizerSettings; colors: string[] };

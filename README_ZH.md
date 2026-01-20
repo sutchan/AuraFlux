@@ -1,21 +1,20 @@
-
 # Aura Flux 🎵👁️
 
-### AI 驱动的 3D 音乐可视化与通感分析引擎 (v1.0.4)
+### AI 驱动的 3D 音乐可视化与通感分析引擎 (v1.6.0)
 
 [English](README.md) | [在线演示](https://aura.tanox.net/) | [更新日志](CHANGELOG.md)
 
 <!-- README.md -->
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" />
   <img src="https://img.shields.io/badge/Three.js-WebGL-white?logo=three.js&logoColor=black" />
-  <img src="https://img.shields.io/badge/AI-Gemini%203.0-8E75B2?logo=google&logoColor=white" />
+  <img src="https://img.shields.io/badge/AI-Gemini%20Flash-8E75B2?logo=google&logoColor=white" />
   <img src="https://img.shields.io/badge/Perf-离屏渲染-orange" />
   <img src="https://img.shields.io/badge/License-GPL%20v2-blue.svg" />
 </p>
 
-**Aura Flux** 是一款将实时音频转化为沉浸式 3D 生成艺术的高端 Web 应用。它结合了 **OffscreenCanvas** 多线程渲染技术与 **Google Gemini 3.0** 通感大模型，不仅能以 60FPS 流畅帧率随律动起舞，更能实时识别歌曲内容并自动调整视觉情绪。
+**Aura Flux** 是一款将实时音频转化为沉浸式 3D 生成艺术的高端 Web 应用。它结合了 **OffscreenCanvas** 多线程渲染技术与 **Google Gemini** 通感大模型，不仅能以 60FPS 流畅帧率随律动起舞，更能实时识别歌曲内容并自动调整视觉情绪。
 
 ---
 

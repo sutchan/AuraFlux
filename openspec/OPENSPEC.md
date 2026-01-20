@@ -1,4 +1,3 @@
-
 # Aura Flux - OpenSpec 规范主文档
 
 本项目严格遵循 **OpenSpec** 标准进行架构设计与文档编写。Aura Flux 是一项融合了高性能实时频谱分析与 Google Gemini 3 系列生成式 AI 的沉浸式视听交互实验。
@@ -8,7 +7,7 @@
 以下文档位于 `openspec/` 目录下，代表了本项目的最新技术标准：
 
 1.  **[01 架构与设计规范](./01_architecture_spec.md)**
-    *   移除 Importmap 回归 Vite Bundling，明确 Worker 相对路径导入规则 (v1.4.0)。
+    *   恢复 Importmap + CDN 策略，在 Vite 中将外部库标记为 external (v1.5.0)。
 2.  **[02 音频引擎与信号规范](./02_audio_engine_spec.md)**
     *   OfflineAudioContext 指纹提取算法、iOS Safari MIME 兼容性 (v0.8.0)。
 3.  **[03 视觉生成渲染规范](./03_rendering_spec.md)**
@@ -20,7 +19,9 @@
 6.  **[06 持久化与国际化规范](./06_storage_and_i18n_spec.md)**
     *   LocalStorage Schema、多语言字典结构 (v1.0.4)。
 7.  **[07 部署与环境规范](./07_deployment_guide.md)**
-    *   更新为标准构建策略，移除 Importmap 相关说明 (v1.1.0)。
+    *   更新为 CDN 混合构建策略说明 (v1.5.0)。
+8.  **[08 测试与验证](./08_testing_and_validation.md)**
+    *   链接至最新的功能测试报告：**[功能测试报告 (v1.0.6)](./reports/test_report_20250127_1200.md)**
 
 ---
-*Aura Flux Project Specification - Version 1.1.0*
+*Aura Flux Project Specification - Version 1.6.0*

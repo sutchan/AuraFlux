@@ -15,7 +15,7 @@ export const en = {
     visual: 'Visual',
     text: 'Text',
     audio: 'Audio',
-    ai: 'AI Identification',
+    ai: 'AI Synesthesia',
     system: 'System'
   },
   hints: {
@@ -50,24 +50,24 @@ export const en = {
     autoHideUi: 'Automatically hide the control panel after a period of inactivity.',
     mirrorDisplay: 'Flip the visualizer output horizontally (useful for rear projection or webcam).'
   },
-  visualizerMode: 'Visualizer Mode',
-  styleTheme: 'Visual Theme',
-  settings: 'Advanced',
+  visualizerMode: 'Visual Engine',
+  styleTheme: 'Color Theme',
+  settings: 'Tuning',
   sensitivity: 'Response Sensitivity',
-  speed: 'Animation Speed',
-  glow: 'Neon Glow',
+  speed: 'Evolution Speed',
+  glow: 'Neon Bloom',
   trails: 'Motion Trails',
-  autoRotate: 'Visualizer Mode Cycle',
+  autoRotate: 'Engine Auto-Cycle',
   rotateInterval: 'Interval (s)',
   cycleColors: 'Auto-Cycle Colors',
   colorInterval: 'Interval (s)',
   cycleSpeed: 'Cycle Duration (s)',
   monitorAudio: 'Monitor Audio',
   audioInput: 'Input Device',
-  lyrics: 'Lyrics',
-  showLyrics: 'Enable AI Recognition',
+  lyrics: 'AI Synesthesia',
+  showLyrics: 'Enable Recognition',
   displaySettings: 'Display Settings',
-  language: 'UI Language',
+  language: 'Interface Language',
   region: 'Target Market',
   startMic: 'Enable Audio',
   stopMic: 'Disable Audio',
@@ -110,11 +110,11 @@ export const en = {
   textFont: 'Font Family',
   textOpacity: 'Opacity',
   textPosition: 'Text Position',
-  quality: 'Visual Quality',
+  quality: 'Render Quality',
   qualities: {
-    low: 'Low',
-    med: 'Medium',
-    high: 'High'
+    low: 'Smooth',
+    med: 'Balanced',
+    high: 'Ultimate'
   },
   visualPanel: {
     effects: 'Effects',
@@ -135,7 +135,7 @@ export const en = {
   showFps: 'Show FPS',
   showTooltips: 'Show Tooltips',
   doubleClickFullscreen: 'Double-Click Fullscreen',
-  autoHideUi: 'Automatically hide the control panel after a period of inactivity.',
+  autoHideUi: 'Auto-Hide Controls',
   mirrorDisplay: 'Mirror Display',
   presets: {
     title: 'Smart Presets',
@@ -168,7 +168,7 @@ export const en = {
       bc: 'Bottom Center',
       br: 'Bottom Right'
   },
-  wakeLock: 'Stay Awake',
+  wakeLock: 'Screen Always On',
   system: {
     shortcuts: {
       mic: 'Mic',
@@ -214,7 +214,7 @@ export const en = {
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard',
-    [LyricsStyle.KARAOKE]: 'Karaoke',
+    [LyricsStyle.KARAOKE]: 'Dynamic',
     [LyricsStyle.MINIMAL]: 'Minimalist'
   },
   helpModal: {

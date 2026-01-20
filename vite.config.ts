@@ -1,6 +1,6 @@
 /**
  * File: vite.config.ts
- * Version: 1.3.1
+ * Version: 1.6.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -30,8 +30,17 @@ export default defineConfig({
     target: 'esnext',
     minify: 'esbuild',
     rollupOptions: {
-      // Externalize three.js to use the CDN version defined in index.html importmap
-      external: ['three']
+      external: [
+        'react',
+        'react-dom',
+        'react-dom/client',
+        'three',
+        '@react-three/fiber',
+        '@react-three/drei',
+        '@react-three/postprocessing',
+        '@google/genai',
+        'uuid'
+      ]
     }
   },
   define: {
