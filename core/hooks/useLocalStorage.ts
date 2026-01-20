@@ -1,14 +1,12 @@
-
 /**
  * File: core/hooks/useLocalStorage.ts
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { useCallback } from 'react';
-
-const STORAGE_PREFIX = 'av_v1_';
+import { STORAGE_PREFIX } from '../constants';
 
 export const useLocalStorage = () => {
   const getStorage = useCallback(<T,>(key: string, fallback: T): T => {

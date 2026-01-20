@@ -1,13 +1,12 @@
-
 /**
  * File: components/ui/controls/SteppedSlider.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React, { memo } from 'react';
-import { TooltipArea } from './Tooltip'; // Assuming Tooltip is in the same directory
+import { TooltipArea } from './Tooltip';
 
 interface SteppedSliderProps {
     label: string; 

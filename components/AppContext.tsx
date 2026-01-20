@@ -1,7 +1,7 @@
 
 /**
  * File: components/AppContext.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -28,7 +28,7 @@ interface AppContextType {
   
   activePreset: string; setActivePreset: React.Dispatch<React.SetStateAction<string>>;
 
-  isListening: boolean; isSimulating: boolean; isIdentifying: boolean;
+  isListening: boolean; isSimulating: boolean; isIdentifying: boolean; isPending: boolean; // Added isPending
   analyser: AnalyserNode | null; mediaStream: MediaStream | null; audioDevices: AudioDevice[];
   currentSong: SongInfo | null; setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
   errorMessage: string | null; setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
@@ -93,7 +93,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() => getStorage('deviceId', ''));
   
   const { 
-    isListening, isSimulating, analyser, mediaStream, audioDevices, 
+    isListening, isSimulating, isPending, analyser, mediaStream, audioDevices, 
     errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone 
   } = useAudio({ settings, language });
 
@@ -170,7 +170,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const contextValue: AppContextType = {
     mode, setMode, colorTheme, setColorTheme, settings, setSettings, lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics,
     language, setLanguage, region, setRegion, selectedDeviceId, onDeviceChange: setSelectedDeviceId, isListening,
-    isSimulating, isIdentifying, analyser, mediaStream, audioDevices, currentSong, setCurrentSong, errorMessage, setErrorMessage,
+    isSimulating, isIdentifying, isPending, analyser, mediaStream, audioDevices, currentSong, setCurrentSong, errorMessage, setErrorMessage,
     startMicrophone, toggleMicrophone, hasAudioPermission, startDemoMode, performIdentification, randomizeSettings, resetSettings,
     resetVisualSettings, resetTextSettings, resetAudioSettings, resetAiSettings, applyPreset, activePreset, setActivePreset, t,
     hasStarted, setHasStarted, isUnsupported, showOnboarding, isThreeMode, handleOnboardingComplete, toggleFullscreen

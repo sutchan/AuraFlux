@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -14,7 +14,7 @@ import { useAppContext } from '../../AppContext';
 export const AudioSettingsPanel: React.FC = () => {
   const { 
     settings, setSettings, audioDevices, selectedDeviceId, 
-    onDeviceChange, toggleMicrophone, isListening, resetAudioSettings, setActivePreset, t 
+    onDeviceChange, toggleMicrophone, isListening, isPending, resetAudioSettings, setActivePreset, t 
   } = useAppContext();
   
   const hints = t?.hints || {};
@@ -46,8 +46,12 @@ export const AudioSettingsPanel: React.FC = () => {
             onChange={onDeviceChange}
             hintText={hints?.device}
          />
-        <button onClick={() => toggleMicrophone(selectedDeviceId)} className={`w-full py-4 rounded-xl font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 ${isListening ? 'bg-red-500/15 text-red-400 border border-red-500/30' : 'bg-blue-600 text-white hover:bg-blue-500'}`}>
-          {isListening ? (t?.stopMic || "Stop") : (t?.startMic || "Start")}
+        <button 
+            onClick={() => toggleMicrophone(selectedDeviceId)} 
+            disabled={isPending}
+            className={`w-full py-4 rounded-xl font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 ${isListening ? 'bg-red-500/15 text-red-400 border border-red-500/30' : 'bg-blue-600 text-white hover:bg-blue-500'} ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          {isPending ? '...' : (isListening ? (t?.stopMic || "Stop") : (t?.startMic || "Start"))}
         </button>
       </div>
 

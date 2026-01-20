@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.0.4 (Rollback)
+ * Version: 1.0.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -21,7 +21,7 @@ interface ThreeVisualizerProps {
 }
 
 const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
-  if (!analyser) return null;
+  if (!analyser || !settings) return null;
 
   const renderScene = () => {
     switch (mode) {
