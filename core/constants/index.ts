@@ -1,25 +1,49 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.6.68
+ * Version: 1.6.74
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 14:30
+ * Updated: 2025-02-21 19:00
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.6.68';
+export const APP_VERSION = '1.6.74';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
-// Updated to 3 colors per theme for better depth and scene compatibility
+// Expanded to 30 curated color themes with 3 colors each for high-fidelity rendering
 export const COLOR_THEMES: string[][] = [
-  ['#00f2ff', '#0060ff', '#00c3ff'], // Electric Blue
-  ['#ff00ea', '#ff0055', '#ff00a6'], // Magenta Pink
-  ['#00ffaa', '#00aa00', '#00ff41'], // Matrix Green
-  ['#ffcc00', '#ff6600', '#ff9500'], // Gold Sunset
-  ['#af52de', '#5856d6', '#8b5cf6'], // Royal Purple
-  ['#ffffff', '#8e8e93', '#c7c7cc'], // Monochrome
+  ['#00f2ff', '#0060ff', '#00c3ff'], // 01: Electric Blue
+  ['#ff00ea', '#ff0055', '#ff00a6'], // 02: Neon Pink
+  ['#00ffaa', '#00aa00', '#00ff41'], // 03: Matrix Green
+  ['#ffcc00', '#ff6600', '#ff9500'], // 04: Gold Sunset
+  ['#af52de', '#5856d6', '#8b5cf6'], // 05: Royal Purple
+  ['#ffffff', '#8e8e93', '#c7c7cc'], // 06: Monochrome
+  ['#ff3c00', '#ff0055', '#ff9500'], // 07: Solar Flare
+  ['#00ffd5', '#008cff', '#5500ff'], // 08: Deep Ocean
+  ['#ff007f', '#7a00ff', '#00e5ff'], // 09: Vaporwave
+  ['#9dff00', '#00ff8c', '#00ccff'], // 10: Cyber Lime
+  ['#ff0000', '#660000', '#330000'], // 11: Blood Moon
+  ['#e0e0e0', '#424242', '#212121'], // 12: Industrial
+  ['#f78fb3', '#cf6a87', '#f8a5c2'], // 13: Sakura
+  ['#3dc1d3', '#546de5', '#786fa6'], // 14: Arctic Mist
+  ['#f19066', '#f3a683', '#f5cd79'], // 15: Desert Sand
+  ['#574b90', '#303952', '#2c2c54'], // 16: Midnight Blue
+  ['#fffa65', '#fff200', '#ff9f1a'], // 17: Electric Yellow
+  ['#32ff7e', '#3ae374', '#05c46b'], // 18: Emerald City
+  ['#18dcff', '#00d2d3', '#01a3a4'], // 19: Cyanide
+  ['#7d5fff', '#4b4b4b', '#1e272e'], // 20: Phantom
+  ['#ff9ff3', '#f368e0', '#ff4dff'], // 21: Candy Gloss
+  ['#54a0ff', '#00d2d3', '#2e86de'], // 22: Skyward
+  ['#5f27cd', '#341f97', '#222f3e'], // 23: Deep Purple
+  ['#ff9f43', '#ee5253', '#ff6b6b'], // 24: Lava Flow
+  ['#10ac84', '#1dd1a1', '#10ac84'], // 25: Jungle
+  ['#222f3e', '#576574', '#8395a7'], // 26: Storm Cloud
+  ['#00d2d3', '#48dbfb', '#0abde3'], // 27: Glacier
+  ['#ff6b6b', '#ee5253', '#c0392b'], // 28: Crimson
+  ['#feca57', '#ff9f43', '#f39c12'], // 29: Amber
+  ['#9b59b6', '#8e44ad', '#2c3e50'], // 30: Nebula Dream
 ];
 
 export const REGION_NAMES: Record<string, string> = {

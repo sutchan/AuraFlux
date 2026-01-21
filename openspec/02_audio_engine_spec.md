@@ -1,4 +1,3 @@
-
 # OpenSpec: 音频引擎规范
 
 ## 1. 采集规范
@@ -32,9 +31,8 @@
   1. **解码:** 将 Base64 音频解码为 AudioBuffer。
   2. **离线渲染:** 创建与原音频采样率一致的 `OfflineAudioContext`。
   3. **特征提取:** 在 `ScriptProcessor.onaudioprocess` 回调中实时截获 FFT 数据。
-     *   *注意：* 不再使用 `suspend/resume` 方法，因为无法保证数据同步。
-  4. **特征降维:** 扫描 0-4300Hz 频段 (Bin 2~100) 的能量峰值索引 (Index)。
-  5. **匹配:** Jaccard 相似度算法 (阈值 0.25) 对比本地缓存。
+  4. **特征降维:** 扫描 0-4300Hz 频段的能量峰值索引。
+  5. **匹配:** Jaccard 相似度算法对比本地缓存。
 
 ---
-*Aura Flux Audio Engine - Version 0.8.0*
+*Aura Flux Audio Engine - Version 1.6.74*

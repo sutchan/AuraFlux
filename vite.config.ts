@@ -1,7 +1,7 @@
 
 /**
  * File: vite.config.ts
- * Version: 1.6.4
+ * Version: 1.6.74
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */

@@ -1,10 +1,10 @@
 /**
  * File: public/sw.js
- * Version: 1.6.46
+ * Version: 1.6.74
  * Author: Aura Flux Team
  */
 
-const CACHE_NAME = 'aura-flux-v1.6.46';
+const CACHE_NAME = 'aura-flux-v1.6.74';
 const ASSETS = [
   './',
   './index.html',

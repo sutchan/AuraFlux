@@ -15,7 +15,7 @@
 ## 2. 模块解析与 Worker 策略
 - **Worker 导入:** 必须使用显式相对路径。
 - **离屏架构:** 渲染线程 (Worker) 独立处理 2D Canvas 绘图，主线程仅负责音频采样与状态管理。
-- **数值安全性 (v1.6.62):** Shader 引入 `epsilon` 保护机制，防止在极低或归零状态下产生 `NaN` 导致渲染黑屏。
+- **数值安全性 (v1.6.62):** Shader 引入 `epsilon` 保护机制，防止 en 极低或归零状态下产生 `NaN` 导致渲染黑屏。
 
 ## 3. 并发与生命周期健壮性
 - **React 19 Compatibility:** 全面支持 Concurrent Mode。
@@ -23,4 +23,4 @@
 - **渲染画质适配:** 提供低/中/高三档密度配置，通过减少 50% 粒子基数 (v1.6.61) 确保移动设备的热稳定性。
 
 ---
-*Aura Flux Architecture - Version 1.6.68*
+*Aura Flux Architecture - Version 1.6.74*

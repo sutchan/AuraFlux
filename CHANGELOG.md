@@ -2,13 +2,12 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
-## [v1.6.68] - 2025-02-21
+## [v1.6.74] - 2025-02-21
 
-### Optimized & Finalized
-*   **🌐 Comprehensive i18n:** Perfected all 10 supported languages including Russian and Arabic with full context alignment.
-*   **⚖️ Visual Engine Hierarchy:** Reordered the visualizer list to place 2D/Classic high-performance engines first, followed by WebGL high-fidelity scenes at the end.
-*   **🧪 Robustness Validation:** Implemented deep settings merge and validation to ensure compatibility with legacy LocalStorage data.
-*   **📄 Spec Synchronization:** Updated all OpenSpec architecture and rendering documents to reflect v1.6.68 standards.
+### Improved
+*   **🔄 Version Synchronization:** Fully synchronized version identifiers across `package.json`, `index.html`, source headers, and all 10 OpenSpec documentation files.
+*   **📄 Spec Audit:** Updated internal engineering footers in all markdown specifications to reflect the latest project state.
+*   **⚙️ PWA Refresh:** Updated Service Worker cache versioning to ensure clean asset updates for 1.6.74.
 
-## [v1.6.63] - 2025-02-20
+## [v1.6.73] - 2025-02-21
 ...
