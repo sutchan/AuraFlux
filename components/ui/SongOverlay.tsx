@@ -1,7 +1,7 @@
 
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -51,6 +51,20 @@ const getMoodStyle = (mood: string | undefined | null) => {
   };
 };
 
+const getProviderLabel = (source: string | undefined) => {
+    switch(source) {
+        case 'GROK': return 'Grok xAI';
+        case 'CLAUDE': return 'Claude 3.5';
+        case 'OPENAI': return 'GPT-4o';
+        case 'DEEPSEEK': return 'DeepSeek';
+        case 'QWEN': return 'Qwen';
+        case 'LOCAL': return 'Local Cache';
+        case 'MOCK': return 'Simulation';
+        case 'GEMINI': 
+        default: return 'Gemini 3.0';
+    }
+};
+
 const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, onRetry, onClose, analyser, sensitivity = 1.0 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const moodStyle = useMemo(() => song && song.mood ? getMoodStyle(song.mood) : getMoodStyle('default'), [song]);
@@ -73,6 +87,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
   const displayTitle = song.identified ? song.title : (song.title || "Signal Detected");
   const displayArtist = song.identified ? song.artist : (song.artist || "Analyzing...");
   const isConfidenceLow = !song.identified;
+  const sourceLabel = getProviderLabel(song.matchSource);
 
   return (
     <div className="pointer-events-none fixed inset-0 z-20 overflow-hidden">
@@ -108,14 +123,19 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
               {displayArtist}
             </p>
             
-            {song.mood && (
-              <div className="flex items-center gap-2 mt-2 flex-wrap">
-                <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r ${moodStyle.badgeGradient} border border-white/10 rounded-full`}>
-                   <span className={moodStyle.textColor}>{moodStyle.icon}</span>
-                   <span className={`text-[10px] font-bold uppercase tracking-wider ${moodStyle.textColor}`}>{song.mood}</span>
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
+                {song.mood && (
+                  <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r ${moodStyle.badgeGradient} border border-white/10 rounded-full`}>
+                     <span className={moodStyle.textColor}>{moodStyle.icon}</span>
+                     <span className={`text-[10px] font-bold uppercase tracking-wider ${moodStyle.textColor}`}>{song.mood}</span>
+                  </div>
+                )}
+                
+                {/* Source Badge */}
+                <div className="inline-flex items-center px-2 py-1 bg-white/5 border border-white/10 rounded-full">
+                    <span className="text-[9px] font-mono text-white/40 uppercase tracking-widest">via {sourceLabel}</span>
                 </div>
-              </div>
-            )}
+            </div>
 
             <div className="flex items-center gap-4 mt-3 pt-2 border-t border-white/10 opacity-80 md:opacity-60 group-hover:opacity-100 transition-opacity">
                 {song.searchUrl && song.identified && (

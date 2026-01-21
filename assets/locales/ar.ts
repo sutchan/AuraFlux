@@ -1,31 +1,20 @@
 
 /**
  * File: assets/locales/ar.ts
- * Version: 1.6.7
- * Author: Aura Vision Team
+ * Version: 1.6.18
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-17 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ar = {
   common: {
-    on: 'تشغيل',
-    off: 'إيقاف',
-    visible: 'مرئي',
-    hidden: 'مخفي',
-    active: 'نشط',
-    muted: 'مكتوم',
-    beta: 'بيتا',
-    simple: 'بسيط',
-    advanced: 'متقدم'
+    on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم'
   },
   tabs: {
-    visual: 'بصري',
-    text: 'نص',
-    audio: 'صوت',
-    ai: 'تمييز المسار',
-    system: 'نظام'
+    visual: 'بصري', text: 'نص', audio: 'صوت', ai: 'تمييز المسار', system: 'نظام'
   },
   hints: {
     mode: 'اختر المحرك الرياضي الأساسي لتوليد المؤثرات البصرية.',
@@ -125,22 +114,16 @@ export const ar = {
   textPosition: 'الموضع',
   quality: 'جودة الرندرة',
   qualities: {
-    low: 'منخفضة',
-    med: 'متوسطة',
-    high: 'عالية'
+    low: 'منخفضة', med: 'متوسطة', high: 'عالية'
   },
   visualPanel: {
-    effects: 'تأثيرات',
-    automation: 'أتمتة',
-    display: 'عرض'
+    effects: 'تأثيرات', automation: 'أتمتة', display: 'عرض'
   },
   audioPanel: {
     info: 'اضبط الحساسية والتنعيم لتخصيص تفاعل المصور مع الصوت. الدقة العالية توفر تفاصيل أكثر لكنها تزيد الحمل على المعالج.'
   },
   systemPanel: {
-    interface: 'الواجهة',
-    behavior: 'السلوك',
-    maintenance: 'الصيانة'
+    interface: 'الواجهة', behavior: 'السلوك', maintenance: 'الصيانة', engine: 'المحرك', audio: 'الصوت', ai: 'الذكاء الاصطناعي'
   },
   showFps: 'عرض FPS',
   showTooltips: 'عرض التلميحات',
@@ -148,15 +131,7 @@ export const ar = {
   autoHideUi: 'إخفاء الواجهة تلقائياً',
   mirrorDisplay: 'عكس العرض',
   presets: {
-    title: 'إعدادات مسبقة ذكية',
-    hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.',
-    select: 'اختر مزاجاً...',
-    calm: 'منوم وهادئ',
-    party: 'حفلة نشطة',
-    ambient: 'تركيز محيطي',
-    cyberpunk: 'فورة سايبربانك',
-    retrowave: 'غروب ريترو',
-    vocal: 'تركيز صوتي'
+    title: 'إعدادات مسبقة ذكية', hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.', select: 'اختر مزاجاً...', calm: 'منوم وهادئ', party: 'حفلة نشطة', ambient: 'تركيز محيطي', cyberpunk: 'فورة سايبربانك', retrowave: 'روب ريترو', vocal: 'تركيز صوتي'
   },
   recognitionSource: 'مزود الذكاء الاصطناعي',
   lyricsPosition: 'الموضع',
@@ -164,50 +139,24 @@ export const ar = {
   lyricsFontSize: 'الحجم',
   simulatedDemo: 'محاكاة (عرض)',
   positions: {
-      top: 'أعلى',
-      center: 'وسط',
-      bottom: 'أسفل',
-      tl: 'أعلى يسار',
-      tc: 'أعلى وسط',
-      tr: 'أعلى يمين',
-      ml: 'وسط يسار',
-      mc: 'مركز',
-      mr: 'وسط يمين',
-      bl: 'أسفل يسار',
-      bc: 'أسفل وسط',
-      br: 'أسفل يمين'
+      top: 'أعلى', center: 'وسط', bottom: 'أسفل', tl: 'أعلى يسار', tc: 'أعلى وسط', tr: 'أعلى يمين', ml: 'وسط يسار', mc: 'مركز', mr: 'وسط يمين', bl: 'أسفل يسار', bc: 'أسفل وسط', br: 'أسفل يمين'
   },
   wakeLock: 'البقاء مستيقظاً',
   system: {
-    shortcuts: {
-      mic: 'ميكروفون',
-      ui: 'واجهة',
-      mode: 'وضع',
-      random: 'عشوائي'
-    }
+    shortcuts: { mic: 'ميكروفون', ui: 'واجهة', mode: 'وضع', random: 'عشوائي' }
   },
   errors: {
-    title: 'خطأ صوتي',
-    accessDenied: 'تم رفض الوصول. يرجى التحقق من أذونات الميكروفون.',
-    noDevice: 'لم يتم العثور على جهاز.',
-    deviceBusy: 'الجهاز مشغول أو غير صالح.',
-    general: 'تعذر الوصول إلى الصوت.',
-    tryDemo: 'تجربة وضع العرض (بدون صوت)'
+    title: 'خطأ صوتي', accessDenied: 'تم رفض الوصول. يرجى التحقق من أذونات الميكروفون.', noDevice: 'لم يتم العثور على جهاز.', deviceBusy: 'الجهاز مشغول أو غير صالح.', general: 'تعذر الوصول إلى الصوت.', tryDemo: 'تجربة وضع العرض (بدون صوت)'
   },
   aiState: {
-    active: 'التمييز نشط',
-    enable: 'بدء التمييز بالذكاء الاصطناعي'
+    active: 'التمييز نشط', enable: 'بدء التمييز بالذكاء الاصطناعي'
   },
   regions: {
-    global: 'عالمي',
-    US: 'أمريكا / الغرب',
-    CN: 'الصين',
-    JP: 'اليابان',
-    KR: 'كوريا',
-    EU: 'أوروبا',
-    LATAM: 'أمريكا اللاتينية'
+    global: 'عالمي', US: 'أمريكا / الغرب', CN: 'الصين', JP: 'اليابان', KR: 'كوريا', EU: 'أوروبا', LATAM: 'أمريكا اللاتينية'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'التدفق العصبي (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'المجال الكمي (WebGL)',
     [VisualizerMode.PLASMA]: 'تدفق البلازما',
     [VisualizerMode.BARS]: 'أشرطة التردد',
     [VisualizerMode.PARTICLES]: 'الملاحة بين النجوم',
@@ -219,38 +168,23 @@ export const ar = {
     [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو (DoF)',
     [VisualizerMode.SILK]: 'الحرير العائم (WebGL)',
     [VisualizerMode.LIQUID]: 'الكوكب السائل (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'شكل موجي أنيق',
     [VisualizerMode.TERRAIN]: 'التضاريس المضلعة (WebGL)'
   },
   lyricsStyles: {
-    [LyricsStyle.STANDARD]: 'تنسيق قياسي',
-    [LyricsStyle.KARAOKE]: 'تفاعل ديناميكي',
-    [LyricsStyle.MINIMAL]: 'بسيط جداً'
+    [LyricsStyle.STANDARD]: 'تنسيق قياسي', [LyricsStyle.KARAOKE]: 'تفاعل ديناميكي', [LyricsStyle.MINIMAL]: 'بسيط جداً'
   },
   helpModal: {
     title: 'دليل Aura Flux',
-    tabs: {
-        guide: 'دليل',
-        shortcuts: 'اختصارات',
-        about: 'حول'
-    },
+    tabs: { guide: 'دليل', shortcuts: 'اختصارات', about: 'حول' },
     intro: 'Aura Flux هو أداة للحس المرافق تحول الصوت إلى فن رقمي رياضي في الوقت الفعلي باستخدام تحليل طيفي عالي الدقة.',
     shortcutsTitle: 'التحكم بلوحة المفاتيح',
     gesturesTitle: 'إيماءات اللمس',
     shortcutItems: {
-      toggleMic: 'تشغيل/إيقاف الصوت',
-      fullscreen: 'تبديل ملء الشاشة',
-      randomize: 'عشوائية الجماليات',
-      lyrics: 'تبديل معلومات المسار',
-      hideUi: 'إظهار/إخفاء اللوحة',
-      glow: 'تبديل تأثير التوهج',
-      trails: 'تبديل تأثير الآثار',
-      changeMode: 'تغيير النمط',
-      changeTheme: 'تغيير السمة'
+      toggleMic: 'تشغيل/إيقاف الصوت', fullscreen: 'تبديل ملء الشاشة', randomize: 'عشوائية الجماليات', lyrics: 'تبديل معلومات المسار', hideUi: 'إظهار/إخفاء اللوحة', glow: 'تبديل تأثير التوهج', trails: 'تبديل تأثير الآثار', changeMode: 'تغيير النمط', changeTheme: 'تغيير السمة'
     },
     gestureItems: {
-        swipeMode: 'سحب أفقي: تغيير الوضع',
-        swipeSens: 'سحب عمودي: ضبط الحساسية',
-        longPress: 'ضغطة طويلة: تمييز بالذكاء الاصطناعي'
+        swipeMode: 'سحب أفقي: تغيير الوضع', swipeSens: 'سحب عمودي: ضبط الحساسية', longPress: 'ضغطة طويلة: تمييز بالذكاء الاصطناعي'
     },
     howItWorksTitle: 'كيفية الاستخدام',
     howItWorksSteps: [
@@ -262,49 +196,22 @@ export const ar = {
     ],
     settingsTitle: 'دليل المعايير',
     settingsDesc: {
-      sensitivity: 'التحكم في كسب رد الفعل للمؤثرات البصرية.',
-      speed: 'سرعة التطور الزمني للخوارزميات التوليدية.',
-      glow: 'شدة الإضاءة المحيطة لتعزيز الأجواء.',
-      trails: 'تراكم البكسل لخلق حركة انسيابية.',
-      smoothing: 'تنعيم بيانات التردد لتفادي القفزات المفاجئة.',
-      fftSize: 'دقة التحليل الطيفي (عدد العينات).'
+      sensitivity: 'التحكم في كسب رد الفعل للمؤثرات البصرية.', speed: 'سرعة التطور الزمني للخوارزميات التوليدية.', glow: 'شدة الإضاءة المحيطة لتعزيز الأجواء.', trails: 'تراكم البكسل لخلق حركة انسيابية.', smoothing: 'تنعيم بيانات التردد لتفادي القفزات المفاجئة.', fftSize: 'دقة التحليل الطيفي (عدد العينات).'
     },
     projectInfoTitle: 'حول المشروع',
     aboutDescription: 'تجربة تفاعلية من الجيل التالي. Aura Flux يدمج التحليل الطيفي مع Google Gemini 3 لتحويل الأمواج الصوتية الصامتة إلى ضوء حي. مثالي لمنسقي الأغاني والبث المباشر والديكور.',
     privacyTitle: 'الخصوصية والأمان',
     privacyText: 'التحليل الصوتي محلي بالكامل. يتم إرسال بصمات طيفية مشفرة فقط لتمييز الأغنية؛ لا يتم حفظ أي تسجيلات.',
-    version: 'إصدار',
-    coreTech: 'التقنية الأساسية',
-    repository: 'المستودع',
-    support: 'الدعم',
-    reportBug: 'الإبلاغ عن خطأ'
+    version: 'الإصدار', coreTech: 'التقنية الأساسية', repository: 'المستودع', support: 'الدعم', reportBug: 'الإبلاغ عن خطأ'
   },
   onboarding: {
-    welcome: 'مرحباً بك في Aura Flux',
-    subtitle: 'محرك الحس المرافق بالذكاء الاصطناعي',
-    selectLanguage: 'يرجى اختيار اللغة',
-    next: 'التالي',
-    back: 'العودة',
-    skip: 'تخطي',
-    finish: 'بدء التجربة',
+    welcome: 'مرحباً بك في Aura Flux', subtitle: 'محرك الحس المرافق بالذكاء الاصطناعي', selectLanguage: 'يرجى اختيار اللغة', next: 'التالي', back: 'العودة', skip: 'تخطي', finish: 'بدء التجربة',
     features: {
       title: 'الميزات الرئيسية',
-      visuals: {
-        title: 'فنون توليدية',
-        desc: '12+ محركاً رياضياً يعتمد على WebGL لتجسيد الصوت.'
-      },
-      ai: {
-        title: 'ذكاء Gemini AI',
-        desc: 'تحليل فوري للمسارات والمزاج عبر Google Gemini 3.'
-      },
-      privacy: {
-        title: 'آمن وخاص',
-        desc: 'المعالجة محلية. لا يتم تسجيل أو حفظ بياناتك الصوتية أبداً.'
-      }
+      visuals: { title: 'فنون توليدية', desc: '12+ محركاً رياضياً يعتمد على WebGL لتجسيد الصوت.' },
+      ai: { title: 'ذكاء Gemini AI', desc: 'تحليل فوري للمسارات والمزاج عبر Google Gemini 3.' },
+      privacy: { title: 'آمن وخاص', desc: 'المعالجة محلية. لا يتم تسجيل أو حفظ بياناتك الصوتية أبداً.' }
     },
-    shortcuts: {
-      title: 'تحكم ديناميكي',
-      desc: 'كن مايسترو الضوء عبر لوحة المفاتيح.'
-    }
+    shortcuts: { title: 'تحكم ديناميكي', desc: 'كن مايسترو الضوء عبر لوحة المفاتيح.' }
   }
 };

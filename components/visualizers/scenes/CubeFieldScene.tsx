@@ -1,9 +1,10 @@
 
 /**
  * File: components/visualizers/scenes/CubeFieldScene.tsx
- * Version: 1.3.2
+ * Version: 1.4.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-17 16:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -22,45 +23,34 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const coreLightRef = useRef<THREE.PointLight>(null);
   
-  const { bass, treble, smoothedColors } = useAudioReactive({ analyser, colors, settings });
+  const { bass, mids, treble, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1, c2] = smoothedColors;
 
-  // Increased particle count for better density
-  const count = settings.quality === 'high' ? 2000 : settings.quality === 'med' ? 1200 : 600;
+  const count = settings.quality === 'high' ? 1800 : settings.quality === 'med' ? 1000 : 500;
   const dummy = useMemo(() => new THREE.Object3D(), []);
   
-  // Initialize particles with chaotic physics properties
+  // 1. 初始化增强物理属性
   const particles = useMemo(() => {
     const temp = [];
     for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        // Biased radius: more particles at the periphery
-        const radius = 15 + Math.pow(Math.random(), 1.5) * 120; 
+        // 偏置半径分布
+        const radius = 10 + Math.pow(Math.random(), 1.8) * 140; 
         
-        const x = Math.cos(angle) * radius * (0.8 + Math.random() * 0.4);
-        const y = Math.sin(angle) * radius * (0.6 + Math.random() * 0.4); 
-        const z = (Math.random() - 0.5) * 400;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius; 
+        const z = (Math.random() - 0.5) * 450;
 
-        // Scale variation: Big structures vs tiny debris
-        const isStructure = Math.random() > 0.94;
-        const scaleBase = isStructure ? (2.0 + Math.random() * 3.0) : (0.15 + Math.random() * 0.5);
+        // 尺寸多样性
+        const isStructure = Math.random() > 0.95;
+        const scaleBase = isStructure ? (1.5 + Math.random() * 3.0) : (0.1 + Math.random() * 0.4);
 
-        // ROTATION PHYSICS:
-        // Reduced speed to 2% (20% of previous) for "deep space stasis" feel
-        // 1. Inverse Mass: Smaller particles spin much faster than large ones
-        let baseRotSpeed = (Math.random() - 0.5) * (isStructure ? 0.006 : 0.05);
-        
-        // 2. Chaos Factor: 15% of particles are "Hyper Spinners" (unstable debris)
-        const isHyper = Math.random() > 0.85;
-        if (isHyper && !isStructure) baseRotSpeed *= 4.0;
+        // 大幅度随机化速度偏移
+        const speedOffset = 0.4 + Math.random() * 1.8;
 
-        // 3. Axis Variety: Some rotate strictly on one axis, others tumble randomly
-        let rotAxis = new THREE.Vector3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-        if (Math.random() > 0.7) {
-            // Snap to primary axis for visual contrast
-            const r = Math.random();
-            rotAxis = r < 0.33 ? new THREE.Vector3(1,0,0) : (r < 0.66 ? new THREE.Vector3(0,1,0) : new THREE.Vector3(0,0,1));
-        }
+        // 旋转轴
+        const rotAxis = new THREE.Vector3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+        const baseRotSpeed = (Math.random() - 0.5) * (isStructure ? 0.005 : 0.04);
 
         temp.push({
             x, y, z,
@@ -68,12 +58,12 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
             baseY: y,
             scale: scaleBase,
             isStructure,
-            // Parallax speed
-            speedOffset: isStructure ? 0.6 : (0.8 + Math.random() * 0.8), 
+            speedOffset, 
             rotationAxis: rotAxis,
             rotationSpeed: baseRotSpeed,
             phase: Math.random() * Math.PI * 2,
-            wobbleSpeed: Math.random() * 0.04 // Extremely slow wobble
+            wobbleSpeed: 0.02 + Math.random() * 0.05,
+            jitterAmplitude: 0.2 + Math.random() * 0.8
         });
     }
     return temp;
@@ -81,71 +71,67 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    // Smoother base speed, less jerky reaction to bass
-    const moveSpeed = settings.speed * 25 * (1 + bass * 0.15); 
     
-    // --- Dynamic Center / Vanishing Point Logic ---
-    const centerTime = time * 0.15; 
-    const centerX = Math.sin(centerTime) * 40 + Math.sin(centerTime * 2.3) * 15;
-    const centerY = Math.cos(centerTime * 0.8) * 30 + Math.sin(centerTime * 1.5) * 10;
+    // 核心修改：推进速度加速 3 倍。
+    // 基础航行速度乘数从 1.0 提升至 3.0
+    const globalSpeed = settings.speed * 3.0 * (1 + bass * 0.15);
+    
+    // 动态相机逻辑
+    const centerTime = time * 0.2; 
+    const centerX = Math.sin(centerTime) * 35;
+    const centerY = Math.cos(centerTime * 0.7) * 25;
 
-    // Move camera slightly to follow the curve
-    state.camera.position.x += (centerX * 0.1 - state.camera.position.x) * 0.02;
-    state.camera.position.y += (centerY * 0.1 - state.camera.position.y) * 0.02;
-    state.camera.lookAt(centerX * 0.5, centerY * 0.5, -100);
+    state.camera.position.x += (Math.sin(time * 0.1) * 5 - state.camera.position.x) * 0.05;
+    state.camera.lookAt(centerX * 0.2, centerY * 0.2, -100);
 
     if (coreLightRef.current) {
-        coreLightRef.current.position.set(centerX, centerY, -120);
+        coreLightRef.current.position.set(centerX, centerY, -80);
         coreLightRef.current.color = c1;
-        coreLightRef.current.intensity = 5 + bass * 10;
+        coreLightRef.current.intensity = 8 + bass * 15;
     }
 
     if (meshRef.current) {
         const mat = meshRef.current.material as THREE.MeshStandardMaterial;
         mat.color = c0;
         mat.emissive = c1;
-        mat.emissiveIntensity = 0.3 + bass * 0.6 + Math.sin(time * 0.5) * 0.15;
+        // 材质自发光强度受高音频谱驱动
+        mat.emissiveIntensity = 0.2 + treble * 1.5 + (isBeat ? 1.0 : 0);
 
-        // Global rotation boost on high energy
-        const globalRotBoost = 1.0 + bass * 1.5 + treble * 0.5;
+        // 动量因子
+        const rotationBoost = 1.0 + mids * 2.0 + treble * 1.5;
 
         particles.forEach((p, i) => {
-            // 1. Forward Flight
-            p.z += moveSpeed * p.speedOffset * 0.016; 
-            if (p.z > 50) p.z -= 400;
+            // 2. 差异化航行速度应用
+            p.z += globalSpeed * p.speedOffset * 0.016; 
+            if (p.z > 60) p.z -= 450;
 
-            // 2. Organic Sway
-            const swayAmp = 2.0 + bass * 2.0; 
-            const swayX = Math.sin(time * 0.15 + p.phase + p.z * 0.005) * swayAmp;
-            const swayY = Math.cos(time * 0.1 + p.phase) * (swayAmp * 0.5);
+            // 3. 湍流扰动 (Turbulence)
+            const turbulenceX = Math.sin(time * p.wobbleSpeed + p.phase) * p.jitterAmplitude * (1 + mids);
+            const turbulenceY = Math.cos(time * p.wobbleSpeed * 0.8 + p.phase) * p.jitterAmplitude * (1 + mids);
 
-            // 3. Position Expansion
-            const expansion = 1.0 + bass * 0.08 * (100 / (Math.abs(p.z) + 1)); 
-            
-            // 4. Curvature Warp
-            const depthFactor = Math.max(0, -p.z / 300); 
-            const curveX = centerX * Math.pow(depthFactor, 1.5);
-            const curveY = centerY * Math.pow(depthFactor, 1.5);
+            // 4. 空间透视扭曲
+            const depthFactor = Math.max(0, -p.z / 350); 
+            const perspectiveWarpX = centerX * Math.pow(depthFactor, 1.2);
+            const perspectiveWarpY = centerY * Math.pow(depthFactor, 1.2);
 
             dummy.position.set(
-                (p.baseX + swayX) * expansion + curveX, 
-                (p.baseY + swayY) * expansion + curveY, 
+                p.baseX + turbulenceX + perspectiveWarpX, 
+                p.baseY + turbulenceY + perspectiveWarpY, 
                 p.z
             );
 
-            // 5. ENHANCED TUMBLING LOGIC
-            // Apply rotation step based on particle's inherent speed + audio boost
-            const rotStep = p.rotationSpeed * 0.02 * globalRotBoost;
+            // 5. 旋转物理
+            const rotStep = p.rotationSpeed * 0.1 * (1 + bass * 0.5) * rotationBoost;
             dummy.rotateOnAxis(p.rotationAxis, rotStep);
             
-            // Add a secondary subtle wobble for large structures to make them feel heavy
+            // 结构件增加微弱惯性摆动
             if (p.isStructure) {
-                dummy.rotation.x += Math.sin(time * p.wobbleSpeed) * 0.002;
-                dummy.rotation.z += Math.cos(time * p.wobbleSpeed) * 0.002;
+                dummy.rotation.y += Math.sin(time * 0.1 + p.phase) * 0.002;
             }
 
-            // 6. Scale Reactivity (Shimmer)
-            const s = p.scale * (1 + treble * 0.3 * (p.isStructure ? 0.1 : 1.0));
+            // 6. 尺寸灵敏度优化 (高频闪烁)
+            const shimmer = 1 + treble * 0.4 * (p.isStructure ? 0.2 : 1.5);
+            const s = p.scale * shimmer;
             dummy.scale.set(s, s, s);
             
             dummy.updateMatrix();
@@ -157,26 +143,20 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
 
   return (
     <>
-      <color attach="background" args={['#010103']} />
-      <fog attach="fog" args={['#010103', 20, 160]} /> 
+      <color attach="background" args={['#000000']} />
+      <fog attach="fog" args={['#000000', 30, 200]} /> 
       
-      <ambientLight intensity={0.1} />
-      
-      {/* The Dynamic Wandering Core Light */}
-      <pointLight ref={coreLightRef} distance={300} decay={2} />
-      
-      {/* Foreground Fill Light */}
-      <pointLight position={[0, 0, 10]} intensity={2} color={c2} distance={80} />
-      
-      {/* Rim lighting from side */}
-      <directionalLight position={[50, 20, 10]} intensity={1.0} color={c0} />
+      <ambientLight intensity={0.15} />
+      <pointLight ref={coreLightRef} distance={250} decay={1.8} />
+      <pointLight position={[0, 0, 15]} intensity={1.5} color={c2} distance={100} />
+      <directionalLight position={[40, 40, 20]} intensity={0.7} color={c0} />
 
       <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial 
-            roughness={0.2} 
+            roughness={0.25} 
             metalness={0.9}
-            envMapIntensity={1.0}
+            envMapIntensity={0.5}
         />
       </instancedMesh>
     </>

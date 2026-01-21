@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/scenes/LowPolyTerrainScene.tsx
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -21,159 +21,207 @@ interface SceneProps {
 
 export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const sunRef = useRef<THREE.Mesh>(null);
+  const sunGroupRef = useRef<THREE.Group>(null);
+  const coronaRef = useRef<THREE.Mesh>(null);
+  const particlesRef = useRef<THREE.Points>(null);
   
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const gridMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
   const fogRef = useRef<THREE.Fog>(null);
-  const ambientLightRef = useRef<THREE.AmbientLight>(null);
 
-  const { bass, mids, treble, smoothedColors } = useAudioReactive({ analyser, colors, settings });
+  const { bass, mids, treble, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1, c2] = smoothedColors;
 
-  // Optimize geometry creation
+  // 1. 地形几何体配置
   const { geometry } = useMemo(() => {
-    // Higher segment count for richer detail
     const segmentsW = settings.quality === 'high' ? 80 : settings.quality === 'med' ? 50 : 30;
     const segmentsH = settings.quality === 'high' ? 60 : settings.quality === 'med' ? 40 : 24;
-    
-    const geo = new THREE.PlaneGeometry(160, 120, segmentsW, segmentsH);
-    return { geometry: geo };
+    return { geometry: new THREE.PlaneGeometry(180, 160, segmentsW, segmentsH) };
   }, [settings.quality]);
 
-  useFrame(({ clock }) => {
-     const time = clock.getElapsedTime() * settings.speed;
+  // 2. 能量粒子配置
+  const particleCount = settings.quality === 'low' ? 40 : 80;
+  const [particleData] = useMemo(() => {
+    const pos = new Float32Array(particleCount * 3);
+    const vel = new Float32Array(particleCount);
+    for (let i = 0; i < particleCount; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 100;
+      pos[i * 3 + 1] = Math.random() * 20 - 5;
+      pos[i * 3 + 2] = -Math.random() * 300;
+      vel[i] = 1.5 + Math.random() * 3.0;
+    }
+    return [{ pos, vel }];
+  }, [particleCount]);
 
-     // 1. Sun/Moon Animation (The Anchor)
-     if (sunRef.current) {
-        sunRef.current.position.set(0, 30 + Math.sin(time * 0.1) * 5, -80);
-        const sunScale = 15 + bass * 8.0;
-        sunRef.current.scale.setScalar(sunScale);
-        (sunRef.current.material as THREE.MeshBasicMaterial).color = c0;
-     }
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime() * settings.speed;
+    const { camera } = state;
 
-     // 2. Environment Atmosphere
-     if (materialRef.current) {
-         materialRef.current.color = c1;
-         materialRef.current.emissive = c2;
-         // Glows more on high energy
-         materialRef.current.emissiveIntensity = 0.1 + treble * 0.5;
-     }
-     
-     if (fogRef.current) {
-        fogRef.current.color = new THREE.Color(c2).multiplyScalar(0.1); // Darker fog
-        fogRef.current.near = 10;
-        fogRef.current.far = 90;
-     }
+    // --- 摄影机动态算法 ---
+    const swerve = Math.sin(time * 0.4) * 2.0 * (1 + mids);
+    const shake = isBeat ? (Math.random() - 0.5) * 0.8 : 0;
+    
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, swerve, 0.05);
+    camera.position.y = 2 + Math.cos(time * 0.2) * 0.5 + (isBeat ? 0.3 : 0);
+    camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, -swerve * 0.02 + shake * 0.1, 0.1);
+    camera.lookAt(swerve * 0.5, 0, -80);
 
-     if (ambientLightRef.current) {
-        ambientLightRef.current.color = c1;
-        ambientLightRef.current.intensity = 0.2 + mids * 0.5;
-     }
+    // --- 太阳与日冕增强 ---
+    if (sunGroupRef.current) {
+        sunGroupRef.current.position.set(0, 35 + Math.sin(time * 0.15) * 3, -120);
+        const sunScale = 1.0 + bass * 0.4;
+        sunGroupRef.current.scale.setScalar(sunScale);
+        
+        if (coronaRef.current) {
+            coronaRef.current.scale.setScalar(1.2 + Math.sin(time * 2) * 0.1 + bass * 0.5);
+            (coronaRef.current.material as THREE.MeshBasicMaterial).opacity = 0.1 + bass * 0.4;
+            (coronaRef.current.material as THREE.MeshBasicMaterial).color = c0;
+        }
+    }
 
-     // 3. Terrain Synthesis Loop
-     if (!meshRef.current) return;
-     
-     const positions = meshRef.current.geometry.attributes.position as THREE.BufferAttribute;
-     const count = positions.count;
+    // --- 材质与雾气响应 ---
+    if (materialRef.current) {
+        materialRef.current.color = c1;
+        materialRef.current.emissive = c2;
+        materialRef.current.emissiveIntensity = 0.05 + treble * 0.8;
+    }
+    
+    if (gridMaterialRef.current) {
+        gridMaterialRef.current.color = c0;
+        gridMaterialRef.current.opacity = 0.1 + treble * 0.5 + (isBeat ? 0.3 : 0);
+    }
 
-     // Pre-calculate constants for the loop
-     const moveSpeed = time * 8.0;
-     const bassAmp = bass * 15.0; 
-     const midAmp = mids * 6.0;
-     const valleyWidth = 15 + bass * 10.0; // Valley breathes with bass
+    if (fogRef.current) {
+        fogRef.current.color = new THREE.Color(c2).multiplyScalar(0.05);
+    }
 
-     for(let i=0; i < count; i++) {
-         const x = positions.getX(i);
-         const y = positions.getY(i); // This is actually Z in world space before rotation
+    // --- 地形合成逻辑 ---
+    if (!meshRef.current) return;
+    const positions = meshRef.current.geometry.attributes.position as THREE.BufferAttribute;
+    const count = positions.count;
+    const moveSpeed = time * 12.0;
+    const valleyWidth = 18 + bass * 12.0;
 
-         // Coordinate distortion for "warp" effect
-         const flowY = y - moveSpeed; 
-         const flowX = x + Math.sin(flowY * 0.05 + time) * 5.0;
+    for (let i = 0; i < count; i++) {
+        const x = positions.getX(i);
+        const y = positions.getY(i);
+        const flowY = y - moveSpeed;
+        const flowX = x + Math.sin(flowY * 0.04 + time) * 8.0;
 
-         // --- FRACTAL TERRAIN GENERATION ---
-         
-         // Layer 1: Base Hills (Low Frequency)
-         let h = Math.sin(flowX * 0.08) * Math.cos(flowY * 0.05) * 6.0;
+        // 多频段分形噪声
+        let h = Math.sin(flowX * 0.06) * Math.cos(flowY * 0.04) * 8.0; // 基础起伏
+        h += Math.abs(Math.sin(flowX * 0.12 + flowY * 0.08)) * 10.0; // 锐利山脊
+        h += Math.sin(flowX * 0.4 + time) * mids * 4.0; // 动态波动
 
-         // Layer 2: Jagged Ridges (Medium Frequency + Abs)
-         // Math.abs creates sharp peaks instead of round hills
-         h += Math.abs(Math.sin(flowX * 0.15 + flowY * 0.1)) * 8.0;
+        // 重拍时的地形随机跳变 (Glitch Effect)
+        if (isBeat && Math.abs(x) > 10) {
+            h += (Math.random() - 0.5) * 12.0 * bass;
+        }
 
-         // Layer 3: Audio Detail (High Frequency)
-         // Adds roughness based on Mids/Treble
-         h += Math.sin(flowX * 0.5 + flowY * 0.6) * midAmp * 0.3;
+        // 山谷平滑逻辑
+        const dist = Math.abs(x);
+        let vFactor = Math.max(0, Math.min(1, (dist - 4) / valleyWidth));
+        vFactor = vFactor * vFactor * (3 - 2 * vFactor); // Cubic Smooth Step
 
-         // --- SAFETY VALLEY LOGIC ---
-         // Flatten the center path for the camera
-         const distFromCenter = Math.abs(x);
-         let valleyFactor = (distFromCenter - 2) / valleyWidth;
-         valleyFactor = Math.max(0, Math.min(1, valleyFactor)); // Clamp 0-1
-         
-         // Apply cubic ease-in for smooth valley walls
-         valleyFactor = valleyFactor * valleyFactor * (3 - 2 * valleyFactor);
+        const finalH = h * vFactor;
+        positions.setZ(i, Math.max(-6, finalH));
+    }
+    positions.needsUpdate = true;
+    meshRef.current.geometry.computeVertexNormals();
 
-         // Final Height Composition
-         // The valleyFactor flattens the center. 
-         // We also add a specific "Bass Spike" on the valley walls.
-         const finalHeight = (h * valleyFactor) + (valleyFactor * bassAmp * Math.sin(x * 0.3) * 0.5);
-         
-         positions.setZ(i, Math.max(-5, finalHeight));
-     }
-     
-     positions.needsUpdate = true;
-     meshRef.current.geometry.computeVertexNormals();
+    // --- 能量流星粒子更新 ---
+    if (particlesRef.current) {
+        const pPositions = particlesRef.current.geometry.attributes.position.array as Float32Array;
+        for (let i = 0; i < particleCount; i++) {
+            pPositions[i * 3 + 2] += particleData.vel[i] * (1 + bass * 2); // 速度受低音驱动
+            if (pPositions[i * 3 + 2] > 50) {
+                pPositions[i * 3 + 2] = -250;
+                pPositions[i * 3] = (Math.random() - 0.5) * 120;
+            }
+        }
+        particlesRef.current.geometry.attributes.position.needsUpdate = true;
+        (particlesRef.current.material as THREE.PointsMaterial).color = c0;
+        (particlesRef.current.material as THREE.PointsMaterial).opacity = 0.2 + bass * 0.6;
+    }
   });
 
   return (
       <>
         <color attach="background" args={['#000000']} /> 
-        <fog ref={fogRef} attach="fog" args={['#000000', 20, 100]} />
+        <fog ref={fogRef} attach="fog" args={['#000000', 10, 140]} />
         
         <DynamicStarfield treble={treble} speed={settings.speed} />
-        
-        {/* The Retro Sun */}
-        <mesh ref={sunRef} position={[0, 30, -80]}>
-            <circleGeometry args={[1, 32]} />
-            <meshBasicMaterial color={c0} fog={false} />
-        </mesh>
 
-        {/* Main Terrain Surface */}
+        {/* 升级版太阳系统 */}
+        <group ref={sunGroupRef}>
+            {/* 核心太阳 */}
+            <mesh>
+                <circleGeometry args={[18, 32]} />
+                <meshBasicMaterial color={c0} fog={false} />
+            </mesh>
+            {/* 外部日冕层 */}
+            <mesh ref={coronaRef}>
+                <circleGeometry args={[22, 32]} />
+                <meshBasicMaterial 
+                    color={c0} 
+                    transparent 
+                    opacity={0.3} 
+                    blending={THREE.AdditiveBlending} 
+                    fog={false} 
+                />
+            </mesh>
+        </group>
+
+        {/* 能量流星粒子 */}
+        <points ref={particlesRef}>
+            <bufferGeometry>
+                <bufferAttribute
+                    attach="attributes-position"
+                    count={particleCount}
+                    array={particleData.pos}
+                    itemSize={3}
+                />
+            </bufferGeometry>
+            <pointsMaterial 
+                size={0.6} 
+                transparent 
+                blending={THREE.AdditiveBlending} 
+                depthWrite={false}
+            />
+        </points>
+
+        {/* 地形表面 */}
         <mesh 
             ref={meshRef} 
             geometry={geometry}
             rotation={[-Math.PI/2, 0, 0]} 
-            position={[0, -10, -20]}
+            position={[0, -12, -20]}
         >
             <meshStandardMaterial 
                 ref={materialRef}
                 flatShading={true} 
-                roughness={0.8}
-                metalness={0.2}
-                side={THREE.DoubleSide}
+                roughness={0.7}
+                metalness={0.3}
             />
         </mesh>
 
-        {/* Neon Grid Overlay (Clone mesh for wireframe effect) */}
+        {/* 发光霓虹网格 */}
         <mesh 
             geometry={geometry}
             rotation={[-Math.PI/2, 0, 0]} 
-            position={[0, -9.9, -20]} // Slightly higher to avoid z-fighting
+            position={[0, -11.9, -20]}
         >
             <meshBasicMaterial 
-                color={c0}
+                ref={gridMaterialRef}
                 wireframe={true}
                 transparent={true}
-                opacity={0.15}
+                opacity={0.2}
             />
         </mesh>
         
-        <ambientLight ref={ambientLightRef} intensity={0.2} />
-        
-        {/* Dynamic lighting from the "Sun" */}
-        <pointLight position={[0, 20, -70]} intensity={2} color={c0} distance={150} />
-        
-        {/* Rim light from front/bottom for volume */}
-        <directionalLight position={[0, 10, 20]} intensity={0.5} color={c1} />
+        <ambientLight intensity={0.1} />
+        <pointLight position={[0, 40, -100]} intensity={3} color={c0} distance={200} />
+        <directionalLight position={[0, 10, 50]} intensity={0.8} color={c1} />
       </>
   );
 };

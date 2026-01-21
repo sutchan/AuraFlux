@@ -1,7 +1,6 @@
-
 /**
  * File: components/controls/panels/SystemSettingsPanel.tsx
- * Version: 1.0.7
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -12,6 +11,7 @@ import { APP_VERSION } from '../../../core/constants';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { useVisuals, useUI } from '../../AppContext';
+import { TooltipArea } from '../../ui/controls/Tooltip';
 
 export const SystemSettingsPanel: React.FC = () => {
   const { language, setLanguage, resetSettings, t } = useUI();
@@ -150,7 +150,7 @@ export const SystemSettingsPanel: React.FC = () => {
                     {t?.appDescription || "Immersive audio visualization suite."}
                   </p>
                   <div className="pt-2 border-t border-white/5 space-y-1">
-                     <div className="flex justify-between text-[9px] font-mono uppercase text-white/20"><span>{sys?.engine || 'Engine'}</span><span>Three.js r160 + React 19</span></div>
+                     <div className="flex justify-between text-[9px] font-mono uppercase text-white/20"><span>{sys?.engine || 'Engine'}</span><span>Three.js r182 + React 19</span></div>
                      <div className="flex justify-between text-[9px] font-mono uppercase text-white/20"><span>{sys?.audio || 'Audio'}</span><span>Web Audio API (Real-time)</span></div>
                      <div className="flex justify-between text-[9px] font-mono uppercase text-white/20"><span>{sys?.ai || 'AI'}</span><span>Gemini 3 Flash (1.5s Latency)</span></div>
                   </div>
@@ -159,23 +159,27 @@ export const SystemSettingsPanel: React.FC = () => {
         </div>
         
         <div className="mt-auto space-y-3 pt-4 border-t border-white/5">
-            <button 
-              onClick={handleResetClick} 
-              className={`w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 group ${confirmReset ? 'bg-red-600 text-white border-red-400' : 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20'}`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 opacity-70 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-              {confirmReset ? (t?.confirmReset || 'Are you sure?') : (t?.reset || "Reset App")}
-            </button>
+            <TooltipArea text={hints?.reset}>
+              <button 
+                onClick={handleResetClick} 
+                className={`w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 group ${confirmReset ? 'bg-red-600 text-white border-red-400' : 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20'}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 opacity-70 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                {confirmReset ? (t?.confirmReset || 'Are you sure?') : (t?.reset || "Reset App")}
+              </button>
+            </TooltipArea>
             
             {isAdvanced && (
-                <button 
-                    onClick={() => setShouldCrash(true)} 
-                    className="w-full py-2 bg-transparent border border-white/5 rounded-lg text-[9px] font-mono text-white/20 uppercase tracking-widest hover:bg-white/5 hover:text-white/50 transition-colors animate-fade-in-up"
-                >
-                    Simulate Crash
-                </button>
+                <TooltipArea text="Force application crash for testing.">
+                  <button 
+                      onClick={() => setShouldCrash(true)} 
+                      className="w-full py-2 bg-transparent border border-white/5 rounded-lg text-[9px] font-mono text-white/20 uppercase tracking-widest hover:bg-white/5 hover:text-white/50 transition-colors animate-fade-in-up"
+                  >
+                      Simulate Crash
+                  </button>
+                </TooltipArea>
             )}
         </div>
       </div>

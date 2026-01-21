@@ -1,7 +1,6 @@
-
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.0.8
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -17,6 +16,7 @@ import { HelpModal } from '../ui/HelpModal';
 import { useIdleTimer } from '../../core/hooks/useIdleTimer';
 import { useVisuals, useAI, useAudioContext, useUI } from '../AppContext';
 import { MiniControls } from './MiniControls';
+import { TooltipArea } from '../ui/controls/Tooltip';
 
 type TabType = 'visual' | 'text' | 'audio' | 'ai' | 'system';
 
@@ -87,7 +87,6 @@ const Controls: React.FC = () => {
       <MiniControls isExpanded={isExpanded} isIdle={isIdle} setIsExpanded={setIsExpanded} toggleFullscreen={toggleFullscreen} />
       {isExpanded && (
         <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505] border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col">
-          {/* Mobile: Increase max-height to 85dvh for better visibility. Desktop: 70vh */}
           <div className="max-h-[85dvh] md:max-h-[70vh] overflow-y-auto custom-scrollbar p-3 md:p-6 pb-safe relative flex flex-col">
             <div className="max-w-5xl mx-auto space-y-3 md:space-y-4 w-full">
               
@@ -111,18 +110,22 @@ const Controls: React.FC = () => {
                 <div className="flex items-center justify-between lg:justify-end gap-3 md:gap-4">
                   {/* Simple/Advanced Toggle Capsule */}
                   <div className="bg-white/5 p-1 rounded-lg flex text-[9px] font-bold uppercase tracking-wider border border-white/5 flex-shrink-0">
-                      <button 
-                        onClick={() => setSettings({...settings, uiMode: 'simple'})} 
-                        className={`px-3 py-1.5 rounded-md transition-all duration-300 ${settings.uiMode === 'simple' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
-                      >
-                        {t?.common?.simple || 'SIMPLE'}
-                      </button>
-                      <button 
-                        onClick={() => setSettings({...settings, uiMode: 'advanced'})} 
-                        className={`px-3 py-1.5 rounded-md transition-all duration-300 ${settings.uiMode === 'advanced' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
-                      >
-                        {t?.common?.advanced || 'ADVANCED'}
-                      </button>
+                      <TooltipArea text={t?.hints?.uiModeSimple}>
+                        <button 
+                          onClick={() => setSettings({...settings, uiMode: 'simple'})} 
+                          className={`px-3 py-1.5 rounded-md transition-all duration-300 ${settings.uiMode === 'simple' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+                        >
+                          {t?.common?.simple || 'SIMPLE'}
+                        </button>
+                      </TooltipArea>
+                      <TooltipArea text={t?.hints?.uiModeAdvanced}>
+                        <button 
+                          onClick={() => setSettings({...settings, uiMode: 'advanced'})} 
+                          className={`px-3 py-1.5 rounded-md transition-all duration-300 ${settings.uiMode === 'advanced' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+                        >
+                          {t?.common?.advanced || 'ADVANCED'}
+                        </button>
+                      </TooltipArea>
                   </div>
 
                   <div className="w-px h-6 bg-white/10 mx-1 hidden lg:block"></div>
@@ -134,7 +137,6 @@ const Controls: React.FC = () => {
                         <ActionButton onClick={toggleFullscreen} hintText={`${t?.hints?.fullscreen || "Fullscreen"} [F]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M20 8V4m0 0h-4M4 16v4m0 0h4M20 16v4m0 0h-4" /></svg>} />
                     </div>
                     
-                    {/* Mobile: Combine Help/Actions into cleaner layout or just keep close button prominent */}
                     <button onClick={() => setIsExpanded(false)} className="w-10 h-10 flex items-center justify-center bg-blue-600 rounded-xl text-white shadow-[0_4px_20px_rgba(37,99,235,0.4)] hover:bg-blue-500 transition-all duration-300 flex-shrink-0" aria-label={t?.hideOptions || "Collapse"}><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg></button>
                   </div>
                 </div>

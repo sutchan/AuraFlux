@@ -1,9 +1,10 @@
 
 /**
  * File: core/services/visualizerStrategies.ts
- * Version: 1.6.8
- * Author: Aura Vision Team
+ * Version: 1.6.10
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2024-05-15 14:25
  */
 
 import { VisualizerMode, IVisualizerRenderer } from '../types/index';
@@ -18,21 +19,17 @@ import { NebulaRenderer } from './renderers/NebulaRenderer';
 import { TunnelRenderer } from './renderers/GeometryRenderers';
 import { PlasmaRenderer } from './renderers/PlasmaRenderer';
 import { LasersRenderer } from './renderers/LasersRenderer';
+import { WaveformRenderer } from './renderers/WaveformRenderer';
 
-// Export classes for type usage if needed
+// Export classes for type usage
 export { 
   BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
   ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
-  LasersRenderer
+  LasersRenderer, WaveformRenderer
 };
 
-// Also export the BeatDetector
 export { BeatDetector } from './beatDetector';
 
-/**
- * Factory function to instantiate all 2D visualizer renderers.
- * This ensures strict consistency between the Main Thread (fallback) and Web Worker (primary).
- */
 export const createVisualizerRenderers = (): Record<string, IVisualizerRenderer> => {
   return {
     [VisualizerMode.BARS]: new BarsRenderer(),
@@ -44,5 +41,6 @@ export const createVisualizerRenderers = (): Record<string, IVisualizerRenderer>
     [VisualizerMode.LASERS]: new LasersRenderer(),
     [VisualizerMode.FLUID_CURVES]: new FluidCurvesRenderer(),
     [VisualizerMode.MACRO_BUBBLES]: new MacroBubblesRenderer(),
+    [VisualizerMode.WAVEFORM]: new WaveformRenderer(),
   };
 };

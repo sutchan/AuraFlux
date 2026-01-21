@@ -1,30 +1,19 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.7.1
- * Author: Aura Vision Team
+ * Version: 1.6.29
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-18 18:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const en = {
   common: {
-    on: 'ON',
-    off: 'OFF',
-    visible: 'VISIBLE',
-    hidden: 'HIDDEN',
-    active: 'ACTIVE',
-    muted: 'MUTED',
-    beta: 'BETA',
-    simple: 'SIMPLE',
-    advanced: 'ADVANCED'
+    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED'
   },
   tabs: {
-    visual: 'Visual',
-    text: 'Text',
-    audio: 'Audio',
-    ai: 'AI Synesthesia',
-    system: 'System'
+    visual: 'Visual', text: 'Text', audio: 'Audio', ai: 'AI Synesthesia', system: 'System'
   },
   hints: {
     mode: 'Select the core mathematical engine for generating visuals.',
@@ -44,7 +33,10 @@ export const en = {
     colorInterval: 'Time in seconds before smoothly blending to the next color palette.',
     reset: 'Restore all application settings to factory defaults.',
     confirmReset: 'Confirm Reset? This action cannot be undone.',
-    resetVisual: 'Reset only aesthetics (Speed, Glow, Trails) to defaults.',
+    resetVisual: 'Reset aesthetics (Speed, Glow, Trails) to defaults.',
+    resetText: 'Clear custom text, font, and positioning settings.',
+    resetAudio: 'Restore sensitivity, smoothing, and FFT to defaults.',
+    resetAi: 'Reset AI provider, region, and lyric layout.',
     randomize: 'Generate a serendipitous combination of visual mode and colors.',
     fullscreen: 'Toggle immersive full-screen mode.',
     help: 'View keyboard shortcuts and documentation.',
@@ -61,7 +53,14 @@ export const en = {
     textPulse: 'Text scales dynamically with the rhythm of the music.',
     textAudioReactive: 'Text opacity and size react to live audio amplitude.',
     customTextCycleColor: 'Automatically cycle through the color spectrum for the text.',
-    hideCursor: 'Automatically hide the mouse cursor after inactivity.'
+    hideCursor: 'Automatically hide the mouse cursor after inactivity.',
+    uiModeSimple: 'Hide technical parameters and focus on core aesthetics.',
+    uiModeAdvanced: 'Show all tuning parameters for precise control.',
+    quality: 'Adjust render resolution and particle density.',
+    textSize: 'Scale the custom text layer.',
+    textRotation: 'Rotate the text overlay.',
+    textPosition: 'Anchor point for the custom text.',
+    lyricsPosition: 'Anchor point for the AI lyrics overlay.'
   },
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',
@@ -125,25 +124,16 @@ export const en = {
   textPosition: 'Text Position',
   quality: 'Render Quality',
   qualities: {
-    low: 'Smooth',
-    med: 'Balanced',
-    high: 'Ultimate'
+    low: 'Smooth', med: 'Balanced', high: 'Ultimate'
   },
   visualPanel: {
-    effects: 'Effects',
-    automation: 'Automation',
-    display: 'Display'
+    effects: 'Effects', automation: 'Automation', display: 'Display'
   },
   audioPanel: {
     info: 'Adjust input sensitivity and smoothing to customize how the visualizer reacts to audio dynamics. Higher FFT sizes provide more spectral detail but consume more CPU.'
   },
   systemPanel: {
-    interface: 'Interface',
-    behavior: 'Behavior',
-    maintenance: 'Maintenance',
-    engine: 'Engine',
-    audio: 'Audio',
-    ai: 'AI'
+    interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI'
   },
   showFps: 'Show FPS',
   showTooltips: 'Show Tooltips',
@@ -155,10 +145,10 @@ export const en = {
     hint: 'Apply a curated aesthetic combination with one click.',
     select: 'Select a mood...',
     custom: 'Custom / Modified',
-    calm: 'Hypnotic & Calm',
+    calm: 'Digital Waveform',
     party: 'Energetic Party',
-    ambient: 'Ambient Focus',
-    cyberpunk: 'Cyberpunk Rush',
+    ambient: 'Deep Nebula',
+    cyberpunk: 'Concert Lasers',
     retrowave: 'Retro Sunset',
     vocal: 'Vocal Focus'
   },
@@ -168,27 +158,11 @@ export const en = {
   lyricsFontSize: 'Font Size',
   simulatedDemo: 'Simulated (Demo)',
   positions: {
-      top: 'Top',
-      center: 'Center',
-      bottom: 'Bottom',
-      tl: 'Top Left',
-      tc: 'Top Center',
-      tr: 'Top Right',
-      ml: 'Mid Left',
-      mc: 'Center',
-      mr: 'Mid Right',
-      bl: 'Bottom Left',
-      bc: 'Bottom Center',
-      br: 'Bottom Right'
+      top: 'Top', center: 'Center', bottom: 'Bottom', tl: 'Top Left', tc: 'Top Center', tr: 'Top Right', ml: 'Mid Left', mc: 'Center', mr: 'Mid Right', bl: 'Bottom Left', bc: 'Bottom Center', br: 'Bottom Right'
   },
   wakeLock: 'Screen Always On',
   system: {
-    shortcuts: {
-      mic: 'Mic',
-      ui: 'UI',
-      mode: 'Mode',
-      random: 'Random'
-    }
+    shortcuts: { mic: 'Mic', ui: 'UI', mode: 'Mode', random: 'Random' }
   },
   errors: {
     title: 'Audio Error',
@@ -199,17 +173,10 @@ export const en = {
     tryDemo: 'Try Demo Mode (No Audio)'
   },
   aiState: {
-    active: 'Recognition Active',
-    enable: 'Enable AI Recognition'
+    active: 'Recognition Active', enable: 'Enable AI Recognition'
   },
   regions: {
-    global: 'Global',
-    US: 'USA / West',
-    CN: 'China',
-    JP: 'Japan',
-    KR: 'Korea',
-    EU: 'Europe',
-    LATAM: 'Latin America'
+    global: 'Global', US: 'USA / West', CN: 'China', JP: 'Japan', KR: 'Korea', EU: 'Europe', LATAM: 'Latin America'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: 'Neural Flow',
@@ -225,20 +192,15 @@ export const en = {
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles (DoF)',
     [VisualizerMode.SILK]: 'Silk Waves',
     [VisualizerMode.LIQUID]: 'Liquid Sphere',
-    [VisualizerMode.TERRAIN]: 'Low-Poly Terrain'
+    [VisualizerMode.WAVEFORM]: 'Digital Waveform',
+    [VisualizerMode.TERRAIN]: 'Low-Poly Terrain (WebGL)'
   },
   lyricsStyles: {
-    [LyricsStyle.STANDARD]: 'Standard',
-    [LyricsStyle.KARAOKE]: 'Dynamic',
-    [LyricsStyle.MINIMAL]: 'Minimalist'
+    [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamic', [LyricsStyle.MINIMAL]: 'Minimalist'
   },
   helpModal: {
     title: 'Aura Flux Guide',
-    tabs: {
-        guide: 'Guide',
-        shortcuts: 'Controls',
-        about: 'About'
-    },
+    tabs: { guide: 'Guide', shortcuts: 'Controls', about: 'About' },
     intro: 'Aura Flux transforms your microphone input into highly responsive, generative digital art using advanced spectral analysis.',
     shortcutsTitle: 'Keyboard Shortcuts',
     gesturesTitle: 'Touch Gestures',
@@ -279,38 +241,19 @@ export const en = {
     aboutDescription: 'A next-generation synesthetic experience. Aura Flux fuses high-precision Web Audio spectral analysis with Google Gemini 3 to transform sound into living, reactive light. Designed for VJs, Streamers, and immersive environments.',
     privacyTitle: 'Privacy Policy',
     privacyText: 'Audio is analyzed locally. Temporary high-frequency snapshots are sent to Gemini solely for identification.',
-    version: 'Release',
-    coreTech: 'Core Technology',
-    repository: 'Repository',
-    support: 'Support',
-    reportBug: 'Report Bug'
+    version: 'Release', coreTech: 'Core Technology', repository: 'Repository', support: 'Support', reportBug: 'Report Bug'
   },
   onboarding: {
     welcome: 'Welcome to Aura Flux',
     subtitle: 'Next-Gen AI Synesthesia Engine',
     selectLanguage: 'Choose your language',
-    next: 'Proceed',
-    back: 'Previous',
-    skip: 'Skip',
-    finish: 'Launch App',
+    next: 'Proceed', back: 'Previous', skip: 'Skip', finish: 'Launch App',
     features: {
       title: 'Experience Features',
-      visuals: {
-        title: 'Generative Masterpieces',
-        desc: '12+ reactive engines powered by WebGL and math-driven procedural art.'
-      },
-      ai: {
-        title: 'Gemini AI Intelligence',
-        desc: 'Instant recognition of tracks and aesthetic mood through advanced AI grounding.'
-      },
-      privacy: {
-        title: 'Secure & Private',
-        desc: 'Processing stays local. We never record or store your private audio data.'
-      }
+      visuals: { title: 'Generative Masterpieces', desc: '12+ reactive engines powered by WebGL and math-driven procedural art.' },
+      ai: { title: 'Gemini AI Intelligence', desc: 'Instant recognition of tracks and aesthetic mood through advanced AI grounding.' },
+      privacy: { title: 'Secure & Private', desc: 'Processing stays local. We never record or store your private audio data.' }
     },
-    shortcuts: {
-      title: 'Dynamic Controls',
-      desc: 'Master your environment with these keys.'
-    }
+    shortcuts: { title: 'Dynamic Controls', desc: 'Master your environment with these keys.' }
   }
 };

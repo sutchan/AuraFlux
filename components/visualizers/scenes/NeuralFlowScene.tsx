@@ -1,9 +1,10 @@
 
 /**
  * File: components/visualizers/scenes/NeuralFlowScene.tsx
- * Version: 1.0.0
+ * Version: 1.2.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-17 15:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -31,7 +32,7 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
     const rnd = new Float32Array(count);
     for (let i = 0; i < count; i++) {
       // Sphere distribution
-      const r = 20 + Math.random() * 40;
+      const r = 15 + Math.random() * 50;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       
@@ -39,7 +40,8 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
       
-      rnd[i] = Math.random();
+      // 使用指数级分布提升尺寸层级
+      rnd[i] = Math.pow(Math.random(), 3.5);
     }
     return [pos, rnd];
   }, [count]);
@@ -64,8 +66,8 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
     mat.uniforms.uColor2.value.set(c1);
     
     // Slow rotation
-    pointsRef.current.rotation.y += 0.001 * settings.speed;
-    pointsRef.current.rotation.z += 0.0005 * settings.speed;
+    pointsRef.current.rotation.y += 0.0008 * settings.speed;
+    pointsRef.current.rotation.z += 0.0004 * settings.speed;
   });
 
   return (
@@ -87,6 +89,7 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
             attribute float aRandom;
             varying float vNoise;
             varying float vAlpha;
+            varying float vSize;
 
             // Simple noise function
             vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -125,7 +128,7 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
               vec4 s1 = floor(b1)*2.0 + 1.0;
               vec4 sh = -step(h, vec4(0.0));
               vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-              vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+              vec4 a1 = b1.xzyw + s1.zzww*sh.zzww ;
               vec3 p0 = vec3(a0.xy,h.x);
               vec3 p1 = vec3(a0.zw,h.y);
               vec3 p2 = vec3(a1.xy,h.z);
@@ -139,29 +142,40 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
             }
 
             void main() {
-              // Flow field logic
-              float timeScale = uTime * 0.5;
-              vec3 noisePos = position * 0.05 + timeScale;
-              
-              // Curl-like distortion based on bass
+              float timeScale = uTime * 0.3;
+              vec3 noisePos = position * 0.04 + timeScale;
               float noiseVal = snoise(noisePos);
               vNoise = noiseVal;
               
               vec3 newPos = position;
-              // Bass expands, Treble jitters
-              float expansion = 1.0 + uBass * 2.0 * (0.5 + 0.5 * noiseVal);
+              
+              // 核心优化：大幅增强随声音波动的幅度。
+              // 1. 低音驱动的体积扩张 (Expansion) - 强度从 1.5 提升至 3.5
+              float expansion = 1.0 + pow(uBass, 1.1) * 3.5 * (0.3 + 0.7 * abs(noiseVal));
               newPos *= expansion;
               
-              // Turbulent displacement on high bass
-              newPos.x += sin(newPos.y * 0.1 + uTime * 2.0) * uBass * 5.0;
+              // 2. 音频驱动的湍流位移 (Turbulent Displacement) - 强度从 4.0 提升至 12.0
+              // X 轴位移：随低音大幅摆动 + 随高音产生高频抖动
+              float jitter = uTreble * 2.5; 
+              newPos.x += (sin(newPos.y * 0.1 + uTime * 2.0) * 12.0 * uBass) + (sin(uTime * 15.0 + aRandom * 10.0) * jitter);
+              
+              // Y 轴位移：新增垂直律动
+              newPos.y += (cos(newPos.z * 0.1 + uTime * 1.8) * 10.0 * uBass);
+              
+              // Z 轴位移：深度空间跳变
+              newPos.z += (cos(newPos.x * 0.12 + uTime * 1.6) * 12.0 * uBass) + (cos(uTime * 12.0 + aRandom * 10.0) * jitter);
               
               vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
               gl_Position = projectionMatrix * mvPosition;
               
-              // Size attenuation
-              gl_PointSize = (2.0 + uTreble * 3.0 + aRandom * 2.0) * (200.0 / -mvPosition.z);
+              // 尺寸响应
+              float baseSize = 1.0 + aRandom * 18.0; 
+              float dynamicSize = baseSize * (1.0 + uTreble * 2.5);
               
-              vAlpha = 0.5 + uBass * 0.5;
+              gl_PointSize = dynamicSize * (250.0 / -mvPosition.z);
+              
+              vSize = aRandom;
+              vAlpha = 0.4 + uBass * 0.6;
             }
           `}
           fragmentShader={`
@@ -169,16 +183,21 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
             uniform vec3 uColor2;
             varying float vNoise;
             varying float vAlpha;
+            varying float vSize;
 
             void main() {
               float d = distance(gl_PointCoord, vec2(0.5));
               if(d > 0.5) discard;
               
-              // Gradient based on noise
-              vec3 color = mix(uColor1, uColor2, vNoise * 0.5 + 0.5);
+              vec3 baseColor = mix(uColor1, uColor2, vNoise * 0.5 + 0.5);
+              vec3 color = baseColor + (vSize * 0.2); 
               
-              // Soft circle
+              float core = smoothstep(0.5, 0.0, d);
+              float centerGlow = pow(core, 4.0) * vSize;
+              color = mix(color, vec3(1.0), centerGlow * 0.8);
+              
               float alpha = (1.0 - smoothstep(0.0, 0.5, d)) * vAlpha;
+              alpha *= (0.3 + vSize * 0.7);
               
               gl_FragColor = vec4(color, alpha);
             }

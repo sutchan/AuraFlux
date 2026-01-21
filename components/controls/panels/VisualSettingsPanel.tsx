@@ -1,7 +1,6 @@
-
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.1.0
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -14,6 +13,7 @@ import { Slider } from '../../ui/controls/Slider';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { VisualizerPreview } from './VisualizerPreview';
 import { useVisuals, useUI } from '../../AppContext';
+import { TooltipArea } from '../../ui/controls/Tooltip';
 
 export const VisualSettingsPanel: React.FC = () => {
   const { 
@@ -104,7 +104,9 @@ export const VisualSettingsPanel: React.FC = () => {
                 <div className="pt-2 border-t border-white/5 animate-fade-in-up">
                    <div className="py-2">
                      <div className="flex items-center gap-2 justify-between">
-                          <span className="text-xs font-bold uppercase text-white/60 tracking-wider whitespace-nowrap">{t?.quality || "Quality"}</span>
+                          <TooltipArea text={hints?.quality}>
+                            <span className="text-xs font-bold uppercase text-white/60 tracking-wider whitespace-nowrap">{t?.quality || "Quality"}</span>
+                          </TooltipArea>
                           <div className="flex w-full max-w-[200px] bg-white/[0.04] rounded-lg p-0.5">
                           {(['low', 'med', 'high'] as const).map(q => (
                               <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1.5 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
@@ -151,7 +153,9 @@ export const VisualSettingsPanel: React.FC = () => {
           )}
         </div>
         <div className="mt-auto pt-4">
-          <button onClick={resetVisualSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all flex items-center justify-center gap-2 border border-transparent hover:border-white/10"><svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>
+          <TooltipArea text={hints?.resetVisual}>
+            <button onClick={resetVisualSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all flex items-center justify-center gap-2 border border-transparent hover:border-white/10"><svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>
+          </TooltipArea>
         </div>
       </div>
     </>

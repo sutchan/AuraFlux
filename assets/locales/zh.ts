@@ -1,31 +1,19 @@
-
 /**
  * File: assets/locales/zh.ts
- * Version: 1.7.1
- * Author: Aura Vision Team
+ * Version: 1.6.29
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-18 18:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const zh = {
   common: {
-    on: '开启',
-    off: '关闭',
-    visible: '显示',
-    hidden: '隐藏',
-    active: '运行中',
-    muted: '静音',
-    beta: '测试版',
-    simple: '简洁',
-    advanced: '专业'
+    on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业'
   },
   tabs: {
-    visual: '视觉',
-    text: '文字',
-    audio: '音频',
-    ai: 'AI 通感',
-    system: '系统'
+    visual: '视觉', text: '文字', audio: '音频', ai: 'AI 通感', system: '系统'
   },
   hints: {
     mode: '切换用于生成实时影像的核心数学引擎。',
@@ -46,6 +34,9 @@ export const zh = {
     reset: '将所有应用配置、语言及音频选项恢复至出厂状态。',
     confirmReset: '确认重置？此操作将清除所有自定义设置。',
     resetVisual: '仅重置视觉参数（速度、辉光、拖尾）至默认值。',
+    resetText: '清除自定义文字内容、字体及排版设置。',
+    resetAudio: '恢复灵敏度、平滑度及 FFT 分辨率为默认值。',
+    resetAi: '重置 AI 提供商、识别区域及歌词排版。',
     randomize: '随机生成一套意想不到的模式与配色组合。',
     fullscreen: '进入沉浸式全屏交互模式。',
     help: '查看快捷键操作指南与项目详细文档。',
@@ -62,7 +53,14 @@ export const zh = {
     showCustomText: '切换自定义文字图层的可见性。',
     textPulse: '文字大小随音乐节拍动态缩放。',
     textAudioReactive: '文字的透明度和大小将响应实时音量。',
-    customTextCycleColor: '自动在光谱色中循环切换文字颜色。'
+    customTextCycleColor: '自动在光谱色中循环切换文字颜色。',
+    uiModeSimple: '隐藏技术参数，专注于核心美学调整。',
+    uiModeAdvanced: '展示所有调优参数以获得精确控制。',
+    quality: '调节渲染分辨率与粒子密度。',
+    textSize: '缩放自定义文字图层的大小。',
+    textRotation: '旋转文字覆盖层。',
+    textPosition: '自定义文字的锚定锚点位置。',
+    lyricsPosition: 'AI 歌词覆盖层的显示锚点位置。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -157,10 +155,10 @@ export const zh = {
     hint: '一键应用由专家精心调校的视觉参数组合。',
     select: '选择一种心境...',
     custom: '自定义 / 已修改',
-    calm: '催眠舒缓',
+    calm: '数字波形',
     party: '动感派对',
-    ambient: '静谧氛围',
-    cyberpunk: '赛博朋克',
+    ambient: '深空星云',
+    cyberpunk: '舞台激光',
     retrowave: '复古夕阳',
     vocal: '人声专注'
   },
@@ -170,27 +168,11 @@ export const zh = {
   lyricsFontSize: '字体大小',
   simulatedDemo: '模拟演示 (Demo)',
   positions: {
-      top: '顶部',
-      center: '居中',
-      bottom: '底部',
-      tl: '左上',
-      tc: '中上',
-      tr: '右上',
-      ml: '左中',
-      mc: '正中',
-      mr: '右中',
-      bl: '左下',
-      bc: '中下',
-      br: '右下'
+      top: '顶部', center: '居中', bottom: '底部', tl: '左上', tc: '中上', tr: '右上', ml: '左中', mc: '正中', mr: '右中', bl: '左下', bc: '中下', br: '右下'
   },
   wakeLock: '屏幕常亮',
   system: {
-    shortcuts: {
-      mic: '麦克风',
-      ui: '界面',
-      mode: '模式',
-      random: '随机'
-    }
+    shortcuts: { mic: '麦克风', ui: '界面', mode: '模式', random: '随机' }
   },
   errors: {
     title: '音频错误',
@@ -205,13 +187,7 @@ export const zh = {
     enable: '激活通感引擎'
   },
   regions: {
-    global: '全球',
-    US: '美国 / 西方',
-    CN: '中国大陆',
-    JP: '日本',
-    KR: '韩国',
-    EU: '欧洲',
-    LATAM: '拉丁美洲'
+    global: '全球', US: '美国 / 西方', CN: '中国大陆', JP: '日本', KR: '韩国', EU: '欧洲', LATAM: '拉丁美洲'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: '神经流体 (WebGL)',
@@ -227,6 +203,7 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '微观液泡', 
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
+    [VisualizerMode.WAVEFORM]: '数字波形',
     [VisualizerMode.TERRAIN]: '低多边形山脉 (WebGL)'
   },
   lyricsStyles: {
@@ -236,11 +213,7 @@ export const zh = {
   },
   helpModal: {
     title: 'Aura Flux 交互指南',
-    tabs: {
-        guide: '指南',
-        shortcuts: '控制',
-        about: '关于'
-    },
+    tabs: { guide: '指南', shortcuts: '控制', about: '关于' },
     intro: 'Aura Flux 是一款沉浸式的视听交互工具，它利用高精度麦克风采样，将音频信号实时转化为数学生成的数字艺术。',
     shortcutsTitle: '快捷操作键',
     gesturesTitle: '触控手势',

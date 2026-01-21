@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/scenes/CrystalCoreScene.tsx
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -107,7 +107,7 @@ export const CrystalCoreScene: React.FC<SceneProps> = ({ analyser, colors, setti
   );
 };
 
-const LightBeam = ({ index, bass, color }: { index: number, bass: number, color: THREE.Color }) => {
+const LightBeam = ({ index, bass, color }: { index: number, bass: number, color: THREE.Color, key?: React.Key }) => {
     const ref = useRef<THREE.Mesh>(null);
     useFrame((state) => {
         const t = state.clock.getElapsedTime();

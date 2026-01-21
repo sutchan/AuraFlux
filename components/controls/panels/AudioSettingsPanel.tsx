@@ -1,7 +1,6 @@
-
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 1.0.8
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -10,6 +9,7 @@ import React from 'react';
 import { SteppedSlider } from '../../ui/controls/SteppedSlider';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { useVisuals, useAudioContext, useUI } from '../../AppContext';
+import { TooltipArea } from '../../ui/controls/Tooltip';
 
 export const AudioSettingsPanel: React.FC = () => {
   const { settings, setSettings, resetAudioSettings, setActivePreset } = useVisuals();
@@ -47,13 +47,15 @@ export const AudioSettingsPanel: React.FC = () => {
             onChange={onDeviceChange}
             hintText={hints?.device}
          />
-        <button 
-            onClick={() => toggleMicrophone(selectedDeviceId)} 
-            disabled={isPending}
-            className={`w-full py-4 rounded-xl font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 ${isListening ? 'bg-red-500/15 text-red-400 border border-red-500/30' : 'bg-blue-600 text-white hover:bg-blue-500'} ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {isPending ? '...' : (isListening ? (t?.stopMic || "Stop") : (t?.startMic || "Start"))}
-        </button>
+        <TooltipArea text={`${isListening ? t?.stopMic : t?.startMic} [Space]`}>
+          <button 
+              onClick={() => toggleMicrophone(selectedDeviceId)} 
+              disabled={isPending}
+              className={`w-full py-4 rounded-xl font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 ${isListening ? 'bg-red-500/15 text-red-400 border border-red-500/30' : 'bg-blue-600 text-white hover:bg-blue-500'} ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {isPending ? '...' : (isListening ? (t?.stopMic || "Stop") : (t?.startMic || "Start"))}
+          </button>
+        </TooltipArea>
       </div>
 
       {/* Col 2: Core Processing Parameters */}
@@ -91,10 +93,12 @@ export const AudioSettingsPanel: React.FC = () => {
              </div>
           </div>
           <div className="mt-auto pt-4">
-            <button onClick={resetAudioSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white flex items-center justify-center gap-2 border border-transparent hover:border-white/10 transition-colors">
-               <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-               {t?.resetAudio || "Reset Audio"}
-            </button>
+            <TooltipArea text={hints?.resetAudio}>
+              <button onClick={resetAudioSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white flex items-center justify-center gap-2 border border-transparent hover:border-white/10 transition-colors">
+                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                 {t?.resetAudio || "Reset Audio"}
+              </button>
+            </TooltipArea>
           </div>
       </div>
     </>

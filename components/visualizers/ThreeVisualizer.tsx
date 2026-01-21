@@ -1,9 +1,10 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.6.8
- * Author: Aura Vision Team
+ * Version: 1.7.1
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2024-05-15 14:35
  */
 
 import React, { Suspense, useMemo } from 'react';
@@ -14,7 +15,6 @@ import { VisualizerMode, VisualizerSettings } from '../../core/types';
 import { 
     SilkWavesScene, 
     LiquidSphereScene, 
-    LowPolyTerrainScene, 
     CubeFieldScene,
     NeuralFlowScene
 } from './ThreeScenes';
@@ -28,30 +28,26 @@ interface ThreeVisualizerProps {
 
 const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
   
-  // Performance Optimization: Memoize DPR calculation
   const dpr = useMemo(() => {
     return settings.quality === 'low' ? 0.8 : settings.quality === 'med' ? 1.0 : Math.min(window.devicePixelRatio, 1.5);
   }, [settings.quality]);
 
-  // Performance Optimization: Memoize Bloom Intensity based on mode
   const bloomIntensity = useMemo(() => {
-      if (mode === VisualizerMode.SILK) return 1.2;
-      if (mode === VisualizerMode.LIQUID) return 1.8;
-      if (mode === VisualizerMode.CUBE_FIELD) return 1.5;
-      if (mode === VisualizerMode.NEURAL_FLOW) return 1.8;
-      return 1.5;
+      const base = 2.0;
+      if (mode === VisualizerMode.SILK) return base * 0.8;
+      if (mode === VisualizerMode.LIQUID) return base * 1.5;
+      if (mode === VisualizerMode.CUBE_FIELD) return base * 1.2;
+      if (mode === VisualizerMode.NEURAL_FLOW) return base * 1.8;
+      return base;
   }, [mode]);
 
-  // Performance Optimization: Memoize TiltShift enable logic
   const enableTiltShift = useMemo(() => {
       return settings.quality === 'high' && (
           mode === VisualizerMode.LIQUID || 
-          mode === VisualizerMode.SILK ||
-          mode === VisualizerMode.MACRO_BUBBLES // Not WebGL, but keeping logic consistent
+          mode === VisualizerMode.SILK
       );
   }, [settings.quality, mode]);
 
-  // Performance Optimization: Memoize Scene selection to prevent unnecessary re-evaluations
   const activeScene = useMemo(() => {
     if (!analyser || !settings) return null;
     switch (mode) {
@@ -59,14 +55,12 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             return <SilkWavesScene analyser={analyser} colors={colors} settings={settings} />;
         case VisualizerMode.LIQUID:
             return <LiquidSphereScene analyser={analyser} colors={colors} settings={settings} />;
-        case VisualizerMode.TERRAIN:
-            return <LowPolyTerrainScene analyser={analyser} colors={colors} settings={settings} />;
         case VisualizerMode.CUBE_FIELD:
             return <CubeFieldScene analyser={analyser} colors={colors} settings={settings} />;
         case VisualizerMode.NEURAL_FLOW:
             return <NeuralFlowScene analyser={analyser} colors={colors} settings={settings} />;
         default:
-            return <LowPolyTerrainScene analyser={analyser} colors={colors} settings={settings} />;
+            return <NeuralFlowScene analyser={analyser} colors={colors} settings={settings} />;
     }
   }, [mode, analyser, colors, settings]);
 
@@ -78,22 +72,19 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         key={settings.quality}
         camera={{ position: [0, 2, 16], fov: 55 }} 
         dpr={dpr} 
-        shadows={false}
         gl={{ 
-            antialias: settings.quality !== 'low', 
+            antialias: false,
             alpha: false,
             stencil: false,
             depth: true,
-            powerPreference: "high-performance",
-            failIfMajorPerformanceCaveat: true
+            powerPreference: "high-performance"
         }}
         onCreated={({ gl }) => {
           gl.setClearColor('#000000');
           
-          // Robustness: Handle WebGL Context Loss
           const handleContextLost = (event: Event) => {
             event.preventDefault();
-            console.warn('[ThreeVisualizer] WebGL Context Lost. Attempting to restore...');
+            console.warn('[ThreeVisualizer] WebGL Context Lost.');
           };
 
           const handleContextRestored = () => {
@@ -109,21 +100,18 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         </Suspense>
         
         {settings.glow && (
-            <EffectComposer 
-              multisampling={0} // Disable multisampling for stability
-              enableNormalPass={false}
-            >
+            <EffectComposer multisampling={0}>
                 <Bloom 
-                    luminanceThreshold={0.4} 
+                    luminanceThreshold={0.15} 
                     luminanceSmoothing={0.9} 
                     intensity={bloomIntensity} 
-                    mipmapBlur={settings.quality !== 'low'}
+                    mipmapBlur={true} 
+                    radius={0.7}
                 />
                 {settings.quality === 'high' && (
                     <ChromaticAberration 
-                        offset={new THREE.Vector2(0.0015 * settings.sensitivity, 0.0015)}
+                        offset={new THREE.Vector2(0.0015, 0.0015)}
                         radialModulation={false}
-                        modulationOffset={0}
                     />
                 )}
                 {enableTiltShift && (

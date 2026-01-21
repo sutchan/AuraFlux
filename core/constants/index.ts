@@ -1,25 +1,24 @@
-
 /**
  * File: core/constants/index.ts
- * Version: 1.6.8
- * Author: Aura Vision Team
+ * Version: 1.6.29
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-18 18:15
  */
 
 import { VisualizerMode, Region, Position, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.6.8';
+export const APP_VERSION = '1.6.29';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
-// Logic grouping: Classic (Top) -> Modern 2D -> WebGL (Bottom)
-// Object key order controls the UI list order.
 export const VISUALIZER_PRESETS = {
   // --- Top Priority: Classic/Fluid ---
   [VisualizerMode.PLASMA]: { name: 'Plasma Flow', description: 'Fluid liquid color gradients' },
   [VisualizerMode.BARS]: { name: 'Frequency Bars', description: 'Classic spectrum analyzer' },
 
   // --- Modern 2D ---
+  [VisualizerMode.WAVEFORM]: { name: 'Digital Waveform', description: 'Precision multi-channel oscilloscope' },
   [VisualizerMode.FLUID_CURVES]: { name: 'Aura Waves', description: 'Ethereal flowing gradients' },
   [VisualizerMode.NEBULA]: { name: 'Deep Nebula', description: 'Dense, swirling clouds of color' },
   [VisualizerMode.MACRO_BUBBLES]: { name: 'Macro Bubbles', description: 'Liquid bubbles with Depth of Field' },
@@ -28,12 +27,12 @@ export const VISUALIZER_PRESETS = {
   [VisualizerMode.RINGS]: { name: 'Neon Rings', description: 'Concentric circles reactive to mids' },
   [VisualizerMode.PARTICLES]: { name: 'Starfield', description: 'Drifting particles with Lissajous physics' },
 
-  // --- WebGL Modes (Moved to Bottom) ---
+  // --- WebGL Modes ---
   [VisualizerMode.NEURAL_FLOW]: { name: 'Neural Flow', description: 'Bioluminescent particle stream (WebGL)' },
   [VisualizerMode.SILK]: { name: 'Silk Waves', description: 'Iridescent flowing fabric (WebGL)' },
   [VisualizerMode.LIQUID]: { name: 'Liquid Sphere', description: 'Ferrofluid-like reactive matter (WebGL)' },
   [VisualizerMode.CUBE_FIELD]: { name: 'Quantum Field', description: 'Infinite 3D matrix flight (WebGL)' },
-  [VisualizerMode.TERRAIN]: { name: 'Low-Poly Terrain', description: 'Flying over reactive mountains (WebGL)' },
+  [VisualizerMode.TERRAIN]: { name: 'Low-Poly Terrain', description: 'Generative geometric landscapes (WebGL)' },
 };
 
 export const AVAILABLE_FONTS = [
@@ -75,9 +74,7 @@ export const COLOR_THEMES = [
   ['#312e81', '#1e1b4b', '#4c1d95'],
   ['#111827', '#374151', '#9ca3af'],
   ['#00ffff', '#3b82f6', '#1d4ed8'],
-  // Cyberpunk Spectrum (Multi-color)
   ['#FF00FF', '#00FF00', '#00FFFF', '#FFFF00'],
-  // Prismatic Flare (Highly saturated multi-color)
   ['#FF3F00', '#FFD700', '#00FF41', '#00D8FF', '#FF00A0'],
 ];
 
@@ -85,10 +82,10 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
   calm: {
     nameKey: 'calm',
     settings: {
-      mode: VisualizerMode.NEURAL_FLOW,
-      colorTheme: COLOR_THEMES[18], // Deep Ocean
-      speed: 0.3,
-      sensitivity: 1.2,
+      mode: VisualizerMode.WAVEFORM,
+      colorTheme: COLOR_THEMES[27],
+      speed: 0.4,
+      sensitivity: 1.4,
       glow: true,
       trails: true,
       smoothing: 0.9, 
@@ -99,7 +96,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'party',
     settings: {
       mode: VisualizerMode.CUBE_FIELD,
-      colorTheme: COLOR_THEMES[28], // Prismatic
+      colorTheme: COLOR_THEMES[28],
       speed: 1.8,
       sensitivity: 2.2,
       glow: true,
@@ -111,8 +108,8 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
   cyberpunk: {
     nameKey: 'cyberpunk',
     settings: {
-      mode: VisualizerMode.LASERS, // Updated from HEX_GRID to LASERS
-      colorTheme: COLOR_THEMES[1], // Cyan/Magenta
+      mode: VisualizerMode.LASERS,
+      colorTheme: COLOR_THEMES[1],
       speed: 2.0,
       sensitivity: 1.8,
       glow: true,
@@ -121,55 +118,23 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
       fftSize: 1024
     }
   },
-  retrowave: {
-    nameKey: 'retrowave',
-    settings: {
-      mode: VisualizerMode.TERRAIN,
-      colorTheme: COLOR_THEMES[6], // Purple/Orange
-      speed: 1.2,
-      sensitivity: 1.5,
-      glow: true,
-      trails: true,
-      smoothing: 0.8,
-      fftSize: 1024
-    }
-  },
-  vocal: {
-    nameKey: 'vocal',
-    settings: {
-      mode: VisualizerMode.SILK, // Updated from CRYSTAL_CORE to SILK
-      colorTheme: COLOR_THEMES[22], // White/Pink
-      speed: 0.5,
-      sensitivity: 1.6,
-      glow: true,
-      trails: true,
-      smoothing: 0.85,
-      fftSize: 4096 // High res for voice details
-    }
-  },
   ambient: {
     nameKey: 'ambient',
     settings: {
       mode: VisualizerMode.NEBULA,
-      colorTheme: COLOR_THEMES[18], // Deep Ocean
+      colorTheme: COLOR_THEMES[18],
       speed: 0.2,
       sensitivity: 1.3,
       glow: true,
       trails: true,
-      smoothing: 0.95, // Max smoothing
+      smoothing: 0.95,
       fftSize: 2048
     }
   }
 };
 
 export const REGION_NAMES: Record<Region, string> = {
-  global: 'Global',
-  US: 'USA / West',
-  CN: 'China',
-  JP: 'Japan',
-  KR: 'Korea',
-  EU: 'Europe',
-  LATAM: 'Latin America'
+  global: 'Global', US: 'USA / West', CN: 'China', JP: 'Japan', KR: 'Korea', EU: 'Europe', LATAM: 'Latin America'
 };
 
 export const getPositionOptions = (t: any) => {

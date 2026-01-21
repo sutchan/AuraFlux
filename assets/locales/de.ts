@@ -1,9 +1,10 @@
 
 /**
  * File: assets/locales/de.ts
- * Version: 1.6.7
+ * Version: 1.6.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-17 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -222,6 +223,8 @@ export const de = {
     [VisualizerMode.MACRO_BUBBLES]: 'Makro-Blasen (DoF)',
     [VisualizerMode.SILK]: 'Seidenwellen (WebGL)',
     [VisualizerMode.LIQUID]: 'Flüssige Sphäre (WebGL)',
+    // Fix: Added missing translations
+    [VisualizerMode.WAVEFORM]: 'Elegante Wellenform',
     [VisualizerMode.TERRAIN]: 'Low-Poly Terrain (WebGL)'
   },
   lyricsStyles: {

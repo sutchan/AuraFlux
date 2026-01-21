@@ -1,9 +1,10 @@
 
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.8
+ * Version: 1.6.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-17 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -90,7 +91,7 @@ export const tw = {
   welcomeTitle: 'Aura Flux | 靈動流光',
   welcomeText: '將旋律凝煉為極光，讓節奏躍然屏上。融合 Gemini AI 即時聲景分析，為您開啟感官交響的全新維度。',
   unsupportedTitle: '瀏覽器不受支援',
-  unsupportedText: 'Aura Flux 需要現代瀏覽器功能（例如麥克風存取權限）才能運作。請更新至最新版本的 Chrome、Firefox 或 Safari。',
+  unsupportedText: 'Aura Flux 需要現代瀏覽器功能（例如麥克風存取權限）才能運作。請更新至最新版本的 Chrome, Firefox 或 Safari。',
   hideOptions: '收起',
   showOptions: '顯示設定',
   reset: '重置全域設定',
@@ -226,6 +227,8 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
+    // Fix: Added missing translations
+    [VisualizerMode.WAVEFORM]: '絲綢波形',
     [VisualizerMode.TERRAIN]: '低多邊形山脈 (WebGL)'
   },
   lyricsStyles: {

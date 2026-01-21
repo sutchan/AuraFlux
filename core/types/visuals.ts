@@ -1,23 +1,26 @@
 
 /**
  * File: core/types/visuals.ts
- * Version: 1.6.8
- * Author: Aura Vision Team
+ * Version: 1.6.11
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-17 10:00
  */
 
 import { Position, Region } from './common';
 import { LyricsStyle } from './audio';
 
 export enum VisualizerMode {
-  // WebGL Modes (Moved to bottom in UI, kept here for type safety)
+  // WebGL Modes
   NEURAL_FLOW = 'NEURAL_FLOW',
   SILK = 'SILK',
   LIQUID = 'LIQUID',
   CUBE_FIELD = 'CUBE_FIELD',
+  // Fix: Added missing TERRAIN mode
   TERRAIN = 'TERRAIN',
 
   // Modern 2D Modes
+  WAVEFORM = 'WAVEFORM', // New Elegant Waveform
   FLUID_CURVES = 'FLUID_CURVES',
   NEBULA = 'NEBULA', 
   MACRO_BUBBLES = 'MACRO_BUBBLES',

@@ -1,11 +1,10 @@
-
 /**
  * File: public/sw.js
- * Version: 1.6.6
+ * Version: 1.6.29
  * Author: Aura Flux Team
  */
 
-const CACHE_NAME = 'aura-flux-v1.6.6';
+const CACHE_NAME = 'aura-flux-v1.6.29';
 const ASSETS = [
   './',
   './index.html',
@@ -34,14 +33,11 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Network first strategy to ensure latest app version, falling back to cache if offline.
-  // This is crucial for an app that might receive frequent updates.
   if (e.request.method !== 'GET') return;
   
   e.respondWith(
     fetch(e.request)
       .then((response) => {
-        // Optional: Dynamic caching of successful responses could go here
         return response;
       })
       .catch(() => caches.match(e.request))

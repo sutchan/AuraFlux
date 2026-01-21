@@ -1,12 +1,15 @@
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.1.1
+ * Version: 1.2.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-18 11:00
  */
 
 import React, { memo } from 'react';
 import { VisualizerMode } from '../../../core/types';
+import { VISUALIZER_PRESETS } from '../../../core/constants';
+import { TooltipArea } from '../../ui/controls/Tooltip';
 
 interface VisualizerPreviewProps {
   mode: VisualizerMode;
@@ -24,6 +27,7 @@ const styles: Record<VisualizerMode, React.CSSProperties> = {
     [VisualizerMode.TERRAIN]: { background: 'linear-gradient(to top, #1e1b4b, #4c1d95 60%, #fde047)' },
     
     // Modern 2D
+    [VisualizerMode.WAVEFORM]: { background: 'linear-gradient(to right, #00e5ff, #ffffff, #af52de)' },
     [VisualizerMode.FLUID_CURVES]: { background: 'linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899)'},
     [VisualizerMode.NEBULA]: { background: 'radial-gradient(ellipse at bottom, #2e1065, #000)' },
     [VisualizerMode.MACRO_BUBBLES]: { background: 'radial-gradient(circle at 20% 30%, #8b5cf6 20%, transparent 21%), radial-gradient(circle at 75% 80%, #ec4899 15%, transparent 16%), black' },
@@ -39,19 +43,23 @@ const styles: Record<VisualizerMode, React.CSSProperties> = {
 
 
 export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode, name, isActive, onClick }) => {
+  const description = VISUALIZER_PRESETS[mode]?.description || '';
+  
   return (
-    <button
-      onClick={onClick}
-      aria-pressed={isActive}
-      className={`relative rounded-xl transition-all duration-300 group overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 ${isActive ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:ring-1 hover:ring-white/30'}`}
-    >
-      <div 
-        className="h-11 w-full bg-black transition-transform duration-500 ease-in-out group-hover:scale-110"
-        style={styles[mode] || { background: 'black' }}
-      ></div>
-      <div className={`absolute inset-0 flex items-center justify-center p-2 text-center transition-colors duration-300 ${isActive ? 'bg-black/40' : 'bg-black/60 group-hover:bg-black/50'}`}>
-        <span className={`text-[10px] font-bold uppercase tracking-widest leading-tight ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white'}`}>{name}</span>
-      </div>
-    </button>
+    <TooltipArea text={description}>
+      <button
+        onClick={onClick}
+        aria-pressed={isActive}
+        className={`relative w-full rounded-xl transition-all duration-300 group overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 ${isActive ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:ring-1 hover:ring-white/30'}`}
+      >
+        <div 
+          className="h-11 w-full bg-black transition-transform duration-500 ease-in-out group-hover:scale-110"
+          style={styles[mode] || { background: 'black' }}
+        ></div>
+        <div className={`absolute inset-0 flex items-center justify-center p-2 text-center transition-colors duration-300 ${isActive ? 'bg-black/40' : 'bg-black/60 group-hover:bg-black/50'}`}>
+          <span className={`text-[10px] font-bold uppercase tracking-widest leading-tight ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white'}`}>{name}</span>
+        </div>
+      </button>
+    </TooltipArea>
   );
 });

@@ -1,9 +1,9 @@
-
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.0.10
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-18 11:00
  */
 
 import React from 'react';
@@ -14,6 +14,7 @@ import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { PositionSelector } from '../../ui/controls/PositionSelector';
 import { useVisuals, useUI } from '../../AppContext';
 import { Position } from '../../../core/types';
+import { TooltipArea } from '../../ui/controls/Tooltip';
 
 export const CustomTextSettingsPanel: React.FC = () => {
   const { settings, setSettings, resetTextSettings } = useVisuals();
@@ -50,19 +51,21 @@ export const CustomTextSettingsPanel: React.FC = () => {
                   hintText={hints?.showCustomText}
                   activeColor="blue"
                 />
-                <textarea 
-                  value={settings.customText} 
-                  onChange={(e) => setSettings({...settings, customText: e.target.value.toUpperCase()})} 
-                  placeholder={t?.customTextPlaceholder || "ENTER TEXT"} 
-                  rows={2} 
-                  className="w-full bg-white/[0.04] rounded-xl px-3 py-2 text-sm font-bold text-white tracking-widest uppercase focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all resize-none min-h-[60px]" 
-                />
+                <TooltipArea text={hints?.customTextPlaceholder || "Enter your message"}>
+                  <textarea 
+                    value={settings.customText} 
+                    onChange={(e) => setSettings({...settings, customText: e.target.value.toUpperCase()})} 
+                    placeholder={t?.customTextPlaceholder || "ENTER TEXT"} 
+                    rows={2} 
+                    className="w-full bg-white/[0.04] rounded-xl px-3 py-2 text-sm font-bold text-white tracking-widest uppercase focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all resize-none min-h-[60px]" 
+                  />
+                </TooltipArea>
             </div>
             
             {isAdvanced && (
                 <div className="space-y-5 pt-2 border-t border-white/5 animate-fade-in-up">
-                    <Slider label={t?.textSize || "Size"} value={settings.customTextSize ?? 12} min={2} max={60} step={1} onChange={(v: number) => setSettings({...settings, customTextSize: v})} />
-                    <Slider label={t?.textRotation || "Rotate"} value={settings.customTextRotation ?? 0} min={-180} max={180} step={5} onChange={(v: number) => setSettings({...settings, customTextRotation: v})} unit="°" />
+                    <Slider label={t?.textSize || "Size"} hintText={hints?.textSize} value={settings.customTextSize ?? 12} min={2} max={60} step={1} onChange={(v: number) => setSettings({...settings, customTextSize: v})} />
+                    <Slider label={t?.textRotation || "Rotate"} hintText={hints?.textRotation} value={settings.customTextRotation ?? 0} min={-180} max={180} step={5} onChange={(v: number) => setSettings({...settings, customTextRotation: v})} unit="°" />
                     <div className="pt-2 border-t border-white/5">
                         <Slider label={t?.textOpacity || "Opacity"} value={settings.customTextOpacity ?? 1.0} min={0} max={1} step={0.05} onChange={(v: number) => setSettings({...settings, customTextOpacity: v})} />
                     </div>
@@ -138,7 +141,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                         hintText={hints?.textAudioReactive}
                     />
                     <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
-                    <PositionSelector label={t?.textPosition || "Text Position"} value={settings.customTextPosition} onChange={handleTextPositionChange} options={positionOptions} activeColor="blue" />
+                    <PositionSelector label={t?.textPosition || "Text Position"} hintText={hints?.textPosition} value={settings.customTextPosition} onChange={handleTextPositionChange} options={positionOptions} activeColor="blue" />
                 </div>
             ) : (
                 <div className="flex items-center justify-center h-full text-white/20 text-xs font-mono uppercase tracking-widest text-center">
@@ -148,10 +151,12 @@ export const CustomTextSettingsPanel: React.FC = () => {
          </div>
          
          <div className="mt-auto pt-4">
-            <button onClick={resetTextSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white flex items-center justify-center gap-2 border border-transparent hover:border-white/10 transition-colors">
-               <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-               {t?.resetText || "Reset Text"}
-            </button>
+            <TooltipArea text={hints?.resetText}>
+              <button onClick={resetTextSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white flex items-center justify-center gap-2 border border-transparent hover:border-white/10 transition-colors">
+                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                 {t?.resetText || "Reset Text"}
+              </button>
+            </TooltipArea>
          </div>
       </div>
     </>

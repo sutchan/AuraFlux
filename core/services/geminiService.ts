@@ -1,7 +1,7 @@
 
 /**
  * File: core/services/geminiService.ts
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
@@ -11,7 +11,24 @@ import { GEMINI_MODEL, REGION_NAMES } from '../constants';
 import { SongInfo, Language, Region } from '../types';
 import { generateFingerprint, saveToLocalCache, findLocalMatch } from './fingerprintService';
 
-const REQUEST_TIMEOUT_MS = 25000; // Increased to 25s for better stability
+const REQUEST_TIMEOUT_MS = 25000;
+
+// Provider Persona Definitions
+// Since we only have a Gemini API Key, we use Gemini's advanced instruction following 
+// to mimic the analytical style and personality of other models.
+const PROVIDER_PROFILES: Record<string, string> = {
+    GEMINI: "Role: Google Gemini. Style: Balanced, helpful, and precise. Focus on accurate metadata and broad emotional context.",
+    
+    GROK: "Role: Grok (xAI). Style: Witty, rebellious, slightly edgy, and fun. Use informal language. In the 'mood' field, use creative or slang terms. If you don't know the song, roast the audio quality slightly.",
+    
+    CLAUDE: "Role: Claude (Anthropic). Style: Academic, poetic, and nuanced. Focus on music theory, instrumentation texture, and emotional depth. Descriptions should be articulate and sophisticated.",
+    
+    OPENAI: "Role: GPT-4. Style: Professional, concise, encyclopedic, and neutral. Focus on factual accuracy, genre classification, and release history.",
+    
+    DEEPSEEK: "Role: DeepSeek (Coder/Tech). Style: Highly analytical, technical, and precise. Focus on production quality, frequency spectrum analysis, mixing techniques, and synthesis types.",
+    
+    QWEN: "Role: Qwen (Alibaba). Style: Polite, cross-cultural, and detailed. Pay extra attention to melody, lyrical context, and Asian music markets if applicable."
+};
 
 export const identifySongFromAudio = async (
   base64Audio: string, 
@@ -34,12 +51,7 @@ export const identifySongFromAudio = async (
       };
   }
 
-  // 2. Real AI Mode (Gemini Powered)
-  // NOTE: Currently, this app relies solely on the Google GenAI SDK.
-  // Selections for other providers (OpenAI, etc.) serve as UI placeholders 
-  // or "Persona" modifiers in this version, gracefully falling back to Gemini
-  // to ensure functionality is always available.
-
+  // 2. Real AI Mode (Gemini Backend for All Personas)
   const apiKey = process.env.API_KEY;
   if (!apiKey || apiKey.trim() === '') {
       console.warn("[AI] API Key is missing. Identification disabled.");
@@ -61,7 +73,8 @@ export const identifySongFromAudio = async (
     const localMatch = findLocalMatch(features);
     if (localMatch) {
         console.debug("[AI] Local cache hit:", localMatch.title);
-        return localMatch;
+        // Preserve the requested provider in the match source so UI stays consistent
+        return { ...localMatch, matchSource: provider };
     }
   } catch (e) {
     console.warn("[AI] Fingerprinting skipped:", e);
@@ -77,23 +90,24 @@ export const identifySongFromAudio = async (
         };
         const targetLang = langMap[language] || 'English';
 
-        // Dynamic persona based on "provider" selection to simulate different AI flavors
-        let personaContext = "";
-        if (provider === 'GROK') personaContext = "Style: Witty, edgy, and rebellious. ";
-        if (provider === 'CLAUDE') personaContext = "Style: Academic, precise, and articulate. ";
-        if (provider === 'DEEPSEEK') personaContext = "Style: Analytical, concise, and technical. ";
+        // Select persona profile
+        const personaInstruction = PROVIDER_PROFILES[provider] || PROVIDER_PROFILES['GEMINI'];
 
         const systemInstruction = `
-          You are the "Aura Flux Synesthesia Engine". ${personaContext}
+          You are the "Aura Flux Synesthesia Engine".
+          ${personaInstruction}
+          
           Your task: Analyze the audio snapshot (approx 6s) to identify music or describe the soundscape.
           
           CONTEXT: User Market: ${regionName}. Language: ${targetLang}.
           
           INSTRUCTIONS:
           1. IDENTIFICATION: Try to match the song. If matched, set "identified": true.
-          2. FALLBACK: If NO specific song is recognized (or it's just noise/speech), set "identified": false, BUT YOU MUST still populate "title" (as a short description of the sound, e.g., "Ambient Noise", "Piano Improv") and "mood".
+          2. FALLBACK: If NO specific song is recognized (or it's just noise/speech), set "identified": false.
+             - In this case, populate "title" with a creative short description of the sound (e.g., "Ethereal Pad Swell", "Distorted Bass Kick").
+             - Populate "artist" with the genre or sound category (e.g., "Ambient", "Techno").
           3. TRANSLATION: Translate "mood" and "lyricsSnippet" (or sound description) to ${targetLang}.
-          4. FORMAT: Return strict JSON.
+          4. FORMAT: Return strict JSON only. No markdown code blocks.
         `;
 
         const generatePromise = aiClient.models.generateContent({
@@ -101,22 +115,22 @@ export const identifySongFromAudio = async (
           contents: { 
             parts: [
               { inlineData: { mimeType: mimeType, data: base64Audio } }, 
-              { text: `Analyze audio. Identify track or describe sound. Return JSON.` }
+              { text: `Analyze audio. Return JSON.` }
             ] 
           },
           config: { 
             tools: [{ googleSearch: {} }], 
             systemInstruction: systemInstruction,
-            temperature: 0.4, // Increased slightly to allow for creative descriptions when identification fails
-            topP: 0.9,
+            temperature: 0.45, // Slightly higher to allow personality to shine
+            topP: 0.95,
             responseMimeType: "application/json",
             responseSchema: {
               type: Type.OBJECT,
               properties: {
-                title: { type: Type.STRING, description: "Track title OR short description of sound (e.g. 'City Traffic', 'Unknown Techno')." },
-                artist: { type: Type.STRING, description: "Artist name OR category (e.g. 'Environmental', 'Generative')." },
-                lyricsSnippet: { type: Type.STRING, description: "Key lyrics OR a poetic description of the sound texture." },
-                mood: { type: Type.STRING, description: "2-3 word aesthetic mood." },
+                title: { type: Type.STRING, description: "Track title OR creative sound description." },
+                artist: { type: Type.STRING, description: "Artist name OR genre category." },
+                lyricsSnippet: { type: Type.STRING, description: "Key lyrics OR a description of the sound texture in the persona's style." },
+                mood: { type: Type.STRING, description: "2-3 word aesthetic mood matching the persona's style." },
                 identified: { type: Type.BOOLEAN, description: "True if a specific commercial track was positively matched." },
               },
               required: ['title', 'artist', 'mood', 'identified']
@@ -133,7 +147,7 @@ export const identifySongFromAudio = async (
         let text = response.text;
         if (!text) throw new Error("Empty response from AI");
 
-        // Robustness: Clean Markdown code blocks if present (though responseMimeType usually handles this)
+        // Robustness: Clean Markdown code blocks if present
         text = text.replace(/^```json\s*/, "").replace(/\s*```$/, "");
 
         let songInfo: SongInfo = JSON.parse(text);
@@ -147,9 +161,9 @@ export const identifySongFromAudio = async (
           }
         }
         
-        songInfo.matchSource = 'AI';
+        // Critical: Set the match source to the requested provider so the UI reflects the persona
+        songInfo.matchSource = provider;
         
-        // Critical Fix: Return result even if not "identified", so the UI shows the "Mood/Description"
         return songInfo;
 
     } catch (error: any) {
@@ -166,6 +180,7 @@ export const identifySongFromAudio = async (
   const aiResult = await callGemini();
   
   // Only cache if we actually found a specific song
+  // Note: We don't cache the persona-specific description, only the raw song match
   if (aiResult && aiResult.identified && features.length > 0) {
       saveToLocalCache(features, aiResult);
   }

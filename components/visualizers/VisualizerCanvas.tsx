@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.1.3
+ * Version: 1.1.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -28,71 +28,63 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
   const animationIdRef = useRef<number>(0);
   const rotationRef = useRef<number>(0);
 
-  // Performance Optimization: Ref Pattern
-  // Store the latest props in a ref. This allows the requestAnimationFrame loop
-  // to access the most current settings without needing to be recreated (and restarting the loop)
-  // every time a slider moves or a color changes.
   const propsRef = useRef({ mode, colors, settings });
 
   useEffect(() => {
     propsRef.current = { mode, colors, settings };
   }, [mode, colors, settings]);
 
-  // Initialize Renderers once on mount
   useEffect(() => {
     renderersRef.current = createVisualizerRenderers();
-    // Optional: Pre-init renderers if needed
-    Object.values(renderersRef.current).forEach((r) => {
+    (Object.values(renderersRef.current) as IVisualizerRenderer[]).forEach((r) => {
       if (r.init) r.init(null);
     });
   }, []);
 
-  // Main Animation Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !analyser) return;
 
-    // 'desynchronized' hint reduces latency on compatible browsers (Chrome)
     const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
     if (!ctx) return;
 
-    // Allocate data array once to avoid garbage collection in the loop
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
     const renderLoop = () => {
-      // 1. Retrieve latest state without triggering re-renders
       const { mode: currentMode, colors: currentColors, settings: currentSettings } = propsRef.current;
 
-      // 2. Handle Canvas Resizing
-      // Check client dimensions to ensure 1:1 pixel mapping for sharp rendering
       if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
       }
       const { width, height } = canvas;
 
-      // 3. Audio Processing
       analyser.getByteFrequencyData(dataArray);
-      
-      // Intelligent Noise Filtering (Stateful)
-      // Removes constant hum/hiss while preserving dynamics
       noiseFilterRef.current.process(dataArray);
-
       const isBeat = beatDetectorRef.current.detect(dataArray);
       
-      // Update global rotation logic
       rotationRef.current += 0.005 * currentSettings.speed;
 
-      // 4. Clear Screen / Apply Trails Effect
+      // 基础清理
       if (currentSettings.trails) {
-        // Drawing a semi-transparent black rect creates the "trail" or "motion blur" effect
         ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
         ctx.fillRect(0, 0, width, height);
       } else {
         ctx.clearRect(0, 0, width, height);
       }
 
-      // 5. Delegate to Specific Strategy Renderer
+      // --- 核心修复：原生 Canvas 辉光实现 ---
+      if (currentSettings.glow) {
+        // 使用第一个主题色作为发光底色
+        ctx.shadowColor = currentColors[0] || '#ffffff';
+        // 阴影模糊程度随灵敏度微调
+        ctx.shadowBlur = 15 * currentSettings.sensitivity;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+      } else {
+        ctx.shadowBlur = 0;
+      }
+
       const renderer = renderersRef.current[currentMode];
       if (renderer) {
         try {
@@ -106,25 +98,23 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
             rotationRef.current, 
             isBeat
           );
-        } catch (e) {
-          // Suppress individual renderer errors to keep the app alive
-          // console.warn("Renderer error", e);
-        }
+        } catch (e) {}
       }
+
+      // 重置状态，防止阴影影响后续的 Layer 或 UI 绘制（如果有的话）
+      ctx.shadowBlur = 0;
 
       animationIdRef.current = requestAnimationFrame(renderLoop);
     };
 
-    // Start Loop
     renderLoop();
 
-    // Cleanup on unmount or if analyser changes
     return () => {
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
       }
     };
-  }, [analyser]); // Only restart loop if the audio source itself changes
+  }, [analyser]);
 
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none bg-black overflow-hidden">

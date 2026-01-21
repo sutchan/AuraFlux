@@ -1,31 +1,20 @@
 
 /**
  * File: assets/locales/ru.ts
- * Version: 1.6.7
- * Author: Aura Vision Team
+ * Version: 1.6.18
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-17 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ru = {
   common: {
-    on: 'ВКЛ',
-    off: 'ВЫКЛ',
-    visible: 'ПОКАЗАТЬ',
-    hidden: 'СКРЫТЬ',
-    active: 'АКТИВЕН',
-    muted: 'БЕЗ ЗВУКА',
-    beta: 'БЕТА',
-    simple: 'Простой',
-    advanced: 'Профи'
+    on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'Простой', advanced: 'Профи'
   },
   tabs: {
-    visual: 'Визуал',
-    text: 'Текст',
-    audio: 'Аудио',
-    ai: 'ИИ-Распознавание',
-    system: 'Система'
+    visual: 'Визуал', text: 'Текст', audio: 'Аудио', ai: 'ИИ-Распознавание', system: 'Система'
   },
   hints: {
     mode: 'Выберите основной математический движок для генерации визуальных эффектов.',
@@ -118,6 +107,7 @@ export const ru = {
   customTextPlaceholder: 'ВВЕДИТЕ ТЕКСТ',
   showText: 'Показать Слой',
   pulseBeat: 'Пульсация под Бит',
+  textAudioReactive: 'Аудио Реактивность',
   textSize: 'Размер Шрифта',
   textRotation: 'Вращение',
   textFont: 'Шрифт',
@@ -125,22 +115,16 @@ export const ru = {
   textPosition: 'Позиция',
   quality: 'Качество Рендера',
   qualities: {
-    low: 'Низкое',
-    med: 'Среднее',
-    high: 'Высокое'
+    low: 'Низкое', med: 'Среднее', high: 'Высокое'
   },
   visualPanel: {
-    effects: 'Эффекты',
-    automation: 'Автоматизация',
-    display: 'Отображение'
+    effects: 'Эффекты', automation: 'Автоматизация', display: 'Отображение'
   },
   audioPanel: {
     info: 'Настройте чувствительность и сглаживание для адаптации реакции на звук. Высокий FFT дает детали, но нагружает ЦП.'
   },
   systemPanel: {
-    interface: 'Интерфейс',
-    behavior: 'Поведение',
-    maintenance: 'Обслуживание'
+    interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ'
   },
   showFps: 'Показать FPS',
   showTooltips: 'Подсказки',
@@ -148,15 +132,7 @@ export const ru = {
   autoHideUi: 'Авто-скрытие UI',
   mirrorDisplay: 'Отразить Экран',
   presets: {
-    title: 'Смарт-пресеты',
-    hint: 'Применить профессионально подобранную эстетику в один клик.',
-    select: 'Выберите настроение...',
-    calm: 'Спокойствие',
-    party: 'Вечеринка',
-    ambient: 'Эмбиент',
-    cyberpunk: 'Киберпанк',
-    retrowave: 'Ретровейв',
-    vocal: 'Акцент на вокал'
+    title: 'Смарт-пресеты', hint: 'Применить профессионально подобранную эстетику в один клик.', select: 'Выберите настроение...', calm: 'Спокойствие', party: 'Вечеринка', ambient: 'Эмбиент', cyberpunk: 'Киберпанк', retrowave: 'Ретровейв', vocal: 'Акцент на вокал'
   },
   recognitionSource: 'Источник ИИ',
   lyricsPosition: 'Позиция',
@@ -164,50 +140,24 @@ export const ru = {
   lyricsFontSize: 'Размер',
   simulatedDemo: 'Симуляция (Демо)',
   positions: {
-      top: 'Вверх',
-      center: 'Центр',
-      bottom: 'Вниз',
-      tl: 'Слева Вверху',
-      tc: 'Центр Вверху',
-      tr: 'Справа Вверху',
-      ml: 'Слева Посередине',
-      mc: 'Центр',
-      mr: 'Справа Посередине',
-      bl: 'Слева Внизу',
-      bc: 'Центр Внизу',
-      br: 'Справа Внизу'
+      top: 'Вверх', center: 'Центр', bottom: 'Вниз', tl: 'Слева Вверху', tc: 'Центр Вверху', tr: 'Справа Вверху', ml: 'Слева Посередине', mc: 'Центр', mr: 'Справа Посередине', bl: 'Слева Внизу', bc: 'Центр Внизу', br: 'Справа Внизу'
   },
   wakeLock: 'Не спать',
   system: {
-    shortcuts: {
-      mic: 'Мик',
-      ui: 'UI',
-      mode: 'Режим',
-      random: 'Рандом'
-    }
+    shortcuts: { mic: 'Мик', ui: 'UI', mode: 'Режим', random: 'Рандом' }
   },
   errors: {
-    title: 'Ошибка Аудио',
-    accessDenied: 'Доступ запрещен. Проверьте права микрофона.',
-    noDevice: 'Устройство не найдено.',
-    deviceBusy: 'Устройство занято или недоступно.',
-    general: 'Ошибка доступа к аудио.',
-    tryDemo: 'Попробовать Демо (Без звука)'
+    title: 'Ошибка Аудио', accessDenied: 'Доступ запрещен. Проверьте права микрофона.', noDevice: 'Устройство не найдено.', deviceBusy: 'Устройство занято или недоступно.', general: 'Ошибка доступа к аудио.', tryDemo: 'Попробовать Демо (Без звука)'
   },
   aiState: {
-    active: 'Распознавание Активно',
-    enable: 'Включить Распознавание'
+    active: 'Распознавание Активно', enable: 'Включить Распознавание'
   },
   regions: {
-    global: 'Глобальный',
-    US: 'США / Запад',
-    CN: 'Китай',
-    JP: 'Япония',
-    KR: 'Корея',
-    EU: 'Европа',
-    LATAM: 'Латинская Америка'
+    global: 'Глобальный', US: 'США / Запад', CN: 'Китай', JP: 'Япония', KR: 'Корея', EU: 'Европа', LATAM: 'Латинская Америка'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'Нейронный поток (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Квантовое поле (WebGL)',
     [VisualizerMode.PLASMA]: 'Плазменный поток',
     [VisualizerMode.BARS]: 'Спектральные полосы',
     [VisualizerMode.PARTICLES]: 'Межзвездный полет',
@@ -219,38 +169,23 @@ export const ru = {
     [VisualizerMode.MACRO_BUBBLES]: 'Макро-пузырьки (DoF)',
     [VisualizerMode.SILK]: 'Мерцающий шелк (WebGL)',
     [VisualizerMode.LIQUID]: 'Жидкая планета (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Элегантная осциллограмма',
     [VisualizerMode.TERRAIN]: 'Полигональный ландшафт (WebGL)'
   },
   lyricsStyles: {
-    [LyricsStyle.STANDARD]: 'Стандарт',
-    [LyricsStyle.KARAOKE]: 'Динамичный',
-    [LyricsStyle.MINIMAL]: 'Минимализм'
+    [LyricsStyle.STANDARD]: 'Стандарт', [LyricsStyle.KARAOKE]: 'Динамичный', [LyricsStyle.MINIMAL]: 'Минимализм'
   },
   helpModal: {
     title: 'Гайд Aura Flux',
-    tabs: {
-        guide: 'Гайд',
-        shortcuts: 'Клавиши',
-        about: 'О проекте'
-    },
+    tabs: { guide: 'Гайд', shortcuts: 'Клавиши', about: 'О проекте' },
     intro: 'Aura Flux преобразует звук в генеративное цифровое искусство на основе высокоточного спектрального анализа.',
     shortcutsTitle: 'Горячие клавиши',
     gesturesTitle: 'Сенсорные Жесты',
     shortcutItems: {
-      toggleMic: 'Вкл/Выкл Аудио',
-      fullscreen: 'На весь экран',
-      randomize: 'Случайный стиль',
-      lyrics: 'Инфо о треке ИИ',
-      hideUi: 'Показать/Скрыть панель',
-      glow: 'Эффект свечения',
-      trails: 'Эффект шлейфа',
-      changeMode: 'Сменить режим',
-      changeTheme: 'Сменить тему'
+      toggleMic: 'Вкл/Выкл Аудио', fullscreen: 'На весь экран', randomize: 'Случайный стиль', lyrics: 'Инфо о треке ИИ', hideUi: 'Показать/Скрыть панель', glow: 'Эффект свечения', trails: 'Эффект шлейфа', changeMode: 'Сменить режим', changeTheme: 'Сменить тему'
     },
     gestureItems: {
-        swipeMode: 'Свайп гориз.: Смена режима',
-        swipeSens: 'Свайп верт.: Чувствительность',
-        longPress: 'Долгое нажатие: ИИ-анализ'
+        swipeMode: 'Свайп гориз.: Смена режима', swipeSens: 'Свайп верт.: Чувствительность', longPress: 'Долгое нажатие: ИИ-анализ'
     },
     howItWorksTitle: 'Начало работы',
     howItWorksSteps: [
@@ -262,49 +197,22 @@ export const ru = {
     ],
     settingsTitle: 'Руководство по параметрам',
     settingsDesc: {
-      sensitivity: 'Усиление реакции визуала на звук.',
-      speed: 'Скорость эволюции генеративных алгоритмов.',
-      glow: 'Интенсивность атмосферного свечения.',
-      trails: 'Накопление для плавности движений.',
-      smoothing: 'Временное сглаживание спектра.',
-      fftSize: 'Точность спектрального анализа.'
+      sensitivity: 'Усиление реакции визуала на звук.', speed: 'Скорость эволюции генеративных алгоритмов.', glow: 'Интенсивность атмосферного свечения.', trails: 'Накопление для плавности движений.', smoothing: 'Временное сглаживание спектра.', fftSize: 'Точность спектрального анализа.'
     },
     projectInfoTitle: 'Описание проекта',
     aboutDescription: 'Синестетический опыт нового поколения. Aura Flux объединяет прецизионный анализ с Google Gemini 3 для превращения звука в живой свет. Идеально для VJ, стримеров и инсталляций.',
     privacyTitle: 'Приватность и Безопасность',
     privacyText: 'Анализ аудио локальный. Шифрованные фингерпринты отправляются в Gemini только для поиска; записи не сохраняются.',
-    version: 'Релиз',
-    coreTech: 'Основные Технологии',
-    repository: 'Репозиторий',
-    support: 'Поддержка',
-    reportBug: 'Сообщить об ошибке'
+    version: 'Релиз', coreTech: 'Основные Технологии', repository: 'Репозиторий', support: 'Поддержка', reportBug: 'Сообщить об ошибке'
   },
   onboarding: {
-    welcome: 'Добро пожаловать в Aura Flux',
-    subtitle: 'ИИ-Движок Синестезии Нового Поколения',
-    selectLanguage: 'Выберите язык',
-    next: 'Далее',
-    back: 'Назад',
-    skip: 'Пропустить',
-    finish: 'Начать',
+    welcome: 'Добро пожаловать в Aura Flux', subtitle: 'ИИ-Движок Синестезии Нового Поколения', selectLanguage: 'Выберите язык', next: 'Далее', back: 'Назад', skip: 'Пропустить', finish: 'Начать',
     features: {
       title: 'Ключевые Особенности',
-      visuals: {
-        title: 'Генеративное Искусство',
-        desc: '12+ движков WebGL, материализующих звуковые волны.'
-      },
-      ai: {
-        title: 'Интеллект Gemini AI',
-        desc: 'Мгновенное распознавание треков и настроения через Google Gemini 3.'
-      },
-      privacy: {
-        title: 'Приватно и Безопасно',
-        desc: 'Обработка локальная. Мы не записываем ваши аудиоданные.'
-      }
+      visuals: { title: 'Генеративное Искусство', desc: '12+ движков WebGL, материализующих звуковые волны.' },
+      ai: { title: 'Интеллект Gemini AI', desc: 'Мгновенное распознавание треков и настроения через Google Gemini 3.' },
+      privacy: { title: 'Приватно и Безопасно', desc: 'Обработка локальная. Мы не записываем ваши аудиоданные.' }
     },
-    shortcuts: {
-      title: 'Динамичное Управление',
-      desc: 'Управляйте светом с помощью клавиш.'
-    }
+    shortcuts: { title: 'Динамичное Управление', desc: 'Управляйте светом с помощью клавиш.' }
   }
 };

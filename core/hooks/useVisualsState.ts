@@ -1,9 +1,9 @@
-
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.0.6
- * Author: Aura Vision Team
+ * Version: 1.0.7
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-18 18:15
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -13,6 +13,9 @@ import { COLOR_THEMES } from '../constants';
 
 const DEFAULT_MODE = VisualizerMode.PLASMA;
 const DEFAULT_THEME_INDEX = 1;
+
+// Regex for validating Hex colors
+const HEX_COLOR_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 export const useVisualsState = (hasStarted: boolean, initialSettings: VisualizerSettings) => {
   const { getStorage, setStorage } = useLocalStorage();
@@ -25,8 +28,14 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
 
   const [colorTheme, setColorThemeInternal] = useState<string[]>(() => {
     const saved = getStorage('theme', COLOR_THEMES[DEFAULT_THEME_INDEX]);
-    // Ensure saved theme is a valid array of strings, otherwise fallback
-    return Array.isArray(saved) && saved.length > 0 ? saved : COLOR_THEMES[DEFAULT_THEME_INDEX];
+    
+    // DEFENSE: Deep validation of color theme array
+    if (Array.isArray(saved) && saved.length > 0) {
+        const isValid = saved.every(c => typeof c === 'string' && HEX_COLOR_REGEX.test(c));
+        if (isValid) return saved;
+    }
+    
+    return COLOR_THEMES[DEFAULT_THEME_INDEX];
   });
 
   const [settings, setSettings] = useState<VisualizerSettings>(initialSettings);
@@ -101,7 +110,6 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
       glow: preset.settings.glow,
       trails: preset.settings.trails,
       smoothing: preset.settings.smoothing,
-      // Apply fftSize if present, otherwise keep current or default
       fftSize: preset.settings.fftSize ?? p.fftSize,
     }));
     setActivePreset(preset.nameKey);
