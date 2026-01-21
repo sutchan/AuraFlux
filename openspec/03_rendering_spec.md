@@ -8,18 +8,21 @@
 All 2D 渲染器实现 `IVisualizerRenderer` 接口。
 
 - **Plasma Flow (v1.3.2 纯色优化):**
-  - **视觉提升:** 彻底去除了径向渐变中心的纯白色点。改用主题色作为起始色阶，并通过调整 Alpha 梯度确保中心深邃、边缘轻盈。这种处理方式消除了高频能量导致的“视觉刺眼”，使通感体验更加温润自然。
-  - **动态:** 维持了 v1.3.1 的高灵敏度扩张算法。
+  - **视觉提升:** 彻底去除了径向渐变中心的纯白色点。改用主题色作为起始色阶。
 - **Geometric Tunnel (v1.0.8 闭合优化):**
-  - **修复:** 引入 `ctx.closePath()` 与 `lineJoin: round` 彻底解决多边形转角处的视觉缺口问题。
+  - **修复:** 引入 `ctx.closePath()` 与 `lineJoin: round` 彻底解决多边形转角处的视觉缺口。
 - **Digital Waveform (v2.5.0 Art Optimized):**
   - **风格:** 具备深度感与物理包络的艺术化多通道示波器。
-- **Starfield (星际穿越):** 通过引力中心引导粒子。
 
 ## 3. 3D WebGL 渲染
+- **Neural Flow (v1.3.0 动力学增强):**
+  - **特性:** 引入 3D Simplex 向量场游走、4次幂纤维聚集算法及基于速度的生物荧光闪烁。
+- **Quantum Field (v1.6.3 随机翻滚优化):**
+  - **随机动力学:** 每个方块实例分配独立的 3D 空间旋转轴（Rotation Axis），完全消除全局同步感。
+  - **复合速差:** 引入 `individualSpeedMult` 个体速度倍率，确保方阵中不同方块的翻滚速度差固定为 2 倍，显著增强场景层次感。
+  - **翻滚速率:** 基础翻滚速率与节拍转矩脉冲均降低至原始值的 1/10，以提供高级的“深空悬浮”质感。
 - **SilkWaves (流光绸缎):** 材质 `emissiveIntensity` 随节拍闪烁。
 - **Liquid Sphere (液态星球):** 顶点置换强度随低频能量非线性增强。
-- **Quantum Field:** 航行速度相比初版提升 3 倍，强化穿越感。
 
 ---
-*Aura Flux Rendering - Version 1.6.34*
+*Aura Flux Rendering - Version 1.6.42*

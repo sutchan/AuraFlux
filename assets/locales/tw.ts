@@ -1,32 +1,19 @@
-
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.9
- * Author: Aura Vision Team
+ * Version: 1.6.42
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-17 10:00
+ * Updated: 2025-02-18 23:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const tw = {
   common: {
-    on: '開啟',
-    off: '關閉',
-    visible: '顯示',
-    hidden: '隱藏',
-    active: '啟用',
-    muted: '靜音',
-    beta: '測試版',
-    simple: '簡潔',
-    advanced: '專業'
+    on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業'
   },
   tabs: {
-    visual: '視覺',
-    text: '文字',
-    audio: '音訊',
-    ai: 'AI 通感辨識',
-    system: '系統'
+    visual: '視覺', text: '文字', audio: '音訊', ai: 'AI 通感辨識', system: '系統'
   },
   hints: {
     mode: '選擇用於生成視覺效果的數學渲染引擎。',
@@ -47,6 +34,9 @@ export const tw = {
     reset: '將所有應用設定、語言及音訊選項恢復至原廠狀態。',
     confirmReset: '確認重設？此操作無法復原。',
     resetVisual: '僅重置視覺參數（速度、光暈、殘影）至預設值。',
+    resetText: '清除自訂文字內容、字體及排版設定。',
+    resetAudio: '恢復靈敏度、平滑度及 FFT 解析度為預設值。',
+    resetAi: '重置 AI 提供商、辨識區域及歌詞排版。',
     randomize: '隨機生成一套意想不到的模式與配色組合。',
     fullscreen: '進入沉浸式全螢幕互動模式。',
     help: '查看快捷鍵操作指南與專案詳細文件。',
@@ -63,7 +53,14 @@ export const tw = {
     showCustomText: '切換自訂文字圖層的可見性。',
     textPulse: '文字大小隨音樂節奏動態縮放。',
     textAudioReactive: '文字的透明度和大小將響應即時音量。',
-    customTextCycleColor: '自動在光譜色中循環切換文字顏色。'
+    customTextCycleColor: '自動在光譜色中循環切換文字顏色。',
+    uiModeSimple: '隱藏技術參數，專注於核心美學調整。',
+    uiModeAdvanced: '展示所有調優參數以獲得精確控制。',
+    quality: '調節渲染解析度與粒子密度。',
+    textSize: '縮放自訂文字圖層的大小。',
+    textRotation: '旋轉文字覆蓋層。',
+    textPosition: '自訂文字的錨定錨點位置。',
+    lyricsPosition: 'AI 歌詞覆蓋層的顯示錨點位置。'
   },
   visualizerMode: '視覺化模式',
   styleTheme: '視覺風格',
@@ -76,6 +73,7 @@ export const tw = {
   rotateInterval: '切換間隔 (秒)',
   cycleColors: '自動循環配色',
   colorInterval: '切換間隔 (秒)',
+  cycleSpeed: '循環週期 (秒)',
   monitorAudio: '音訊監聽',
   audioInput: '輸入來源選擇',
   lyrics: 'AI 通感辨識',
@@ -127,25 +125,16 @@ export const tw = {
   textPosition: '顯示位置',
   quality: '渲染畫質',
   qualities: {
-    low: '低',
-    med: '中',
-    high: '高'
+    low: '流暢', med: '均衡', high: '極致'
   },
   visualPanel: {
-    effects: '特效',
-    automation: '自動化',
-    display: '顯示'
+    effects: '特效', automation: '自動化', display: '顯示'
   },
   audioPanel: {
     info: '調節「靈敏度」以改變視覺對聲音的反應強度，「平滑度」控制動畫的流暢性。更高的 FFT 解析度能提供更精細的細節，但會增加 CPU 負載。'
   },
   systemPanel: {
-    interface: '介面互動',
-    behavior: '系統行為',
-    maintenance: '維護與資訊',
-    engine: '渲染引擎',
-    audio: '音訊架構',
-    ai: '人工智慧'
+    interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染引擎', audio: '音訊架構', ai: '人工智慧'
   },
   showFps: '顯示幀率',
   showTooltips: '顯示提示',
@@ -157,10 +146,10 @@ export const tw = {
     hint: '一鍵應用由專家精心調校的視覺參數組合。',
     select: '選擇一種心境...',
     custom: '自定義 / 已修改',
-    calm: '催眠舒緩',
+    calm: '數字波形',
     party: '動感派對',
-    ambient: '靜謐氛圍',
-    cyberpunk: '賽博龐克',
+    ambient: '深空星雲',
+    cyberpunk: '舞台雷射',
     retrowave: '復古夕陽',
     vocal: '人聲專注'
   },
@@ -170,48 +159,20 @@ export const tw = {
   lyricsFontSize: '字體大小',
   simulatedDemo: '模擬演示 (Demo)',
   positions: {
-      top: '頂部',
-      center: '居中',
-      bottom: '底部',
-      tl: '左上',
-      tc: '中上',
-      tr: '右上',
-      ml: '左中',
-      mc: '正中',
-      mr: '右中',
-      bl: '左下',
-      bc: '中下',
-      br: '右下'
+      top: '頂部', center: '居中', bottom: '底部', tl: '左上', tc: '中上', tr: '右上', ml: '左中', mc: '正中', mr: '右中', bl: '左下', bc: '中下', br: '右下'
   },
   wakeLock: '螢幕常亮',
   system: {
-    shortcuts: {
-      mic: '麥克風',
-      ui: '介面',
-      mode: '模式',
-      random: '隨機'
-    }
+    shortcuts: { mic: '麥克風', ui: '介面', mode: '模式', random: '隨機' }
   },
   errors: {
-    title: '音訊錯誤',
-    accessDenied: '無法存取麥克風，請檢查瀏覽器權限。',
-    noDevice: '未偵測到音訊輸入裝置。',
-    deviceBusy: '音訊裝置被佔用或無效。',
-    general: '無法存取音訊裝置。',
-    tryDemo: '嘗試演示模式 (無音訊)'
+    title: '音訊錯誤', accessDenied: '無法存取麥克風，請檢查瀏覽器權限。', noDevice: '未偵測到音訊輸入裝置。', deviceBusy: '音訊裝置被佔用或無效。', general: '無法存取音訊裝置。', tryDemo: '嘗試演示模式 (無音訊)'
   },
   aiState: {
-    active: '通感分析已運行',
-    enable: '激活通感引擎'
+    active: '通感分析已運行', enable: '激活通感引擎'
   },
   regions: {
-    global: '全球',
-    US: '美國 / 西方',
-    CN: '中國大陸',
-    JP: '日本',
-    KR: '韓國',
-    EU: '歐洲',
-    LATAM: '拉丁美洲'
+    global: '全球', US: '美國 / 西方', CN: '中國大陸', JP: '日本', KR: '韓國', EU: '歐洲', LATAM: '拉丁美洲'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: '神經流體 (WebGL)',
@@ -227,40 +188,23 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
-    // Fix: Added missing translations
-    [VisualizerMode.WAVEFORM]: '絲綢波形',
+    [VisualizerMode.WAVEFORM]: '數字波形',
     [VisualizerMode.TERRAIN]: '低多邊形山脈 (WebGL)'
   },
   lyricsStyles: {
-    [LyricsStyle.STANDARD]: '標準排版',
-    [LyricsStyle.KARAOKE]: '動態律動',
-    [LyricsStyle.MINIMAL]: '極簡主義'
+    [LyricsStyle.STANDARD]: '標準排版', [LyricsStyle.KARAOKE]: '動態律動', [LyricsStyle.MINIMAL]: '極簡主義'
   },
   helpModal: {
     title: 'Aura Flux 互動指南',
-    tabs: {
-        guide: '指南',
-        shortcuts: '快捷鍵',
-        about: '關於'
-    },
+    tabs: { guide: '指南', shortcuts: '快捷鍵', about: '關於' },
     intro: 'Aura Flux 是一款沉浸式的視聽互動工具，它利用高精度麥克風取樣，將音訊訊號即時轉化為數學生成的數位藝術。',
     shortcutsTitle: '控制快捷鍵',
     gesturesTitle: '觸控手勢',
     shortcutItems: {
-      toggleMic: '麥克風',
-      fullscreen: '全螢幕',
-      randomize: '隨機',
-      lyrics: '曲目辨識',
-      hideUi: '顯示/隱藏面板',
-      glow: '霓虹光暈',
-      trails: '動態殘影',
-      changeMode: '切換模式',
-      changeTheme: '切換配色'
+      toggleMic: '麥克風', fullscreen: '全螢幕', randomize: '隨機', lyrics: '曲目辨識', hideUi: '顯示/隱藏面板', glow: '霓虹光暈', trails: '動態殘影', changeMode: '切換模式', changeTheme: '切換配色'
     },
     gestureItems: {
-        swipeMode: '水平滑動：切換模式',
-        swipeSens: '垂直滑動：調節靈敏度',
-        longPress: '長按：AI 通感辨識'
+        swipeMode: '水平滑動：切換模式', swipeSens: '垂直滑動：調節靈敏度', longPress: '長按：AI 通感辨識'
     },
     howItWorksTitle: '使用流程',
     howItWorksSteps: [
@@ -272,49 +216,22 @@ export const tw = {
     ],
     settingsTitle: '核心參數指南',
     settingsDesc: {
-      sensitivity: '控制視覺元素對振幅反應的增益。',
-      speed: '調節生成演算法在時間維度上的演化速率。',
-      glow: '後期處理中的全域泛光強度，增強氛圍感。',
-      trails: '控制像素在畫面上的停留時間，產生運動模糊效果。',
-      smoothing: '音訊資料的平滑係數，越高則過渡越圓滑。',
-      fftSize: '決定了頻譜分析的顆粒度，即頻段採樣數量。'
+      sensitivity: '控制視覺元素對振幅反應的增益。', speed: '調節生成演算法在時間維度上的演化速率。', glow: '後期處理中的全域泛光強度，增強氛圍感。', trails: '控制像素在畫面上的停留時間，產生運動模糊效果。', smoothing: '音訊資料的平滑係數，越高則過渡越圓滑。', fftSize: '決定了頻譜分析的顆粒度，即頻段採樣數量。'
     },
     projectInfoTitle: '專案簡介',
     aboutDescription: '下一代通感互動體驗。Aura Flux 融合了高精度即時頻譜分析與 Google Gemini 3 多模態人工智慧，將無形的聲波轉化為有生命的動態光影藝術。適用於 VJ 演出、直播背景、專注陪伴及空間氛圍裝飾。',
     privacyTitle: '隱私與安全',
     privacyText: '音訊分析完全在本地完成。僅在辨識歌曲時，會將加密的頻率特徵臨時發送至雲端，絕不存儲或上傳任何原始錄音數據。',
-    version: '版本號',
-    coreTech: '核心技術',
-    repository: '程式庫',
-    support: '技術支援',
-    reportBug: '回報 Bug'
+    version: '版本號', coreTech: '核心技術', repository: '程式庫', support: '技術支援', reportBug: '回報 Bug'
   },
   onboarding: {
-    welcome: '歡迎體驗 Aura Flux',
-    subtitle: '新一代 AI 音樂通感引擎',
-    selectLanguage: '選擇您的語言',
-    next: '繼續',
-    back: '返回',
-    skip: '跳過',
-    finish: '立即開啟',
+    welcome: '歡迎體驗 Aura Flux', subtitle: '新一代 AI 音樂通感引擎', selectLanguage: '選擇您的語言', next: '繼續', back: '返回', skip: '跳過', finish: '立即開啟',
     features: {
       title: '核心特性',
-      visuals: {
-        title: '生成式藝術傑作',
-        desc: '12+ 種基於 WebGL 的數學動力學引擎，將聲波具象化。'
-      },
-      ai: {
-        title: 'Gemini AI 智能大腦',
-        desc: '實時識別曲目元數據與視覺情緒，由 Google Gemini 3 提供支持。'
-      },
-      privacy: {
-        title: '隱私安全保障',
-        desc: '音訊分析完全在本地運行，我們絕不記錄或存儲您的私人聲音數據。'
-      }
+      visuals: { title: '生成式藝術傑作', desc: '12+ 種基於 WebGL 的數學動力學引擎，將聲波具象化。' },
+      ai: { title: 'Gemini AI 智能大腦', desc: '實時識別曲目元數據與視覺情緒，由 Google Gemini 3 提供支持。' },
+      privacy: { title: '隱私安全保障', desc: '音訊分析完全在本地運行，我們絕不記錄或存儲您的私人聲音數據。' }
     },
-    shortcuts: {
-      title: '極速交互',
-      desc: '通過以下快捷鍵，像指揮家一樣掌控全場。'
-    }
+    shortcuts: { title: '極速交互', desc: '通過以下快捷鍵，像指揮家一樣掌控全場。' }
   }
 };
