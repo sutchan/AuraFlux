@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.6.5
+ * Version: 1.6.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -11,9 +11,13 @@ import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom, ChromaticAberration, TiltShift } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { VisualizerMode, VisualizerSettings } from '../../core/types';
-import { SilkWavesScene } from './scenes/SilkWavesScene';
-import { LiquidSphereScene } from './scenes/LiquidSphereScene';
-import { LowPolyTerrainScene } from './scenes/LowPolyTerrainScene';
+import { 
+    SilkWavesScene, 
+    LiquidSphereScene, 
+    LowPolyTerrainScene, 
+    CubeFieldScene,
+    NeuralFlowScene
+} from './ThreeScenes';
 
 interface ThreeVisualizerProps {
   analyser: AnalyserNode | null;
@@ -33,12 +37,18 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
   const bloomIntensity = useMemo(() => {
       if (mode === VisualizerMode.SILK) return 1.2;
       if (mode === VisualizerMode.LIQUID) return 1.8;
+      if (mode === VisualizerMode.CUBE_FIELD) return 1.5;
+      if (mode === VisualizerMode.NEURAL_FLOW) return 1.8;
       return 1.5;
   }, [mode]);
 
   // Performance Optimization: Memoize TiltShift enable logic
   const enableTiltShift = useMemo(() => {
-      return settings.quality === 'high' && (mode === VisualizerMode.LIQUID || mode === VisualizerMode.SILK);
+      return settings.quality === 'high' && (
+          mode === VisualizerMode.LIQUID || 
+          mode === VisualizerMode.SILK ||
+          mode === VisualizerMode.MACRO_BUBBLES // Not WebGL, but keeping logic consistent
+      );
   }, [settings.quality, mode]);
 
   // Performance Optimization: Memoize Scene selection to prevent unnecessary re-evaluations
@@ -51,6 +61,10 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             return <LiquidSphereScene analyser={analyser} colors={colors} settings={settings} />;
         case VisualizerMode.TERRAIN:
             return <LowPolyTerrainScene analyser={analyser} colors={colors} settings={settings} />;
+        case VisualizerMode.CUBE_FIELD:
+            return <CubeFieldScene analyser={analyser} colors={colors} settings={settings} />;
+        case VisualizerMode.NEURAL_FLOW:
+            return <NeuralFlowScene analyser={analyser} colors={colors} settings={settings} />;
         default:
             return <LowPolyTerrainScene analyser={analyser} colors={colors} settings={settings} />;
     }

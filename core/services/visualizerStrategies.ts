@@ -1,6 +1,7 @@
+
 /**
  * File: core/services/visualizerStrategies.ts
- * Version: 1.1.0
+ * Version: 1.6.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -22,7 +23,7 @@ import { LasersRenderer } from './renderers/LasersRenderer';
 export { 
   BarsRenderer, RingsRenderer, FluidCurvesRenderer, MacroBubblesRenderer, 
   ParticlesRenderer, NebulaRenderer, TunnelRenderer, PlasmaRenderer, 
-  LasersRenderer 
+  LasersRenderer
 };
 
 // Also export the BeatDetector

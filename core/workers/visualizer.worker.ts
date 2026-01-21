@@ -1,7 +1,7 @@
 
 /**
  * File: core/workers/visualizer.worker.ts
- * Version: 1.6.4
+ * Version: 1.6.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  *
@@ -12,7 +12,7 @@
 // --- 1. IMPORT DEPENDENCIES (Strictly Relative Paths) ---
 import { VisualizerMode, VisualizerSettings, WorkerMessage, IVisualizerRenderer } from '../types';
 import { createVisualizerRenderers, BeatDetector } from '../services/visualizerStrategies';
-import { applyNoiseFloor } from '../services/audioUtils';
+import { AdaptiveNoiseFilter } from '../services/audioUtils';
 
 // --- 2. WORKER MAIN LOGIC ---
 
@@ -34,6 +34,7 @@ try {
 }
 
 const beatDetector = new BeatDetector();
+const noiseFilter = new AdaptiveNoiseFilter(); // Stateful filter instance for worker
 
 const loop = () => {
   if (!ctx || !currentSettings) {
@@ -59,9 +60,9 @@ const loop = () => {
   rotation += 0.005 * currentSettings.speed;
   const data = lastFrameData || new Uint8Array(0);
   
-  // Noise filtering for worker path
+  // Intelligent Noise Filtering in Worker
   if (data.length > 0) {
-      applyNoiseFloor(data, 30);
+      noiseFilter.process(data);
   }
 
   const isBeat = data.length > 0 ? beatDetector.detect(data) : false;

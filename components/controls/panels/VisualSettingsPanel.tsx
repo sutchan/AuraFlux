@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.0.7
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -42,20 +42,28 @@ export const VisualSettingsPanel: React.FC = () => {
 
   return (
     <>
-      {/* Col 1: Visual Modes Selection */}
-      <div className="flex flex-col p-4 h-full border-b lg:border-b-0 lg:border-e border-white/5 pt-6 overflow-hidden">
-        <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-3 flex-shrink-0">{t?.visualizerMode || "Visualizer Mode"}</span>
-        <div className="grid grid-cols-2 gap-2 flex-grow overflow-y-auto custom-scrollbar p-1 pe-2 content-start">
-           {Object.keys(VISUALIZER_PRESETS).map(m => (
-             <VisualizerPreview
-                key={m}
-                mode={m as VisualizerMode}
-                name={modes[m as VisualizerMode] || m}
-                isActive={currentMode === m}
-                onClick={() => setMode(m as VisualizerMode)}
-              />
-           ))}
+      {/* Col 1: Visual Modes Selection (Optimized for overflow) */}
+      <div className="flex flex-col h-full border-b lg:border-b-0 lg:border-e border-white/5 overflow-hidden relative">
+        <div className="p-4 pb-2 shrink-0 z-10 bg-[#0f0f11]">
+            <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1">{t?.visualizerMode || "Visualizer Mode"}</span>
         </div>
+        
+        {/* Scrollable Area with Fade Mask */}
+        <div className="flex-grow overflow-y-auto custom-scrollbar px-4 pb-6 mask-fade-vertical">
+            <div className="grid grid-cols-2 gap-3 pb-8">
+               {Object.keys(VISUALIZER_PRESETS).map(m => (
+                 <VisualizerPreview
+                    key={m}
+                    mode={m as VisualizerMode}
+                    name={modes[m as VisualizerMode] || m}
+                    isActive={currentMode === m}
+                    onClick={() => setMode(m as VisualizerMode)}
+                  />
+               ))}
+            </div>
+        </div>
+        {/* Bottom gradient hint */}
+        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#0f0f11] to-transparent pointer-events-none" />
       </div>
       
       {/* Col 2: Themes, Smart Presets & Quality */}

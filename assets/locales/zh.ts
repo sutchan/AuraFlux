@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.7
+ * Version: 1.7.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -214,15 +214,17 @@ export const zh = {
     LATAM: '拉丁美洲'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: '神经流体 (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: '量子方阵 (WebGL)',
     [VisualizerMode.PLASMA]: '流体等离子',
-    [VisualizerMode.BARS]: '镜像频谱分析',
+    [VisualizerMode.BARS]: '频谱分析',
     [VisualizerMode.PARTICLES]: '星际穿越', 
     [VisualizerMode.TUNNEL]: '几何时空隧道',
     [VisualizerMode.RINGS]: '霓虹共振环',
     [VisualizerMode.NEBULA]: '深空星云',
     [VisualizerMode.LASERS]: '舞台激光矩阵',
     [VisualizerMode.FLUID_CURVES]: '极光之舞',
-    [VisualizerMode.MACRO_BUBBLES]: '微观液泡 (景深)', 
+    [VisualizerMode.MACRO_BUBBLES]: '微观液泡', 
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
     [VisualizerMode.TERRAIN]: '低多边形山脉 (WebGL)'

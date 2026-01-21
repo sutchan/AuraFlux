@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.7
+ * Version: 1.6.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -213,15 +213,17 @@ export const tw = {
     LATAM: '拉丁美洲'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: '神經流體 (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: '量子方陣 (WebGL)',
     [VisualizerMode.PLASMA]: '流體電漿',
-    [VisualizerMode.BARS]: '鏡像頻譜分析',
+    [VisualizerMode.BARS]: '頻譜分析',
     [VisualizerMode.PARTICLES]: '星際穿越', 
     [VisualizerMode.TUNNEL]: '幾何時空隧道',
     [VisualizerMode.RINGS]: '霓虹共振環',
     [VisualizerMode.NEBULA]: '深空星云',
     [VisualizerMode.LASERS]: '舞台雷射矩陣',
     [VisualizerMode.FLUID_CURVES]: '極光之舞',
-    [VisualizerMode.MACRO_BUBBLES]: '微觀液泡 (DoF)', 
+    [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
     [VisualizerMode.TERRAIN]: '低多邊形山脈 (WebGL)'

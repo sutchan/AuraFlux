@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -9,7 +9,7 @@
 import React, { useRef, useEffect } from 'react';
 import { VisualizerMode, VisualizerSettings, IVisualizerRenderer } from '../../core/types/index';
 import { createVisualizerRenderers, BeatDetector } from '../../core/services/visualizerStrategies';
-import { applyNoiseFloor } from '../../core/services/audioUtils';
+import { AdaptiveNoiseFilter } from '../../core/services/audioUtils';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
@@ -24,6 +24,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const renderersRef = useRef<Record<string, IVisualizerRenderer>>({});
   const beatDetectorRef = useRef(new BeatDetector());
+  const noiseFilterRef = useRef(new AdaptiveNoiseFilter());
   const animationIdRef = useRef<number>(0);
   const rotationRef = useRef<number>(0);
 
@@ -73,9 +74,9 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
       // 3. Audio Processing
       analyser.getByteFrequencyData(dataArray);
       
-      // Noise Gate: Filter out background hum (e.g. fans, AC)
-      // Threshold of 30 ensures silence looks like silence
-      applyNoiseFloor(dataArray, 30);
+      // Intelligent Noise Filtering (Stateful)
+      // Removes constant hum/hiss while preserving dynamics
+      noiseFilterRef.current.process(dataArray);
 
       const isBeat = beatDetectorRef.current.detect(dataArray);
       

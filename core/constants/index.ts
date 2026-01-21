@@ -1,30 +1,39 @@
 
 /**
  * File: core/constants/index.ts
- * Version: 1.6.6
+ * Version: 1.6.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import { VisualizerMode, Region, Position, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.6.6';
+export const APP_VERSION = '1.6.8';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
+// Logic grouping: Classic (Top) -> Modern 2D -> WebGL (Bottom)
+// Object key order controls the UI list order.
 export const VISUALIZER_PRESETS = {
+  // --- Top Priority: Classic/Fluid ---
   [VisualizerMode.PLASMA]: { name: 'Plasma Flow', description: 'Fluid liquid color gradients' },
   [VisualizerMode.BARS]: { name: 'Frequency Bars', description: 'Classic spectrum analyzer' },
-  [VisualizerMode.PARTICLES]: { name: 'Starfield', description: 'Drifting particles with Lissajous physics' },
+
+  // --- Modern 2D ---
+  [VisualizerMode.FLUID_CURVES]: { name: 'Aura Waves', description: 'Ethereal flowing gradients' },
+  [VisualizerMode.NEBULA]: { name: 'Deep Nebula', description: 'Dense, swirling clouds of color' },
+  [VisualizerMode.MACRO_BUBBLES]: { name: 'Macro Bubbles', description: 'Liquid bubbles with Depth of Field' },
+  [VisualizerMode.LASERS]: { name: 'Concert Lasers', description: 'Converging sweeping light beams' },
   [VisualizerMode.TUNNEL]: { name: 'Geometric Tunnel', description: '3D deep space tunnel' },
   [VisualizerMode.RINGS]: { name: 'Neon Rings', description: 'Concentric circles reactive to mids' },
-  [VisualizerMode.NEBULA]: { name: 'Deep Nebula', description: 'Dense, swirling clouds of color' },
-  [VisualizerMode.LASERS]: { name: 'Concert Lasers', description: 'Converging sweeping light beams' },
-  [VisualizerMode.FLUID_CURVES]: { name: 'Aura Waves', description: 'Ethereal flowing gradients' },
-  [VisualizerMode.MACRO_BUBBLES]: { name: 'Macro Bubbles', description: 'Liquid bubbles with Depth of Field (DoF)' },
+  [VisualizerMode.PARTICLES]: { name: 'Starfield', description: 'Drifting particles with Lissajous physics' },
+
+  // --- WebGL Modes (Moved to Bottom) ---
+  [VisualizerMode.NEURAL_FLOW]: { name: 'Neural Flow', description: 'Bioluminescent particle stream (WebGL)' },
   [VisualizerMode.SILK]: { name: 'Silk Waves', description: 'Iridescent flowing fabric (WebGL)' },
   [VisualizerMode.LIQUID]: { name: 'Liquid Sphere', description: 'Ferrofluid-like reactive matter (WebGL)' },
-  [VisualizerMode.TERRAIN]: { name: 'Low-Poly Terrain', description: 'Flying over reactive mountains (WebGL)' }
+  [VisualizerMode.CUBE_FIELD]: { name: 'Quantum Field', description: 'Infinite 3D matrix flight (WebGL)' },
+  [VisualizerMode.TERRAIN]: { name: 'Low-Poly Terrain', description: 'Flying over reactive mountains (WebGL)' },
 };
 
 export const AVAILABLE_FONTS = [
@@ -76,40 +85,40 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
   calm: {
     nameKey: 'calm',
     settings: {
-      mode: VisualizerMode.SILK,
-      colorTheme: COLOR_THEMES[22], // White/Pastel
-      speed: 0.4,
-      sensitivity: 1.1,
+      mode: VisualizerMode.NEURAL_FLOW,
+      colorTheme: COLOR_THEMES[18], // Deep Ocean
+      speed: 0.3,
+      sensitivity: 1.2,
       glow: true,
       trails: true,
-      smoothing: 0.92, // High smoothing for liquid feel
+      smoothing: 0.9, 
       fftSize: 2048
     }
   },
   party: {
     nameKey: 'party',
     settings: {
-      mode: VisualizerMode.LASERS,
+      mode: VisualizerMode.CUBE_FIELD,
       colorTheme: COLOR_THEMES[28], // Prismatic
       speed: 1.8,
       sensitivity: 2.2,
       glow: true,
-      trails: false, // Sharp movements
-      smoothing: 0.5, // Low smoothing for snappy hits
+      trails: false, 
+      smoothing: 0.5,
       fftSize: 1024
     }
   },
   cyberpunk: {
     nameKey: 'cyberpunk',
     settings: {
-      mode: VisualizerMode.TUNNEL, // Updated from GRID to TUNNEL
+      mode: VisualizerMode.LASERS, // Updated from HEX_GRID to LASERS
       colorTheme: COLOR_THEMES[1], // Cyan/Magenta
-      speed: 2.5,
+      speed: 2.0,
       sensitivity: 1.8,
       glow: true,
       trails: true,
       smoothing: 0.7,
-      fftSize: 512
+      fftSize: 1024
     }
   },
   retrowave: {
@@ -128,12 +137,12 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
   vocal: {
     nameKey: 'vocal',
     settings: {
-      mode: VisualizerMode.RINGS,
-      colorTheme: COLOR_THEMES[10], // Pink/White
-      speed: 0.8,
-      sensitivity: 1.4,
-      glow: false,
-      trails: false,
+      mode: VisualizerMode.SILK, // Updated from CRYSTAL_CORE to SILK
+      colorTheme: COLOR_THEMES[22], // White/Pink
+      speed: 0.5,
+      sensitivity: 1.6,
+      glow: true,
+      trails: true,
       smoothing: 0.85,
       fftSize: 4096 // High res for voice details
     }

@@ -6,6 +6,12 @@ All notable changes to the **Aura Vision** project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.7] - 2025-01-27
+
+### Added
+*   **🔇 Intelligent Noise Gate:** Implemented an advanced `applyNoiseFloor` algorithm with automatic Make-up Gain and Spectral Tilt. This effectively eliminates continuous background noise (fans, AC, hiss) without dimming the visual output of actual music.
+*   **🔌 DC Offset Removal:** The audio engine now explicitly zeroes out the DC offset (0Hz) bin to prevent visual artifacts when the room is silent.
+
 ## [v1.6.6] - 2025-01-27
 
 ### Added

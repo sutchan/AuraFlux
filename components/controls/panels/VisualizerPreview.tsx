@@ -1,7 +1,6 @@
-
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.0.8
+ * Version: 1.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -17,18 +16,25 @@ interface VisualizerPreviewProps {
 }
 
 const styles: Record<VisualizerMode, React.CSSProperties> = {
-    [VisualizerMode.PLASMA]: { background: 'radial-gradient(circle, #ec4899, #8b5cf6, #3b82f6)' },
-    [VisualizerMode.BARS]: { background: 'linear-gradient(to top, #3b82f6, #8b5cf6 50%, #3b82f6)' },
-    [VisualizerMode.PARTICLES]: { background: 'radial-gradient(circle, white 2%, transparent 4%), black' },
-    [VisualizerMode.TUNNEL]: { background: 'radial-gradient(circle, transparent 20%, #8b5cf6 50%, black 80%)' },
-    [VisualizerMode.RINGS]: { background: 'radial-gradient(circle, transparent 30%, #ec4899 35%, transparent 40%), radial-gradient(circle, transparent 60%, #8b5cf6 65%, transparent 70%), black' },
-    [VisualizerMode.NEBULA]: { background: 'radial-gradient(ellipse at bottom, #2e1065, #000)' },
-    [VisualizerMode.LASERS]: { background: 'linear-gradient(10deg, transparent 48%, #ff00ff 50%, transparent 52%), linear-gradient(170deg, transparent 48%, #00ffff 50%, transparent 52%), black' },
-    [VisualizerMode.FLUID_CURVES]: { background: 'linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899)'},
-    [VisualizerMode.MACRO_BUBBLES]: { background: 'radial-gradient(circle at 20% 30%, #8b5cf6 20%, transparent 21%), radial-gradient(circle at 75% 80%, #ec4899 15%, transparent 16%), black' },
+    // WebGL High-End
+    [VisualizerMode.NEURAL_FLOW]: { background: 'radial-gradient(circle at 30% 30%, #00ffaa, transparent), radial-gradient(circle at 70% 70%, #00aaff, #000)' },
     [VisualizerMode.SILK]: { background: 'linear-gradient(45deg, #a3e635, #22c55e, #14532d)' },
     [VisualizerMode.LIQUID]: { background: 'radial-gradient(circle, #4c1d95, #1e1b4b)' },
+    [VisualizerMode.CUBE_FIELD]: { background: 'linear-gradient(180deg, #000 50%, #3b82f6 100%)' },
     [VisualizerMode.TERRAIN]: { background: 'linear-gradient(to top, #1e1b4b, #4c1d95 60%, #fde047)' },
+    
+    // Modern 2D
+    [VisualizerMode.FLUID_CURVES]: { background: 'linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899)'},
+    [VisualizerMode.NEBULA]: { background: 'radial-gradient(ellipse at bottom, #2e1065, #000)' },
+    [VisualizerMode.MACRO_BUBBLES]: { background: 'radial-gradient(circle at 20% 30%, #8b5cf6 20%, transparent 21%), radial-gradient(circle at 75% 80%, #ec4899 15%, transparent 16%), black' },
+    
+    // Classic
+    [VisualizerMode.TUNNEL]: { background: 'radial-gradient(circle, transparent 20%, #8b5cf6 50%, black 80%)' },
+    [VisualizerMode.LASERS]: { background: 'linear-gradient(10deg, transparent 48%, #ff00ff 50%, transparent 52%), linear-gradient(170deg, transparent 48%, #00ffff 50%, transparent 52%), black' },
+    [VisualizerMode.RINGS]: { background: 'radial-gradient(circle, transparent 30%, #ec4899 35%, transparent 40%), radial-gradient(circle, transparent 60%, #8b5cf6 65%, transparent 70%), black' },
+    [VisualizerMode.PARTICLES]: { background: 'radial-gradient(circle, white 2%, transparent 4%), black' },
+    [VisualizerMode.PLASMA]: { background: 'radial-gradient(circle, #ec4899, #8b5cf6, #3b82f6)' },
+    [VisualizerMode.BARS]: { background: 'linear-gradient(to top, #3b82f6, #8b5cf6 50%, #3b82f6)' },
 };
 
 

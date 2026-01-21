@@ -1,7 +1,7 @@
 
 /**
  * File: components/AppContext.tsx
- * Version: 1.1.1
+ * Version: 1.1.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -184,7 +184,13 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   
   const resetAudioSettings = useCallback(() => setSettings(p => ({ ...p, sensitivity: DEFAULT_SETTINGS.sensitivity, smoothing: DEFAULT_SETTINGS.smoothing, fftSize: DEFAULT_SETTINGS.fftSize })), [setSettings]);
 
-  const isThreeMode = useMemo(() => mode === VisualizerMode.SILK || mode === VisualizerMode.LIQUID || mode === VisualizerMode.TERRAIN, [mode]);
+  const isThreeMode = useMemo(() => 
+    mode === VisualizerMode.SILK || 
+    mode === VisualizerMode.LIQUID || 
+    mode === VisualizerMode.TERRAIN ||
+    mode === VisualizerMode.CUBE_FIELD ||
+    mode === VisualizerMode.NEURAL_FLOW
+  , [mode]);
 
   return (
     <VisualsContext.Provider value={{

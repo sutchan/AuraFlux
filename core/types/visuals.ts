@@ -1,7 +1,7 @@
 
 /**
  * File: core/types/visuals.ts
- * Version: 1.0.11
+ * Version: 1.6.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -10,20 +10,25 @@ import { Position, Region } from './common';
 import { LyricsStyle } from './audio';
 
 export enum VisualizerMode {
-  BARS = 'BARS',
-  PLASMA = 'PLASMA',
-  PARTICLES = 'PARTICLES',
-  TUNNEL = 'TUNNEL',
-  RINGS = 'RINGS',
-  NEBULA = 'NEBULA', 
-  LASERS = 'LASERS',
-  FLUID_CURVES = 'FLUID_CURVES',
-  MACRO_BUBBLES = 'MACRO_BUBBLES',
-  
-  // WebGL Modes
+  // WebGL Modes (Moved to bottom in UI, kept here for type safety)
+  NEURAL_FLOW = 'NEURAL_FLOW',
   SILK = 'SILK',
   LIQUID = 'LIQUID',
-  TERRAIN = 'TERRAIN'
+  CUBE_FIELD = 'CUBE_FIELD',
+  TERRAIN = 'TERRAIN',
+
+  // Modern 2D Modes
+  FLUID_CURVES = 'FLUID_CURVES',
+  NEBULA = 'NEBULA', 
+  MACRO_BUBBLES = 'MACRO_BUBBLES',
+  
+  // Classic Modes
+  LASERS = 'LASERS',
+  TUNNEL = 'TUNNEL',
+  RINGS = 'RINGS',
+  PARTICLES = 'PARTICLES',
+  PLASMA = 'PLASMA',
+  BARS = 'BARS'
 }
 
 export interface VisualizerSettings {

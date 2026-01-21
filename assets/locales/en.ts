@@ -1,7 +1,6 @@
-
 /**
  * File: assets/locales/en.ts
- * Version: 1.6.7
+ * Version: 1.7.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -213,6 +212,8 @@ export const en = {
     LATAM: 'Latin America'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'Neural Flow',
+    [VisualizerMode.CUBE_FIELD]: 'Quantum Field',
     [VisualizerMode.PLASMA]: 'Plasma Flow',
     [VisualizerMode.BARS]: 'Frequency Bars',
     [VisualizerMode.PARTICLES]: 'Starfield (Drift)',
