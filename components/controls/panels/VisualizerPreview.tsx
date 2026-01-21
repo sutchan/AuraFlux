@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 16:00
  */
 
 import React, { memo } from 'react';
@@ -11,20 +11,12 @@ import { VisualizerMode } from '../../../core/types';
 import { VISUALIZER_PRESETS } from '../../../core/constants';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 
-interface VisualizerPreviewProps {
-  mode: VisualizerMode;
-  name: string;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-const styles: Record<VisualizerMode, React.CSSProperties> = {
+const styles: Partial<Record<VisualizerMode, React.CSSProperties>> = {
     // WebGL High-End
     [VisualizerMode.NEURAL_FLOW]: { background: 'radial-gradient(circle at 30% 30%, #00ffaa, transparent), radial-gradient(circle at 70% 70%, #00aaff, #000)' },
     [VisualizerMode.SILK]: { background: 'linear-gradient(45deg, #a3e635, #22c55e, #14532d)' },
     [VisualizerMode.LIQUID]: { background: 'radial-gradient(circle, #4c1d95, #1e1b4b)' },
     [VisualizerMode.CUBE_FIELD]: { background: 'linear-gradient(180deg, #000 50%, #3b82f6 100%)' },
-    [VisualizerMode.TERRAIN]: { background: 'linear-gradient(to top, #1e1b4b, #4c1d95 60%, #fde047)' },
     
     // Modern 2D
     [VisualizerMode.WAVEFORM]: { background: 'linear-gradient(to right, #00e5ff, #ffffff, #af52de)' },
@@ -63,3 +55,10 @@ export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode,
     </TooltipArea>
   );
 });
+
+interface VisualizerPreviewProps {
+  mode: VisualizerMode;
+  name: string;
+  isActive: boolean;
+  onClick: () => void;
+}

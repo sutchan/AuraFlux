@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.6.48
+ * Version: 1.6.54
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,8 +24,8 @@ export const en = {
     sensitivity: 'Amplifies the visual reaction to audio. Increase for quiet environments.',
     smoothing: 'Temporal damping. Higher values yield liquid-like movement; lower values are twitchy.',
     fftSize: 'Spectral resolution. 4096 provides fine detail but consumes more CPU.',
-    lyrics: 'Toggle AI-powered song identification and lyric fetching.',
-    lyricsStyle: 'Customize the visual presentation of the synchronized lyrics.',
+    lyrics: 'Toggle AI-powered song identification and synesthetic description.',
+    lyricsStyle: 'Customize the visual presentation of the synchronized metadata.',
     region: 'Bias the AI search engine towards music from this specific market.',
     autoRotate: 'Automatically cycle through different visual engines over time.',
     rotateInterval: 'Time in seconds before switching to the next visual engine.',
@@ -36,7 +36,7 @@ export const en = {
     resetVisual: 'Reset aesthetics (Speed, Glow, Trails) to defaults.',
     resetText: 'Clear custom text, font, and positioning settings.',
     resetAudio: 'Restore sensitivity, smoothing, and FFT to defaults.',
-    resetAi: 'Reset AI provider, region, and lyric layout.',
+    resetAi: 'Reset AI persona, region, and lyric layout.',
     randomize: 'Generate a serendipitous combination of visual mode and colors.',
     fullscreen: 'Toggle immersive full-screen mode.',
     help: 'View keyboard shortcuts and documentation.',
@@ -48,7 +48,7 @@ export const en = {
     showTooltips: 'Enable helpful floating hints when hovering over controls.',
     doubleClickFullscreen: 'Toggle fullscreen mode by double-clicking anywhere on the visualizer.',
     autoHideUi: 'Automatically hide the control panel after a period of inactivity.',
-    mirrorDisplay: 'Flip the visualizer output horizontally (useful for rear projection or webcams).',
+    mirrorDisplay: 'Flip the visualizer output horizontally (useful for rear projection).',
     showCustomText: 'Toggle the visibility of your custom message overlay.',
     textPulse: 'Text scales dynamically with the rhythm of the music.',
     textAudioReactive: 'Text opacity and size react to live audio amplitude.',
@@ -84,12 +84,12 @@ export const en = {
   startMic: 'Enable Audio',
   stopMic: 'Disable Audio',
   listening: 'Active',
-  identifying: 'AI Analyzing...',
+  identifying: 'AI Analyzing Track...',
   startExperience: 'Launch Experience',
   welcomeTitle: 'Aura Flux | The Sound of Light',
   welcomeText: 'Transmute every vibration into generative masterpieces. Powered by Gemini AI for real-time recognition, experience the ultimate synesthetic journey.',
   unsupportedTitle: 'Incompatible Browser',
-  unsupportedText: 'Aura Flux requires modern Web Audio and Media features. Please switch to a recent version of Chrome, Edge, or Safari to continue.',
+  unsupportedText: 'Aura Flux requires modern Web Audio features. Please switch to a recent version of Chrome, Edge, or Safari to continue.',
   hideOptions: 'Collapse',
   showOptions: 'Expand Options',
   reset: 'Reset System',
@@ -152,11 +152,11 @@ export const en = {
     retrowave: 'Retro Sunset',
     vocal: 'Vocal Focus'
   },
-  recognitionSource: 'AI Provider',
+  recognitionSource: 'AI Persona Provider',
   lyricsPosition: 'Lyrics Position',
   lyricsFont: 'Font Family',
   lyricsFontSize: 'Font Size',
-  simulatedDemo: 'Simulated (Demo)',
+  simulatedDemo: 'Simulated (Offline)',
   positions: {
       top: 'Top', center: 'Center', bottom: 'Bottom', tl: 'Top Left', tc: 'Top Center', tr: 'Top Right', ml: 'Mid Left', mc: 'Center', mr: 'Mid Right', bl: 'Bottom Left', bc: 'Bottom Center', br: 'Bottom Right'
   },
@@ -179,8 +179,8 @@ export const en = {
     global: 'Global', US: 'USA / West', CN: 'China', JP: 'Japan', KR: 'Korea', EU: 'Europe', LATAM: 'Latin America'
   },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'Neural Flow',
-    [VisualizerMode.CUBE_FIELD]: 'Quantum Field',
+    [VisualizerMode.NEURAL_FLOW]: 'Neural Flow (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Quantum Field (WebGL)',
     [VisualizerMode.PLASMA]: 'Plasma Flow',
     [VisualizerMode.BARS]: 'Frequency Bars',
     [VisualizerMode.PARTICLES]: 'Starfield (Drift)',
@@ -190,11 +190,9 @@ export const en = {
     [VisualizerMode.LASERS]: 'Concert Lasers',
     [VisualizerMode.FLUID_CURVES]: 'Aura Waves',
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles (DoF)',
-    [VisualizerMode.SILK]: 'Silk Waves',
-    [VisualizerMode.LIQUID]: 'Liquid Sphere',
-    [VisualizerMode.WAVEFORM]: 'Digital Waveform',
-    // Fix: Added missing translation
-    [VisualizerMode.TERRAIN]: 'Low-Poly Terrain (WebGL)'
+    [VisualizerMode.SILK]: 'Silk Waves (WebGL)',
+    [VisualizerMode.LIQUID]: 'Liquid Sphere (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Digital Waveform'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamic', [LyricsStyle.MINIMAL]: 'Minimalist'
@@ -202,7 +200,7 @@ export const en = {
   helpModal: {
     title: 'Aura Flux Guide',
     tabs: { guide: 'Guide', shortcuts: 'Controls', about: 'About' },
-    intro: 'Aura Flux transforms your microphone input into highly responsive, generative digital art using advanced spectral analysis.',
+    intro: 'Aura Flux transforms your microphone input into highly responsive, generative digital art using advanced spectral analysis and Gemini 3 Flash Intelligence.',
     shortcutsTitle: 'Keyboard Shortcuts',
     gesturesTitle: 'Touch Gestures',
     shortcutItems: {
@@ -241,7 +239,7 @@ export const en = {
     projectInfoTitle: 'Project Description',
     aboutDescription: 'A next-generation synesthetic experience. Aura Flux fuses high-precision Web Audio spectral analysis with Google Gemini 3 to transform sound into living, reactive light. Designed for VJs, Streamers, and immersive environments.',
     privacyTitle: 'Privacy Policy',
-    privacyText: 'Audio is analyzed locally. Temporary high-frequency snapshots are sent to Gemini solely for identification.',
+    privacyText: 'Audio is analyzed locally. Temporary encrypted high-frequency snapshots are sent to Gemini solely for identification.',
     version: 'Release', coreTech: 'Core Technology', repository: 'Repository', support: 'Support', reportBug: 'Report Bug'
   },
   onboarding: {
@@ -251,7 +249,7 @@ export const en = {
     next: 'Proceed', back: 'Previous', skip: 'Skip', finish: 'Launch App',
     features: {
       title: 'Experience Features',
-      visuals: { title: 'Generative Masterpieces', desc: '12+ reactive engines powered by WebGL and math-driven procedural art.' },
+      visuals: { title: 'Generative Masterpieces', desc: '15+ reactive engines powered by WebGL and math-driven procedural art.' },
       ai: { title: 'Gemini AI Intelligence', desc: 'Instant recognition of tracks and aesthetic mood through advanced AI grounding.' },
       privacy: { title: 'Secure & Private', desc: 'Processing stays local. We never record or store your private audio data.' }
     },

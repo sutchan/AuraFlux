@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.6.9
+ * Version: 1.6.54
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -36,7 +36,7 @@ export const es = {
     sensitivity: 'Amplifica la reacción visual al audio. Aumentar para entornos silenciosos.',
     smoothing: 'Amortiguación temporal. Valores altos dan fluidez líquida; bajos son más nerviosos.',
     fftSize: 'Resolución espectral. 4096 ofrece detalles finos pero consume más CPU.',
-    lyrics: 'Alterna la identificación de canciones y obtención de letras mediante IA.',
+    lyrics: 'Letras IA síncronas para visualización.',
     lyricsStyle: 'Personaliza la presentación visual de las letras sincronizadas.',
     region: 'Orienta el motor de búsqueda IA hacia la música de este mercado específico.',
     autoRotate: 'Cicla automáticamente a través de diferentes motores visuales.',
@@ -62,7 +62,7 @@ export const es = {
     textPulse: 'El texto escala dinámicamente con el ritmo de la música.',
     textAudioReactive: 'La opacidad y el tamaño del texto reaccionan al volumen.',
     customTextCycleColor: 'Cicla automáticamente por el espectro de colores para el texto.',
-    hideCursor: 'Oculta automáticamente el cursor del ratón tras inactividad.'
+    hideCursor: 'Ocultar Cursor tras inactividad.'
   },
   visualizerMode: 'Modo Visualizador',
   styleTheme: 'Tema Visual',
@@ -93,7 +93,7 @@ export const es = {
   unsupportedTitle: 'Navegador no compatible',
   unsupportedText: 'Aura Flux requiere funciones modernas de Web Audio. Por favor, usa una versión reciente de Chrome, Edge o Safari.',
   hideOptions: 'Contraer',
-  showOptions: 'Expandir Opciones',
+  showOptions: 'Descripción',
   reset: 'Reiniciar Sistema',
   resetVisual: 'Reiniciar Estética',
   resetText: 'Reiniciar Texto',
@@ -212,6 +212,8 @@ export const es = {
     LATAM: 'Latinoamérica'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'Flujo Neuronal (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Campo Cuántico (WebGL)',
     [VisualizerMode.PLASMA]: 'Flujo de Plasma',
     [VisualizerMode.BARS]: 'Espectro de Barras',
     [VisualizerMode.PARTICLES]: 'Viaje Estelar',
@@ -223,9 +225,7 @@ export const es = {
     [VisualizerMode.MACRO_BUBBLES]: 'Burbujas Macro (DoF)',
     [VisualizerMode.SILK]: 'Seda Flotante (WebGL)',
     [VisualizerMode.LIQUID]: 'Planeta Líquido (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Forma de onda elegante',
-    // Fix: Added missing translation
-    [VisualizerMode.TERRAIN]: 'Relieve Low-Poly (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Forma de onda elegante'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Diseño Estándar',

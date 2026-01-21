@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.6.9
+ * Version: 1.6.54
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -36,7 +36,7 @@ export const de = {
     sensitivity: 'Verstärkt die visuelle Reaktion auf Audio. Erhöhen für leise Umgebungen.',
     smoothing: 'Zeitliche Dämpfung. Höhere Werte ergeben flüssige Bewegungen; niedriger ist zackig.',
     fftSize: 'Spektrale Auflösung. 4096 bietet feine Details, verbraucht aber mehr CPU.',
-    lyrics: 'KI-gestützte Songidentifikation und Textabruf umschalten.',
+    lyrics: 'KI-gestützte Songidentifikation umschalten.',
     lyricsStyle: 'Passen Sie die visuelle Darstellung der synchronisierten Texte an.',
     region: 'Richtet die KI-Suchmaschine auf Musik dieses spezifischen Marktes aus.',
     autoRotate: 'Wechselt automatisch durch verschiedene visuelle Engines.',
@@ -89,11 +89,11 @@ export const de = {
   identifying: 'KI analysiert Track...',
   startExperience: 'Erlebnis Starten',
   welcomeTitle: 'Aura Flux | Der Klang des Lichts',
-  welcomeText: 'Verwandeln Sie jede Schwingung in ein generatives Meisterwerk. Angetrieben von Gemini AI für Echtzeit-Erkennung – erleben Sie die ultimative synästhetische Reise.',
+  welcomeText: 'Verwandeln Sie jede Schwingung in ein generatives Meisterwerk. Angetrieben von Gemini KI für Echtzeit-Erkennung – erleben Sie die ultimative synästhetische Reise.',
   unsupportedTitle: 'Browser nicht unterstützt',
   unsupportedText: 'Aura Flux erfordert moderne Web Audio Funktionen. Bitte nutzen Sie eine aktuelle Version von Chrome, Edge oder Safari.',
   hideOptions: 'Einklappen',
-  showOptions: 'Optionen anzeigen',
+  showOptions: 'Anzeigen',
   reset: 'System zurücksetzen',
   resetVisual: 'Ästhetik zurücksetzen',
   resetText: 'Text zurücksetzen',
@@ -118,7 +118,7 @@ export const de = {
   customTextPlaceholder: 'TEXT EINGEBEN',
   showText: 'Overlay anzeigen',
   pulseBeat: 'Pulsieren im Takt',
-  textSize: 'Schriftgröße',
+  textSize: 'Größe',
   textRotation: 'Drehung',
   textFont: 'Schriftart',
   textOpacity: 'Deckkraft',
@@ -154,7 +154,8 @@ export const de = {
     title: 'Smart Presets',
     hint: 'Wenden Sie kuratierte ästhetische Kombinationen mit einem Klick an.',
     select: 'Stimmung wählen...',
-    calm: 'Hypnotisch & Ruhig',
+    custom: 'Benutzerdefiniert / Modifiziert',
+    calm: 'Digital Waveform',
     party: 'Energetische Party',
     ambient: 'Ambient Fokus',
     cyberpunk: 'Cyberpunk Rush',
@@ -211,6 +212,8 @@ export const de = {
     LATAM: 'Lateinamerika'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'Neuronaler Fluss (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Quantenfeld (WebGL)',
     [VisualizerMode.PLASMA]: 'Fluid-Plasma',
     [VisualizerMode.BARS]: 'Frequenzbalken',
     [VisualizerMode.PARTICLES]: 'Sternenfeld',
@@ -222,9 +225,7 @@ export const de = {
     [VisualizerMode.MACRO_BUBBLES]: 'Makro-Blasen (DoF)',
     [VisualizerMode.SILK]: 'Seidenwellen (WebGL)',
     [VisualizerMode.LIQUID]: 'Flüssige Sphäre (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Elegante Wellenform',
-    // Fix: Added missing translation
-    [VisualizerMode.TERRAIN]: 'Low-Poly Terrain (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Digital Waveform'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard Layout',

@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.7.5
+ * Version: 1.7.11
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import React, { Suspense, useMemo } from 'react';
@@ -15,9 +15,7 @@ import {
     SilkWavesScene, 
     LiquidSphereScene, 
     CubeFieldScene,
-    NeuralFlowScene,
-    // Fix: Import missing scene
-    LowPolyTerrainScene
+    NeuralFlowScene
 } from './ThreeScenes';
 
 interface ThreeVisualizerProps {
@@ -29,28 +27,59 @@ interface ThreeVisualizerProps {
 
 const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
   
+  // Memoize Device Pixel Ratio calculation to prevent unnecessary re-renders
   const dpr = useMemo(() => {
+    if (!settings) return 1;
     return settings.quality === 'low' ? 0.8 : settings.quality === 'med' ? 1.0 : Math.min(window.devicePixelRatio, 1.5);
-  }, [settings.quality]);
+  }, [settings?.quality]);
 
+  // Memoize Bloom intensity based on the active mode for visual consistency
   const bloomIntensity = useMemo(() => {
       const base = 2.0;
-      if (mode === VisualizerMode.SILK) return base * 0.8;
-      if (mode === VisualizerMode.LIQUID) return base * 1.5;
-      if (mode === VisualizerMode.CUBE_FIELD) return base * 1.2;
-      if (mode === VisualizerMode.NEURAL_FLOW) return base * 1.8;
-      return base;
+      switch (mode) {
+          case VisualizerMode.SILK: return base * 0.8;
+          case VisualizerMode.LIQUID: return base * 1.5;
+          case VisualizerMode.CUBE_FIELD: return base * 1.2;
+          case VisualizerMode.NEURAL_FLOW: return base * 1.8;
+          default: return base;
+      }
   }, [mode]);
 
-  const enableTiltShift = useMemo(() => {
-      return settings.quality === 'high' && (
+  // Memoize post-processing logic
+  const postProcessingEffects = useMemo(() => {
+      if (!settings.glow) return null;
+
+      const enableTiltShift = settings.quality === 'high' && (
           mode === VisualizerMode.LIQUID || 
           mode === VisualizerMode.SILK
       );
-  }, [settings.quality, mode]);
 
+      return (
+          <EffectComposer multisampling={0}>
+              <Bloom 
+                  luminanceThreshold={0.15} 
+                  luminanceSmoothing={0.9} 
+                  intensity={bloomIntensity} 
+                  mipmapBlur={true} 
+                  radius={0.7}
+              />
+              {settings.quality === 'high' && (
+                  <ChromaticAberration 
+                      offset={new THREE.Vector2(0.0015, 0.0015)}
+                      radialModulation={false}
+                  />
+              )}
+              {enableTiltShift && (
+                  <TiltShift blur={0.1} />
+              )}
+          </EffectComposer>
+      );
+  }, [settings.glow, settings.quality, mode, bloomIntensity]);
+
+  // Memoize the active scene component to avoid expensive tree re-calculation
   const activeScene = useMemo(() => {
     if (!analyser || !settings) return null;
+    
     switch (mode) {
         case VisualizerMode.SILK:
             return <SilkWavesScene analyser={analyser} colors={colors} settings={settings} />;
@@ -60,9 +89,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             return <CubeFieldScene analyser={analyser} colors={colors} settings={settings} />;
         case VisualizerMode.NEURAL_FLOW:
             return <NeuralFlowScene analyser={analyser} colors={colors} settings={settings} />;
-        // Fix: Added TERRAIN scene case
-        case VisualizerMode.TERRAIN:
-            return <LowPolyTerrainScene analyser={analyser} colors={colors} settings={settings} />;
         default:
             return <NeuralFlowScene analyser={analyser} colors={colors} settings={settings} />;
     }
@@ -103,26 +129,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             {activeScene}
         </Suspense>
         
-        {settings.glow && (
-            <EffectComposer multisampling={0}>
-                <Bloom 
-                    luminanceThreshold={0.15} 
-                    luminanceSmoothing={0.9} 
-                    intensity={bloomIntensity} 
-                    mipmapBlur={true} 
-                    radius={0.7}
-                />
-                {settings.quality === 'high' && (
-                    <ChromaticAberration 
-                        offset={new THREE.Vector2(0.0015, 0.0015)}
-                        radialModulation={false}
-                    />
-                )}
-                {enableTiltShift && (
-                    <TiltShift blur={0.1} />
-                )}
-            </EffectComposer>
-        )}
+        {postProcessingEffects}
       </Canvas>
     </div>
   );

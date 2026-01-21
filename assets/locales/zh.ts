@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.48
+ * Version: 1.6.54
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,8 +24,8 @@ export const zh = {
     sensitivity: '音频响应增益。在安静环境下调高此值可增强视觉爆发力。',
     smoothing: '时域阻尼系数。高数值如液体般柔顺，低数值则反应锐利。',
     fftSize: '频谱采样精度。4096 提供极致细节，但会增加 CPU 负载。',
-    lyrics: '激活 AI 驱动的声景分析与歌词同步展示。',
-    lyricsStyle: '更改识别结果及歌词的排版风格。',
+    lyrics: '激活 AI 驱动的声景分析、曲目识别与通感描述。',
+    lyricsStyle: '更改识别结果及元数据的排版风格。',
     region: '针对特定音乐市场优化 AI 搜索的匹配权重。',
     autoRotate: '自动循环切换不同的视觉引擎。',
     rotateInterval: '切换到下一个视觉引擎前的停留时间（秒）。',
@@ -36,7 +36,7 @@ export const zh = {
     resetVisual: '仅重置视觉参数（速度、辉光、拖尾）至默认值。',
     resetText: '清除自定义文字内容、字体及排版设置。',
     resetAudio: '恢复灵敏度、平滑度及 FFT 分辨率为默认值。',
-    resetAi: '重置 AI 提供商、识别区域及歌词排版。',
+    resetAi: '重置 AI 角色、识别区域及歌词排版。',
     randomize: '随机生成一套意想不到的模式与配色组合。',
     fullscreen: '进入沉浸式全屏交互模式。',
     help: '查看快捷键操作指南与项目详细文档。',
@@ -49,7 +49,7 @@ export const zh = {
     showTooltips: '鼠标悬停在控件上时显示功能说明。',
     doubleClickFullscreen: '允许通过双击屏幕任意位置切换全屏模式。',
     autoHideUi: '在无操作时自动隐藏底部控制面板。',
-    mirrorDisplay: '水平翻转画面（适用于背投或摄像头模式）。',
+    mirrorDisplay: '水平翻转画面（适用于背投或镜像显示）。',
     showCustomText: '切换自定义文字图层的可见性。',
     textPulse: '文字大小随音乐节拍动态缩放。',
     textAudioReactive: '文字的透明度和大小将响应实时音量。',
@@ -59,8 +59,8 @@ export const zh = {
     quality: '调节渲染分辨率与粒子密度。',
     textSize: '缩放自定义文字图层的大小。',
     textRotation: '旋转文字覆盖层。',
-    textPosition: '自定义文字的锚定锚点位置。',
-    lyricsPosition: 'AI 歌词覆盖层的显示锚点位置。'
+    textPosition: '自定义文字的锚定位置。',
+    lyricsPosition: 'AI 歌词覆盖层的显示锚点。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -74,7 +74,7 @@ export const zh = {
   cycleColors: '色彩自动流转',
   colorInterval: '切换间隔 (秒)',
   cycleSpeed: '循环周期 (秒)',
-  monitorAudio: '音频监听 (Monitor)',
+  monitorAudio: '音频监听',
   audioInput: '输入源选择',
   lyrics: 'AI 通感识别', 
   showLyrics: '激活通感引擎',
@@ -87,7 +87,7 @@ export const zh = {
   identifying: '正在捕获声景特征...', 
   startExperience: '开启视听盛宴',
   welcomeTitle: 'Aura Flux | 灵动流光',
-  welcomeText: '将旋律凝炼为极光，让节奏跃然屏上。融合 Gemini AI 实时声景分析，为您开启感官交响的全新维度。',
+  welcomeText: '将旋律凝炼为极光，让节奏跃然屏上。融合 Gemini AI 实时声景分析，为您开启感官交响的全新维度平衡感。',
   unsupportedTitle: '浏览器不受支持',
   unsupportedText: 'Aura Flux 需要现代浏览器功能（例如 Web Audio API）才能运行。请更新到最新版本的 Chrome、Edge 或 Safari。',
   hideOptions: '收起面板',
@@ -117,7 +117,7 @@ export const zh = {
   customTextPlaceholder: '输入文字...',
   showText: '显示文字图层',
   pulseBeat: '随节拍律动',
-  textAudioReactive: '音频响应 (大小/透明度)',
+  textAudioReactive: '音频响应',
   textSize: '字体大小',
   textRotation: '旋转角度',
   textFont: '字体样式',
@@ -162,11 +162,11 @@ export const zh = {
     retrowave: '复古夕阳',
     vocal: '人声专注'
   },
-  recognitionSource: 'AI 识别源',
+  recognitionSource: 'AI 角色偏好',
   lyricsPosition: '歌词显示位置',
   lyricsFont: '字体样式',
   lyricsFontSize: '字体大小',
-  simulatedDemo: '模拟演示 (Demo)',
+  simulatedDemo: '演示模式 (离线)',
   positions: {
       top: '顶部', center: '居中', bottom: '底部', tl: '左上', tc: '中上', tr: '右上', ml: '左中', mc: '正中', mr: '右中', bl: '左下', bc: '中下', br: '右下'
   },
@@ -203,9 +203,7 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '微观液泡', 
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '数字波形',
-    // Fix: Added missing translation
-    [VisualizerMode.TERRAIN]: '低多边形山脉 (WebGL)'
+    [VisualizerMode.WAVEFORM]: '数字波形'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '标准排版',
@@ -215,7 +213,7 @@ export const zh = {
   helpModal: {
     title: 'Aura Flux 交互指南',
     tabs: { guide: '指南', shortcuts: '控制', about: '关于' },
-    intro: 'Aura Flux 是一款沉浸式的视听交互工具，它利用高精度麦克风采样，将音频信号实时转化为数学生成的数字艺术。',
+    intro: 'Aura Flux 是一款沉浸式的视听交互工具，它利用高精度麦克风采样，结合 Gemini 3 Flash 智能大脑，将音频信号实时转化为数学生成的数字艺术。',
     shortcutsTitle: '快捷操作键',
     gesturesTitle: '触控手势',
     shortcutItems: {
@@ -252,9 +250,9 @@ export const zh = {
       fftSize: '决定了频谱分析的颗粒度，即频段采样数量。'
     },
     projectInfoTitle: '项目简介',
-    aboutDescription: '一个基于实时频域分析与 Gemini AI 语义识别的沉浸式音乐可视化套件。',
+    aboutDescription: '一个基于实时频域分析与 Gemini AI 语义识别的沉浸式音乐可视化套件。适用于直播背景、VJ 演出及沉浸式冥想环境。',
     privacyTitle: '隐私与安全',
-    privacyText: '音频分析完全在本地完成。仅在识别歌曲时，会将加密的频率特征临时发送至云端，绝不存储或上传任何原始录音数据。',
+    privacyText: '音频分析完全在本地完成。仅在识别歌曲时，会将加密的频谱特征临时发送至 Gemini 引擎，绝不存储或上传任何原始录音数据。',
     version: '版本号',
     coreTech: '核心技术',
     repository: '代码仓库',
@@ -273,7 +271,7 @@ export const zh = {
       title: '核心特性',
       visuals: {
         title: '生成式艺术杰作',
-        desc: '12+ 种基于 WebGL 的数学动力学引擎，将声波具象化。'
+        desc: '15+ 种基于 WebGL 的数学动力学引擎，将声波具象化。'
       },
       ai: {
         title: 'Gemini AI 智能大脑',

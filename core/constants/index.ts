@@ -1,14 +1,14 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.6.48
+ * Version: 1.6.54
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, Region, Position, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.6.48';
+export const APP_VERSION = '1.6.54';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
@@ -32,8 +32,6 @@ export const VISUALIZER_PRESETS = {
   [VisualizerMode.SILK]: { name: 'Silk Waves', description: 'Iridescent flowing fabric (WebGL)' },
   [VisualizerMode.LIQUID]: { name: 'Liquid Sphere', description: 'Ferrofluid-like reactive matter (WebGL)' },
   [VisualizerMode.CUBE_FIELD]: { name: 'Quantum Field', description: 'Infinite 3D matrix flight (WebGL)' },
-  // Fix: Added TERRAIN preset
-  [VisualizerMode.TERRAIN]: { name: 'Low-Poly Terrain', description: 'Retro synthwave landscape (WebGL)' },
 };
 
 export const AVAILABLE_FONTS = [

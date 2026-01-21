@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.6.9
+ * Version: 1.6.54
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -36,8 +36,8 @@ export const ko = {
     sensitivity: '오디오 게인 제어입니다. 조용한 환경에서는 값을 높여 시각적 반응을 증폭시키세요.',
     smoothing: '시계열 댐핑 계수입니다. 높은 값은 액체처럼 부드럽게, 낮은 값은 날카롭게 반응합니다.',
     fftSize: '주파수 분석 해상도입니다. 4096은 정밀한 디테일을 제공하나 CPU 부하가 증가합니다.',
-    lyrics: 'AI 기반 트랙 식별 및 가사 표시 기능을 토글합니다.',
-    lyricsStyle: '식별된 정보 및 가사의 레이아웃 스타일을 변경합니다.',
+    lyrics: 'AI 기반 트랙 식별 기능을 토글합니다.',
+    lyricsStyle: '식별된 정보의 레이아웃 스타일을 변경합니다.',
     region: 'AI 검색 엔진의 가중치를 특정 지역의 음악 시장에 맞게 최적화합니다.',
     autoRotate: '다양한 시각 효과 엔진을 일정 시간마다 자동으로 순환시킵니다.',
     rotateInterval: '다음 엔진으로 전환되기 전까지의 대기 시간(초)입니다.',
@@ -93,7 +93,7 @@ export const ko = {
   unsupportedTitle: '지원되지 않는 브라우저',
   unsupportedText: 'Aura Flux는 최신 Web Audio 기능이 필요합니다. 최신 버전의 Chrome, Edge 또는 Safari를 사용해 주세요.',
   hideOptions: '패널 접기',
-  showOptions: '옵션 표시',
+  showOptions: '설정 표시',
   reset: '시스템 전체 초기화',
   resetVisual: '미학 설정 초기화',
   resetText: '텍스트 설정 초기화',
@@ -107,8 +107,8 @@ export const ko = {
   hideCursor: '마우스 커서 숨김',
   customColor: '텍스트 색상',
   randomizeTooltip: '모든 시각 설정 무작위화 (R)',
-  smoothing: '동적 평활도',
-  fftSize: '주파수 해상도 (FFT)',
+  smoothing: '평활도',
+  fftSize: '해상도 (FFT)',
   appInfo: '앱 정보',
   appDescription: '실시간 스펙트럼 분석과 Gemini AI 인식을 결합한 몰입형 음악 시각화 도구.',
   version: '빌드',
@@ -118,11 +118,12 @@ export const ko = {
   customTextPlaceholder: '텍스트 입력',
   showText: '오버레이 표시',
   pulseBeat: '비트에 맞춰 고동',
-  textSize: '폰트 크기',
-  textRotation: '회전 각도',
-  textFont: '폰트 스타일',
+  textAudioReactive: '오디오 반응형',
+  textSize: '크기',
+  textRotation: '회전',
+  textFont: '글꼴',
   textOpacity: '불투명도',
-  textPosition: '표시 위치',
+  textPosition: '위치',
   quality: '렌더링 품질',
   qualities: {
     low: '낮음',
@@ -139,8 +140,11 @@ export const ko = {
   },
   systemPanel: {
     interface: '인터페이스',
-    behavior: '시스템 동작',
-    maintenance: '유지 관리'
+    behavior: '동작',
+    maintenance: '유지 관리',
+    engine: '엔진',
+    audio: '오디오',
+    ai: 'AI'
   },
   showFps: 'FPS 표시',
   showTooltips: '툴팁 표시',
@@ -151,8 +155,9 @@ export const ko = {
     title: '스마트 프리셋',
     hint: '전문가가 튜닝한 시각적 조합을 한 번의 클릭으로 적용합니다.',
     select: '무드 선택...',
-    calm: '최면 및 평온',
-    party: '역동적인 파티',
+    custom: '사용자 지정 / 수정됨',
+    calm: '디지털 파형',
+    party: '에너제틱 파티',
     ambient: '앰비언트 포커스',
     cyberpunk: '사이버펑크',
     retrowave: '레트로 웨이브',
@@ -160,8 +165,8 @@ export const ko = {
   },
   recognitionSource: 'AI 프로바이더',
   lyricsPosition: '가사 위치',
-  lyricsFont: '폰트 스타일',
-  lyricsFontSize: '폰트 크기',
+  lyricsFont: '글꼴',
+  lyricsFontSize: '크기',
   simulatedDemo: '데모 모드 (Simulated)',
   positions: {
       top: '상단',
@@ -195,7 +200,7 @@ export const ko = {
     tryDemo: '데모 모드 시도 (오디오 없음)'
   },
   aiState: {
-    active: '인식 기능 활성화됨',
+    active: '인식 활성화됨',
     enable: 'AI 인식 시작'
   },
   regions: {
@@ -208,24 +213,24 @@ export const ko = {
     LATAM: '남미'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: '신경 유체 (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: '양자 필드 (WebGL)',
     [VisualizerMode.PLASMA]: '플라즈마 플로우',
-    [VisualizerMode.BARS]: '스펙트럼 분석기',
+    [VisualizerMode.BARS]: '주파수 바',
     [VisualizerMode.PARTICLES]: '성간 항해',
     [VisualizerMode.TUNNEL]: '기하학적 터널',
-    [VisualizerMode.RINGS]: '공명 네온 링',
+    [VisualizerMode.RINGS]: '네온 링',
     [VisualizerMode.NEBULA]: '심우주 성운',
     [VisualizerMode.LASERS]: '레이저 매트릭스',
     [VisualizerMode.FLUID_CURVES]: '오로라의 춤',
     [VisualizerMode.MACRO_BUBBLES]: '마이크로 버블 (DoF)',
-    [VisualizerMode.SILK]: '유광 실크 (WebGL)',
+    [VisualizerMode.SILK]: '실크 웨이브 (WebGL)',
     [VisualizerMode.LIQUID]: '유체 행성 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '실크 파형',
-    // Fix: Added missing translation
-    [VisualizerMode.TERRAIN]: '폴리곤 산맥 (WebGL)'
+    [VisualizerMode.WAVEFORM]: '디지털 파형'
   },
   lyricsStyles: {
-    [LyricsStyle.STANDARD]: '표준 레이아웃',
-    [LyricsStyle.KARAOKE]: '동적 반응',
+    [LyricsStyle.STANDARD]: '표준',
+    [LyricsStyle.KARAOKE]: '동적',
     [LyricsStyle.MINIMAL]: '미니멀리즘'
   },
   helpModal: {
@@ -236,13 +241,13 @@ export const ko = {
         about: '정보'
     },
     intro: 'Aura Flux는 고정밀 오디오 샘플링을 기반으로 소리를 실시간 수리적 디지털 아트로 변환하는 공감각 도구입니다.',
-    shortcutsTitle: '키보드 상호작용',
+    shortcutsTitle: '키보드 조작',
     gesturesTitle: '터치 제스처',
     shortcutItems: {
       toggleMic: '오디오 입력 전환',
       fullscreen: '전체 화면 전환',
       randomize: '미학 요소 랜덤화',
-      lyrics: 'AI 트랙 정보 전환',
+      lyrics: '트랙 정보 전환',
       hideUi: '제어 패널 표시/숨김',
       glow: '글로우 효과 전환',
       trails: '잔상 효과 전환',
@@ -279,7 +284,7 @@ export const ko = {
     coreTech: '핵심 기술',
     repository: '저장소',
     support: '지원',
-    reportBug: '버그 신고'
+    reportBug: '부그 신고'
   },
   onboarding: {
     welcome: 'Aura Flux에 오신 것을 환영합니다',
@@ -293,7 +298,7 @@ export const ko = {
       title: '핵심 기능',
       visuals: {
         title: '제너레이티브 아트',
-        desc: 'WebGL 기반의 12종 이상의 수리 엔진이 음파를 형상화합니다.'
+        desc: '15+ 종 기반의 수학 엔진이 음파를 형상화합니다.'
       },
       ai: {
         title: 'Gemini AI 인텔리전스',

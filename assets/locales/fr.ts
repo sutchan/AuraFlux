@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.6.9
+ * Version: 1.6.54
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -36,7 +36,7 @@ export const fr = {
     sensitivity: 'Amplifie la réaction visuelle à l\'audio. Augmentez pour les environnements calmes.',
     smoothing: 'Amortissement temporel. Des valeurs élevées donnent un mouvement fluide.',
     fftSize: 'Résolution spectrale. 4096 fournit des détails fins mais utilise plus de CPU.',
-    lyrics: 'Active l\'identification de chanson et la récupération des paroles par IA.',
+    lyrics: 'Identification de chanson par IA.',
     lyricsStyle: 'Personnalisez la présentation visuelle des paroles synchronisées.',
     region: 'Oriente le moteur de recherche IA vers la musique de ce marché spécifique.',
     autoRotate: 'Change automatiquement de moteur visuel.',
@@ -67,7 +67,7 @@ export const fr = {
   visualizerMode: 'Mode Visualiseur',
   styleTheme: 'Thème Visuel',
   settings: 'Avancé',
-  sensitivity: 'Sensibilidad',
+  sensitivity: 'Sensibilité',
   speed: 'Vitesse d\'Évolution',
   glow: 'Éclat Néon',
   trails: 'Traînées de Mouvement',
@@ -78,7 +78,7 @@ export const fr = {
   cycleSpeed: 'Durée Cycle (s)',
   monitorAudio: 'Moniteur Audio',
   audioInput: 'Périphérique d\'Entrée',
-  lyrics: 'Paroles IA',
+  lyrics: 'Identification IA',
   showLyrics: 'Activer l\'Identification',
   displaySettings: 'Affichage',
   language: 'Langue Système',
@@ -118,7 +118,7 @@ export const fr = {
   customTextPlaceholder: 'ENTRER TEXTE',
   showText: 'Afficher Superposition',
   pulseBeat: 'Pulsation au Rythme',
-  textSize: 'Taille Police',
+  textSize: 'Taille',
   textRotation: 'Rotation',
   textFont: 'Police',
   textOpacity: 'Opacité',
@@ -131,7 +131,7 @@ export const fr = {
   },
   visualPanel: {
     effects: 'Effets',
-    automation: 'Automatización',
+    automation: 'Automatisation',
     display: 'Affichage'
   },
   audioPanel: {
@@ -154,11 +154,12 @@ export const fr = {
     title: 'Préréglages Intelligents',
     hint: 'Appliquez des combinaisons esthétiques professionnelles en un clic.',
     select: 'Choisir une ambiance...',
-    calm: 'Hypnotique & Calme',
+    custom: 'Personnalisé / Modifié',
+    calm: 'Digital Waveform',
     party: 'Fête Énergique',
     ambient: 'Focus Ambiant',
-    cyberpunk: 'Cyberpunk Rush',
-    retrowave: 'Retro Sunset',
+    cyberpunk: 'Rush Cyberpunk',
+    retrowave: 'Coucher de soleil Rétro',
     vocal: 'Focus Vocal'
   },
   recognitionSource: 'Fournisseur IA',
@@ -211,6 +212,8 @@ export const fr = {
     LATAM: 'Amérique Latine'
   },
   modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'Flux Neuronal (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Champ Quantique (WebGL)',
     [VisualizerMode.PLASMA]: 'Flux Plasma',
     [VisualizerMode.BARS]: 'Barres de Fréquence',
     [VisualizerMode.PARTICLES]: 'Voyage Stellaire',
@@ -222,9 +225,7 @@ export const fr = {
     [VisualizerMode.MACRO_BUBBLES]: 'Macro-bulles (DoF)',
     [VisualizerMode.SILK]: 'Soie Flottante (WebGL)',
     [VisualizerMode.LIQUID]: 'Sphère Liquide (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Forme d\'onde élégante',
-    // Fix: Added missing translation
-    [VisualizerMode.TERRAIN]: 'Relief Low-Poly (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Digital Waveform'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Mise en page Standard',

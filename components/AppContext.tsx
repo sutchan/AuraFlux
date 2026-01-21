@@ -1,9 +1,9 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.1.8
+ * Version: 1.1.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-20 10:45
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
@@ -184,10 +184,10 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   
   const resetAudioSettings = useCallback(() => setSettings(p => ({ ...p, sensitivity: DEFAULT_SETTINGS.sensitivity, smoothing: DEFAULT_SETTINGS.smoothing, fftSize: DEFAULT_SETTINGS.fftSize })), [setSettings]);
 
+  // FIX: Removed reference to VisualizerMode.TERRAIN as it is not defined in the VisualizerMode enum.
   const isThreeMode = useMemo(() => 
     mode === VisualizerMode.SILK || 
     mode === VisualizerMode.LIQUID || 
-    mode === VisualizerMode.TERRAIN ||
     mode === VisualizerMode.CUBE_FIELD ||
     mode === VisualizerMode.NEURAL_FLOW
   , [mode]);

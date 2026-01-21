@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.6.19
+ * Version: 1.6.54
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,7 @@ export const ar = {
     sensitivity: 'تضخيم التفاعل البصري مع الصوت. قم بزيادته في البيئات الهادئة.',
     smoothing: 'التخميد الزمني. القيم العالية تعطي حركة سائلة.',
     fftSize: 'الدقة الطيفية. 4096 يوفر تفاصيل دقيقة ولكنه يستهلك المزيد من المعالج.',
-    lyrics: 'تبديل التعرف على الأغاني وجلب الكلمات بواسطة الذكاء الاصطناعي.',
+    lyrics: 'تفعيل/تعطيل التعرف على الأغاني بواسطة الذكاء الاصطناعي.',
     lyricsStyle: 'تخصيص العرض المرئي للكلمات المتزامنة.',
     region: 'توجيه محرك بحث الذكاء الاصطناعي نحو الموسيقى في هذا السوق المحدد.',
     autoRotate: 'التنقل تلقائيًا عبر محركات بصرية مختلفة.',
@@ -81,7 +81,7 @@ export const ar = {
   unsupportedTitle: 'المتصفح غير مدعوم',
   unsupportedText: 'يتطلب Aura Flux ميزات Web Audio حديثة. يرجى استخدام أحدث إصدار من Chrome أو Safari.',
   hideOptions: 'طي اللوحة',
-  showOptions: 'عرض الخيارات',
+  showOptions: 'خيارات',
   reset: 'إعادة تعيين النظام',
   resetVisual: 'إعادة تعيين الجماليات',
   resetText: 'إعادة تعيين النص',
@@ -106,7 +106,7 @@ export const ar = {
   customTextPlaceholder: 'أدخل النص',
   showText: 'إظهار التراكب',
   pulseBeat: 'نبض مع الإيقاع',
-  textSize: 'حجم الخط',
+  textSize: 'الحجم',
   textRotation: 'الدوران',
   textFont: 'نوع الخط',
   textOpacity: 'الشفافية',
@@ -130,7 +130,7 @@ export const ar = {
   autoHideUi: 'إخفاء الواجهة تلقائياً',
   mirrorDisplay: 'عكس العرض',
   presets: {
-    title: 'إعدادات مسبقة ذكية', hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.', select: 'اختر مزاجاً...', calm: 'منوم وهادئ', party: 'حفلة نشطة', ambient: 'تركيز محيطي', cyberpunk: 'فورة سايبربانك', retrowave: 'روب ريترو', vocal: 'تركيز صوتي'
+    title: 'إعدادات مسبقة ذكية', hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.', select: 'اختر مزاجاً...', calm: 'شكل موجي رقمي', party: 'حفلة نشطة', ambient: 'تركيز محيطي', cyberpunk: 'فورة سايبربانك', retrowave: 'روب ريترو', vocal: 'تركيز صوتي'
   },
   recognitionSource: 'مزود الذكاء الاصطناعي',
   lyricsPosition: 'الموضع',
@@ -167,8 +167,7 @@ export const ar = {
     [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو (DoF)',
     [VisualizerMode.SILK]: 'الحرير العائم (WebGL)',
     [VisualizerMode.LIQUID]: 'الكوكب السائل (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'شكل موجي أنيق',
-    [VisualizerMode.TERRAIN]: 'التضاريس المضلعة (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'تنسيق قياسي', [LyricsStyle.KARAOKE]: 'تفاعل ديناميكي', [LyricsStyle.MINIMAL]: 'بسيط جداً'

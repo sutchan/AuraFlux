@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.6.19
+ * Version: 1.6.54
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,7 @@ export const ru = {
     sensitivity: 'Усиление реакции на звук. Увеличьте для тихих помещений.',
     smoothing: 'Временное сглаживание. Высокие значения — плавность, низкие — резкость.',
     fftSize: 'Спектральное разрешение. 4096 дает детализацию, но нагружает ЦП.',
-    lyrics: 'Включить распознавание песен и получение текстов с помощью ИИ.',
+    lyrics: 'Идентификация песен с помощью ИИ.',
     lyricsStyle: 'Настроить визуальное представление синхронизированных текстов.',
     region: 'Ориентировать поиск ИИ на музыку этого конкретного рынка.',
     autoRotate: 'Автоматически переключать визуальные движки.',
@@ -107,7 +107,7 @@ export const ru = {
   showText: 'Показать Слой',
   pulseBeat: 'Пульсация под Бит',
   textAudioReactive: 'Аудио Реактивность',
-  textSize: 'Размер Шрифта',
+  textSize: 'Размер',
   textRotation: 'Вращение',
   textFont: 'Шрифт',
   textOpacity: 'Прозрачность',
@@ -168,8 +168,7 @@ export const ru = {
     [VisualizerMode.MACRO_BUBBLES]: 'Макро-пузырьки (DoF)',
     [VisualizerMode.SILK]: 'Мерцающий шелк (WebGL)',
     [VisualizerMode.LIQUID]: 'Жидкая планета (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Элегантная осциллограмма',
-    [VisualizerMode.TERRAIN]: 'Полигональный ландшафт (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Цифровой волнообразный график'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Стандарт', [LyricsStyle.KARAOKE]: 'Динамичный', [LyricsStyle.MINIMAL]: 'Минимализм'

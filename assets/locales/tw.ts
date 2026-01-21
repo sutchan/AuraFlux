@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.43
+ * Version: 1.6.54
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,19 +24,19 @@ export const tw = {
     sensitivity: '音訊響應增益。在安靜環境下調高此值可增強視覺爆發力。',
     smoothing: '時域阻尼係數。高數值如液體般柔順，低數值則反應銳利。',
     fftSize: '頻譜採樣精度。4096 提供極致細節但消耗更多 CPU 資源。',
-    lyrics: '激活 AI 驅動的聲景分析與歌詞同步展示。',
-    lyricsStyle: '更改辨識結果及歌詞的排版風格。',
+    lyrics: '激活 AI 驅動的聲景分析、曲目辨識與通感描述。',
+    lyricsStyle: '更改辨識結果及元數據的排版風格。',
     region: '針對特定音樂市場優化 AI 搜尋的匹配權重。',
     autoRotate: '自動循環切換不同的視覺化引擎。',
     rotateInterval: '自動切換到下一個視覺化引擎前的停留時間（秒）。',
     cycleColors: '隨時間推移自動平滑過渡色彩主題。',
-    colorInterval: '平滑過渡到下一個色彩主題前的停留時間（秒）。',
+    colorInterval: '平滑過渡到下一色彩主題前的停留時間（秒）。',
     reset: '將所有應用設定、語言及音訊選項恢復至原廠狀態。',
     confirmReset: '確認重設？此操作無法復原。',
     resetVisual: '僅重置視覺參數（速度、光暈、殘影）至預設值。',
     resetText: '清除自訂文字內容、字體及排版設定。',
     resetAudio: '恢復靈敏度、平滑度及 FFT 解析度為預設值。',
-    resetAi: '重置 AI 提供商、辨識區域及歌詞排版。',
+    resetAi: '重置 AI 角色、辨識區域及歌詞排版。',
     randomize: '隨機生成一套意想不到的模式與配色組合。',
     fullscreen: '進入沉浸式全螢幕互動模式。',
     help: '查看快捷鍵操作指南與專案詳細文件。',
@@ -117,7 +117,7 @@ export const tw = {
   customTextPlaceholder: '輸入文字',
   showText: '顯示文字圖層',
   pulseBeat: '隨節奏律動',
-  textAudioReactive: '音訊響應 (大小/透明度)',
+  textAudioReactive: '音訊響應',
   textSize: '字體大小',
   textRotation: '旋轉角度',
   textFont: '字體樣式',
@@ -153,7 +153,7 @@ export const tw = {
     retrowave: '復古夕陽',
     vocal: '人聲專注'
   },
-  recognitionSource: 'AI 辨識源',
+  recognitionSource: 'AI 角色偏好',
   lyricsPosition: '歌詞顯示位置',
   lyricsFont: '字體樣式',
   lyricsFontSize: '字體大小',
@@ -188,9 +188,7 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '數字波形',
-    // Fix: Added missing translation
-    [VisualizerMode.TERRAIN]: '低多邊形山脈 (WebGL)'
+    [VisualizerMode.WAVEFORM]: '數字波形'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準排版', [LyricsStyle.KARAOKE]: '動態律動', [LyricsStyle.MINIMAL]: '極簡主義'
@@ -198,7 +196,7 @@ export const tw = {
   helpModal: {
     title: 'Aura Flux 互動指南',
     tabs: { guide: '指南', shortcuts: '快捷鍵', about: '關於' },
-    intro: 'Aura Flux 是一款沉浸式的視聽互動工具，它利用高精度麥克風取樣，將音訊訊號即時轉化為數學生成的數位藝術。',
+    intro: 'Aura Flux 是一款沉浸式的視聽互動工具，它利用高精度麥克風取樣，結合 Gemini 3 智能大腦，將音訊訊號即時轉化為數學生成的數位藝術。',
     shortcutsTitle: '控制快捷鍵',
     gesturesTitle: '觸控手势',
     shortcutItems: {
@@ -220,16 +218,16 @@ export const tw = {
       sensitivity: '控制視覺元素對振幅反應的增益。', speed: '調節生成演算法在時間維度上的演化速率。', glow: '後期處理中的全域泛光強度，增強氛圍感。', trails: '控制像素在畫面上的停留時間，產生運動模糊效果。', smoothing: '音訊資料的平滑係數，越高則過渡越圓滑。', fftSize: '決定了頻譜分析的顆粒度，即頻段採樣數量。'
     },
     projectInfoTitle: '專案簡介',
-    aboutDescription: '下一代通感互動體驗。Aura Flux 融合了高精度即時頻譜分析與 Google Gemini 3 多模態人工智慧，將無形的聲波轉化為有生命的動態光影藝術。適用於 VJ 演出、直播背景、專注陪伴及空間氛圍裝飾。',
+    aboutDescription: '下一代通感互動體驗。Aura Flux 融合了高精度即時頻譜分析與 Google Gemini 3 多模態人工智慧，將無形的聲波轉化為有生命的動態光影藝術。適用於 VJ 演出、直播背景及沉浸式冥想。',
     privacyTitle: '隱私與安全',
-    privacyText: '音訊分析完全在本地完成。僅在辨識歌曲時，會將加密的頻率特徵臨時發送至雲端，絕不存儲或上傳任何原始錄音數據。',
+    privacyText: '音訊分析完全在本地完成。僅在辨識歌曲時，會將加密的頻率特徵臨時發送至 Gemini 引擎，絕不存儲或上傳任何原始錄音數據。',
     version: '版本號', coreTech: '核心技術', repository: '程式庫', support: '技術支援', reportBug: '回報 Bug'
   },
   onboarding: {
     welcome: '歡迎體驗 Aura Flux', subtitle: '新一代 AI 音樂通感引擎', selectLanguage: '選擇您的語言', next: '繼續', back: '返回', skip: '跳過', finish: '立即開啟',
     features: {
       title: '核心特性',
-      visuals: { title: '生成式藝術傑作', desc: '12+ 種基於 WebGL 的數學動力學引擎，將聲波具象化。' },
+      visuals: { title: '生成式藝術傑作', desc: '15+ 種基於 WebGL 的數學動力學引擎，將聲波具象化。' },
       ai: { title: 'Gemini AI 智能大腦', desc: '實時識別曲目元數據與視覺情緒，由 Google Gemini 3 提供支持。' },
       privacy: { title: '隱私安全保障', desc: '音訊分析完全在本地運行，我們絕不記錄或存儲您的私人聲音數據。' }
     },

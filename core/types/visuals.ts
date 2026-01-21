@@ -1,9 +1,9 @@
 /**
  * File: core/types/visuals.ts
- * Version: 1.6.48
+ * Version: 1.6.54
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 11:00
+ * Updated: 2025-02-19 17:00
  */
 
 import { Position, Region } from './common';
@@ -15,8 +15,6 @@ export enum VisualizerMode {
   SILK = 'SILK',
   LIQUID = 'LIQUID',
   CUBE_FIELD = 'CUBE_FIELD',
-  // Fix: Added missing TERRAIN mode
-  TERRAIN = 'TERRAIN',
 
   // Modern 2D Modes
   WAVEFORM = 'WAVEFORM', 
