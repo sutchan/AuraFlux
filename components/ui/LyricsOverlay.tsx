@@ -1,7 +1,7 @@
 
 /**
  * File: components/ui/LyricsOverlay.tsx
- * Version: 1.0.5
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -22,7 +22,8 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   const containerRef = useRef<HTMLDivElement>(null);
 
   const isPreview = song?.matchSource === 'PREVIEW';
-  const isEnabled = isPreview || (showLyrics && !!song && (!!song.lyricsSnippet || song.identified));
+  // Allow showing text if we have a snippet, even if identified is false (generic description case)
+  const isEnabled = isPreview || (showLyrics && !!song && (!!song.lyricsSnippet || song.identified || !!song.title));
   
   useAudioPulse({
     elementRef: containerRef,
@@ -35,8 +36,17 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   });
 
   if (!isEnabled) return null;
-  const text = (song?.lyricsSnippet || "").replace(/\[\d{2}:\d{2}(\.\d{1,3})?\]/g, '').trim();
+  
+  // Fallback to title/artist if no snippet is available (e.g. for instrumental tracks or partial matches)
+  let rawText = song?.lyricsSnippet;
+  if (!rawText && song) {
+      if (song.identified) rawText = `${song.title} - ${song.artist}`;
+      else rawText = song.title; // Show the sound description
+  }
+  
+  const text = (rawText || "").replace(/\[\d{2}:\d{2}(\.\d{1,3})?\]/g, '').trim();
   if (!text) return null;
+  
   const lines = text.split('\n').slice(0, 6);
 
   let textClass = "";
@@ -49,15 +59,16 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   if (lyricsStyle === LyricsStyle.KARAOKE) {
      textClass = "font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-white to-purple-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]";
      const sizeVw = baseSizeVw;
-     fontStyle = { ...fontStyle, fontSize: `min(${sizeVw}vw, ${sizeVw * 12}px)`, lineHeight: 1.3 };
+     // Add px fallback for very small screens
+     fontStyle = { ...fontStyle, fontSize: `max(24px, min(${sizeVw}vw, ${sizeVw * 12}px))`, lineHeight: 1.3 };
   } else if (lyricsStyle === LyricsStyle.MINIMAL) {
      textClass = "font-mono text-white/80 tracking-[0.2em]";
      const sizeVw = baseSizeVw * 0.6;
-     fontStyle = { ...fontStyle, fontSize: `min(${sizeVw}vw, ${sizeVw * 8.5}px)`, lineHeight: 1.8 };
+     fontStyle = { ...fontStyle, fontSize: `max(14px, min(${sizeVw}vw, ${sizeVw * 8.5}px))`, lineHeight: 1.8 };
   } else {
      textClass = "font-serif italic text-white drop-shadow-md";
      const sizeVw = baseSizeVw * 0.9;
-     fontStyle = { ...fontStyle, fontSize: `min(${sizeVw}vw, ${sizeVw * 10}px)`, lineHeight: 1.4 };
+     fontStyle = { ...fontStyle, fontSize: `max(18px, min(${sizeVw}vw, ${sizeVw * 10}px))`, lineHeight: 1.4 };
   }
 
   const getPositionClasses = () => {
@@ -77,7 +88,8 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   };
 
   return (
-    <div className={`pointer-events-none fixed inset-0 z-10 flex flex-col px-6 pt-24 pb-32 ${getPositionClasses()}`}>
+    // Added pb-safe and extra padding for mobile bottom area
+    <div className={`pointer-events-none fixed inset-0 z-10 flex flex-col px-6 pt-24 pb-48 md:pb-32 pb-safe ${getPositionClasses()}`}>
       <div 
         ref={containerRef} 
         className="select-none max-w-4xl"

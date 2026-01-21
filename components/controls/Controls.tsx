@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -86,12 +86,15 @@ const Controls: React.FC = () => {
     <>
       <MiniControls isExpanded={isExpanded} isIdle={isIdle} setIsExpanded={setIsExpanded} toggleFullscreen={toggleFullscreen} />
       {isExpanded && (
-        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505] border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100">
-          <div className="max-h-[70vh] overflow-y-auto custom-scrollbar p-4 md:p-6 relative">
-            <div className="max-w-5xl mx-auto space-y-4">
+        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505] border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col">
+          {/* Mobile: Increase max-height to 85dvh for better visibility. Desktop: 70vh */}
+          <div className="max-h-[85dvh] md:max-h-[70vh] overflow-y-auto custom-scrollbar p-3 md:p-6 pb-safe relative flex flex-col">
+            <div className="max-w-5xl mx-auto space-y-3 md:space-y-4 w-full">
+              
               {/* Sticky Header */}
-              <div className="sticky top-0 z-50 bg-[#050505] pb-4 pt-1 border-b border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex bg-white/[0.04] p-1 rounded-xl overflow-x-auto max-w-full scrollbar-hide gap-1 mask-fade-right" role="tablist" aria-label="Settings Categories">
+              <div className="sticky top-0 z-50 bg-[#050505]/95 backdrop-blur-md pb-2 pt-1 border-b border-white/10 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
+                {/* Scrollable Tabs */}
+                <div className="flex bg-white/[0.04] p-1 rounded-xl overflow-x-auto max-w-full scrollbar-hide gap-1 mask-fade-right touch-pan-x" role="tablist" aria-label="Settings Categories">
                   {(['visual', 'text', 'ai', 'audio', 'system'] as TabType[]).map(tab => (
                     <button 
                       key={tab} 
@@ -100,14 +103,14 @@ const Controls: React.FC = () => {
                       aria-selected={activeTab === tab}
                       aria-controls={`panel-${tab}`}
                       id={`tab-${tab}`}
-                      className={`px-5 py-2.5 rounded-lg ${tabFontSize} font-bold uppercase tracking-[0.2em] transition-all duration-300 flex-shrink-0 ${activeTab === tab ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>{t?.tabs?.[tab] || tab}
+                      className={`px-4 py-2.5 md:px-5 rounded-lg ${tabFontSize} font-bold uppercase tracking-[0.2em] transition-all duration-300 flex-shrink-0 whitespace-nowrap ${activeTab === tab ? 'bg-white/20 text-white shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>{t?.tabs?.[tab] || tab}
                     </button>
                   ))}
                 </div>
                 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between lg:justify-end gap-3 md:gap-4">
                   {/* Simple/Advanced Toggle Capsule */}
-                  <div className="bg-white/5 p-1 rounded-lg flex text-[9px] font-bold uppercase tracking-wider border border-white/5">
+                  <div className="bg-white/5 p-1 rounded-lg flex text-[9px] font-bold uppercase tracking-wider border border-white/5 flex-shrink-0">
                       <button 
                         onClick={() => setSettings({...settings, uiMode: 'simple'})} 
                         className={`px-3 py-1.5 rounded-md transition-all duration-300 ${settings.uiMode === 'simple' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
@@ -122,19 +125,23 @@ const Controls: React.FC = () => {
                       </button>
                   </div>
 
-                  <div className="w-px h-6 bg-white/10 mx-1 hidden md:block"></div>
+                  <div className="w-px h-6 bg-white/10 mx-1 hidden lg:block"></div>
 
                   <div className="flex items-center gap-2">
-                    <ActionButton onClick={() => setShowHelpModal(true)} hintText={t?.hints?.help || "Help & Info"} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.546-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} />
-                    <ActionButton onClick={randomizeSettings} hintText={`${t?.hints?.randomize || "Randomize"} [R]`} icon={<span className="font-bold">R</span>} />
-                    <ActionButton onClick={toggleFullscreen} hintText={`${t?.hints?.fullscreen || "Fullscreen"} [F]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M20 8V4m0 0h-4M4 16v4m0 0h4M20 16v4m0 0h-4" /></svg>} />
-                    <button onClick={() => setIsExpanded(false)} className="w-10 h-10 flex items-center justify-center bg-blue-600 rounded-xl text-white shadow-[0_12px_40px_rgba(37,99,235,0.3)] hover:bg-blue-500 transition-all duration-300" aria-label={t?.hideOptions || "Collapse"}><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg></button>
+                    <div className="hidden md:flex gap-2">
+                        <ActionButton onClick={() => setShowHelpModal(true)} hintText={t?.hints?.help || "Help & Info"} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.546-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} />
+                        <ActionButton onClick={randomizeSettings} hintText={`${t?.hints?.randomize || "Randomize"} [R]`} icon={<span className="font-bold">R</span>} />
+                        <ActionButton onClick={toggleFullscreen} hintText={`${t?.hints?.fullscreen || "Fullscreen"} [F]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M20 8V4m0 0h-4M4 16v4m0 0h4M20 16v4m0 0h-4" /></svg>} />
+                    </div>
+                    
+                    {/* Mobile: Combine Help/Actions into cleaner layout or just keep close button prominent */}
+                    <button onClick={() => setIsExpanded(false)} className="w-10 h-10 flex items-center justify-center bg-blue-600 rounded-xl text-white shadow-[0_4px_20px_rgba(37,99,235,0.4)] hover:bg-blue-500 transition-all duration-300 flex-shrink-0" aria-label={t?.hideOptions || "Collapse"}><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg></button>
                   </div>
                 </div>
               </div>
               
               <div 
-                className="bg-[#0f0f11] border border-white/5 rounded-2xl overflow-hidden min-h-[240px]"
+                className="bg-[#0f0f11] border border-white/5 rounded-2xl overflow-hidden min-h-[40vh] md:min-h-[240px]"
                 role="tabpanel"
                 id={`panel-${activeTab}`}
                 aria-labelledby={`tab-${activeTab}`}
@@ -147,6 +154,9 @@ const Controls: React.FC = () => {
                   {activeTab === 'system' && <SystemSettingsPanel />}
                 </div>
               </div>
+              
+              {/* Extra bottom padding for mobile scrolling */}
+              <div className="h-16 md:h-0 w-full" />
             </div>
           </div>
         </div>

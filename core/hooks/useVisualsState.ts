@@ -1,7 +1,7 @@
 
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -17,8 +17,18 @@ const DEFAULT_THEME_INDEX = 1;
 export const useVisualsState = (hasStarted: boolean, initialSettings: VisualizerSettings) => {
   const { getStorage, setStorage } = useLocalStorage();
 
-  const [mode, setModeInternal] = useState<VisualizerMode>(() => getStorage('mode', DEFAULT_MODE));
-  const [colorTheme, setColorThemeInternal] = useState<string[]>(() => getStorage('theme', COLOR_THEMES[DEFAULT_THEME_INDEX]));
+  // Robustness: Validate enum from storage. If invalid (old version data), fallback to default.
+  const [mode, setModeInternal] = useState<VisualizerMode>(() => {
+    const saved = getStorage('mode', DEFAULT_MODE);
+    return Object.values(VisualizerMode).includes(saved) ? saved : DEFAULT_MODE;
+  });
+
+  const [colorTheme, setColorThemeInternal] = useState<string[]>(() => {
+    const saved = getStorage('theme', COLOR_THEMES[DEFAULT_THEME_INDEX]);
+    // Ensure saved theme is a valid array of strings, otherwise fallback
+    return Array.isArray(saved) && saved.length > 0 ? saved : COLOR_THEMES[DEFAULT_THEME_INDEX];
+  });
+
   const [settings, setSettings] = useState<VisualizerSettings>(initialSettings);
   const [activePreset, setActivePreset] = useState<string>('');
   

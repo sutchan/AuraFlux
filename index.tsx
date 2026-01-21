@@ -1,7 +1,7 @@
 
 /**
  * File: index.tsx
- * Version: 1.6.5
+ * Version: 1.6.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -15,6 +15,20 @@ import './assets/styles/index.css';
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error("Could not find root element to mount to");
+}
+
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(
+      (registration) => {
+        console.log('SW registered: ', registration);
+      },
+      (registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      }
+    );
+  });
 }
 
 const root = createRoot(rootElement);

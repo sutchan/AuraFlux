@@ -1,7 +1,7 @@
 
 <!--
   File: index.html
-  Version: 1.6.5
+  Version: 1.6.6
   Author: Aura Flux Team
   Copyright (c) 2024 Aura Flux. All rights reserved.
 -->
@@ -9,7 +9,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
 
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B3R0GXSDY8"></script>
@@ -27,6 +27,13 @@
     <meta name="keywords" content="music visualizer, audio visualizer, AI music recognition, Google Gemini, WebGL, Three.js, React, generative art">
     <meta name="theme-color" content="#000000">
 
+    <!-- PWA & Mobile Identity -->
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Aura Flux">
+    
     <!-- SEO & Identity -->
     <link rel="icon" type="image/svg+xml" href="./assets/images/favicon.svg" />
     <link rel="apple-touch-icon" href="./assets/images/favicon.svg" />

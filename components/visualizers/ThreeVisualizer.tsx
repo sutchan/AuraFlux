@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.0.6
+ * Version: 1.6.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -11,7 +11,9 @@ import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom, ChromaticAberration, TiltShift } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { VisualizerMode, VisualizerSettings } from '../../core/types';
-import { SilkWavesScene, LiquidSphereScene, LowPolyTerrainScene } from './ThreeScenes';
+import { SilkWavesScene } from './scenes/SilkWavesScene';
+import { LiquidSphereScene } from './scenes/LiquidSphereScene';
+import { LowPolyTerrainScene } from './scenes/LowPolyTerrainScene';
 
 interface ThreeVisualizerProps {
   analyser: AnalyserNode | null;

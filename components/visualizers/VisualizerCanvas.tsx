@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -9,6 +9,7 @@
 import React, { useRef, useEffect } from 'react';
 import { VisualizerMode, VisualizerSettings, IVisualizerRenderer } from '../../core/types/index';
 import { createVisualizerRenderers, BeatDetector } from '../../core/services/visualizerStrategies';
+import { applyNoiseFloor } from '../../core/services/audioUtils';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
@@ -71,6 +72,11 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
 
       // 3. Audio Processing
       analyser.getByteFrequencyData(dataArray);
+      
+      // Noise Gate: Filter out background hum (e.g. fans, AC)
+      // Threshold of 30 ensures silence looks like silence
+      applyNoiseFloor(dataArray, 30);
+
       const isBeat = beatDetectorRef.current.detect(dataArray);
       
       // Update global rotation logic

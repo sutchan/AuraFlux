@@ -1,7 +1,7 @@
 
 /**
  * File: core/hooks/useAudioReactive.ts
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -10,7 +10,7 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { VisualizerSettings } from '../types';
-import { getAverage } from '../services/audioUtils';
+import { getAverage, applyNoiseFloor } from '../services/audioUtils';
 import { BeatDetector } from '../services/beatDetector';
 
 interface UseAudioReactiveProps {
@@ -60,6 +60,9 @@ export const useAudioReactive = ({ analyser, colors, settings }: UseAudioReactiv
 
     // 2. Audio Data Processing
     analyser.getByteFrequencyData(dataArray);
+    
+    // Apply noise floor (Threshold: 30/255) to reduce background static/fan noise
+    applyNoiseFloor(dataArray, 30);
     
     audioData.isBeat = beatDetectorRef.current.detect(dataArray);
     

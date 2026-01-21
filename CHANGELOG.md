@@ -6,6 +6,16 @@ All notable changes to the **Aura Vision** project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.6] - 2025-01-27
+
+### Added
+*   **🛡️ State Resilience:** Implemented strict enum validation in `useVisualsState`. The application now auto-recovers to default modes if LocalStorage contains corrupted or outdated mode data (e.g. from v1.0).
+*   **🌏 i18n Polish:** Refined Arabic (AR) and Russian (RU) translations for "About" and "Mobile Gestures" sections to ensure grammatical correctness and UI fit.
+
+### Changed
+*   **🔧 OpenSpec Sync:** Updated `06_storage_and_i18n_spec.md` to reflect the completed 10-language support matrix.
+*   **🔖 Version Bump:** Synchronized application version to **v1.6.6** across all core files.
+
 ## [v1.6.5] - 2025-01-27
 
 ### Added

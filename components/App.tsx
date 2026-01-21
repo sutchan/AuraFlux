@@ -1,7 +1,7 @@
 
 /**
  * File: components/App.tsx
- * Version: 1.6.3
+ * Version: 1.6.6
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
  */

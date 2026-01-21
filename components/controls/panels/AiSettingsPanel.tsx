@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -69,23 +69,30 @@ export const AiSettingsPanel: React.FC = () => {
             <SettingsToggle label={t?.showLyrics || "Enable Recognition"} value={showLyrics} onChange={() => setShowLyrics(!showLyrics)} activeColor="green" hintText={`${hints?.lyrics || "Enable AI Lyrics"} [L]`} />
             
             {isAdvanced && (
-                <div className="space-y-4 pt-1 animate-fade-in-up">
+                <div className="space-y-1 pt-1 animate-fade-in-up">
                    <CustomSelect 
                      label={t?.recognitionSource || "AI Source"} 
                      value={settings.recognitionProvider || 'GEMINI'} 
                      options={[
-                       { value: 'GEMINI', label: 'Gemini 3.0' }, 
-                       { value: 'GROK', label: 'Grok (xAI)' },
-                       { value: 'DEEPSEEK', label: 'DeepSeek' },
-                       { value: 'QWEN', label: 'Qwen (Alibaba)' },
-                       { value: 'OPENAI', label: 'OpenAI GPT-4' },
-                       { value: 'CLAUDE', label: 'Claude 3.5' },
-                       { value: 'MOCK', label: t?.simulatedDemo || 'Simulated' }
+                       { value: 'GEMINI', label: '🟢 Gemini 3.0 (Native)' }, 
+                       { value: 'GROK', label: '🟡 Grok (Persona)' },
+                       { value: 'CLAUDE', label: '🟡 Claude 3.5 (Persona)' },
+                       { value: 'OPENAI', label: '🟡 GPT-4 (Persona)' },
+                       { value: 'DEEPSEEK', label: '🟡 DeepSeek (Persona)' },
+                       { value: 'QWEN', label: '🟡 Qwen (Persona)' },
+                       { value: 'MOCK', label: `⚪ ${t?.simulatedDemo || 'Simulated'} (Offline)` }
                      ]} 
                      onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
                    />
+                   {/* Status Legend */}
+                   <div className="flex gap-3 px-1 mt-1 text-[9px] font-mono text-white/20 uppercase tracking-tight select-none">
+                      <span className="flex items-center gap-1"><span className="text-green-500">🟢</span> API Connected</span>
+                      <span className="flex items-center gap-1"><span className="text-yellow-500">🟡</span> Emulated</span>
+                   </div>
                    
-                   <CustomSelect label={t?.region || "Region"} value={settings.region || 'global'} hintText={hints?.region} options={Object.keys(REGION_NAMES).map(r => ({ value: r, label: regions[r] || r }))} onChange={(val) => setSettings({...settings, region: val as Region})} />
+                   <div className="pt-3">
+                      <CustomSelect label={t?.region || "Region"} value={settings.region || 'global'} hintText={hints?.region} options={Object.keys(REGION_NAMES).map(r => ({ value: r, label: regions[r] || r }))} onChange={(val) => setSettings({...settings, region: val as Region})} />
+                   </div>
                 </div>
             )}
         </div>
