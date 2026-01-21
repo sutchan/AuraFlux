@@ -1,10 +1,9 @@
-
 /**
  * File: assets/locales/ja.ts
- * Version: 1.6.10
+ * Version: 1.6.11
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-17 10:00
+ * Updated: 2025-02-19 11:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -226,8 +225,8 @@ export const ja = {
     [VisualizerMode.MACRO_BUBBLES]: '微細液胞 (DoF)',
     [VisualizerMode.SILK]: '流光シルク (WebGL)',
     [VisualizerMode.LIQUID]: '流体惑星 (WebGL)',
-    // Fix: Added missing translations
     [VisualizerMode.WAVEFORM]: 'シルク波形',
+    // Fix: Added missing translation
     [VisualizerMode.TERRAIN]: 'ポリゴン山脈 (WebGL)'
   },
   lyricsStyles: {

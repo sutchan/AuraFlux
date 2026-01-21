@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/NeuralFlowScene.tsx
- * Version: 1.3.1
+ * Version: 1.3.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 21:25
+ * Updated: 2025-02-18 23:55
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -20,17 +20,15 @@ interface SceneProps {
 
 export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
   const pointsRef = useRef<THREE.Points>(null);
-  const { bass, mids, treble, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
+  const { bass, mids, treble, volume, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1] = smoothedColors;
 
-  // 1. 密度与数据初始化
   const count = settings.quality === 'high' ? 24000 : settings.quality === 'med' ? 12000 : 6000;
 
   const [positions, randomness] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const rnd = new Float32Array(count);
     for (let i = 0; i < count; i++) {
-      // 空间球形初始分布，为流场提供基座
       const r = 20 + Math.random() * 60;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
@@ -39,7 +37,6 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
       
-      // rnd[i] 决定粒子的本征属性：0-1，通过指数分布拉开差距
       rnd[i] = Math.pow(Math.random(), 2.0);
     }
     return [pos, rnd];
@@ -50,12 +47,12 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
     uBass: { value: 0 },
     uMids: { value: 0 },
     uTreble: { value: 0 },
-    uBeat: { value: 0 }, // 节拍能量累加
+    uBeat: { value: 0 }, 
+    uVolume: { value: 0 },
     uColor1: { value: new THREE.Color(c0) },
     uColor2: { value: new THREE.Color(c1) }
   }), []);
 
-  // 缓动记录上次节拍时间，用于 Shader 中的冲击波扩散
   const beatTimerRef = useRef(0);
 
   useFrame((state) => {
@@ -64,25 +61,26 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
     const mat = pointsRef.current.material as THREE.ShaderMaterial;
     const time = state.clock.getElapsedTime();
     
-    // 节拍逻辑控制：当检测到 isBeat 时，触发一次能量脉冲
     if (isBeat) {
       beatTimerRef.current = time;
     }
 
-    // 更新 Uniforms
     mat.uniforms.uTime.value = time * settings.speed;
     mat.uniforms.uBass.value = bass;
     mat.uniforms.uMids.value = mids;
     mat.uniforms.uTreble.value = treble;
-    // 衰减后的节拍强度传入 Shader
-    const beatPhase = Math.max(0, 1.0 - (time - beatTimerRef.current) * 2.5);
+    mat.uniforms.uVolume.value = volume;
+    
+    // 节拍能量衰减曲线
+    const beatElapsed = time - beatTimerRef.current;
+    const beatPhase = Math.max(0, Math.exp(-beatElapsed * 3.5));
     mat.uniforms.uBeat.value = beatPhase;
 
     mat.uniforms.uColor1.value.set(c0);
     mat.uniforms.uColor2.value.set(c1);
     
-    // 整体缓速旋转，模拟空间漂浮感
-    pointsRef.current.rotation.y += 0.0005 * settings.speed;
+    // 旋转速度下调 50%
+    pointsRef.current.rotation.y += (0.00025 + bass * 0.001) * settings.speed;
   });
 
   return (
@@ -109,7 +107,6 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
             varying float vSpeed;
             varying float vAlpha;
 
-            // Simplex 3D Noise for Vector Field
             vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
             vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
             vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -149,48 +146,43 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
               return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
             }
 
-            // --- HELPER FUNCTIONS MUST BE DEFINED BEFORE USE ---
-            float life(float d) {
-                return smoothstep(0.0, 150.0, d);
-            }
-
             void main() {
               vec3 newPos = position;
               float distToCenter = length(position);
               
-              // 1. 流场动力学 (Vector Field Flow)
-              // 采样三维噪声构建向量场。aRandom 增加个体差异，确保流动轨迹不重合。
-              float n1 = snoise(position * 0.03 + uTime * 0.2 + aRandom);
-              float n2 = snoise(position * 0.02 - uTime * 0.15 + aRandom * 5.0);
-              float n3 = snoise(position * 0.025 + uTime * 0.1 + aRandom * 10.0);
-              vec3 flow = vec3(n1, n2, n3) * (5.0 + uBass * 15.0);
+              // --- 1. 耦合动力学: 低音位移减半 (2.5 + 12.5) ---
+              float n1 = snoise(position * 0.02 + uTime * 0.15 + aRandom);
+              float n2 = snoise(position * 0.015 - uTime * 0.1 + aRandom * 5.0);
+              float n3 = snoise(position * 0.025 + uTime * 0.08 + aRandom * 10.0);
+              vec3 flow = vec3(n1, n2, n3) * (2.5 + uBass * 12.5);
               newPos += flow;
 
-              // 2. 纤维化聚集 (Neural Filament Clumping)
-              // 对噪声值取绝对值并进行幂运算，迫使粒子向噪声“脊线”汇聚。
-              float filamentNoise = snoise(newPos * 0.05 + uTime * 0.1);
-              float clump = pow(abs(filamentNoise), 4.0);
-              newPos += normalize(newPos) * clump * 25.0 * (1.0 + uBass);
+              // --- 2. 耦合动力学: 中音聚集位移减半 (17.5) ---
+              float filamentNoise = snoise(newPos * 0.04 + uTime * 0.05);
+              float clumpingPower = 3.0 + uMids * 4.0;
+              float clump = pow(abs(filamentNoise), clumpingPower);
+              newPos += normalize(newPos) * clump * 17.5 * (1.0 + uBass);
               
-              // 3. 节拍能量冲击波 (Beat-Driven Shockwaves)
-              // 从中心向外扩散的物理波
-              float shockwave = sin(distToCenter * 0.2 - uTime * 8.0) * 0.5 + 0.5;
-              float waveFront = exp(-pow(distToCenter * 0.05 - uBeat * 5.0, 2.0) * 10.0);
-              newPos += normalize(newPos) * waveFront * 15.0 * uBeat;
+              // --- 3. 高音抖动减半 (2.0) ---
+              float jitter = snoise(newPos * 0.5 + uTime * 10.0) * uTreble * 2.0;
+              newPos += jitter;
+
+              // --- 4. 节拍冲击减半 (10.0) ---
+              float waveFront = exp(-pow(distToCenter * 0.04 - uBeat * 6.0, 2.0) * 8.0);
+              newPos += normalize(newPos) * waveFront * 10.0 * uBeat;
 
               vNoise = filamentNoise;
-              vSpeed = length(flow) * 0.1; // 传出速度用于荧光亮度计算
+              vSpeed = length(flow) * 0.15 + uTreble * 0.5; 
 
               vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
               gl_Position = projectionMatrix * mvPosition;
 
-              // 动态尺寸：节拍处变大，远处的点变小
-              float sizeBase = 2.0 + aRandom * 12.0;
-              float beatScale = 1.0 + uBeat * 2.0;
-              float trebleScale = 1.0 + uTreble * 3.0;
-              gl_PointSize = sizeBase * beatScale * trebleScale * (300.0 / -mvPosition.z);
+              float sizeBase = 3.0 + aRandom * 15.0;
+              float beatScale = 1.0 + uBeat * 2.5;
+              float treblePulse = 1.0 + sin(uTime * 30.0 + aRandom * 100.0) * uTreble;
+              gl_PointSize = sizeBase * beatScale * treblePulse * (300.0 / -mvPosition.z);
               
-              vAlpha = (0.3 + uBass * 0.4 + uBeat * 0.3) * (1.0 - life(distToCenter));
+              vAlpha = (0.25 + uBass * 0.5 + uBeat * 0.4) * (1.0 - smoothstep(0.0, 160.0, distToCenter));
             }
           `}
           fragmentShader={`
@@ -198,6 +190,8 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
             uniform vec3 uColor2;
             uniform float uTime;
             uniform float uTreble;
+            uniform float uBeat;
+            uniform float uVolume;
             varying float vNoise;
             varying float vSpeed;
             varying float vAlpha;
@@ -206,19 +200,17 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
               float dist = distance(gl_PointCoord, vec2(0.5));
               if(dist > 0.5) discard;
 
-              // 4. 基于速度的“生物荧光”色彩 (Velocity-Based Bioluminescence)
-              // 速度越快（通常受声音驱动），颜色越亮
               vec3 baseColor = mix(uColor1, uColor2, vNoise * 0.5 + 0.5);
-              vec3 bioluminescence = baseColor + (vSpeed * 0.8) + (uTreble * 0.5);
+              vec3 discharge = vec3(1.0) * uBeat * 0.8;
+              vec3 bioluminescence = baseColor + discharge + (vSpeed * 0.6);
               
-              // 模拟电信号闪烁 (Flicker)
-              float flicker = sin(uTime * 20.0 + vNoise * 100.0) * 0.5 + 0.5;
-              bioluminescence *= (0.8 + flicker * 0.2 * uTreble);
+              float sparkle = pow(abs(sin(uTime * 15.0 + vNoise * 50.0)), 10.0) * uTreble;
+              bioluminescence += sparkle * 1.2;
 
               float core = 1.0 - smoothstep(0.0, 0.5, dist);
-              float glow = pow(core, 3.0);
+              float glow = pow(core, 2.5 - uVolume * 1.5);
               
-              gl_FragColor = vec4(bioluminescence, vAlpha * core);
+              gl_FragColor = vec4(bioluminescence, vAlpha * glow);
             }
           `}
         />

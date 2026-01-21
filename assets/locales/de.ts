@@ -1,10 +1,9 @@
-
 /**
  * File: assets/locales/de.ts
- * Version: 1.6.8
+ * Version: 1.6.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-17 10:00
+ * Updated: 2025-02-19 11:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -218,13 +217,13 @@ export const de = {
     [VisualizerMode.TUNNEL]: 'Geometrischer Tunnel',
     [VisualizerMode.RINGS]: 'Neon-Ringe',
     [VisualizerMode.NEBULA]: 'Deep Nebula',
-    [VisualizerMode.LASERS]: 'Konzert-Laser',
+    [VisualizerMode.LASERS]: 'Concert Laser',
     [VisualizerMode.FLUID_CURVES]: 'Aura-Wellen',
     [VisualizerMode.MACRO_BUBBLES]: 'Makro-Blasen (DoF)',
     [VisualizerMode.SILK]: 'Seidenwellen (WebGL)',
     [VisualizerMode.LIQUID]: 'Flüssige Sphäre (WebGL)',
-    // Fix: Added missing translations
     [VisualizerMode.WAVEFORM]: 'Elegante Wellenform',
+    // Fix: Added missing translation
     [VisualizerMode.TERRAIN]: 'Low-Poly Terrain (WebGL)'
   },
   lyricsStyles: {
@@ -276,7 +275,7 @@ export const de = {
       fftSize: 'Präzision der Spektralanalyse.'
     },
     projectInfoTitle: 'Über das Projekt',
-    aboutDescription: 'Synästhetisches Erlebnis der nächsten Generation. Aura Flux fusioniert Präzisions-Analyse mit Google Gemini 3, um Schall in lebendiges Licht zu wandeln. Ideal für VJs, Streamer und Rauminszenierungen.',
+    aboutDescription: 'Synästhetisches Erlebnis der nächsten Generation. Aura Flux fusioniert Präzisions-Analyse mit Google Gemini 3 um Schall in lebendiges Licht zu wandeln. Ideal für VJs, Streamer und Rauminszenierungen.',
     privacyTitle: 'Datenschutz & Sicherheit',
     privacyText: 'Die Audioanalyse erfolgt lokal. Nur verschlüsselte Merkmale werden zur Songerkennung an Gemini gesendet; es werden keine Aufnahmen gespeichert.',
     version: 'Release',

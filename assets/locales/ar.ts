@@ -1,10 +1,9 @@
-
 /**
  * File: assets/locales/ar.ts
- * Version: 1.6.18
+ * Version: 1.6.19
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-17 18:00
+ * Updated: 2025-02-19 11:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -126,7 +125,7 @@ export const ar = {
     interface: 'الواجهة', behavior: 'السلوك', maintenance: 'الصيانة', engine: 'المحرك', audio: 'الصوت', ai: 'الذكاء الاصطناعي'
   },
   showFps: 'عرض FPS',
-  showTooltips: 'عرض التلميحات',
+  showTooltips: 'عرض تلميحات',
   doubleClickFullscreen: 'ملء الشاشة بالنقر المزدوج',
   autoHideUi: 'إخفاء الواجهة تلقائياً',
   mirrorDisplay: 'عكس العرض',
@@ -146,7 +145,7 @@ export const ar = {
     shortcuts: { mic: 'ميكروفون', ui: 'واجهة', mode: 'وضع', random: 'عشوائي' }
   },
   errors: {
-    title: 'خطأ صوتي', accessDenied: 'تم رفض الوصول. يرجى التحقق من أذونات الميكروفون.', noDevice: 'لم يتم العثور على جهاز.', deviceBusy: 'الجهاز مشغول أو غير صالح.', general: 'تعذر الوصول إلى الصوت.', tryDemo: 'تجربة وضع العرض (بدون صوت)'
+    title: 'خطأ صوتي', accessDenied: 'تم رفض الوصول. يرجى التحقق من أذونات الميكروفون.', noDevice: 'لم يتم العور على جهاز.', deviceBusy: 'الجهاز مشغول أو غير صالح.', general: 'تعذر الوصول إلى الصوت.', tryDemo: 'تجربة وضع العرض (بدون صوت)'
   },
   aiState: {
     active: 'التمييز نشط', enable: 'بدء التمييز بالذكاء الاصطناعي'
@@ -196,7 +195,7 @@ export const ar = {
     ],
     settingsTitle: 'دليل المعايير',
     settingsDesc: {
-      sensitivity: 'التحكم في كسب رد الفعل للمؤثرات البصرية.', speed: 'سرعة التطور الزمني للخوارزميات التوليدية.', glow: 'شدة الإضاءة المحيطة لتعزيز الأجواء.', trails: 'تراكم البكسل لخلق حركة انسيابية.', smoothing: 'تنعيم بيانات التردد لتفادي القفزات المفاجئة.', fftSize: 'دقة التحليل الطيفي (عدد العينات).'
+      sensitivity: 'التحكم في كسب رد الفعل للمؤثرات البصرية.', speed: 'سرعة التطور الزمني للخوارزميات التوليدية.', glow: 'شدة الإضاءة المحيطة لتعزيز الأجواء.', trails: 'تراكم البكسل لخلق حركة انسيابية.', smoothing: 'تنعيم بيانات التردد لتفادي القفزات المفاجئة.', fftSize: 'دقة التحليل الطيفي (معاينة العينات).'
     },
     projectInfoTitle: 'حول المشروع',
     aboutDescription: 'تجربة تفاعلية من الجيل التالي. Aura Flux يدمج التحليل الطيفي مع Google Gemini 3 لتحويل الأمواج الصوتية الصامتة إلى ضوء حي. مثالي لمنسقي الأغاني والبث المباشر والديكور.',

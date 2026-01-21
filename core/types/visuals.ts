@@ -1,10 +1,9 @@
-
 /**
  * File: core/types/visuals.ts
- * Version: 1.6.11
+ * Version: 1.6.48
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-17 10:00
+ * Updated: 2025-02-19 11:00
  */
 
 import { Position, Region } from './common';
@@ -20,7 +19,7 @@ export enum VisualizerMode {
   TERRAIN = 'TERRAIN',
 
   // Modern 2D Modes
-  WAVEFORM = 'WAVEFORM', // New Elegant Waveform
+  WAVEFORM = 'WAVEFORM', 
   FLUID_CURVES = 'FLUID_CURVES',
   NEBULA = 'NEBULA', 
   MACRO_BUBBLES = 'MACRO_BUBBLES',

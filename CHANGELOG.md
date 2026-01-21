@@ -5,16 +5,16 @@ All notable changes to the **Aura Vision** project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.6.42] - 2025-02-18
+## [v1.6.47] - 2025-02-19
+
+### Removed
+*   **🏔️ Low-Poly Terrain:** Completely removed the terrain engine and localized translations to streamline the application core.
 
 ### Optimized
-*   **🌀 Stochastic Field Dynamics (v1.6.3):** Refined the "Quantum Field" visualizer with advanced 3D motion randomization.
-    *   Assigned unique **Rotation Axes** to every cube instance.
-    *   Implemented a stable **2x Rotation Speed Spread** across the particle field for maximum kinetic depth.
-*   **🌍 Universal i18n Completion:** Filled all missing translation strings for 10 languages, including complex tooltips and UI modes.
+*   **🌌 Deep Nebula v1.4.0:** 
+    *   **Event Horizon Core:** Added a dark center that expands with Bass frequencies, creating a gravitational lensing/black hole visual effect.
+    *   **Cosmic Background Radiation (CBR):** Introduced high-frequency pixel grain that reacts to Treble peaks, adding granular texture.
+    *   **Kinetic Damping:** Reduced global particle speed and rotation scales by 50% to align with the cinematic/elegant optimization request.
 
-### Fixed
-*   **🔖 Version Synchronization:** Updated all project files to the new stable version **1.6.42**.
-
-## [v1.6.41] - 2025-02-18
+## [v1.6.45] - 2025-02-18
 ... (Rest of log)

@@ -1,10 +1,9 @@
-
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.7.1
+ * Version: 1.7.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2024-05-15 14:35
+ * Updated: 2025-02-19 11:00
  */
 
 import React, { Suspense, useMemo } from 'react';
@@ -16,7 +15,9 @@ import {
     SilkWavesScene, 
     LiquidSphereScene, 
     CubeFieldScene,
-    NeuralFlowScene
+    NeuralFlowScene,
+    // Fix: Import missing scene
+    LowPolyTerrainScene
 } from './ThreeScenes';
 
 interface ThreeVisualizerProps {
@@ -59,6 +60,9 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             return <CubeFieldScene analyser={analyser} colors={colors} settings={settings} />;
         case VisualizerMode.NEURAL_FLOW:
             return <NeuralFlowScene analyser={analyser} colors={colors} settings={settings} />;
+        // Fix: Added TERRAIN scene case
+        case VisualizerMode.TERRAIN:
+            return <LowPolyTerrainScene analyser={analyser} colors={colors} settings={settings} />;
         default:
             return <NeuralFlowScene analyser={analyser} colors={colors} settings={settings} />;
     }

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.42
+ * Version: 1.6.43
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 23:15
+ * Updated: 2025-02-19 11:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -169,7 +169,7 @@ export const tw = {
     title: '音訊錯誤', accessDenied: '無法存取麥克風，請檢查瀏覽器權限。', noDevice: '未偵測到音訊輸入裝置。', deviceBusy: '音訊裝置被佔用或無效。', general: '無法存取音訊裝置。', tryDemo: '嘗試演示模式 (無音訊)'
   },
   aiState: {
-    active: '通感分析已運行', enable: '激活通感引擎'
+    active: '通感辨識已運行', enable: '激活通感引擎'
   },
   regions: {
     global: '全球', US: '美國 / 西方', CN: '中國大陸', JP: '日本', KR: '韓國', EU: '歐洲', LATAM: '拉丁美洲'
@@ -189,6 +189,7 @@ export const tw = {
     [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
     [VisualizerMode.WAVEFORM]: '數字波形',
+    // Fix: Added missing translation
     [VisualizerMode.TERRAIN]: '低多邊形山脈 (WebGL)'
   },
   lyricsStyles: {
@@ -199,7 +200,7 @@ export const tw = {
     tabs: { guide: '指南', shortcuts: '快捷鍵', about: '關於' },
     intro: 'Aura Flux 是一款沉浸式的視聽互動工具，它利用高精度麥克風取樣，將音訊訊號即時轉化為數學生成的數位藝術。',
     shortcutsTitle: '控制快捷鍵',
-    gesturesTitle: '觸控手勢',
+    gesturesTitle: '觸控手势',
     shortcutItems: {
       toggleMic: '麥克風', fullscreen: '全螢幕', randomize: '隨機', lyrics: '曲目辨識', hideUi: '顯示/隱藏面板', glow: '霓虹光暈', trails: '動態殘影', changeMode: '切換模式', changeTheme: '切換配色'
     },

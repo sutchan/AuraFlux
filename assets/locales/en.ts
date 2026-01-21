@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.6.29
+ * Version: 1.6.48
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 18:15
+ * Updated: 2025-02-19 11:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -193,6 +193,7 @@ export const en = {
     [VisualizerMode.SILK]: 'Silk Waves',
     [VisualizerMode.LIQUID]: 'Liquid Sphere',
     [VisualizerMode.WAVEFORM]: 'Digital Waveform',
+    // Fix: Added missing translation
     [VisualizerMode.TERRAIN]: 'Low-Poly Terrain (WebGL)'
   },
   lyricsStyles: {

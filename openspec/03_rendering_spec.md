@@ -15,14 +15,15 @@ All 2D 渲染器实现 `IVisualizerRenderer` 接口。
   - **风格:** 具备深度感与物理包络的艺术化多通道示波器。
 
 ## 3. 3D WebGL 渲染
-- **Neural Flow (v1.3.0 动力学增强):**
-  - **特性:** 引入 3D Simplex 向量场游走、4次幂纤维聚集算法及基于速度的生物荧光闪烁。
+- **Neural Flow (v1.3.2 动力学增强):**
+  - **多频耦合:** 低音驱动宏观流场（Vector Field），中音驱动纤维聚集张力（Clumping），高音注入微观震颤（Neuro-jitter）。
+  - **放电特效:** 节拍触发 `discharge` 白色脉冲，模拟神经元放电过程。
+  - **生物荧光:** 粒子亮度随瞬时音量非线性增强，高音驱动随机电信号火花（Sparkle）。
 - **Quantum Field (v1.6.3 随机翻滚优化):**
-  - **随机动力学:** 每个方块实例分配独立的 3D 空间旋转轴（Rotation Axis），完全消除全局同步感。
-  - **复合速差:** 引入 `individualSpeedMult` 个体速度倍率，确保方阵中不同方块的翻滚速度差固定为 2 倍，显著增强场景层次感。
-  - **翻滚速率:** 基础翻滚速率与节拍转矩脉冲均降低至原始值的 1/10，以提供高级的“深空悬浮”质感。
+  - **随机动力学:** 每个方块实例分配独立的 3D 空间旋转轴（Rotation Axis）。
+  - **复合速差:** 引入 `individualSpeedMult` 个体速度倍率，确保方阵内 2 倍翻滚速差。
 - **SilkWaves (流光绸缎):** 材质 `emissiveIntensity` 随节拍闪烁。
 - **Liquid Sphere (液态星球):** 顶点置换强度随低频能量非线性增强。
 
 ---
-*Aura Flux Rendering - Version 1.6.42*
+*Aura Flux Rendering - Version 1.6.43*

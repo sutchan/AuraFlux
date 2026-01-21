@@ -1,10 +1,9 @@
-
 /**
  * File: assets/locales/ru.ts
- * Version: 1.6.18
+ * Version: 1.6.19
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-17 18:00
+ * Updated: 2025-02-19 11:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -200,7 +199,7 @@ export const ru = {
       sensitivity: 'Усиление реакции визуала на звук.', speed: 'Скорость эволюции генеративных алгоритмов.', glow: 'Интенсивность атмосферного свечения.', trails: 'Накопление для плавности движений.', smoothing: 'Временное сглаживание спектра.', fftSize: 'Точность спектрального анализа.'
     },
     projectInfoTitle: 'Описание проекта',
-    aboutDescription: 'Синестетический опыт нового поколения. Aura Flux объединяет прецизионный анализ с Google Gemini 3 для превращения звука в живой свет. Идеально для VJ, стримеров и инсталляций.',
+    aboutDescription: 'Синестетический опыт нового поколения. Aura Flux объединяет прецизионный анализ с Google Gemini 3 для превращения звука в живой свет. Идеально для VJs, стримеров и инсталляций.',
     privacyTitle: 'Приватность и Безопасность',
     privacyText: 'Анализ аудио локальный. Шифрованные фингерпринты отправляются в Gemini только для поиска; записи не сохраняются.',
     version: 'Релиз', coreTech: 'Основные Технологии', repository: 'Репозиторий', support: 'Поддержка', reportBug: 'Сообщить об ошибке'

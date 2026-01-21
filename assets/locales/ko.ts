@@ -1,10 +1,9 @@
-
 /**
  * File: assets/locales/ko.ts
- * Version: 1.6.8
+ * Version: 1.6.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-17 10:00
+ * Updated: 2025-02-19 11:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -220,8 +219,8 @@ export const ko = {
     [VisualizerMode.MACRO_BUBBLES]: '마이크로 버블 (DoF)',
     [VisualizerMode.SILK]: '유광 실크 (WebGL)',
     [VisualizerMode.LIQUID]: '유체 행성 (WebGL)',
-    // Fix: Added missing translations
     [VisualizerMode.WAVEFORM]: '실크 파형',
+    // Fix: Added missing translation
     [VisualizerMode.TERRAIN]: '폴리곤 산맥 (WebGL)'
   },
   lyricsStyles: {
