@@ -32,10 +32,16 @@
 - **Auto Hide UI** -> 自动隐藏控制栏 / Auto-Hide Controls。
 - **Mirror Display** -> 镜像翻转 / Mirror Display。
 
+### 关于页面 (v1.6.5)
+- **Core Technology** -> 核心技术 / Core Technology.
+- **Repository** -> 代码仓库 / Repository.
+- **Support** -> 技术支持 / Support.
+- **Report Bug** -> 反馈问题 / Report Bug.
+
 ## 4. 区域化 AI 策略
 - **Region Mapping:** 根据选择的 UI 语言自动映射默认搜索市场。
 - **CN Market:** 优化中文歌曲的元数据搜索权重。
 - **Linguistic Logic:** 识别结果必须返回原声脚本（如 日语歌曲返回假名/汉字而非罗马音）。
 
 ---
-*Aura Flux Storage & i18n - Version 1.6.0*
+*Aura Flux Storage & i18n - Version 1.6.5*

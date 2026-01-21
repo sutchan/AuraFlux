@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ar.ts
- * Version: 1.6.6
+ * Version: 1.6.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -273,7 +273,11 @@ export const ar = {
     aboutDescription: 'تجربة تفاعلية من الجيل التالي. Aura Flux يدمج التحليل الطيفي مع Google Gemini 3 لتحويل الأمواج الصوتية الصامتة إلى ضوء حي. مثالي لمنسقي الأغاني والبث المباشر والديكور.',
     privacyTitle: 'الخصوصية والأمان',
     privacyText: 'التحليل الصوتي محلي بالكامل. يتم إرسال بصمات طيفية مشفرة فقط لتمييز الأغنية؛ لا يتم حفظ أي تسجيلات.',
-    version: 'إصدار'
+    version: 'إصدار',
+    coreTech: 'التقنية الأساسية',
+    repository: 'المستودع',
+    support: 'الدعم',
+    reportBug: 'الإبلاغ عن خطأ'
   },
   onboarding: {
     welcome: 'مرحباً بك في Aura Flux',

@@ -18,11 +18,11 @@
 5.  **[05 UI/UX 与交互规范](./05_interface_spec.md)**
     *   移动端手势控制规范 (v1.6.3)。
 6.  **[06 持久化与国际化规范](./06_storage_and_i18n_spec.md)**
-    *   LocalStorage Schema、多语言字典结构 (v1.0.4)。
+    *   LocalStorage Schema、多语言字典结构 (v1.6.5)。
 7.  **[07 部署与环境规范](./07_deployment_guide.md)**
     *   CDN 混合构建策略说明 (v1.5.0)。
 8.  **[08 测试与验证](./08_testing_and_validation.md)**
     *   链接至最新的功能测试报告：**[功能测试报告 (v1.0.6)](./reports/test_report_20250127_1200.md)**
 
 ---
-*Aura Flux Project Specification - Version 1.6.3*
+*Aura Flux Project Specification - Version 1.6.5*

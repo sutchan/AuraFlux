@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.6
+ * Version: 1.6.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -278,7 +278,11 @@ export const tw = {
     aboutDescription: '下一代通感互動體驗。Aura Flux 融合了高精度即時頻譜分析與 Google Gemini 3 多模態人工智慧，將無形的聲波轉化為有生命的動態光影藝術。適用於 VJ 演出、直播背景、專注陪伴及空間氛圍裝飾。',
     privacyTitle: '隱私與安全',
     privacyText: '音訊分析完全在本地完成。僅在辨識歌曲時，會將加密的頻率特徵臨時發送至雲端，絕不存儲或上傳任何原始錄音數據。',
-    version: '版本號'
+    version: '版本號',
+    coreTech: '核心技術',
+    repository: '程式庫',
+    support: '技術支援',
+    reportBug: '回報 Bug'
   },
   onboarding: {
     welcome: '歡迎體驗 Aura Flux',

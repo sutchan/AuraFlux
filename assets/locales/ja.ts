@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ja.ts
- * Version: 1.6.6
+ * Version: 1.6.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -277,7 +277,11 @@ export const ja = {
     aboutDescription: '次世代の通感インタラクティブ体験。Aura Fluxは、Web Audioによる高精度解析とGoogle Gemini 3を融合させ、無形の音波を生命感あふれる光へと変換します。VJ、配信、空間演出に最適です。',
     privacyTitle: 'プライバシーと安全',
     privacyText: '音声解析はローカルで完結します。認識時のみ暗号化された特徴量を一時的に送信し、生録音データを保存することはありません。',
-    version: 'リリース'
+    version: 'リリース',
+    coreTech: 'コア技術',
+    repository: 'リポジトリ',
+    support: 'サポート',
+    reportBug: 'バグ報告'
   },
   onboarding: {
     welcome: 'Aura Fluxへようこそ',

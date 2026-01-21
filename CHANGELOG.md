@@ -6,6 +6,16 @@ All notable changes to the **Aura Vision** project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.5] - 2025-01-27
+
+### Added
+*   **🌏 Full i18n Coverage:** Completed translations for the new "About & Project Info" section across all 10 supported languages (en, zh, tw, ja, ko, es, de, fr, ru, ar).
+*   **🔧 OpenSpec Update:** Synced i18n specifications in `06_storage_and_i18n_spec.md` to reflect the extended localization scope.
+
+### Changed
+*   **✨ UI Refinement:** Replaced hardcoded strings in the About modal with dynamic keys, ensuring a seamless experience for international users.
+*   **🔖 Version Bump:** Synchronized application version to **v1.6.5** across all core files.
+
 ## [v1.6.3] - 2025-01-27
 
 ### Added

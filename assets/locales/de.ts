@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/de.ts
- * Version: 1.6.6
+ * Version: 1.6.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -276,7 +276,11 @@ export const de = {
     aboutDescription: 'Synästhetisches Erlebnis der nächsten Generation. Aura Flux fusioniert Präzisions-Analyse mit Google Gemini 3, um Schall in lebendiges Licht zu wandeln. Ideal für VJs, Streamer und Rauminszenierungen.',
     privacyTitle: 'Datenschutz & Sicherheit',
     privacyText: 'Die Audioanalyse erfolgt lokal. Nur verschlüsselte Merkmale werden zur Songerkennung an Gemini gesendet; es werden keine Aufnahmen gespeichert.',
-    version: 'Release'
+    version: 'Release',
+    coreTech: 'Kerntechnologie',
+    repository: 'Repository',
+    support: 'Support',
+    reportBug: 'Fehler melden'
   },
   onboarding: {
     welcome: 'Willkommen bei Aura Flux',

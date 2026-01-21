@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.6
+ * Version: 1.6.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -279,7 +279,11 @@ export const zh = {
     aboutDescription: '一个基于实时频域分析与 Gemini AI 语义识别的沉浸式音乐可视化套件。',
     privacyTitle: '隐私与安全',
     privacyText: '音频分析完全在本地完成。仅在识别歌曲时，会将加密的频率特征临时发送至云端，绝不存储或上传任何原始录音数据。',
-    version: '版本号'
+    version: '版本号',
+    coreTech: '核心技术',
+    repository: '代码仓库',
+    support: '技术支持',
+    reportBug: '反馈 Bug'
   },
   onboarding: {
     welcome: '欢迎体验 Aura Flux',

@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ko.ts
- * Version: 1.6.6
+ * Version: 1.6.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -273,7 +273,11 @@ export const ko = {
     aboutDescription: '차세대 공감각적 상호작용 체험. Aura Flux는 고정밀 실시간 스펙트럼 분석과 Google Gemini 3 AI를 융합하여 무형의 음파를 살아있는 빛으로 변환합니다. VJ, 스트리밍, 공간 연출에 최적화되어 있습니다.',
     privacyTitle: '개인정보 및 보안',
     privacyText: '오디오 분석은 로컬에서만 수행됩니다. 인식 시에만 암호화된 특징점을 임시 전송하며, 실제 녹음 데이터는 저장되지 않습니다.',
-    version: '릴리스'
+    version: '릴리스',
+    coreTech: '핵심 기술',
+    repository: '저장소',
+    support: '지원',
+    reportBug: '버그 신고'
   },
   onboarding: {
     welcome: 'Aura Flux에 오신 것을 환영합니다',

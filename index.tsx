@@ -1,7 +1,7 @@
 
 /**
  * File: index.tsx
- * Version: 1.6.4
+ * Version: 1.6.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
