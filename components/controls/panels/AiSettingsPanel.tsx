@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 11:00
+ * Updated: 2025-02-18 19:15
  */
 
 import React, { useRef } from 'react';
@@ -135,14 +136,16 @@ export const AiSettingsPanel: React.FC = () => {
         <div className="flex-grow">
             {isAdvanced ? (
                 <div className="animate-fade-in-up">
-                    <PositionSelector
-                      label={t?.lyricsPosition || "Position"}
-                      hintText={hints?.lyricsPosition}
-                      value={settings.lyricsPosition}
-                      onChange={handleLyricsPositionChange}
-                      options={positionOptions}
-                      activeColor="green"
-                    />
+                    {/* Wrap PositionSelector in TooltipArea as it does not accept hintText prop */}
+                    <TooltipArea text={hints?.lyricsPosition}>
+                        <PositionSelector
+                        label={t?.lyricsPosition || "Position"}
+                        value={settings.lyricsPosition}
+                        onChange={handleLyricsPositionChange}
+                        options={positionOptions}
+                        activeColor="green"
+                        />
+                    </TooltipArea>
                 </div>
             ) : (
                 <div className="flex items-center justify-center h-full text-white/20 text-xs font-mono uppercase tracking-widest text-center px-4">

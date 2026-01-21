@@ -1,14 +1,14 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.6.29
+ * Version: 1.6.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 18:15
+ * Updated: 2025-02-18 21:00
  */
 
 import { VisualizerMode, Region, Position, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.6.29';
+export const APP_VERSION = '1.6.35';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 

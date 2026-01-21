@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 18:15
+ * Updated: 2025-02-18 21:00
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -23,7 +23,7 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
   // Robustness: Validate enum from storage. If invalid (old version data), fallback to default.
   const [mode, setModeInternal] = useState<VisualizerMode>(() => {
     const saved = getStorage('mode', DEFAULT_MODE);
-    return Object.values(VisualizerMode).includes(saved) ? saved : DEFAULT_MODE;
+    return Object.values(VisualizerMode).includes(saved as VisualizerMode) ? (saved as VisualizerMode) : DEFAULT_MODE;
   });
 
   const [colorTheme, setColorThemeInternal] = useState<string[]>(() => {
@@ -38,7 +38,13 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
     return COLOR_THEMES[DEFAULT_THEME_INDEX];
   });
 
-  const [settings, setSettings] = useState<VisualizerSettings>(initialSettings);
+  // --- Robustness: Deep settings validation & merge ---
+  const [settings, setSettings] = useState<VisualizerSettings>(() => {
+    const saved = getStorage<Partial<VisualizerSettings>>('settings', {});
+    // Merge saved with initial to ensure no fields are missing due to version changes
+    return { ...initialSettings, ...saved };
+  });
+
   const [activePreset, setActivePreset] = useState<string>('');
   
   const rotateIntervalRef = useRef<number | null>(null);
@@ -98,7 +104,7 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
     setModeInternal(modes[Math.floor(Math.random() * modes.length)]);
     setSettings(p => ({ ...p, speed: 0.8 + Math.random() * 0.8, sensitivity: 1.2 + Math.random() * 1.0, glow: Math.random() > 0.15, trails: Math.random() > 0.2, smoothing: 0.7 + Math.random() * 0.2 }));
     setActivePreset('');
-  }, [setSettings]);
+  }, []);
 
   const applyPreset = useCallback((preset: SmartPreset) => {
     setModeInternal(preset.settings.mode);
@@ -113,7 +119,7 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
       fftSize: preset.settings.fftSize ?? p.fftSize,
     }));
     setActivePreset(preset.nameKey);
-  }, [setSettings]);
+  }, []);
 
   const resetVisualSettings = useCallback(() => {
     setModeInternal(DEFAULT_MODE);
@@ -131,7 +137,7 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
       quality: initialSettings.quality,
     }));
     setActivePreset('');
-  }, [setSettings, initialSettings]);
+  }, [initialSettings]);
 
   return {
     mode, setMode,

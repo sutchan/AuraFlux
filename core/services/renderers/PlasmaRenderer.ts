@@ -1,9 +1,9 @@
 /**
  * File: core/services/renderers/PlasmaRenderer.ts
- * Version: 1.3.0
+ * Version: 1.3.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 14:00
+ * Updated: 2025-02-18 20:45
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -51,7 +51,6 @@ export class PlasmaRenderer implements IVisualizerRenderer {
         vx: 0,
         vy: 0,
         radius: 0,
-        // 核心优化：将基础系数从 0.15 提升至 0.3，实现直径翻倍
         baseRadius: (Math.min(w, h) * 0.3) + (Math.random() * 200),
         angle: Math.random() * Math.PI * 2,
         phase: Math.random() * 100,
@@ -63,7 +62,6 @@ export class PlasmaRenderer implements IVisualizerRenderer {
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean) {
     if (colors.length === 0) return;
 
-    // 1. 初始化与自适应
     const blobCount = settings.quality === 'high' ? 8 : settings.quality === 'med' ? 6 : 4;
     if (this.blobs.length !== blobCount || this.lastW !== w || this.lastH !== h) {
       this.initBlobs(w, h, blobCount, colors.length);
@@ -71,12 +69,10 @@ export class PlasmaRenderer implements IVisualizerRenderer {
       this.lastH = h;
     }
 
-    // 2. 频率分析与通感细分
     const bass = Math.pow(getAverage(data, 0, 15) / 255, 1.2) * settings.sensitivity;
     const mid = getAverage(data, 20, 80) / 255 * settings.sensitivity;
     const treble = Math.pow(getAverage(data, 100, 200) / 255, 1.5) * settings.sensitivity;
 
-    // 3. 高频爆发：生成电离火花
     if (treble > 0.6 || (beat && treble > 0.4)) {
       for (let i = 0; i < 3; i++) {
         const sourceBlob = this.blobs[Math.floor(Math.random() * this.blobs.length)];
@@ -95,20 +91,14 @@ export class PlasmaRenderer implements IVisualizerRenderer {
     }
 
     ctx.save();
-    
-    // --- 核心混合模式 ---
     ctx.globalCompositeOperation = 'screen';
     
-    // 4. 更新与绘制等离子体球
     this.blobs.forEach((b, i) => {
-      // 非线性流体运动
       const driftSpeed = 0.002 * settings.speed;
       b.angle += driftSpeed * (1 + mid);
       
-      // 核心优化：增强响应幅度，beat 时的扩张感更强
       const expansion = 1 + (bass * 1.2) + (beat ? 0.4 : 0);
       
-      // 向量场更新
       const tx = w / 2 + Math.cos(b.angle + i) * (w * 0.3 * expansion);
       const ty = h / 2 + Math.sin(b.angle * 0.8 + b.phase) * (h * 0.3 * expansion);
       
@@ -117,33 +107,30 @@ export class PlasmaRenderer implements IVisualizerRenderer {
       b.x += b.vx;
       b.y += b.vy;
 
-      // 核心优化：动态半径倍率调整
       const dynamicRadius = b.baseRadius * (0.8 + bass * 0.8 + Math.sin(rotation + b.phase) * 0.1);
       const color = colors[b.colorIdx % colors.length];
 
-      // --- 改进渐变算法 ---
+      // --- 核心修正：去除中心白点，使用主题色深浅渐变 ---
       const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, dynamicRadius);
       
-      const coreAlpha = 0.3 + treble * 0.7; 
-      g.addColorStop(0, `rgba(255, 255, 255, ${coreAlpha})`);
-      g.addColorStop(0.08, color); 
-      g.addColorStop(0.3, `${color}cc`);
-      g.addColorStop(0.6, `${color}44`); 
+      // 不再使用 white，直接使用主题色并调整不透明度分布
+      g.addColorStop(0, color); // 中心为实色
+      g.addColorStop(0.3, `${color}dd`); // 中部保持高饱和
+      g.addColorStop(0.6, `${color}66`); // 边缘平滑羽化
       g.addColorStop(1, 'transparent');
 
-      ctx.globalAlpha = 0.4 + mid * 0.6;
+      ctx.globalAlpha = 0.5 + mid * 0.5;
       ctx.fillStyle = g;
       ctx.beginPath();
       ctx.arc(b.x, b.y, dynamicRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // 内部差分干扰纹理
       if (settings.quality !== 'low') {
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
         const jitter = Math.sin(rotation * 5 + b.phase) * 10;
         const innerG = ctx.createRadialGradient(b.x + jitter, b.y + jitter, 0, b.x + jitter, b.y + jitter, dynamicRadius * 0.4);
-        innerG.addColorStop(0, `${color}44`);
+        innerG.addColorStop(0, `${color}33`);
         innerG.addColorStop(1, 'transparent');
         ctx.fillStyle = innerG;
         ctx.beginPath();
@@ -153,7 +140,6 @@ export class PlasmaRenderer implements IVisualizerRenderer {
       }
     });
 
-    // 5. 绘制电离火花 (Sparks)
     ctx.globalCompositeOperation = 'lighter';
     for (let i = this.sparks.length - 1; i >= 0; i--) {
       const s = this.sparks[i];

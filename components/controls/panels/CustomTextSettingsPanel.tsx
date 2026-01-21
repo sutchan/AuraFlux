@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 11:00
+ * Updated: 2025-02-18 19:15
  */
 
 import React from 'react';
@@ -141,7 +142,16 @@ export const CustomTextSettingsPanel: React.FC = () => {
                         hintText={hints?.textAudioReactive}
                     />
                     <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
-                    <PositionSelector label={t?.textPosition || "Text Position"} hintText={hints?.textPosition} value={settings.customTextPosition} onChange={handleTextPositionChange} options={positionOptions} activeColor="blue" />
+                    {/* Wrap PositionSelector in TooltipArea as it does not accept hintText prop */}
+                    <TooltipArea text={hints?.textPosition}>
+                        <PositionSelector 
+                            label={t?.textPosition || "Text Position"} 
+                            value={settings.customTextPosition} 
+                            onChange={handleTextPositionChange} 
+                            options={positionOptions} 
+                            activeColor="blue" 
+                        />
+                    </TooltipArea>
                 </div>
             ) : (
                 <div className="flex items-center justify-center h-full text-white/20 text-xs font-mono uppercase tracking-widest text-center">

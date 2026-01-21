@@ -1,9 +1,9 @@
-
 /**
  * File: core/services/renderers/GeometryRenderers.ts
- * Version: 1.0.6
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-18 20:00
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -20,6 +20,10 @@ export class TunnelRenderer implements IVisualizerRenderer {
     
     ctx.save();
     ctx.translate(centerX, centerY);
+    
+    // 设置笔触属性，防止转角处出现缺口或尖锐突起
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
     
     // Zoom/Shake on beat
     if (beat) {
@@ -46,12 +50,17 @@ export class TunnelRenderer implements IVisualizerRenderer {
         
         ctx.globalAlpha = scale; 
         ctx.beginPath();
-        for (let j = 0; j <= 6; j++) {
-            const angle = (j / 6) * Math.PI * 2 + rotation * (i % 2 === 0 ? 1 : -1);
+        
+        // 核心修复：改用 0 to 5 循环结合 closePath，确保图形完美闭合无缺口
+        const sides = 6;
+        const rotDir = (i % 2 === 0 ? 1 : -1);
+        for (let j = 0; j < sides; j++) {
+            const angle = (j / sides) * Math.PI * 2 + rotation * rotDir;
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
             if (j === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
+        ctx.closePath();
         ctx.stroke();
     }
     ctx.restore();

@@ -1,9 +1,9 @@
-
 /**
  * File: components/ui/help/AboutContent.tsx
- * Version: 1.6.5
- * Author: Aura Vision Team
+ * Version: 1.6.30
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-18 18:30
  */
 
 import React from 'react';
@@ -74,7 +74,7 @@ export const AboutContent: React.FC<AboutContentProps> = ({ h, t }) => (
              <div className="inline-flex items-center gap-3 px-4 py-1 rounded-full bg-white/[0.03] border border-white/5">
                 <span className="text-[10px] font-mono text-white/40">{t?.version || "Build"} v{APP_VERSION}</span>
                 <span className="w-px h-3 bg-white/10"></span>
-                <span className="text-[10px] font-mono text-white/40">&copy; {new Date().getFullYear()} Aura Vision</span>
+                <span className="text-[10px] font-mono text-white/40">&copy; 2026 Auro Flux @Sut</span>
              </div>
         </div>
     </div>
