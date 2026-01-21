@@ -1,17 +1,17 @@
 
 /**
  * File: components/visualizers/scenes/LowPolyTerrainScene.tsx
- * Version: 1.0.5
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
 import React, { useRef, useMemo } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
-import { DynamicStarfield } from './DynamicStarfield'; // Importing DynamicStarfield
+import { DynamicStarfield } from './DynamicStarfield';
 
 interface SceneProps {
   analyser: AnalyserNode;
@@ -21,122 +21,159 @@ interface SceneProps {
 
 export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
   const meshRef = useRef<THREE.Mesh>(null);
+  const sunRef = useRef<THREE.Mesh>(null);
+  
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
   const fogRef = useRef<THREE.Fog>(null);
-  const dirLightRef = useRef<THREE.DirectionalLight>(null);
   const ambientLightRef = useRef<THREE.AmbientLight>(null);
 
   const { bass, mids, treble, smoothedColors } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1, c2] = smoothedColors;
 
-  const geometry = useMemo(() => {
-    // Standard terrain segments
-    const segments = settings.quality === 'high' ? 60 : settings.quality === 'med' ? 40 : 30;
-    // Larger plane for infinite feel
-    return new THREE.PlaneGeometry(120, 120, segments, segments);
+  // Optimize geometry creation
+  const { geometry } = useMemo(() => {
+    // Higher segment count for richer detail
+    const segmentsW = settings.quality === 'high' ? 80 : settings.quality === 'med' ? 50 : 30;
+    const segmentsH = settings.quality === 'high' ? 60 : settings.quality === 'med' ? 40 : 24;
+    
+    const geo = new THREE.PlaneGeometry(160, 120, segmentsW, segmentsH);
+    return { geometry: geo };
   }, [settings.quality]);
 
   useFrame(({ clock }) => {
-     // Modulate speed with bass to give a "turbo boost" feeling on kicks
      const time = clock.getElapsedTime() * settings.speed;
 
-     if (materialRef.current) materialRef.current.color = c1;
+     // 1. Sun/Moon Animation (The Anchor)
+     if (sunRef.current) {
+        sunRef.current.position.set(0, 30 + Math.sin(time * 0.1) * 5, -80);
+        const sunScale = 15 + bass * 8.0;
+        sunRef.current.scale.setScalar(sunScale);
+        (sunRef.current.material as THREE.MeshBasicMaterial).color = c0;
+     }
+
+     // 2. Environment Atmosphere
+     if (materialRef.current) {
+         materialRef.current.color = c1;
+         materialRef.current.emissive = c2;
+         // Glows more on high energy
+         materialRef.current.emissiveIntensity = 0.1 + treble * 0.5;
+     }
      
      if (fogRef.current) {
-        fogRef.current.color = c2;
-        // Fog breathes with the music
-        fogRef.current.near = 15 - bass * 5;
+        fogRef.current.color = new THREE.Color(c2).multiplyScalar(0.1); // Darker fog
+        fogRef.current.near = 10;
         fogRef.current.far = 90;
      }
 
-     // Reactive lighting
-     if (dirLightRef.current) {
-        dirLightRef.current.color = c0;
-        dirLightRef.current.intensity = 1.5 + bass * 2.0; // Flash on beat
-     }
      if (ambientLightRef.current) {
         ambientLightRef.current.color = c1;
         ambientLightRef.current.intensity = 0.2 + mids * 0.5;
      }
 
+     // 3. Terrain Synthesis Loop
      if (!meshRef.current) return;
-     const positions = meshRef.current.geometry.attributes.position as THREE.BufferAttribute;
-
-     // Amplifiers
-     const bassAmp = bass * 12.0; 
-     const midAmp = mids * 4.0;
      
-     // Global terrain pulse
-     const breathing = 1.0 + bass * 0.2;
+     const positions = meshRef.current.geometry.attributes.position as THREE.BufferAttribute;
+     const count = positions.count;
 
-     for(let i=0; i<positions.count; i++) {
+     // Pre-calculate constants for the loop
+     const moveSpeed = time * 8.0;
+     const bassAmp = bass * 15.0; 
+     const midAmp = mids * 6.0;
+     const valleyWidth = 15 + bass * 10.0; // Valley breathes with bass
+
+     for(let i=0; i < count; i++) {
          const x = positions.getX(i);
-         const y = positions.getY(i);
+         const y = positions.getY(i); // This is actually Z in world space before rotation
 
-         // Diversified movement logic:
-         // 1. Forward movement (Y-axis) - faster on beat
-         const flowY = y - (time * 10);
-         // 2. Lateral drift (X-axis) - simulates a meandering path
-         const driftX = Math.sin(time * 0.15) * 15;
-         const flowX = x + driftX;
+         // Coordinate distortion for "warp" effect
+         const flowY = y - moveSpeed; 
+         const flowX = x + Math.sin(flowY * 0.05 + time) * 5.0;
 
-         // Mountain Noise Generation with diversified coordinates
-         const noise1 = Math.sin(flowX * 0.08 + flowY * 0.06);
-         const noise2 = Math.sin(flowX * 0.2 + flowY * 0.15) * 0.5;
+         // --- FRACTAL TERRAIN GENERATION ---
          
-         // Audio ripple - originates from center
-         const dist = Math.sqrt(x*x + y*y);
-         const ripple = Math.sin(dist * 0.3 - time * 5) * treble * 1.5;
+         // Layer 1: Base Hills (Low Frequency)
+         let h = Math.sin(flowX * 0.08) * Math.cos(flowY * 0.05) * 6.0;
 
-         let h = (noise1 * 5 + noise2 * midAmp) * breathing + ripple;
+         // Layer 2: Jagged Ridges (Medium Frequency + Abs)
+         // Math.abs creates sharp peaks instead of round hills
+         h += Math.abs(Math.sin(flowX * 0.15 + flowY * 0.1)) * 8.0;
 
-         // Safety Valley: Flatten geometry at X=0 (Camera path)
+         // Layer 3: Audio Detail (High Frequency)
+         // Adds roughness based on Mids/Treble
+         h += Math.sin(flowX * 0.5 + flowY * 0.6) * midAmp * 0.3;
+
+         // --- SAFETY VALLEY LOGIC ---
+         // Flatten the center path for the camera
          const distFromCenter = Math.abs(x);
-         const valleyWidth = 12;
-         let valleyFactor = (distFromCenter - 4) / valleyWidth;
-         valleyFactor = Math.max(0, Math.min(1, valleyFactor)); 
+         let valleyFactor = (distFromCenter - 2) / valleyWidth;
+         valleyFactor = Math.max(0, Math.min(1, valleyFactor)); // Clamp 0-1
          
-         h *= valleyFactor;
+         // Apply cubic ease-in for smooth valley walls
+         valleyFactor = valleyFactor * valleyFactor * (3 - 2 * valleyFactor);
+
+         // Final Height Composition
+         // The valleyFactor flattens the center. 
+         // We also add a specific "Bass Spike" on the valley walls.
+         const finalHeight = (h * valleyFactor) + (valleyFactor * bassAmp * Math.sin(x * 0.3) * 0.5);
          
-         // Ridge effect - Spikes grow with bass
-         const finalHeight = Math.abs(h) + (valleyFactor * bassAmp * 0.6 * Math.sin(x * 0.5));
-         
-         positions.setZ(i, finalHeight);
+         positions.setZ(i, Math.max(-5, finalHeight));
      }
+     
      positions.needsUpdate = true;
      meshRef.current.geometry.computeVertexNormals();
   });
 
   return (
       <>
-        <color attach="background" args={[c2.getStyle()]} /> 
-        <fog ref={fogRef} attach="fog" args={[c2.getStyle(), 20, 90]} />
+        <color attach="background" args={['#000000']} /> 
+        <fog ref={fogRef} attach="fog" args={['#000000', 20, 100]} />
+        
         <DynamicStarfield treble={treble} speed={settings.speed} />
         
-        {/* 
-           Standard Terrain Rotation: -90deg on X to lay flat. 
-           Position: Lowered Y (-6) to clear camera at Y=2. 
-           Pushed back Z (-20) to cover frustum.
-        */}
-        <mesh ref={meshRef} rotation={[-Math.PI/2, 0, 0]} position={[0, -6, -20]}>
-            <primitive object={geometry} attach="geometry" />
+        {/* The Retro Sun */}
+        <mesh ref={sunRef} position={[0, 30, -80]}>
+            <circleGeometry args={[1, 32]} />
+            <meshBasicMaterial color={c0} fog={false} />
+        </mesh>
+
+        {/* Main Terrain Surface */}
+        <mesh 
+            ref={meshRef} 
+            geometry={geometry}
+            rotation={[-Math.PI/2, 0, 0]} 
+            position={[0, -10, -20]}
+        >
             <meshStandardMaterial 
                 ref={materialRef}
                 flatShading={true} 
                 roughness={0.8}
                 metalness={0.2}
+                side={THREE.DoubleSide}
+            />
+        </mesh>
+
+        {/* Neon Grid Overlay (Clone mesh for wireframe effect) */}
+        <mesh 
+            geometry={geometry}
+            rotation={[-Math.PI/2, 0, 0]} 
+            position={[0, -9.9, -20]} // Slightly higher to avoid z-fighting
+        >
+            <meshBasicMaterial 
+                color={c0}
+                wireframe={true}
+                transparent={true}
+                opacity={0.15}
             />
         </mesh>
         
-        <ambientLight ref={ambientLightRef} intensity={0.2} color={c1} />
-        <directionalLight 
-            ref={dirLightRef}
-            color={c0} 
-            intensity={1.5} 
-            position={[0, 20, -10]}
-        />
-        {/* Rim light from below/front */}
-        <pointLight position={[0, -5, 10]} intensity={1} color={c1} distance={60} />
+        <ambientLight ref={ambientLightRef} intensity={0.2} />
+        
+        {/* Dynamic lighting from the "Sun" */}
+        <pointLight position={[0, 20, -70]} intensity={2} color={c0} distance={150} />
+        
+        {/* Rim light from front/bottom for volume */}
+        <directionalLight position={[0, 10, 20]} intensity={0.5} color={c1} />
       </>
   );
 };

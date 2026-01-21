@@ -1,7 +1,7 @@
 
 /**
  * File: components/AppContext.tsx
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -16,7 +16,7 @@ import { useAiState } from '../core/hooks/useAiState';
 
 // --- Default Settings ---
 const DEFAULT_SETTINGS: VisualizerSettings = {
-  uiMode: 'simple',
+  uiMode: 'advanced', // Updated to default to advanced mode
   sensitivity: 1.5, speed: 1.0, glow: false, trails: true, autoRotate: false, rotateInterval: 30,
   cycleColors: false, colorInterval: 10, hideCursor: false, smoothing: 0.8, fftSize: 512, 
   quality: 'high', monitor: false, wakeLock: false, customText: 'AURA', showCustomText: false,
