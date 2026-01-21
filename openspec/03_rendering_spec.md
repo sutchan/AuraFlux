@@ -1,29 +1,23 @@
 # OpenSpec: 渲染规范
 
-## 1. 节拍检测算法 (True Beat Detection) - v0.8.0
+## 1. 节拍检测算法 (True Beat Detection)
 - **算法:** 谱通量 (Spectral Flux) 差分分析。
 - **逻辑:** 输出 `isBeat` 布尔值，驱动视觉元素的瞬时爆发。
 
 ## 2. 2D 策略模式渲染器 (Worker-Compatible)
-All 2D 渲染器实现 `IVisualizerRenderer` 接口。
-
-- **Plasma Flow (v1.3.2 纯色优化):**
-  - **视觉提升:** 彻底去除了径向渐变中心的纯白色点。改用主题色作为起始色阶。
-- **Geometric Tunnel (v1.0.8 闭合优化):**
-  - **修复:** 引入 `ctx.closePath()` 与 `lineJoin: round` 彻底解决多边形转角处的视觉缺口。
-- **Digital Waveform (v2.5.0 Art Optimized):**
-  - **风格:** 具备深度感与物理包络的艺术化多通道示波器。
+- **Digital Waveform (v2.9.0):** 优化振幅系数 (0.22) 与高频段增益补偿，增强线条视觉一致性。
+- **Plasma Flow:** 去除中心白点，采用主题色深度渐变，修复色彩过载问题。
 
 ## 3. 3D WebGL 渲染
-- **Neural Flow (v1.3.2 动力学增强):**
-  - **多频耦合:** 低音驱动宏观流场（Vector Field），中音驱动纤维聚集张力（Clumping），高音注入微观震颤（Neuro-jitter）。
-  - **放电特效:** 节拍触发 `discharge` 白色脉冲，模拟神经元放电过程。
-  - **生物荧光:** 粒子亮度随瞬时音量非线性增强，高音驱动随机电信号火花（Sparkle）。
+- **Neural Flow (v3.2.4 健壮性增强):**
+  - **安全 Curl Noise:** 引入 `+ 0.0001` 偏移，彻底修复梯度归一化导致的 `NaN` 空白屏幕 Bug。
+  - **运动拉伸 (Motion Stretching):** 通过顶点着色器计算 `vMotionDir`，在片段着色器中实现动态形状拉伸，模拟神经纤维质感。
+  - **交互力场:** 映射触控点 `uPointer` 至 3D 空间，实现 Energetic (排斥) 与 Calm (吸引) 的物理反馈。
+  - **粒子平衡:** 极致画质下限制为 24000 粒子 (v1.6.68)，保障 60FPS 基准。
 - **Quantum Field (v1.6.3 随机翻滚优化):**
-  - **随机动力学:** 每个方块实例分配独立的 3D 空间旋转轴（Rotation Axis）。
-  - **复合速差:** 引入 `individualSpeedMult` 个体速度倍率，确保方阵内 2 倍翻滚速差。
-- **SilkWaves (流光绸缎):** 材质 `emissiveIntensity` 随节拍闪烁。
-- **Liquid Sphere (液态星球):** 顶点置换强度随低频能量非线性增强。
+  - **随机轴动力学:** 每个方块实例分配独立旋转轴。
+  - **2 倍速差:** 引入 `individualSpeedMult` 确保方阵内律动错落有致。
+- **Crystal Core (v1.0.3):** 采用 `dispersion` (色散) 物理材质，替代已弃用的属性，确保兼容性。
 
 ---
-*Aura Flux Rendering - Version 1.6.43*
+*Aura Flux Rendering - Version 1.6.68*

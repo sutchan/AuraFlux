@@ -1,9 +1,9 @@
-
 /**
  * File: core/hooks/useAudioReactive.ts
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-20 20:15
  */
 
 import { useRef } from 'react';
@@ -22,7 +22,17 @@ interface UseAudioReactiveProps {
 export const useAudioReactive = ({ analyser, colors, settings }: UseAudioReactiveProps) => {
   const dataArray = useRef(new Uint8Array(analyser.frequencyBinCount)).current;
   
-  const smoothedColorsRef = useRef(colors.map(c => new THREE.Color(c)));
+  // Helper to ensure we have a minimum of 3 colors for scene shaders that destructure [c0, c1, c2]
+  const getSafeColors = (inputColors: string[]) => {
+    const base = inputColors.length > 0 ? inputColors : ['#ffffff'];
+    const safe = [...base];
+    while (safe.length < 3) {
+      safe.push(base[0]);
+    }
+    return safe;
+  };
+
+  const smoothedColorsRef = useRef(getSafeColors(colors).map(c => new THREE.Color(c)));
   const targetColorRef = useRef(new THREE.Color());
   const beatDetectorRef = useRef(new BeatDetector());
   // Stateful noise filter for WebGL context
@@ -32,18 +42,19 @@ export const useAudioReactive = ({ analyser, colors, settings }: UseAudioReactiv
 
   useFrame(() => {
     const smoothedColors = smoothedColorsRef.current;
+    const safeInputColors = getSafeColors(colors);
     
     // 1. Smooth Color Transition Logic
     const lerpSpeed = 0.05;
     
-    // BUG FIX: Correctly handle theme color array size change to prevent visual jumps.
-    if (smoothedColors.length !== colors.length) {
+    // Adjust smoothed colors array size if needed (e.g., if safeInputColors changed length)
+    if (smoothedColors.length !== safeInputColors.length) {
       const currentLength = smoothedColors.length;
-      const targetLength = colors.length;
+      const targetLength = safeInputColors.length;
 
       if (currentLength < targetLength) {
         for (let i = currentLength; i < targetLength; i++) {
-          smoothedColors.push(new THREE.Color(colors[i] || colors[0] || '#ffffff'));
+          smoothedColors.push(new THREE.Color(safeInputColors[i] || safeInputColors[0] || '#ffffff'));
         }
       } else {
         smoothedColors.length = targetLength;
@@ -51,7 +62,7 @@ export const useAudioReactive = ({ analyser, colors, settings }: UseAudioReactiv
     }
 
     smoothedColors.forEach((color, i) => {
-      const targetHex = colors[i] || colors[0] || '#ffffff';
+      const targetHex = safeInputColors[i] || safeInputColors[0] || '#ffffff';
       color.lerp(targetColorRef.current.set(targetHex), lerpSpeed);
     });
 

@@ -1,146 +1,152 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.6.54
+ * Version: 1.6.68
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-21 14:30
  */
 
-import { VisualizerMode, Region, Position, SmartPreset } from '../types';
+import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.6.54';
+export const APP_VERSION = '1.6.68';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
-export const VISUALIZER_PRESETS = {
-  // --- Top Priority: Classic/Fluid ---
-  [VisualizerMode.PLASMA]: { name: 'Plasma Flow', description: 'Fluid liquid color gradients' },
-  [VisualizerMode.BARS]: { name: 'Frequency Bars', description: 'Classic spectrum analyzer' },
+// Updated to 3 colors per theme for better depth and scene compatibility
+export const COLOR_THEMES: string[][] = [
+  ['#00f2ff', '#0060ff', '#00c3ff'], // Electric Blue
+  ['#ff00ea', '#ff0055', '#ff00a6'], // Magenta Pink
+  ['#00ffaa', '#00aa00', '#00ff41'], // Matrix Green
+  ['#ffcc00', '#ff6600', '#ff9500'], // Gold Sunset
+  ['#af52de', '#5856d6', '#8b5cf6'], // Royal Purple
+  ['#ffffff', '#8e8e93', '#c7c7cc'], // Monochrome
+];
 
-  // --- Modern 2D ---
-  [VisualizerMode.WAVEFORM]: { name: 'Digital Waveform', description: 'Precision multi-channel oscilloscope' },
-  [VisualizerMode.FLUID_CURVES]: { name: 'Aura Waves', description: 'Ethereal flowing gradients' },
-  [VisualizerMode.NEBULA]: { name: 'Deep Nebula', description: 'Dense, swirling clouds of color' },
-  [VisualizerMode.MACRO_BUBBLES]: { name: 'Macro Bubbles', description: 'Liquid bubbles with Depth of Field' },
-  [VisualizerMode.LASERS]: { name: 'Concert Lasers', description: 'Converging sweeping light beams' },
-  [VisualizerMode.TUNNEL]: { name: 'Geometric Tunnel', description: '3D deep space tunnel' },
-  [VisualizerMode.RINGS]: { name: 'Neon Rings', description: 'Concentric circles reactive to mids' },
-  [VisualizerMode.PARTICLES]: { name: 'Starfield', description: 'Drifting particles with Lissajous physics' },
-
-  // --- WebGL Modes ---
-  [VisualizerMode.NEURAL_FLOW]: { name: 'Neural Flow', description: 'Bioluminescent particle stream (WebGL)' },
-  [VisualizerMode.SILK]: { name: 'Silk Waves', description: 'Iridescent flowing fabric (WebGL)' },
-  [VisualizerMode.LIQUID]: { name: 'Liquid Sphere', description: 'Ferrofluid-like reactive matter (WebGL)' },
-  [VisualizerMode.CUBE_FIELD]: { name: 'Quantum Field', description: 'Infinite 3D matrix flight (WebGL)' },
+export const REGION_NAMES: Record<string, string> = {
+  global: 'Global',
+  US: 'United States',
+  CN: 'China',
+  JP: 'Japan',
+  KR: 'Korea',
+  EU: 'Europe',
+  LATAM: 'Latin America'
 };
 
 export const AVAILABLE_FONTS = [
-  { value: 'Inter, sans-serif', label: 'Inter (Default)' },
-  { value: 'Arial, sans-serif', label: 'Arial' },
-  { value: 'Courier New, monospace', label: 'Courier New' },
-  { value: 'Times New Roman, serif', label: 'Times New Roman' },
-  { value: 'Impact, sans-serif', label: 'Impact' },
-  { value: 'Georgia, serif', label: 'Georgia' },
-  { value: 'Verdana, sans-serif', label: 'Verdana' }
+  { value: 'Inter, sans-serif', label: 'Inter (Sans)' },
+  { value: '"JetBrains Mono", monospace', label: 'JetBrains (Mono)' },
+  { value: '"Playfair Display", serif', label: 'Playfair (Serif)' },
+  { value: 'system-ui, sans-serif', label: 'System' }
 ];
 
-export const COLOR_THEMES = [
-  ['#3b82f6', '#8b5cf6', '#ec4899'],
-  ['#ff00ff', '#00ffff', '#ffff00'],
-  ['#6366f1', '#a855f7', '#ec4899'],
-  ['#f7ff00', '#db36a4', '#000000'],
-  ['#ff4d00', '#ff00ff', '#00ff4d'],
-  ['#f472b6', '#d946ef', '#8b5cf6'],
-  ['#2e1065', '#6b21a8', '#d8b4fe'],
-  ['#ef4444', '#f59e0b', '#fbbf24'],
-  ['#fcd34d', '#f97316', '#ea580c'],
-  ['#f87171', '#dc2626', '#991b1b'],
-  ['#fa709a', '#fee140', '#ffffff'],
-  ['#450a0a', '#991b1b', '#f87171'],
-  ['#7f1d1d', '#b91c1c', '#f87171'],
-  ['#eab308', '#facc15', '#fef08a'],
-  ['#10b981', '#34d399', '#6ee7b7'],
-  ['#0ea5e9', '#22d3ee', '#67e8f9'],
-  ['#064e3b', '#059669', '#34d399'],
-  ['#001219', '#005f73', '#0a9396'],
-  ['#082f49', '#075985', '#0ea5e9'],
-  ['#a3e635', '#22c55e', '#14532d'],
-  ['#1a2a6c', '#b21f1f', '#fdbb2d'],
-  ['#4c1d95', '#8b5cf6', '#ddd6fe'],
-  ['#ee9ca7', '#ffdde1', '#ffffff'],
-  ['#94a3b8', '#e2e8f0', '#f8fafc'],
-  ['#000000', '#ffffff', '#cccccc'],
-  ['#312e81', '#1e1b4b', '#4c1d95'],
-  ['#111827', '#374151', '#9ca3af'],
-  ['#00ffff', '#3b82f6', '#1d4ed8'],
-  ['#FF00FF', '#00FF00', '#00FFFF', '#FFFF00'],
-  ['#FF3F00', '#FFD700', '#00FF41', '#00D8FF', '#FF00A0'],
+export const getPositionOptions = (t: any) => [
+  { value: 'tl', label: t?.positions?.tl || 'Top Left' },
+  { value: 'tc', label: t?.positions?.tc || 'Top Center' },
+  { value: 'tr', label: t?.positions?.tr || 'Top Right' },
+  { value: 'ml', label: t?.positions?.ml || 'Mid Left' },
+  { value: 'mc', label: t?.positions?.mc || 'Center' },
+  { value: 'mr', label: t?.positions?.mr || 'Mid Right' },
+  { value: 'bl', label: t?.positions?.bl || 'Bottom Left' },
+  { value: 'bc', label: t?.positions?.bc || 'Bottom Center' },
+  { value: 'br', label: t?.positions?.br || 'Bottom Right' },
 ];
+
+/**
+ * Visualizer Presets Sorting:
+ * 1. 2D / Classic Engines (High performance, pure canvas)
+ * 2. WebGL Engines (High fidelity, 3D scenes - moved to end per user request)
+ */
+export const VISUALIZER_PRESETS: Record<string, { description: string }> = {
+  // --- 2D & Classic Engines ---
+  [VisualizerMode.PLASMA]: { description: 'Smooth fluid-like color blending.' },
+  [VisualizerMode.BARS]: { description: 'Classic frequency spectrum analyzer.' },
+  [VisualizerMode.PARTICLES]: { description: 'Deep space starfield traversal.' },
+  [VisualizerMode.TUNNEL]: { description: 'Recursive geometric corridor.' },
+  [VisualizerMode.RINGS]: { description: 'Concentric neon resonance patterns.' },
+  [VisualizerMode.NEBULA]: { description: 'Deep space particle simulation.' },
+  [VisualizerMode.LASERS]: { description: 'Sharp high-energy light beams.' },
+  [VisualizerMode.FLUID_CURVES]: { description: 'Smooth atmospheric light waves.' },
+  [VisualizerMode.MACRO_BUBBLES]: { description: 'Soft focus micro-cellular visuals.' },
+  [VisualizerMode.WAVEFORM]: { description: 'Liquid ribbons of spectral frequency.' },
+
+  // --- WebGL Engines (At the end) ---
+  [VisualizerMode.NEURAL_FLOW]: { description: 'Organic fluid simulation powered by WebGL.' },
+  [VisualizerMode.CUBE_FIELD]: { description: 'Infinite field of geometric blocks.' },
+  [VisualizerMode.SILK]: { description: 'Ethereal ribbons dancing in 3D space.' },
+  [VisualizerMode.LIQUID]: { description: 'Abstract morphing sphere reacting to rhythm.' },
+};
 
 export const SMART_PRESETS: Record<string, SmartPreset> = {
   calm: {
     nameKey: 'calm',
     settings: {
       mode: VisualizerMode.WAVEFORM,
-      colorTheme: COLOR_THEMES[27],
-      speed: 0.4,
-      sensitivity: 1.4,
-      glow: true,
+      colorTheme: COLOR_THEMES[0],
+      speed: 0.5,
+      sensitivity: 1.0,
+      glow: false,
       trails: true,
-      smoothing: 0.9, 
-      fftSize: 2048
+      smoothing: 0.9,
     }
   },
   party: {
     nameKey: 'party',
     settings: {
-      mode: VisualizerMode.CUBE_FIELD,
-      colorTheme: COLOR_THEMES[28],
-      speed: 1.8,
-      sensitivity: 2.2,
-      glow: true,
-      trails: false, 
-      smoothing: 0.5,
-      fftSize: 1024
-    }
-  },
-  cyberpunk: {
-    nameKey: 'cyberpunk',
-    settings: {
-      mode: VisualizerMode.LASERS,
+      mode: VisualizerMode.PLASMA,
       colorTheme: COLOR_THEMES[1],
-      speed: 2.0,
-      sensitivity: 1.8,
+      speed: 1.5,
+      sensitivity: 2.0,
       glow: true,
       trails: true,
-      smoothing: 0.7,
-      fftSize: 1024
+      smoothing: 0.6,
     }
   },
   ambient: {
     nameKey: 'ambient',
     settings: {
       mode: VisualizerMode.NEBULA,
-      colorTheme: COLOR_THEMES[18],
-      speed: 0.2,
-      sensitivity: 1.3,
+      colorTheme: COLOR_THEMES[4],
+      speed: 0.3,
+      sensitivity: 1.2,
       glow: true,
       trails: true,
       smoothing: 0.95,
-      fftSize: 2048
+    }
+  },
+  cyberpunk: {
+    nameKey: 'cyberpunk',
+    settings: {
+      mode: VisualizerMode.LASERS,
+      colorTheme: COLOR_THEMES[0],
+      speed: 1.2,
+      sensitivity: 1.8,
+      glow: true,
+      trails: true,
+      smoothing: 0.7,
+    }
+  },
+  retrowave: {
+    nameKey: 'retrowave',
+    settings: {
+      mode: VisualizerMode.CUBE_FIELD,
+      colorTheme: COLOR_THEMES[1],
+      speed: 1.0,
+      sensitivity: 1.5,
+      glow: true,
+      trails: false,
+      smoothing: 0.8,
+    }
+  },
+  vocal: {
+    nameKey: 'vocal',
+    settings: {
+      mode: VisualizerMode.BARS,
+      colorTheme: COLOR_THEMES[5],
+      speed: 0.8,
+      sensitivity: 1.3,
+      glow: false,
+      trails: true,
+      smoothing: 0.85
     }
   }
-};
-
-export const REGION_NAMES: Record<Region, string> = {
-  global: 'Global', US: 'USA / West', CN: 'China', JP: 'Japan', KR: 'Korea', EU: 'Europe', LATAM: 'Latin America'
-};
-
-export const getPositionOptions = (t: any) => {
-  const p = t?.positions || {};
-  return [
-    { value: 'tl', label: p.tl || "Top Left" }, { value: 'tc', label: p.tc || "Top Center" }, { value: 'tr', label: p.tr || "Top Right" },
-    { value: 'ml', label: p.ml || "Mid Left" }, { value: 'mc', label: p.mc || "Center" }, { value: 'mr', label: p.mr || "Mid Right" },
-    { value: 'bl', label: p.bl || "Bottom Left" }, { value: 'bc', label: p.bc || "Bottom Center" }, { value: 'br', label: p.br || "Bottom Right" },
-  ];
 };

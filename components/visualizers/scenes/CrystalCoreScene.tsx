@@ -1,9 +1,10 @@
 
 /**
  * File: components/visualizers/scenes/CrystalCoreScene.tsx
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-20 18:30
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -86,7 +87,8 @@ export const CrystalCoreScene: React.FC<SceneProps> = ({ analyser, colors, setti
                 transmission={1.0} // Glass-like
                 thickness={3} // Refraction volume
                 ior={1.8} // Diamond-like refractive index
-                chromaticAberration={0.05 + treble * 0.1}
+                // FIX: Use dispersion instead of chromaticAberration for physical accuracy in modern Three.js
+                dispersion={0.05 + treble * 0.1}
                 attenuationColor={c0}
                 attenuationDistance={10}
                 clearcoat={1}
@@ -114,7 +116,8 @@ const LightBeam = ({ index, bass, color }: { index: number, bass: number, color:
         if (ref.current) {
             const scaleY = 10 + bass * 40 * Math.random();
             ref.current.scale.y = scaleY;
-            ref.current.material.opacity = (bass * 0.5 + 0.1) * Math.sin(t * 5 + index);
+            // FIX: Cast material to MeshBasicMaterial to access opacity property as material can be an array
+            (ref.current.material as THREE.MeshBasicMaterial).opacity = (bass * 0.5 + 0.1) * Math.sin(t * 5 + index);
         }
     });
     
