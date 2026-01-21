@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.3
+ * Version: 1.6.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -250,8 +250,8 @@ export const zh = {
       changeTheme: '切换配色'
     },
     gestureItems: {
-        swipeMode: '左右滑：切换模式',
-        swipeSens: '上下滑：调节灵敏度',
+        swipeMode: '水平滑动：切换模式',
+        swipeSens: '垂直滑动：调节灵敏度',
         longPress: '长按：AI 通感识别'
     },
     howItWorksTitle: '使用指南',

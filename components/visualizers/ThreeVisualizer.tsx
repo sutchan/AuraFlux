@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -57,10 +57,26 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             alpha: false,
             stencil: false,
             depth: true,
-            powerPreference: "high-performance"
+            powerPreference: "high-performance",
+            failIfMajorPerformanceCaveat: true
         }}
         onCreated={({ gl }) => {
           gl.setClearColor('#000000');
+          
+          // Robustness: Handle WebGL Context Loss
+          // This prevents the application from freezing if the GPU crashes or browser kills the context
+          // We must call event.preventDefault() to allow the browser to attempt to restore the context.
+          const handleContextLost = (event: Event) => {
+            event.preventDefault();
+            console.warn('[ThreeVisualizer] WebGL Context Lost. Attempting to restore...');
+          };
+
+          const handleContextRestored = () => {
+            console.log('[ThreeVisualizer] WebGL Context Restored.');
+          };
+
+          gl.domElement.addEventListener('webglcontextlost', handleContextLost, false);
+          gl.domElement.addEventListener('webglcontextrestored', handleContextRestored, false);
         }}
       >
         <Suspense fallback={null}>

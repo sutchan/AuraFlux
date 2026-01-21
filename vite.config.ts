@@ -1,7 +1,7 @@
 
 /**
  * File: vite.config.ts
- * Version: 1.6.3
+ * Version: 1.6.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -31,9 +31,7 @@ export default defineConfig({
     target: 'esnext',
     minify: 'esbuild',
     rollupOptions: {
-      external: [
-        'three'
-      ]
+      external: [] // Three.js is now bundled
     }
   },
   define: {

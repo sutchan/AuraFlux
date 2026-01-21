@@ -1,7 +1,7 @@
 
 /**
  * File: core/hooks/useAudio.ts
- * Version: 1.2.6
+ * Version: 1.6.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -11,8 +11,50 @@ import { AudioDevice, VisualizerSettings, Language, AudioFeatures } from '../typ
 import { TRANSLATIONS } from '../i18n';
 import { createDemoAudioGraph } from '../services/audioSynthesis';
 
-// Use direct path to public asset to avoid build/alias resolution issues
-const AUDIO_PROCESSOR_URL = './audio-processor.js';
+// Inline Worklet Code to avoid module resolution issues.
+// Note: AudioWorkletProcessor is available in the AudioWorkletGlobalScope.
+const WORKLET_CODE = `
+class AudioFeaturesProcessor extends AudioWorkletProcessor {
+  constructor() {
+    super();
+    this._volume = 0;
+    this._lastUpdate = currentTime;
+    this._smoothingFactor = 0.8;
+  }
+
+  process(inputs, outputs, parameters) {
+    const input = inputs[0];
+    
+    if (input && input.length > 0) {
+      const samples = input[0];
+      let sum = 0;
+      
+      for (let i = 0; i < samples.length; ++i) {
+        sum += samples[i] * samples[i];
+      }
+      const rms = Math.sqrt(sum / samples.length);
+      
+      this._volume = (this._volume * this._smoothingFactor) + (rms * (1 - this._smoothingFactor));
+
+      if (currentTime - this._lastUpdate > 0.016) {
+        this.port.postMessage({
+          type: 'features',
+          data: {
+            rms: this._volume,
+            energy: rms,
+            timestamp: currentTime
+          }
+        });
+        this._lastUpdate = currentTime;
+      }
+    }
+
+    return true;
+  }
+}
+
+registerProcessor('audio-features-processor', AudioFeaturesProcessor);
+`;
 
 interface UseAudioProps {
   settings: VisualizerSettings;
@@ -20,22 +62,35 @@ interface UseAudioProps {
 }
 
 export const useAudio = ({ settings, language }: UseAudioProps) => {
+  // Defensive defaults: Ensure values exist even if settings object is malformed or null during init
+  const safeFftSize = settings?.fftSize || 512;
+  const safeSmoothing = (settings?.smoothing !== undefined) ? settings.smoothing : 0.8;
+
   const [isListening, setIsListening] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
-  const [isPending, setIsPending] = useState(false); // ROBUSTNESS: Mutex lock
+  const [isPending, setIsPending] = useState(false);
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [audioDevices, setAudioDevices] = useState<AudioDevice[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // AudioWorklet Features
   const featuresRef = useRef<AudioFeatures>({ rms: 0, energy: 0, timestamp: 0 });
   const workletNodeRef = useRef<AudioWorkletNode | null>(null);
-
   const audioContextRef = useRef<AudioContext | null>(null);
   const demoGraphRef = useRef<{ stop: () => void } | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const workletUrlRef = useRef<string | null>(null);
+
+  // Cleanup Worklet URL on unmount
+  useEffect(() => {
+    return () => {
+      if (workletUrlRef.current) {
+        URL.revokeObjectURL(workletUrlRef.current);
+        workletUrlRef.current = null;
+      }
+    };
+  }, []);
 
   const stopListening = useCallback(async () => {
     try {
@@ -70,7 +125,6 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     }
   }, []);
 
-  // Resilience: Monitor AudioContext state changes (especially for mobile focus loss)
   const attemptResume = useCallback(async () => {
     if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
       try {
@@ -92,9 +146,8 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [isListening, attemptResume]);
 
-
   const updateAudioDevices = useCallback(async () => {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
     try {
         const devices = await navigator.mediaDevices.enumerateDevices();
         setAudioDevices(devices.filter(d => d.kind === 'audioinput').map(d => ({ deviceId: d.deviceId, label: d.label || `Mic ${d.deviceId.slice(0, 5)}` })));
@@ -104,14 +157,21 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
   }, []);
   
   useEffect(() => {
-    navigator.mediaDevices?.addEventListener('devicechange', updateAudioDevices);
-    return () => navigator.mediaDevices?.removeEventListener('devicechange', updateAudioDevices);
+    if (typeof navigator !== 'undefined' && navigator.mediaDevices) {
+        navigator.mediaDevices.addEventListener('devicechange', updateAudioDevices);
+        return () => navigator.mediaDevices?.removeEventListener('devicechange', updateAudioDevices);
+    }
   }, [updateAudioDevices]);
 
-  // Helper to init Worklet
   const initWorklet = async (ctx: AudioContext, source: MediaStreamAudioSourceNode) => {
     try {
-        await ctx.audioWorklet.addModule(AUDIO_PROCESSOR_URL);
+        if (!workletUrlRef.current) {
+            const blob = new Blob([WORKLET_CODE], { type: 'application/javascript' });
+            workletUrlRef.current = URL.createObjectURL(blob);
+        }
+
+        await ctx.audioWorklet.addModule(workletUrlRef.current);
+        
         const node = new AudioWorkletNode(ctx, 'audio-features-processor');
         
         node.port.onmessage = (event) => {
@@ -121,10 +181,9 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
         };
         
         source.connect(node);
-        // Worklet needs to connect to destination or have keep-alive to run
         node.connect(ctx.destination); 
         workletNodeRef.current = node;
-        console.log("[Audio] Worklet initialized.");
+        console.log("[Audio] Worklet initialized successfully.");
     } catch (e) {
         console.warn("[Audio] AudioWorklet failed to load, falling back to main thread only:", e);
     }
@@ -132,10 +191,13 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
 
   const startMicrophone = useCallback(async (deviceId?: string) => {
     setErrorMessage(null);
-    // Ensure any previous instance is fully stopped before starting new one
     await stopListening();
 
     try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error("Audio API not supported in this browser");
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ 
         audio: { 
             deviceId: deviceId ? { exact: deviceId } : undefined, 
@@ -154,23 +216,24 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
           };
       }
       
-      const context = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) throw new Error("AudioContext not supported");
+
+      const context = new AudioContextClass();
       
       context.onstatechange = () => {
-          if (context.state === 'closed') return; // Ignore if intentional
-          // Auto-resume logic if suspended unexpectedly
+          if (context.state === 'closed') return;
       };
 
       if (context.state === 'suspended') await context.resume();
 
       const node = context.createAnalyser();
-      node.fftSize = settings.fftSize;
-      node.smoothingTimeConstant = settings.smoothing;
+      node.fftSize = safeFftSize;
+      node.smoothingTimeConstant = safeSmoothing;
       
       const source = context.createMediaStreamSource(stream);
       source.connect(node);
 
-      // Initialize AudioWorklet
       await initWorklet(context, source);
 
       audioContextRef.current = context;
@@ -193,19 +256,22 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
           console.error("[Audio] Access Error:", err);
       }
     }
-  }, [settings.fftSize, settings.smoothing, updateAudioDevices, language, stopListening]);
+  }, [safeFftSize, safeSmoothing, updateAudioDevices, language, stopListening]);
 
   const startDemoMode = useCallback(async () => {
     setErrorMessage(null);
     await stopListening();
 
     try {
-        const context = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        const context = new AudioContextClass();
         if (context.state === 'suspended') await context.resume();
 
         const node = context.createAnalyser();
-        node.fftSize = settings.fftSize;
-        node.smoothingTimeConstant = settings.smoothing;
+        node.fftSize = safeFftSize;
+        node.smoothingTimeConstant = safeSmoothing;
 
         const silentDestination = context.createGain();
         silentDestination.gain.value = 0;
@@ -225,11 +291,10 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     } catch (e) {
         console.error("Demo mode synthesis failed", e);
     }
-  }, [settings.fftSize, settings.smoothing, stopListening]);
+  }, [safeFftSize, safeSmoothing, stopListening]);
 
-  // ROBUSTNESS: Atomic toggle with locking
   const toggleMicrophone = useCallback(async (deviceId: string) => {
-    if (isPending) return; // Prevent clicking while processing
+    if (isPending) return;
     
     setIsPending(true);
     try {
@@ -245,13 +310,14 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
   
   useEffect(() => {
     if (analyser) {
-      analyser.smoothingTimeConstant = settings.smoothing;
-      if (analyser.fftSize !== settings.fftSize) analyser.fftSize = settings.fftSize;
+      analyser.smoothingTimeConstant = safeSmoothing;
+      if (analyser.fftSize !== safeFftSize) analyser.fftSize = safeFftSize;
     }
-  }, [settings.smoothing, settings.fftSize, analyser]);
+  }, [safeSmoothing, safeFftSize, analyser]);
 
+  // Robust Return: Always return the structure expected by destructuring
   return { 
-      isListening, isSimulating, isPending, // Export isPending
+      isListening, isSimulating, isPending,
       audioContext, analyser, mediaStream, audioDevices, 
       errorMessage, setErrorMessage, 
       startMicrophone, startDemoMode, toggleMicrophone,

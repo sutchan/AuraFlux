@@ -26,7 +26,10 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     // Initialize all renderers if they have an init method
     // Note: We don't pass canvas here yet, as it might resize. 
     // Renderers that need canvas context usually get it in draw() or lazily.
-    Object.values(renderersRef.current).forEach((r) => r.init && r.init(null));
+    Object.values(renderersRef.current).forEach((r) => {
+      const renderer = r as IVisualizerRenderer;
+      if (renderer.init) renderer.init(null);
+    });
   }, []);
 
   useEffect(() => {
