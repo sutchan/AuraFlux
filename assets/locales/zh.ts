@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.4
+ * Version: 1.6.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -31,9 +31,9 @@ export const zh = {
     mode: '切换用于生成实时影像的核心数学引擎。',
     theme: '应用精心调校的沉浸式色彩主题。',
     speed: '时间流速倍率。低数值催眠舒缓，高数值动感强烈。',
-    glow: '开启后期辉光渲染 (Bloom)。关闭可显著提升性能。',
+    glow: '开启后期辉光渲染 (Bloom)。关闭可显著提升低配设备性能。',
     trails: '控制光影残留时间。高数值可产生如油画般的流动轨迹。',
-    sensitivity: '音频响应增益。数值越高，微弱的声音也能引发剧烈的视觉爆发。',
+    sensitivity: '音频响应增益。在安静环境下调高此值可增强视觉爆发力。',
     smoothing: '时域阻尼系数。高数值如液体般柔顺，低数值则反应锐利。',
     fftSize: '频谱采样精度。4096 提供极致细节，但会增加 CPU 负载。',
     lyrics: '激活 AI 驱动的声景分析与歌词同步展示。',
@@ -58,7 +58,11 @@ export const zh = {
     showTooltips: '鼠标悬停在控件上时显示功能说明。',
     doubleClickFullscreen: '允许通过双击屏幕任意位置切换全屏模式。',
     autoHideUi: '在无操作时自动隐藏底部控制面板。',
-    mirrorDisplay: '水平翻转画面（适用于背投或摄像头模式）。'
+    mirrorDisplay: '水平翻转画面（适用于背投或摄像头模式）。',
+    showCustomText: '切换自定义文字图层的可见性。',
+    textPulse: '文字大小随音乐节拍动态缩放。',
+    textAudioReactive: '文字的透明度和大小将响应实时音量。',
+    customTextCycleColor: '自动在光谱色中循环切换文字颜色。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -256,10 +260,11 @@ export const zh = {
     },
     howItWorksTitle: '使用指南',
     howItWorksSteps: [
-      '1. 授权权限：点击“开启体验”并允许浏览器访问麦克风。',
-      '2. 播放音乐：在设备附近播放音乐，视觉效果将根据实时采样跳动。',
-      '3. 探索模式：打开设置面板 (按 H) 切换 12+ 种视觉引擎。',
-      '4. AI 识别：按 L 键激活“AI 通感识别”以解析当前声景。'
+      '1. 连接: 点击“开启体验”并授权麦克风，启动音频响应引擎。',
+      '2. 视觉: 播放音乐。使用“智能预设”一键设定完美氛围。',
+      '3. 定制: 切换“专业模式 (Advanced)”以微调灵敏度、FFT参数或添加“自定义文字”。',
+      '4. 交互: 左右滑动切换模式，上下滑动调节灵敏度，长按激活 AI 识别。',
+      '5. 探索: 按 H 打开设置，F 全屏，R 随机切换风格。'
     ],
     settingsTitle: '核心参数指南',
     settingsDesc: {

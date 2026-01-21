@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -40,7 +40,7 @@ export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode,
       className={`relative rounded-xl transition-all duration-300 group overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 ${isActive ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:ring-1 hover:ring-white/30'}`}
     >
       <div 
-        className="h-16 w-full bg-black transition-transform duration-500 ease-in-out group-hover:scale-110"
+        className="h-11 w-full bg-black transition-transform duration-500 ease-in-out group-hover:scale-110"
         style={styles[mode] || { background: 'black' }}
       ></div>
       <div className={`absolute inset-0 flex items-center justify-center p-2 text-center transition-colors duration-300 ${isActive ? 'bg-black/40' : 'bg-black/60 group-hover:bg-black/50'}`}>

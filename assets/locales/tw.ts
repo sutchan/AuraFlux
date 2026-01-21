@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.1
+ * Version: 1.6.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -33,7 +33,7 @@ export const tw = {
     speed: '時間流速倍率。低數值催眠舒緩，高數值動感強烈。',
     glow: '開啟後期泛光（Bloom）。關閉可提升低階裝置效能。',
     trails: '控制光影殘留時間。高數值可產生如油畫般的流動感。',
-    sensitivity: '控制音訊增益。數值越高，微弱的聲音也能引發劇烈的視覺爆發。',
+    sensitivity: '音訊響應增益。在安靜環境下調高此值可增強視覺爆發力。',
     smoothing: '時域阻尼係數。高數值如液體般柔順，低數值則反應銳利。',
     fftSize: '頻譜採樣精度。4096 提供極致細節但消耗更多 CPU 資源。',
     lyrics: '激活 AI 驅動的聲景分析與歌詞同步展示。',
@@ -52,13 +52,17 @@ export const tw = {
     mic: '啟動或靜音系統麥克風訊號。',
     device: '選擇當前活動的音訊輸入硬體。',
     monitor: '透過揚聲器監聽輸入訊號（警告：可能產生回音）。',
-    hideCursor: '自動隱藏滑鼠游標以獲得純淨視覺。',
+    hideCursor: '自動隱藏滑鼠游標以獲得純淨視覺體驗。',
     wakeLock: '啟用後，只要視覺化處於活動狀態，螢幕將保持常亮。',
     showFps: '在螢幕左上角顯示即時的幀率（FPS）計數器。',
-    showTooltips: '滑鼠懸停在控制項上時顯示幫助提示。',
+    showTooltips: '滑鼠懸停在控制項上時顯示功能說明。',
     doubleClickFullscreen: '允許透過雙擊螢幕任意位置切換全螢幕模式。',
     autoHideUi: '在無操作時自動隱藏底部控制面板。',
-    mirrorDisplay: '水平翻轉畫面（適用於背投或攝影機模式）。'
+    mirrorDisplay: '水平翻轉畫面（適用於背投或攝影機模式）。',
+    showCustomText: '切換自訂文字圖層的可見性。',
+    textPulse: '文字大小隨音樂節奏動態縮放。',
+    textAudioReactive: '文字的透明度和大小將響應即時音量。',
+    customTextCycleColor: '自動在光譜色中循環切換文字顏色。'
   },
   visualizerMode: '視覺化模式',
   styleTheme: '視覺風格',
@@ -218,7 +222,7 @@ export const tw = {
     [VisualizerMode.LASERS]: '舞台雷射矩陣',
     [VisualizerMode.FLUID_CURVES]: '極光之舞',
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡 (DoF)', 
-    [VisualizerMode.SILK]: '流光綢緞 (WebGL)',
+    [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
     [VisualizerMode.TERRAIN]: '低多邊形山脈 (WebGL)'
   },
@@ -236,6 +240,7 @@ export const tw = {
     },
     intro: 'Aura Flux 是一款沉浸式的視聽互動工具，它利用高精度麥克風取樣，將音訊訊號即時轉化為數學生成的數位藝術。',
     shortcutsTitle: '控制快捷鍵',
+    gesturesTitle: '觸控手勢',
     shortcutItems: {
       toggleMic: '麥克風',
       fullscreen: '全螢幕',
@@ -247,12 +252,18 @@ export const tw = {
       changeMode: '切換模式',
       changeTheme: '切換配色'
     },
+    gestureItems: {
+        swipeMode: '水平滑動：切換模式',
+        swipeSens: '垂直滑動：調節靈敏度',
+        longPress: '長按：AI 通感辨識'
+    },
     howItWorksTitle: '使用流程',
     howItWorksSteps: [
-      '1. 授權權限：點擊「開啟體驗」並允許瀏覽器訪問麥克風。',
-      '2. 播放音樂：在設備附近播放音樂，視覺效果將根據實時採樣跳動。',
-      '3. 探索模式：打開設置面板 (按 H) 切換 12+ 種視覺引擎。',
-      '4. AI 辨識：按 L 鍵開啟「AI 通感辨識」以分析當前歌曲及其情緒。'
+      '1. 連接: 點擊「開啟體驗」並授權麥克風，啟動音訊響應引擎。',
+      '2. 視覺: 播放音樂。使用「智慧預設」一鍵設定完美氛圍。',
+      '3. 客製: 切換「專業模式 (Advanced)」以微調靈敏度、FFT參數或添加「自訂文字」。',
+      '4. 互動: 左右滑動切換模式，上下滑動調節靈敏度，長按啟動 AI 辨識。',
+      '5. 探索: 按 H 打開設置，F 全螢幕，R 隨機切換風格。'
     ],
     settingsTitle: '核心參數指南',
     settingsDesc: {

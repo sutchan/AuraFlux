@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.0.9
+ * Version: 1.0.10
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -20,6 +20,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
   const { t } = useUI();
   
   const isAdvanced = settings.uiMode === 'advanced';
+  const hints = t?.hints || {};
   
   const positionOptions = getPositionOptions(t);
 
@@ -46,7 +47,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                   label={t?.customText || "Text Content"}
                   value={settings.showCustomText}
                   onChange={() => setSettings({...settings, showCustomText: !settings.showCustomText})}
-                  hintText={t?.showText}
+                  hintText={hints?.showCustomText}
                   activeColor="blue"
                 />
                 <textarea 
@@ -83,6 +84,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                           value={settings.customTextCycleColor} 
                           onChange={() => setSettings({...settings, customTextCycleColor: !settings.customTextCycleColor})}
                           variant="clean"
+                          hintText={hints?.customTextCycleColor}
                         />
                         {settings.customTextCycleColor && (
                             <div className="pl-1 pt-3 pb-2">
@@ -133,7 +135,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                         value={settings.textPulse}
                         onChange={() => setSettings({...settings, textPulse: !settings.textPulse})}
                         variant="clean"
-                        hintText="Scale text based on audio amplitude & rhythm"
+                        hintText={hints?.textAudioReactive}
                     />
                     <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
                     <PositionSelector label={t?.textPosition || "Text Position"} value={settings.customTextPosition} onChange={handleTextPositionChange} options={positionOptions} activeColor="blue" />

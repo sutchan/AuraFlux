@@ -1,4 +1,11 @@
 
+/**
+ * File: assets/locales/es.ts
+ * Version: 1.6.6
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const es = {
@@ -26,7 +33,7 @@ export const es = {
     speed: 'Multiplicador de tiempo. Valores bajos son hipnóticos; altos son enérgicos.',
     glow: 'Activa el resplandor de post-procesamiento. Desactívalo para mejorar el rendimiento.',
     trails: 'Controla la persistencia de píxeles. Valores altos crean un movimiento fluido tipo pintura.',
-    sensitivity: 'Controla la ganancia de audio. Valores altos crean reacciones explosivas a sonidos tenues.',
+    sensitivity: 'Amplifica la reacción visual al audio. Aumentar para entornos silenciosos.',
     smoothing: 'Amortiguación temporal. Valores altos dan fluidez líquida; bajos son más nerviosos.',
     fftSize: 'Resolución espectral. 4096 ofrece detalles finos pero consume más CPU.',
     lyrics: 'Alterna la identificación de canciones y obtención de letras mediante IA.',
@@ -50,7 +57,12 @@ export const es = {
     showTooltips: 'Muestra pistas flotantes al pasar el ratón por los controles.',
     doubleClickFullscreen: 'Alterna pantalla completa haciendo doble clic en cualquier lugar.',
     autoHideUi: 'Oculta automáticamente los controles tras un periodo de inactividad.',
-    mirrorDisplay: 'Voltea la imagen horizontalmente (útil para retroproyección o webcams).'
+    mirrorDisplay: 'Voltea la imagen horizontalmente (útil para retroproyección o webcams).',
+    showCustomText: 'Alterna la visibilidad de tu capa de texto personalizado.',
+    textPulse: 'El texto escala dinámicamente con el ritmo de la música.',
+    textAudioReactive: 'La opacidad y el tamaño del texto reaccionan al volumen.',
+    customTextCycleColor: 'Cicla automáticamente por el espectro de colores para el texto.',
+    hideCursor: 'Oculta automáticamente el cursor del ratón tras inactividad.'
   },
   visualizerMode: 'Modo Visualizador',
   styleTheme: 'Tema Visual',
@@ -227,6 +239,7 @@ export const es = {
     },
     intro: 'Aura Flux transforma la señal de tu micrófono en arte digital generativo altamente reactivo mediante análisis espectral avanzado.',
     shortcutsTitle: 'Interacción por Teclado',
+    gesturesTitle: 'Gestos Táctiles',
     shortcutItems: {
       toggleMic: 'Activar/Desactivar Audio',
       fullscreen: 'Pantalla Completa',
@@ -238,12 +251,18 @@ export const es = {
       changeMode: 'Cambiar Modo',
       changeTheme: 'Cambiar Colores'
     },
+    gestureItems: {
+        swipeMode: 'Deslizar Horizontal: Cambiar Modo',
+        swipeSens: 'Deslizar Vertical: Ajustar Sensibilidad',
+        longPress: 'Pulsación Larga: Info IA'
+    },
     howItWorksTitle: 'Cómo usar',
     howItWorksSteps: [
-      '1. Autorizar permisos: Haz clic en "Lanzar" y permite el acceso al micrófono.',
-      '2. Reproducir música: Los visuales reaccionarán en tiempo real a cualquier sonido cercano.',
-      '3. Explorar modos: Abre el panel (tecla H) para alternar entre 12+ motores visuales.',
-      '4. Identificación IA: Presiona L para identificar la canción actual y su estado de ánimo.'
+      '1. Conectar: Haz clic en "Lanzar" y autoriza el micrófono.',
+      '2. Visualizar: Reproduce música. Usa "Ajustes Inteligentes" para cambiar de ambiente.',
+      '3. Personalizar: Activa el "Modo Avanzado" para ajustar sensibilidad, FFT y "Texto Personalizado".',
+      '4. Interactuar: Desliza para cambiar modo/sensibilidad. Mantén pulsado para IA.',
+      '5. Explorar: H para opciones, F para pantalla completa, R para aleatorio.'
     ],
     settingsTitle: 'Guía de Parámetros',
     settingsDesc: {

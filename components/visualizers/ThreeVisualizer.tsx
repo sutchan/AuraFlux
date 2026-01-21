@@ -1,12 +1,12 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom, ChromaticAberration, TiltShift } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -21,9 +21,27 @@ interface ThreeVisualizerProps {
 }
 
 const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
-  if (!analyser || !settings) return null;
+  
+  // Performance Optimization: Memoize DPR calculation
+  const dpr = useMemo(() => {
+    return settings.quality === 'low' ? 0.8 : settings.quality === 'med' ? 1.0 : Math.min(window.devicePixelRatio, 1.5);
+  }, [settings.quality]);
 
-  const renderScene = () => {
+  // Performance Optimization: Memoize Bloom Intensity based on mode
+  const bloomIntensity = useMemo(() => {
+      if (mode === VisualizerMode.SILK) return 1.2;
+      if (mode === VisualizerMode.LIQUID) return 1.8;
+      return 1.5;
+  }, [mode]);
+
+  // Performance Optimization: Memoize TiltShift enable logic
+  const enableTiltShift = useMemo(() => {
+      return settings.quality === 'high' && (mode === VisualizerMode.LIQUID || mode === VisualizerMode.SILK);
+  }, [settings.quality, mode]);
+
+  // Performance Optimization: Memoize Scene selection to prevent unnecessary re-evaluations
+  const activeScene = useMemo(() => {
+    if (!analyser || !settings) return null;
     switch (mode) {
         case VisualizerMode.SILK:
             return <SilkWavesScene analyser={analyser} colors={colors} settings={settings} />;
@@ -34,16 +52,9 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         default:
             return <LowPolyTerrainScene analyser={analyser} colors={colors} settings={settings} />;
     }
-  };
+  }, [mode, analyser, colors, settings]);
 
-  const getBloomIntensity = () => {
-      if (mode === VisualizerMode.SILK) return 1.2;
-      if (mode === VisualizerMode.LIQUID) return 1.8;
-      return 1.5;
-  };
-
-  const dpr = settings.quality === 'low' ? 0.8 : settings.quality === 'med' ? 1.0 : Math.min(window.devicePixelRatio, 1.5);
-  const enableTiltShift = settings.quality === 'high' && (mode === VisualizerMode.LIQUID || mode === VisualizerMode.SILK);
+  if (!analyser || !settings) return null;
   
   return (
     <div className="w-full h-full">
@@ -64,8 +75,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
           gl.setClearColor('#000000');
           
           // Robustness: Handle WebGL Context Loss
-          // This prevents the application from freezing if the GPU crashes or browser kills the context
-          // We must call event.preventDefault() to allow the browser to attempt to restore the context.
           const handleContextLost = (event: Event) => {
             event.preventDefault();
             console.warn('[ThreeVisualizer] WebGL Context Lost. Attempting to restore...');
@@ -80,7 +89,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         }}
       >
         <Suspense fallback={null}>
-            {renderScene()}
+            {activeScene}
         </Suspense>
         
         {settings.glow && (
@@ -91,7 +100,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
                 <Bloom 
                     luminanceThreshold={0.4} 
                     luminanceSmoothing={0.9} 
-                    intensity={getBloomIntensity()} 
+                    intensity={bloomIntensity} 
                     mipmapBlur={settings.quality !== 'low'}
                 />
                 {settings.quality === 'high' && (

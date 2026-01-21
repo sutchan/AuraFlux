@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/en.ts
- * Version: 1.6.3
+ * Version: 1.6.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -30,18 +30,18 @@ export const en = {
   hints: {
     mode: 'Select the core mathematical engine for generating visuals.',
     theme: 'Apply a curated color palette to the scene.',
-    speed: 'Time-scale multiplier. Low values are hypnotic; high values are energetic.',
-    glow: 'Enable post-processing bloom. Disable to improve performance.',
+    speed: 'Adjusts the time-scale. Low values are hypnotic; high values are energetic.',
+    glow: 'Enable post-processing bloom. Disable to improve performance on low-end devices.',
     trails: 'Controls pixel persistence. High values create fluid, paint-like motion.',
-    sensitivity: 'Controls audio gain. Higher values create explosive reactions to subtle sounds.',
-    smoothing: 'Temporal damping. Higher values yield liquid-like movement; lower is twitchy.',
-    fftSize: 'Spectral resolution. 4096 provides fine detail but uses more CPU.',
+    sensitivity: 'Amplifies the visual reaction to audio. Increase for quiet environments.',
+    smoothing: 'Temporal damping. Higher values yield liquid-like movement; lower values are twitchy.',
+    fftSize: 'Spectral resolution. 4096 provides fine detail but consumes more CPU.',
     lyrics: 'Toggle AI-powered song identification and lyric fetching.',
     lyricsStyle: 'Customize the visual presentation of the synchronized lyrics.',
     region: 'Bias the AI search engine towards music from this specific market.',
-    autoRotate: 'Automatically cycle through different visual engines.',
+    autoRotate: 'Automatically cycle through different visual engines over time.',
     rotateInterval: 'Time in seconds before switching to the next visual engine.',
-    cycleColors: 'Transitions automatically between color themes over time.',
+    cycleColors: 'Automatically transition between color themes over time.',
     colorInterval: 'Time in seconds before smoothly blending to the next color palette.',
     reset: 'Restore all application settings to factory defaults.',
     confirmReset: 'Confirm Reset? This action cannot be undone.',
@@ -51,13 +51,18 @@ export const en = {
     help: 'View keyboard shortcuts and documentation.',
     mic: 'Activate or mute microphone input.',
     device: 'Select the hardware audio input source.',
-    monitor: 'Route audio input to speakers (Caution: may cause feedback loop).',
-    wakeLock: 'Prevent the screen from turning off or dimming while the visualizer is active.',
+    monitor: 'Pass microphone input to speakers. WARNING: Can cause loud feedback loops.',
+    wakeLock: 'Prevent the screen from turning off while the visualizer is active.',
     showFps: 'Display a real-time frames-per-second counter.',
     showTooltips: 'Enable helpful floating hints when hovering over controls.',
     doubleClickFullscreen: 'Toggle fullscreen mode by double-clicking anywhere on the visualizer.',
     autoHideUi: 'Automatically hide the control panel after a period of inactivity.',
-    mirrorDisplay: 'Flip the visualizer output horizontally (useful for rear projection or webcam).'
+    mirrorDisplay: 'Flip the visualizer output horizontally (useful for rear projection or webcams).',
+    showCustomText: 'Toggle the visibility of your custom message overlay.',
+    textPulse: 'Text scales dynamically with the rhythm of the music.',
+    textAudioReactive: 'Text opacity and size react to live audio amplitude.',
+    customTextCycleColor: 'Automatically cycle through the color spectrum for the text.',
+    hideCursor: 'Automatically hide the mouse cursor after inactivity.'
   },
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',
@@ -254,10 +259,11 @@ export const en = {
     },
     howItWorksTitle: 'How to Use',
     howItWorksSteps: [
-      '1. Grant Permissions: Click "Start" and allow the browser to access your audio input.',
-      '2. Play Music: Play audio near your device. The visuals react to the microphone in real-time.',
-      '3. Explore Modes: Open the Options panel (or press H) to switch visual engines.',
-      '4. AI Recognition: Press L to identify the current song and its aesthetic mood.'
+      '1. Connect: Click "Start" to authorize microphone access for audio reactivity.',
+      '2. Visualize: Play music. Use "Smart Presets" to instantly set the mood.',
+      '3. Customize: Toggle "Advanced Mode" to tune Sensitivity, FFT, and enable "Custom Text".',
+      '4. Interact: Swipe horizontal/vertical to change modes or sensitivity. Long-press for AI.',
+      '5. Explore: Press H for options, F for fullscreen, or R to randomize.'
     ],
     settingsTitle: 'Parameter Guide',
     settingsDesc: {

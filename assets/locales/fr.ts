@@ -1,4 +1,11 @@
 
+/**
+ * File: assets/locales/fr.ts
+ * Version: 1.6.6
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const fr = {
@@ -26,7 +33,7 @@ export const fr = {
     speed: 'Multiplicateur de temps. Les valeurs basses sont hypnotiques ; les hautes sont énergiques.',
     glow: 'Active le bloom post-traitement. Désactivez pour améliorer les performances.',
     trails: 'Contrôle la persistance des pixels. Des valeurs élevées créent un mouvement fluide.',
-    sensitivity: 'Contrôle le gain audio. Des valeurs élevées créent des réactions explosives.',
+    sensitivity: 'Amplifie la réaction visuelle à l\'audio. Augmentez pour les environnements calmes.',
     smoothing: 'Amortissement temporel. Des valeurs élevées donnent un mouvement fluide.',
     fftSize: 'Résolution spectrale. 4096 fournit des détails fins mais utilise plus de CPU.',
     lyrics: 'Active l\'identification de chanson et la récupération des paroles par IA.',
@@ -44,13 +51,18 @@ export const fr = {
     help: 'Voir les raccourcis clavier et la documentation.',
     mic: 'Active ou coupe l\'entrée microphone.',
     device: 'Sélectionnez la source d\'entrée audio matérielle.',
-    monitor: 'Sortie vers haut-parleurs (Attention : risque de larsen).',
+    monitor: 'Passe l\'entrée micro aux haut-parleurs. ATTENTION : risque de larsen.',
     wakeLock: 'Empêche l\'écran de s\'éteindre pendant que le visualiseur est actif.',
     showFps: 'Affichage des images par seconde en temps réel.',
     showTooltips: 'Affiche des indices flottants au survol des commandes.',
     doubleClickFullscreen: 'Double-cliquez n\'importe où pour basculer en plein écran.',
     autoHideUi: 'Masque automatiquement le panneau après une période d\'inactivité.',
-    mirrorDisplay: 'Inverse l\'affichage horizontalement (utile pour la rétroprojection).'
+    mirrorDisplay: 'Inverse l\'affichage horizontalement (utile pour la rétroprojection).',
+    showCustomText: 'Bascule la visibilité de votre superposition de message personnalisé.',
+    textPulse: 'Le texte change d\'échelle dynamiquement avec le rythme de la musique.',
+    textAudioReactive: 'L\'opacité et la taille du texte réagissent à l\'amplitude audio.',
+    customTextCycleColor: 'Fait défiler automatiquement le spectre des couleurs pour le texte.',
+    hideCursor: 'Masque automatiquement le curseur de la souris après inactivité.'
   },
   visualizerMode: 'Mode Visualiseur',
   styleTheme: 'Thème Visuel',
@@ -119,7 +131,7 @@ export const fr = {
   },
   visualPanel: {
     effects: 'Effets',
-    automation: 'Automatisation',
+    automation: 'Automatización',
     display: 'Affichage'
   },
   audioPanel: {
@@ -128,7 +140,10 @@ export const fr = {
   systemPanel: {
     interface: 'Interface',
     behavior: 'Comportement',
-    maintenance: 'Maintenance'
+    maintenance: 'Maintenance',
+    engine: 'Moteur',
+    audio: 'Audio',
+    ai: 'IA'
   },
   showFps: 'Afficher FPS',
   showTooltips: 'Afficher Aide',
@@ -223,6 +238,7 @@ export const fr = {
     },
     intro: 'Aura Flux transforme votre entrée microphone en art numérique génératif basé sur une analyse spectrale de haute précision.',
     shortcutsTitle: 'Interaction Clavier',
+    gesturesTitle: 'Gestes Tactiles',
     shortcutItems: {
       toggleMic: 'Activer Microphone',
       fullscreen: 'Plein écran',
@@ -234,12 +250,18 @@ export const fr = {
       changeMode: 'Changer de Mode',
       changeTheme: 'Changer de Thème'
     },
+    gestureItems: {
+        swipeMode: 'Glisser Horizontal : Mode',
+        swipeSens: 'Glisser Vertical : Sensibilité',
+        longPress: 'Appui Long : Info IA'
+    },
     howItWorksTitle: 'Utilisation',
     howItWorksSteps: [
-      '1. Autorisations : Cliquez sur "Lancer" et autorisez l\'accès au micro.',
-      '2. Musique : Jouez du son à proximité, les visuels réagiront instantanément.',
-      '3. Exploration : Ouvrez le panneau (H) pour basculer entre 12+ moteurs.',
-      '4. Identification IA : Pressez L pour identifier le titre et l\'ambiance.'
+      '1. Connexion : Cliquez sur "Lancer" et autorisez le micro.',
+      '2. Visuel : Jouez de la musique. Utilisez les "Préréglages Intelligents" pour l\'ambiance.',
+      '3. Personnaliser : Mode "Avancé" pour régler la sensibilité, FFT et "Texte Personnalisé".',
+      '4. Interagir : Glissez pour changer de mode/sensibilité. Appui long pour l\'IA.',
+      '5. Explorer : H pour options, F pour plein écran, R pour aléatoire.'
     ],
     settingsTitle: 'Guide des Paramètres',
     settingsDesc: {
@@ -251,7 +273,7 @@ export const fr = {
       fftSize: 'Précision de l\'analyse spectrale.'
     },
     projectInfoTitle: 'Description du Projet',
-    aboutDescription: 'Expérience synesthésique de nouvelle génération. Aura Flux fusionne l\'analyse de précision avec Google Gemini 3 pour transformer le son en lumière vive. Idéal pour les VJs, streamers et installations immersives.',
+    aboutDescription: 'Expérience synesthésique de nouvelle génération. Aura Flux fusionne l\'analyse de précision avec Google Gemini 3 pour transformer le son en lumière vive. Idéal pour les VJ, streamers et installations immersives.',
     privacyTitle: 'Confidentialité & Sécurité',
     privacyText: 'L\'analyse audio est locale. Seules des signatures chiffrées sont envoyées à Gemini pour l\'identification ; aucun enregistrement n\'est stocké.',
     version: 'Release'

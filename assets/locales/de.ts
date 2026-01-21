@@ -1,4 +1,11 @@
 
+/**
+ * File: assets/locales/de.ts
+ * Version: 1.6.6
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const de = {
@@ -26,7 +33,7 @@ export const de = {
     speed: 'Zeit-Multiplikator. Niedrige Werte sind hypnotisch; hohe Werte energetisch.',
     glow: 'Aktiviert Post-Processing-Bloom. Deaktivieren für bessere Leistung.',
     trails: 'Steuert die Pixel-Persistenz. Hohe Werte erzeugen flüssige, malerische Bewegungen.',
-    sensitivity: 'Steuert die Audioverstärkung. Höhere Werte erzeugen explosive Reaktionen auf leise Geräusche.',
+    sensitivity: 'Verstärkt die visuelle Reaktion auf Audio. Erhöhen für leise Umgebungen.',
     smoothing: 'Zeitliche Dämpfung. Höhere Werte ergeben flüssige Bewegungen; niedriger ist zackig.',
     fftSize: 'Spektrale Auflösung. 4096 bietet feine Details, verbraucht aber mehr CPU.',
     lyrics: 'KI-gestützte Songidentifikation und Textabruf umschalten.',
@@ -44,13 +51,18 @@ export const de = {
     help: 'Tastaturkürzel und Dokumentation anzeigen.',
     mic: 'Mikrofoneingang aktivieren oder stummschalten.',
     device: 'Wählen Sie die Hardware-Audioeingangsquelle.',
-    monitor: 'Audioeingang auf Lautsprecher leiten (Vorsicht: Rückkopplungsgefahr).',
-    wakeLock: 'Verhindert, dass der Bildschirm ausgeschaltet oder gedimmt wird, während der Visualizer aktiv ist.',
+    monitor: 'Mikrofoneingang auf Lautsprecher leiten. WARNUNG: Kann Rückkopplungen verursachen.',
+    wakeLock: 'Verhindert, dass der Bildschirm ausgeschaltet wird, während der Visualizer aktiv ist.',
     showFps: 'Echtzeit-Anzeige der Bilder pro Sekunde.',
     showTooltips: 'Hilfreiche Hinweise beim Überfahren von Steuerelementen.',
     doubleClickFullscreen: 'Doppelklick zum Umschalten des Vollbildmodus.',
     autoHideUi: 'Bedienfeld bei Inaktivität automatisch ausblenden.',
-    mirrorDisplay: 'Visualisierung horizontal spiegeln (nützlich für Rückprojektionen).'
+    mirrorDisplay: 'Visualisierung horizontal spiegeln (nützlich für Rückprojektionen).',
+    showCustomText: 'Schaltet die Sichtbarkeit Ihres benutzerdefinierten Text-Overlays um.',
+    textPulse: 'Der Text skaliert dynamisch im Rhythmus der Musik.',
+    textAudioReactive: 'Textdeckkraft und -größe reagieren auf die Live-Audio-Amplitude.',
+    customTextCycleColor: 'Automatischer Durchlauf durch das Farbspektrum für den Text.',
+    hideCursor: 'Mauszeiger nach Inaktivität automatisch ausblenden.'
   },
   visualizerMode: 'Visualizer-Modus',
   styleTheme: 'Visuelles Thema',
@@ -128,7 +140,10 @@ export const de = {
   systemPanel: {
     interface: 'Oberfläche',
     behavior: 'Verhalten',
-    maintenance: 'Wartung'
+    maintenance: 'Wartung',
+    engine: 'Engine',
+    audio: 'Audio',
+    ai: 'KI'
   },
   showFps: 'FPS anzeigen',
   showTooltips: 'Tooltips anzeigen',
@@ -223,6 +238,7 @@ export const de = {
     },
     intro: 'Aura Flux verwandelt Mikrofon-Input basierend auf Echtzeit-Spektralanalyse in mathematisch generierte digitale Kunst.',
     shortcutsTitle: 'Tastatur-Steuerung',
+    gesturesTitle: 'Touch-Gesten',
     shortcutItems: {
       toggleMic: 'Audio Ein/Aus',
       fullscreen: 'Vollbild umschalten',
@@ -234,12 +250,18 @@ export const de = {
       changeMode: 'Modus wechseln',
       changeTheme: 'Thema wechseln'
     },
+    gestureItems: {
+        swipeMode: 'Wischen Horizontal: Modus ändern',
+        swipeSens: 'Wischen Vertikal: Empfindlichkeit',
+        longPress: 'Lange drücken: KI-Erkennung'
+    },
     howItWorksTitle: 'Verwendung',
     howItWorksSteps: [
-      '1. Berechtigungen: Klicken Sie auf "Start" und erlauben Sie den Mikrofonzugriff.',
-      '2. Musik abspielen: Die Visuals reagieren sofort auf Klänge in Ihrer Nähe.',
-      '3. Modi erkunden: Öffnen Sie das Panel (H), um zwischen 12+ Engines zu wählen.',
-      '4. KI-Erkennung: Drücken Sie L, um den aktuellen Song und die Stimmung zu analysieren.'
+      '1. Verbinden: Klicken Sie auf "Start" und erlauben Sie den Mikrofonzugriff.',
+      '2. Visualisieren: Musik abspielen. Nutzen Sie "Smart Presets" für sofortige Atmosphäre.',
+      '3. Anpassen: "Erweitert"-Modus aktivieren für Empfindlichkeit, FFT und "Eigenen Text".',
+      '4. Interagieren: Wischen für Modus/Sensibilität. Lang drücken für KI-Erkennung.',
+      '5. Entdecken: H für Optionen, F für Vollbild, R für Zufall.'
     ],
     settingsTitle: 'Parameter Guide',
     settingsDesc: {

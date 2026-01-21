@@ -1,6 +1,7 @@
+
 /**
  * File: core/services/geminiService.ts
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
@@ -135,10 +136,14 @@ export const identifySongFromAudio = async (
         let songInfo: SongInfo = JSON.parse(text.trim());
         if (!songInfo.identified) return null;
 
+        // Parse Grounding Metadata to find the Google Search URL
         const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
-        if (groundingChunks) {
+        if (groundingChunks && Array.isArray(groundingChunks)) {
+          // Look for a web URI in the chunks
           const webSource = groundingChunks.find((chunk: any) => chunk.web?.uri);
-          if (webSource?.web?.uri) songInfo.searchUrl = webSource.web.uri;
+          if (webSource?.web?.uri) {
+            songInfo.searchUrl = webSource.web.uri;
+          }
         }
         
         songInfo.matchSource = 'AI';

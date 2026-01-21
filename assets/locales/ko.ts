@@ -1,4 +1,11 @@
 
+/**
+ * File: assets/locales/ko.ts
+ * Version: 1.6.6
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ko = {
@@ -26,7 +33,7 @@ export const ko = {
     speed: '시간의 흐름 배율입니다. 낮은 값은 최면적이고 높은 값은 역동적입니다.',
     glow: '포스트 프로세싱 글로우 효과입니다. 성능을 높이려면 비활성화하세요.',
     trails: '픽셀 잔상 강도입니다. 높은 값은 유체와 같은 부드러운 움직임을 만듭니다.',
-    sensitivity: '오디오 게인 제어입니다. 높은 값은 미세한 소리에도 폭발적인 반응을 유도합니다.',
+    sensitivity: '오디오 게인 제어입니다. 조용한 환경에서는 값을 높여 시각적 반응을 증폭시키세요.',
     smoothing: '시계열 댐핑 계수입니다. 높은 값은 액체처럼 부드럽게, 낮은 값은 날카롭게 반응합니다.',
     fftSize: '주파수 분석 해상도입니다. 4096은 정밀한 디테일을 제공하나 CPU 부하가 증가합니다.',
     lyrics: 'AI 기반 트랙 식별 및 가사 표시 기능을 토글합니다.',
@@ -50,7 +57,12 @@ export const ko = {
     showTooltips: '컨트롤 위에 마우스를 올리면 도움말 힌트를 표시합니다.',
     doubleClickFullscreen: '화면 아무 곳이나 더블 클릭하여 전체 화면을 토글합니다.',
     autoHideUi: '조작이 없을 때 제어 패널을 자동으로 숨깁니다.',
-    mirrorDisplay: '화면을 좌우 반전시킵니다(후면 투사나 웹캠 모드에 유용).'
+    mirrorDisplay: '화면을 좌우 반전시킵니다(후면 투사나 웹캠 모드에 유용).',
+    showCustomText: '사용자 정의 텍스트 오버레이의 표시 여부를 전환합니다.',
+    textPulse: '텍스트 크기가 음악 비트에 맞춰 동적으로 조절됩니다.',
+    textAudioReactive: '텍스트의 투명도와 크기가 실시간 볼륨에 반응합니다.',
+    customTextCycleColor: '텍스트 색상을 스펙트럼 전반에 걸쳐 자동으로 순환시킵니다.',
+    hideCursor: '일정 시간 활동이 없으면 마우스 커서를 자동으로 숨깁니다.'
   },
   visualizerMode: '시각화 모드',
   styleTheme: '비주얼 테마',
@@ -223,6 +235,7 @@ export const ko = {
     },
     intro: 'Aura Flux는 고정밀 오디오 샘플링을 기반으로 소리를 실시간 수리적 디지털 아트로 변환하는 공감각 도구입니다.',
     shortcutsTitle: '키보드 상호작용',
+    gesturesTitle: '터치 제스처',
     shortcutItems: {
       toggleMic: '오디오 입력 전환',
       fullscreen: '전체 화면 전환',
@@ -234,12 +247,18 @@ export const ko = {
       changeMode: '모드 순환',
       changeTheme: '테마 순환'
     },
+    gestureItems: {
+        swipeMode: '가로 스와이프: 모드 변경',
+        swipeSens: '세로 스와이프: 감도 조절',
+        longPress: '길게 누르기: AI 인식'
+    },
     howItWorksTitle: '사용 방법',
     howItWorksSteps: [
-      '1. 권한 허용: "시작"을 클릭하고 마이크 접근을 승인하세요.',
-      '2. 음악 재생: 장치 근처에서 소리가 들리면 시각 효과가 실시간으로 반응합니다.',
-      '3. 모드 탐색: 설정 패널(H)을 열어 12종 이상의 엔진을 시도해보세요.',
-      '4. AI 인식: L키를 눌러 현재 곡의 메타데이터와 분위기를 분석합니다.'
+      '1. 연결: "시작"을 클릭하고 마이크 권한을 허용하세요.',
+      '2. 비주얼: 음악을 재생합니다. "스마트 프리셋"으로 분위기를 즉시 전환하세요.',
+      '3. 커스텀: "고급 모드(Advanced)"에서 감도, FFT, "사용자 정의 텍스트"를 설정하세요.',
+      '4. 조작: 스와이프하여 모드/감도 변경, 길게 눌러 AI 인식을 실행합니다.',
+      '5. 탐색: H 설정, F 전체 화면, R 무작위 설정을 사용하세요.'
     ],
     settingsTitle: '주요 매개변수 가이드',
     settingsDesc: {

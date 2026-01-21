@@ -1,4 +1,11 @@
 
+/**
+ * File: assets/locales/ja.ts
+ * Version: 1.6.6
+ * Author: Aura Vision Team
+ * Copyright (c) 2024 Aura Vision. All rights reserved.
+ */
+
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ja = {
@@ -26,7 +33,7 @@ export const ja = {
     speed: '時間の流動倍率。低値は催眠的に、高値はエネルギッシュに変化します。',
     glow: 'ポストプロセスのブルーム効果。負荷が高い場合はオフにしてください。',
     trails: 'ピクセルの残像強度。高値にすると油彩のような流動性が生まれます。',
-    sensitivity: '音声利得の調整。微細な音に対する視覚的反応を増幅させます。',
+    sensitivity: '音声利得の調整。静かな環境では数値を上げると反応が良くなります。',
     smoothing: '時域の減衰係数。高値は液体のように滑らかに、低値は鋭敏に反応します。',
     fftSize: 'スペクトル解析の解像度。4096は繊細ですがCPU負荷が高まります。',
     lyrics: 'AIによる楽曲特定と歌詞のリアルタイム表示を切り替えます。',
@@ -50,7 +57,12 @@ export const ja = {
     showTooltips: 'コントロールにホバーした際、ヘルプを表示します。',
     doubleClickFullscreen: '画面の任意の場所をダブルクリックして全画面表示を切り替えます。',
     autoHideUi: '無操作時にコントロールパネルを自動的に隠します。',
-    mirrorDisplay: '描画内容を左右反転させます（背面投影やカメラ等に有効）。'
+    mirrorDisplay: '描画内容を左右反転させます（背面投影やカメラ等に有効）。',
+    showCustomText: 'カスタムテキストオーバーレイの表示/非表示を切り替えます。',
+    textPulse: 'テキストサイズを音楽のリズムに合わせて動的に伸縮させます。',
+    textAudioReactive: 'テキストの透明度とサイズを音量に反応させます。',
+    customTextCycleColor: 'テキストの色をスペクトル全体で自動的に循環させます。',
+    hideCursor: '一定時間操作がない場合、マウスカーソルを非表示にします。'
   },
   visualizerMode: 'ビジュアルモード',
   styleTheme: '視覚スタイル',
@@ -227,6 +239,7 @@ export const ja = {
     },
     intro: 'Aura Fluxは、高精度の音声サンプリングに基づき、音をリアルタイムで数理的なデジタルアートへ変換する通感ツールです。',
     shortcutsTitle: 'キーボード操作',
+    gesturesTitle: 'タッチジェスチャー',
     shortcutItems: {
       toggleMic: 'マイクのオン/オフ',
       fullscreen: '全画面表示の切替',
@@ -238,12 +251,18 @@ export const ja = {
       changeMode: 'モードの切り替え',
       changeTheme: 'テーマの切り替え'
     },
+    gestureItems: {
+        swipeMode: '水平スワイプ：モード切替',
+        swipeSens: '垂直スワイプ：感度調整',
+        longPress: '長押し：AI認識'
+    },
     howItWorksTitle: '使用方法',
     howItWorksSteps: [
-      '1. 権限の許可: 「開始」をクリックし、マイクへのアクセスを許可します。',
-      '2. 音楽の再生: デバイスの近くで音楽を流すと、ビジュアルが反応し始めます。',
-      '3. モード探索: 設定パネル（Hキー）から12種類以上のエンジンを試せます。',
-      '4. AI認識: Lキーで現在の楽曲情報と雰囲気の解析を開始します。'
+      '1. 接続: 「体験を開始」をクリックし、マイク権限を許可します。',
+      '2. 視覚: 音楽を再生します。**スマートプリセット**で瞬時に雰囲気を演出できます。',
+      '3. 設定: **詳細モード (Advanced)** で感度やFFT、**カスタムテキスト**を調整します。',
+      '4. 操作: スワイプでモード/感度変更、長押しで **AI認識** を起動します。',
+      '5. 探索: Hで設定、Fで全画面、Rでランダム化します。'
     ],
     settingsTitle: '主要パラメータ解説',
     settingsDesc: {
