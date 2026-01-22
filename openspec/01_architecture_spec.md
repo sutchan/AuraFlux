@@ -23,4 +23,4 @@
 - **渲染画质适配:** 提供低/中/高三档密度配置，通过减少 50% 粒子基数 (v1.6.61) 确保移动设备的热稳定性。
 
 ---
-*Aura Flux Architecture - Version 1.6.74*
+*Aura Flux Architecture - Version 1.6.75*

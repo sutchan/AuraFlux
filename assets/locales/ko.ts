@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.6.54
+ * Version: 1.6.75
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -46,6 +46,9 @@ export const ko = {
     reset: '모든 설정, 언어 및 오디오 옵션을 공장 초기 상태로 되돌립니다.',
     confirmReset: '초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
     resetVisual: '시각적 매개변수(속도, 광채, 잔상)만 초기화합니다.',
+    resetText: '사용자 정의 텍스트, 글꼴 및 위치 설정을 지웁니다.',
+    resetAudio: '감도, 평활도 및 FFT를 기본값으로 복원합니다.',
+    resetAi: 'AI 페르소나, 지역 및 가사 레이아웃을 재설정합니다.',
     randomize: '시각 모드와 색상의 독창적인 조합을 무작위로 생성합니다.',
     fullscreen: '몰입형 전체 화면 모드로 전환합니다.',
     help: '단축키 가이드 및 프로젝트 문서를 확인합니다.',
@@ -62,7 +65,21 @@ export const ko = {
     textPulse: '텍스트 크기가 음악 비트에 맞춰 동적으로 조절됩니다.',
     textAudioReactive: '텍스트의 투명도와 크기가 실시간 볼륨에 반응합니다.',
     customTextCycleColor: '텍스트 색상을 스펙트럼 전반에 걸쳐 자동으로 순환시킵니다.',
-    hideCursor: '일정 시간 활동이 없으면 마우스 커서를 자동으로 숨깁니다.'
+    hideCursor: '일정 시간 활동이 없으면 마우스 커서를 자동으로 숨깁니다.',
+    uiModeSimple: '기술적 매개변수를 숨기고 핵심 미학에 집중합니다.',
+    uiModeAdvanced: '정밀한 제어를 위해 모든 튜닝 매개변수를 표시합니다.',
+    quality: '렌더링 해상도와 입자 밀도를 조정합니다.',
+    textSize: '사용자 정의 텍스트 레이어의 크기를 조절합니다.',
+    textRotation: '텍스트 오버레이를 회전합니다.',
+    textPosition: '사용자 정의 텍스트의 앵커 포인트입니다.',
+    lyricsPosition: 'AI 가사 오버레이의 앵커 포인트입니다.',
+    customTextPlaceholder: '메시지를 입력하세요.',
+    textOpacity: '사용자 정의 텍스트의 투명도 수준입니다.',
+    cycleSpeed: '전체 색상 주기가 완료되는 시간(초)입니다.',
+    lyricsFont: 'AI 가사의 타이포그래피 스타일입니다.',
+    lyricsFontSize: 'AI 식별 텍스트의 크기를 조절합니다.',
+    textFont: '사용자 정의 텍스트 레이어의 글꼴 모음입니다.',
+    recognitionSource: 'AI 페르소나 또는 공급자를 선택하세요.'
   },
   visualizerMode: '시각화 모드',
   styleTheme: '비주얼 테마',
@@ -163,7 +180,7 @@ export const ko = {
     retrowave: '레트로 웨이브',
     vocal: '보컬 강조'
   },
-  recognitionSource: 'AI 프로바이더',
+  recognitionSource: 'AI 페르소나',
   lyricsPosition: '가사 위치',
   lyricsFont: '글꼴',
   lyricsFontSize: '크기',

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.6.54
+ * Version: 1.6.75
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -46,6 +46,9 @@ export const es = {
     reset: 'Restaura toda la configuración a los valores de fábrica.',
     confirmReset: '¿Confirmar reinicio? Esta acción no se puede deshacer.',
     resetVisual: 'Restablece solo estética (Velocidad, Brillo, Estelas).',
+    resetText: 'Borrar configuración de texto personalizado, fuentes y posición.',
+    resetAudio: 'Restaurar sensibilidad, suavizado y FFT a los valores predeterminados.',
+    resetAi: 'Restablecer personalidad de IA, región y diseño de letras.',
     randomize: 'Genera una combinación inesperada de modo visual y colores.',
     fullscreen: 'Alterna el modo inmersivo de pantalla completa.',
     help: 'Ver atajos de teclado y documentación.',
@@ -62,7 +65,21 @@ export const es = {
     textPulse: 'El texto escala dinámicamente con el ritmo de la música.',
     textAudioReactive: 'La opacidad y el tamaño del texto reaccionan al volumen.',
     customTextCycleColor: 'Cicla automáticamente por el espectro de colores para el texto.',
-    hideCursor: 'Ocultar Cursor tras inactividad.'
+    hideCursor: 'Ocultar Cursor tras inactividad.',
+    uiModeSimple: 'Ocultar parámetros técnicos y centrarse en la estética principal.',
+    uiModeAdvanced: 'Mostrar todos los parámetros de ajuste para un control preciso.',
+    quality: 'Ajustar la resolución de renderizado y la densidad de partículas.',
+    textSize: 'Escalar la capa de texto personalizado.',
+    textRotation: 'Rotar la superposición de texto.',
+    textPosition: 'Punto de anclaje para el texto personalizado.',
+    lyricsPosition: 'Punto de anclaje para la superposición de letras de IA.',
+    customTextPlaceholder: 'Introduce tu mensaje.',
+    textOpacity: 'Nivel de transparencia del texto personalizado.',
+    cycleSpeed: 'Tiempo en segundos para un ciclo de color completo.',
+    lyricsFont: 'Estilo tipográfico para las letras de IA.',
+    lyricsFontSize: 'Escalar el texto de identificación de IA.',
+    textFont: 'Familia tipográfica para la capa de texto personalizado.',
+    recognitionSource: 'Seleccionar la personalidad o proveedor de IA.'
   },
   visualizerMode: 'Modo Visualizador',
   styleTheme: 'Tema Visual',

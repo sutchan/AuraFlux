@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.6.54
+ * Version: 1.6.75
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -46,6 +46,9 @@ export const de = {
     reset: 'Setzt alle Anwendungseinstellungen auf die Werkseinstellungen zurück.',
     confirmReset: 'Zurücksetzen bestätigen? Diese Aktion kann nicht rückgängig gemacht werden.',
     resetVisual: 'Setzt nur die Ästhetik (Geschwindigkeit, Leuchten, Spuren) zurück.',
+    resetText: 'Löscht Einstellungen für benutzerdefinierten Text, Schriftart und Position.',
+    resetAudio: 'Setzt Empfindlichkeit, Glättung und FFT auf Standard zurück.',
+    resetAi: 'Setzt KI-Persona, Region und Text-Layout zurück.',
     randomize: 'Erzeugt eine zufällige Kombination aus visuellem Modus und Farben.',
     fullscreen: 'Schaltet den immersiven Vollbildmodus um.',
     help: 'Tastaturkürzel und Dokumentation anzeigen.',
@@ -62,7 +65,21 @@ export const de = {
     textPulse: 'Der Text skaliert dynamisch im Rhythmus der Musik.',
     textAudioReactive: 'Textdeckkraft und -größe reagieren auf die Live-Audio-Amplitude.',
     customTextCycleColor: 'Automatischer Durchlauf durch das Farbspektrum für den Text.',
-    hideCursor: 'Mauszeiger nach Inaktivität automatisch ausblenden.'
+    hideCursor: 'Mauszeiger nach Inaktivität automatisch ausblenden.',
+    uiModeSimple: 'Technische Parameter ausblenden und auf Kernästhetik konzentrieren.',
+    uiModeAdvanced: 'Alle Einstellparameter für präzise Steuerung anzeigen.',
+    quality: 'Renderauflösung und Partikeldichte anpassen.',
+    textSize: 'Benutzerdefinierte Textebene skalieren.',
+    textRotation: 'Text-Overlay drehen.',
+    textPosition: 'Ankerpunkt für den benutzerdefinierten Text.',
+    lyricsPosition: 'Ankerpunkt für das KI-Songtext-Overlay.',
+    customTextPlaceholder: 'Geben Sie Ihre Nachricht ein.',
+    textOpacity: 'Transparenzgrad des benutzerdefinierten Textes.',
+    cycleSpeed: 'Zeit in Sekunden für einen vollständigen Farbzyklus.',
+    lyricsFont: 'Typografiestil für die KI-Texte.',
+    lyricsFontSize: 'Skalieren Sie den KI-Identifikationstext.',
+    textFont: 'Schriftfamilie für die benutzerdefinierte Textebene.',
+    recognitionSource: 'Wählen Sie die KI-Persönlichkeit oder den Anbieter.'
   },
   visualizerMode: 'Visualizer-Modus',
   styleTheme: 'Visuelles Thema',

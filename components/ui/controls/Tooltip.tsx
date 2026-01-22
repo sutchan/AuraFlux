@@ -1,9 +1,9 @@
-
 /**
  * File: components/ui/controls/Tooltip.tsx
- * Version: 1.0.14
+ * Version: 1.0.15
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-21 20:00
  */
 
 import React, { useState, useEffect, useRef, memo } from 'react';
@@ -77,15 +77,36 @@ const FloatingTooltipInternal = ({ text, visible, anchorRef }: FloatingTooltipPr
 export const FloatingTooltip = memo(FloatingTooltipInternal);
 
 export const TooltipArea = memo(({ children, text }: { children?: React.ReactNode, text: string | undefined | null }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
+  const timerRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { settings } = useVisuals();
   
-  const shouldShow = settings.showTooltips && isHovered;
+  const handleMouseEnter = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    // Delay showing the tooltip by 1 second (1000ms)
+    timerRef.current = window.setTimeout(() => {
+      setShouldShow(true);
+    }, 1000);
+  };
+
+  const handleMouseLeave = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setShouldShow(false);
+  };
+  
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const visible = settings.showTooltips && shouldShow;
   
   return (
-    <div ref={containerRef} className="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <FloatingTooltip text={text} visible={shouldShow} anchorRef={containerRef} />
+    <div ref={containerRef} className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <FloatingTooltip text={text} visible={visible} anchorRef={containerRef} />
       {children}
     </div>
   );

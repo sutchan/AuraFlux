@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.54
+ * Version: 1.6.75
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -60,7 +60,14 @@ export const zh = {
     textSize: '缩放自定义文字图层的大小。',
     textRotation: '旋转文字覆盖层。',
     textPosition: '自定义文字的锚定位置。',
-    lyricsPosition: 'AI 歌词覆盖层的显示锚点。'
+    lyricsPosition: 'AI 歌词覆盖层的显示锚点。',
+    customTextPlaceholder: '输入您的自定义信息。',
+    textOpacity: '自定义文字的透明度级别。',
+    cycleSpeed: '完成一次色彩循环所需的时间（秒）。',
+    lyricsFont: 'AI 歌词的排版风格。',
+    lyricsFontSize: '缩放 AI 识别文本的大小。',
+    textFont: '自定义文字图层的字体系列。',
+    recognitionSource: '选择 AI 角色或提供商。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',

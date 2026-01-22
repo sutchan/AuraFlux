@@ -1,10 +1,9 @@
-
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 19:15
+ * Updated: 2025-02-21 20:00
  */
 
 import React from 'react';
@@ -68,7 +67,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                     <Slider label={t?.textSize || "Size"} hintText={hints?.textSize} value={settings.customTextSize ?? 12} min={2} max={60} step={1} onChange={(v: number) => setSettings({...settings, customTextSize: v})} />
                     <Slider label={t?.textRotation || "Rotate"} hintText={hints?.textRotation} value={settings.customTextRotation ?? 0} min={-180} max={180} step={5} onChange={(v: number) => setSettings({...settings, customTextRotation: v})} unit="°" />
                     <div className="pt-2 border-t border-white/5">
-                        <Slider label={t?.textOpacity || "Opacity"} value={settings.customTextOpacity ?? 1.0} min={0} max={1} step={0.05} onChange={(v: number) => setSettings({...settings, customTextOpacity: v})} />
+                        <Slider label={t?.textOpacity || "Opacity"} hintText={hints?.textOpacity} value={settings.customTextOpacity ?? 1.0} min={0} max={1} step={0.05} onChange={(v: number) => setSettings({...settings, customTextOpacity: v})} />
                     </div>
                 </div>
             )}
@@ -94,6 +93,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                             <div className="pl-1 pt-3 pb-2">
                                 <Slider 
                                     label={t?.cycleSpeed || "Cycle Speed (Time)"} 
+                                    hintText={hints?.cycleSpeed}
                                     value={settings.customTextCycleInterval || 5} 
                                     min={1} 
                                     max={60} 
@@ -141,7 +141,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                         variant="clean"
                         hintText={hints?.textAudioReactive}
                     />
-                    <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
+                    <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} hintText={hints?.textFont} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
                     {/* Wrap PositionSelector in TooltipArea as it does not accept hintText prop */}
                     <TooltipArea text={hints?.textPosition}>
                         <PositionSelector 

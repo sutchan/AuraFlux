@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.6.54
+ * Version: 1.6.75
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -46,6 +46,9 @@ export const fr = {
     reset: 'Restaure tous les paramètres de l\'application aux valeurs d\'usine.',
     confirmReset: 'Confirmer la réinitialisation ? Cette action est irréversible.',
     resetVisual: 'Réinitialise uniquement l\'esthétique (Vitesse, Lueur, Traînées).',
+    resetText: 'Effacer les paramètres de texte personnalisé, de police et de position.',
+    resetAudio: 'Rétablir la sensibilité, le lissage et la FFT aux valeurs par défaut.',
+    resetAi: 'Réinitialiser la personnalité de l\'IA, la région et la mise en page des paroles.',
     randomize: 'Génère une combinaison fortuite de mode visuel et de couleurs.',
     fullscreen: 'Active le mode plein écran immersif.',
     help: 'Voir les raccourcis clavier et la documentation.',
@@ -62,7 +65,21 @@ export const fr = {
     textPulse: 'Le texte change d\'échelle dynamiquement avec le rythme de la musique.',
     textAudioReactive: 'L\'opacité et la taille du texte réagissent à l\'amplitude audio.',
     customTextCycleColor: 'Fait défiler automatiquement le spectre des couleurs pour le texte.',
-    hideCursor: 'Masque automatiquement le curseur de la souris après inactivité.'
+    hideCursor: 'Masque automatiquement le curseur de la souris après inactivité.',
+    uiModeSimple: 'Masquer les paramètres techniques et se concentrer sur l\'esthétique principale.',
+    uiModeAdvanced: 'Afficher tous les paramètres de réglage pour un contrôle précis.',
+    quality: 'Ajuster la résolution de rendu et la densité des particules.',
+    textSize: 'Mettre à l\'échelle le calque de texte personnalisé.',
+    textRotation: 'Faire pivoter la superposition de texte.',
+    textPosition: 'Point d\'ancrage pour le texte personnalisé.',
+    lyricsPosition: 'Point d\'ancrage pour la superposition des paroles de l\'IA.',
+    customTextPlaceholder: 'Saisissez votre message.',
+    textOpacity: 'Niveau de transparence du texte personnalisé.',
+    cycleSpeed: 'Temps en secondes pour un cycle de couleur complet.',
+    lyricsFont: 'Style typographique pour les paroles de l\'IA.',
+    lyricsFontSize: 'Mettre à l\'échelle le texte d\'identification de l\'IA.',
+    textFont: 'Famille de polices pour le calque de texte personnalisé.',
+    recognitionSource: 'Sélectionnez la personnalité ou le fournisseur de l\'IA.'
   },
   visualizerMode: 'Mode Visualiseur',
   styleTheme: 'Thème Visuel',

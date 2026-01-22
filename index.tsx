@@ -1,9 +1,9 @@
 /**
  * File: index.tsx
- * Version: 1.6.74
+ * Version: 1.6.75
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 19:00
+ * Updated: 2025-02-21 23:00
  */
 
 import React from 'react';

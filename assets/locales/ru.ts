@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.6.68
- * Author: Sut
+ * Version: 1.6.75
+ * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 15:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -60,7 +60,14 @@ export const ru = {
     textSize: 'Масштаб текстового слоя.',
     textRotation: 'Вращение текстового слоя.',
     textPosition: 'Якорь для текста.',
-    lyricsPosition: 'Якорь для текста ИИ.'
+    lyricsPosition: 'Якорь для текста ИИ.',
+    customTextPlaceholder: 'Введите ваше сообщение.',
+    textOpacity: 'Уровень прозрачности пользовательского текста.',
+    cycleSpeed: 'Время в секундах для полного цветового цикла.',
+    lyricsFont: 'Стиль типографики для текстов ИИ.',
+    lyricsFontSize: 'Масштаб текста идентификации ИИ.',
+    textFont: 'Семейство шрифтов для слоя пользовательского текста.',
+    recognitionSource: 'Выберите личность или провайдера ИИ.'
   },
   visualizerMode: 'Визуальный движок',
   styleTheme: 'Цветовая тема',
@@ -87,7 +94,7 @@ export const ru = {
   identifying: 'ИИ анализирует трек...',
   startExperience: 'Запустить',
   welcomeTitle: 'Aura Flux | Звук Света',
-  welcomeText: 'Превратите каждую вибрацию в генеративный шедевр. Работает на базе Gemini AI для распознавания в реальном времени.',
+  welcomeText: 'Превратите каждую вибрацию в генеративное цифровое искусство. Работает на базе Gemini AI для распознавания в реальном времени.',
   unsupportedTitle: 'Браузер не поддерживается',
   unsupportedText: 'Aura Flux требует современных функций Web Audio. Пожалуйста, используйте Chrome, Edge или Safari.',
   hideOptions: 'Свернуть',

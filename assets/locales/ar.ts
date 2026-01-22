@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.6.68
- * Author: Sut
+ * Version: 1.6.75
+ * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 15:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -60,7 +60,14 @@ export const ar = {
     textSize: 'تغيير حجم طبقة النص المخصص.',
     textRotation: 'تدوير تراكب النص.',
     textPosition: 'نقطة الارتكاز للنص المخصص.',
-    lyricsPosition: 'نقطة الارتكاز لتراكب الكلمات بالذكاء الاصطناعي.'
+    lyricsPosition: 'نقطة الارتكاز لتراكب الكلمات بالذكاء الاصطناعي.',
+    customTextPlaceholder: 'أدخل رسالتك.',
+    textOpacity: 'مستوى شفافية النص المخصص.',
+    cycleSpeed: 'الوقت بالثواني لدورة ألوان كاملة.',
+    lyricsFont: 'نمط الطباعة لكلمات الذكاء الاصطناعي.',
+    lyricsFontSize: 'تغيير حجم نص التعريف بالذكاء الاصطناعي.',
+    textFont: 'عائلة الخط لطبقة النص المخصص.',
+    recognitionSource: 'اختر شخصية الذكاء الاصطناعي أو المزود.'
   },
   visualizerMode: 'محرك العرض المرئي',
   styleTheme: 'سمة الألوان',
@@ -138,7 +145,7 @@ export const ar = {
   showFps: 'عرض FPS',
   showTooltips: 'عرض تلميحات',
   doubleClickFullscreen: 'ملء الشاشة بالنقر المزدوج',
-  autoHideUi: 'إخفاء الواجهة تلقائياً',
+  autoHideUi: 'إخفاء لوحة التحكم تلقائيًا.',
   mirrorDisplay: 'عكس العرض',
   presets: {
     title: 'إعدادات مسبقة ذكية', hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.', select: 'اختر مزاجاً...', custom: 'معدل', calm: 'شكل موجي رقمي', party: 'حفلة نشطة', ambient: 'سديم عميق', cyberpunk: 'ليزر حفلات', retrowave: 'غروب ريترو', vocal: 'تركيز صوتي'

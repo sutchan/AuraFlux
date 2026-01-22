@@ -1,9 +1,9 @@
 /**
  * File: core/types/visuals.ts
- * Version: 1.6.74
+ * Version: 1.6.75
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 19:30
+ * Updated: 2025-02-21 23:00
  */
 
 import { Position, Region } from './common';

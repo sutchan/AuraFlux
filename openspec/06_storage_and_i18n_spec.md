@@ -14,4 +14,4 @@
 - **Wake Lock** -> 屏幕常亮。
 
 ---
-*Aura Flux Storage & i18n - Version 1.6.74*
+*Aura Flux Storage & i18n - Version 1.6.75*

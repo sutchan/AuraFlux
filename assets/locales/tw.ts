@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.54
+ * Version: 1.6.75
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -60,7 +60,14 @@ export const tw = {
     textSize: '縮放自訂文字圖層的大小。',
     textRotation: '旋轉文字覆蓋層。',
     textPosition: '自訂文字的錨定錨點位置。',
-    lyricsPosition: 'AI 歌詞覆蓋層的顯示錨點位置。'
+    lyricsPosition: 'AI 歌詞覆蓋層的顯示錨點位置。',
+    customTextPlaceholder: '輸入您的訊息。',
+    textOpacity: '自訂文字的透明度。',
+    cycleSpeed: '完成一次色彩循環所需的時間（秒）。',
+    lyricsFont: 'AI 歌詞的字體樣式。',
+    lyricsFontSize: '縮放 AI 辨識文字的大小。',
+    textFont: '自訂文字圖層的字體系列。',
+    recognitionSource: '選擇 AI 角色或供應商。'
   },
   visualizerMode: '視覺化模式',
   styleTheme: '視覺風格',

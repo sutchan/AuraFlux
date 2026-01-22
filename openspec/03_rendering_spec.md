@@ -14,8 +14,8 @@
 
 ## 3. 3D WebGL 渲染
 - **Neural Flow (v3.2.4):** 安全 Curl Noise 引入 `+ 0.0001` 偏移。
-- **Quantum Field (v1.6.3):** 引入 `individualSpeedMult` 确保方阵内律动错落有致。
+- **Quantum Field (v1.6.13):** 极速穿梭优化 (Speed x15)，Z 轴推进速度提高至 4.5，旋转速度降低至 10%。
 - **Crystal Core (v1.0.3):** 采用 `dispersion` (色散) 物理材质。
 
 ---
-*Aura Flux Rendering - Version 1.6.74*
+*Aura Flux Rendering - Version 1.6.75*

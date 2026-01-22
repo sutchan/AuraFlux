@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.6.74
+ * Version: 1.6.75
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 19:30
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -60,7 +60,14 @@ export const en = {
     textSize: 'Scale the custom text layer.',
     textRotation: 'Rotate the text overlay.',
     textPosition: 'Anchor point for the custom text.',
-    lyricsPosition: 'Anchor point for the AI lyrics overlay.'
+    lyricsPosition: 'Anchor point for the AI lyrics overlay.',
+    customTextPlaceholder: 'Enter your message.',
+    textOpacity: 'Transparency level of the custom text.',
+    cycleSpeed: 'Time in seconds for a full color cycle.',
+    lyricsFont: 'Typography style for the AI lyrics.',
+    lyricsFontSize: 'Scale the AI identification text.',
+    textFont: 'Font family for the custom text layer.',
+    recognitionSource: 'Select the AI personality or provider.'
   },
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.6.54
+ * Version: 1.6.75
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-21 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -46,6 +46,9 @@ export const ja = {
     reset: 'アプリの全設定、言語、音響オプションを工場出荷状態に戻します。',
     confirmReset: '設定を初期化しますか？この操作は取り消せません。',
     resetVisual: '外観パラメータ（速度、光彩、残像）のみをリセットします。',
+    resetText: 'カスタムテキスト、フォント、および位置設定をクリアします。',
+    resetAudio: '感度、スムージング、およびFFTをデフォルトに戻します。',
+    resetAi: 'AIペルソナ、地域、および歌詞のレイアウトをリセットします。',
     randomize: '視覚モードと色彩を独創的な組み合わせで自動生成します。',
     fullscreen: '没入感のあるフルスクリーンモードに切り替えます。',
     help: 'ショートカットキーやドキュメントを確認します。',
@@ -62,7 +65,21 @@ export const ja = {
     textPulse: 'テキストサイズを音楽のリズムに合わせて動的に伸縮させます。',
     textAudioReactive: 'テキストの透明度とサイズを音量に反応させます。',
     customTextCycleColor: 'テキストの色をスペクトル全体で自動的に循環させます。',
-    hideCursor: '一定時間操作がない場合、マウスカーソルを非表示にします。'
+    hideCursor: '一定時間操作がない場合、マウスカーソルを非表示にします。',
+    uiModeSimple: '技術的なパラメータを隠し、美学的な調整に集中します。',
+    uiModeAdvanced: 'すべての調整パラメータを表示して正確に制御します。',
+    quality: 'レンダリング解像度とパーティクル密度を調整します。',
+    textSize: 'カスタムテキストレイヤーのスケールを調整します。',
+    textRotation: 'テキストオーバーレイを回転させます。',
+    textPosition: 'カスタムテキストのアンカーポイント。',
+    lyricsPosition: 'AI歌詞オーバーレイのアンカーポイント。',
+    customTextPlaceholder: 'メッセージを入力してください。',
+    textOpacity: 'カスタムテキストの透明度レベル。',
+    cycleSpeed: 'カラーサイクルが完了するまでの時間（秒）。',
+    lyricsFont: 'AI歌詞のタイポグラフィスタイル。',
+    lyricsFontSize: 'AI識別テキストのスケール。',
+    textFont: 'カスタムテキストレイヤーのフォントファミリー。',
+    recognitionSource: 'AIペルソナまたはプロバイダーを選択します。'
   },
   visualizerMode: 'ビジュアルモード',
   styleTheme: '視覚スタイル',

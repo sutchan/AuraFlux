@@ -1,10 +1,9 @@
-
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 19:15
+ * Updated: 2025-02-21 20:00
  */
 
 import React, { useRef } from 'react';
@@ -75,7 +74,7 @@ export const AiSettingsPanel: React.FC = () => {
                    <CustomSelect 
                      label={t?.recognitionSource || "AI Source"} 
                      value={settings.recognitionProvider || 'GEMINI'} 
-                     hintText={hints?.recognitionSource || "Choose AI persona"}
+                     hintText={hints?.recognitionSource}
                      options={[
                        { value: 'GEMINI', label: '🟢 Gemini 3.0 (Native)' }, 
                        { value: 'GROK', label: '🟡 Grok (Persona)' },
@@ -117,11 +116,12 @@ export const AiSettingsPanel: React.FC = () => {
                         label={t?.lyricsFont || "Font Family"} 
                         value={settings.lyricsFont || 'Inter, sans-serif'} 
                         options={AVAILABLE_FONTS} 
+                        hintText={hints?.lyricsFont}
                         onChange={(val) => setSettings({...settings, lyricsFont: val})} 
                     />
                     <Slider 
                         label={t?.lyricsFontSize || "Font Size"} 
-                        hintText={hints?.lyricsFontSize || "Scale identification text"}
+                        hintText={hints?.lyricsFontSize}
                         value={settings.lyricsFontSize ?? 4} 
                         min={1} max={8} step={0.5} 
                         onChange={(v: number) => setSettings({...settings, lyricsFontSize: v})} 
