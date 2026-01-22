@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.6.75
+ * Version: 1.6.76
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:00
+ * Updated: 2025-02-21 23:25
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -135,6 +135,7 @@ export const de = {
   customTextPlaceholder: 'TEXT EINGEBEN',
   showText: 'Overlay anzeigen',
   pulseBeat: 'Pulsieren im Takt',
+  textAudioReactive: 'Audio-Reaktivität',
   textSize: 'Größe',
   textRotation: 'Drehung',
   textFont: 'Schriftart',

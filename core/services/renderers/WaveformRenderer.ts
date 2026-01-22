@@ -1,9 +1,9 @@
 /**
  * File: core/services/renderers/WaveformRenderer.ts
- * Version: 2.9.0
+ * Version: 2.9.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-20 13:15
+ * Updated: 2025-02-21 23:25
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -88,8 +88,8 @@ export class WaveformRenderer implements IVisualizerRenderer {
             const envelope = Math.sin((x / w) * Math.PI);
             const jitter = (i > 4 && energy > 0.01) ? (Math.random() - 0.5) * 5 * energy : 0;
             
-            // 核心修改：振幅系数从 0.45 降为 0.22 (减半)
-            const amplitude = (h * 0.22 * config.amp) * energy * envelope;
+            // 优化：振幅系数从 0.22 降为 0.11 (降低50%)
+            const amplitude = (h * 0.11 * config.amp) * energy * envelope;
             
             const wave1 = Math.sin(x * config.freq + this.phaseOffset * (1 + i * 0.1) + i);
             const wave2 = Math.sin(x * config.freq * 2.5 - this.phaseOffset * 0.4) * 0.3;

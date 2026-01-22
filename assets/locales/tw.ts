@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.75
+ * Version: 1.6.76
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:00
+ * Updated: 2025-02-21 23:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -155,7 +155,7 @@ export const tw = {
     custom: '自定義 / 已修改',
     calm: '數字波形',
     party: '動感派對',
-    ambient: '深空星雲',
+    ambient: '深空星云',
     cyberpunk: '舞台雷射',
     retrowave: '復古夕陽',
     vocal: '人聲專注'

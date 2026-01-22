@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/CubeFieldScene.tsx
- * Version: 1.6.13
+ * Version: 1.6.14
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 22:45
+ * Updated: 2025-02-21 23:45
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -104,7 +104,6 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
     analyser.getByteFrequencyData(dataArray);
     
     const velocityBoost = 1.0 + volume * 2.0 + (isBeat ? 2.5 : 0);
-    // 调整优化：速度在 1.5 基础上再提高 3 倍 -> 4.5，打造极速穿梭感
     const globalSpeed = settings.speed * 4.5 * velocityBoost;
     
     const centerTime = time * 0.2; 
@@ -118,18 +117,19 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
     if (coreLightRef.current) {
         coreLightRef.current.position.set(centerX, centerY, -80);
         coreLightRef.current.color = c1;
-        coreLightRef.current.intensity = 8 + bass * 25 + (isBeat ? 40 : 0);
+        coreLightRef.current.intensity = 15 + bass * 35 + (isBeat ? 50 : 0); // Increased light intensity
     }
 
     if (meshRef.current) {
         const mat = meshRef.current.material as THREE.MeshStandardMaterial;
         mat.color = c0;
         mat.emissive = c1;
-        mat.emissiveIntensity = 0.1 + treble * 2.5 + (isBeat ? 2.0 : 0);
+        // 亮度优化：大幅提升基础自发光和高音响应
+        mat.emissiveIntensity = 0.4 + treble * 4.0 + (isBeat ? 3.5 : 0);
 
         const rotationBoost = 1.0 + mids * 2.0 + treble * 2.5;
-        const binCount = dataArray.length; // 512, 1024, etc.
-        const effectiveBinLimit = Math.floor(binCount * 0.6); // 忽略极高频噪音区
+        const binCount = dataArray.length; 
+        const effectiveBinLimit = Math.floor(binCount * 0.6); 
 
         particles.forEach((p, i) => {
             // Z轴主推进 (极速)
@@ -219,16 +219,16 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
       <color attach="background" args={['#000000']} />
       <fog attach="fog" args={['#000000', 30, 220]} /> 
       
-      <ambientLight intensity={0.15} />
-      <pointLight ref={coreLightRef} distance={280} decay={2.0} />
-      <pointLight position={[0, 0, 20]} intensity={2} color={c2} distance={120} />
-      <directionalLight position={[40, 40, 20]} intensity={0.8} color={c0} />
+      <ambientLight intensity={0.2} />
+      <pointLight ref={coreLightRef} distance={350} decay={2.0} />
+      <pointLight position={[0, 0, 20]} intensity={3} color={c2} distance={150} />
+      <directionalLight position={[40, 40, 20]} intensity={1.2} color={c0} />
 
       <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial 
-            roughness={0.2} 
-            metalness={0.9}
+            roughness={0.1} 
+            metalness={0.95}
         />
       </instancedMesh>
     </>

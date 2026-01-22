@@ -1,9 +1,9 @@
-
 /**
  * File: core/services/renderers/BarsRenderer.ts
- * Version: 1.0.7
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-21 23:45
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -57,9 +57,9 @@ export class BarsRenderer implements IVisualizerRenderer {
     const c0 = colors[0] || '#ffffff';
     const c1 = colors[1] || c0;
     
-    // Drop speed relative to height (e.g., 0.5% of screen height per frame)
-    // Adjusted by sensitivity to keep physics consistent
-    const dropRate = (h * 0.005) / Math.max(0.5, settings.sensitivity * 0.5);
+    // Drop speed relative to height (e.g., 0.125% of screen height per frame)
+    // Optimized: slowed down even further (0.0025 -> 0.00125) for extreme anti-gravity effect
+    const dropRate = (h * 0.00125) / Math.max(0.5, settings.sensitivity * 0.5);
 
     for (let i = 0; i < halfCount; i++) {
         // Get Audio Value using Average to ensure we don't skip narrow frequency bands

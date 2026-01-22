@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.6.75
+ * Version: 1.6.80
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:00
+ * Updated: 2025-02-22 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -16,7 +16,7 @@ export const ko = {
     hidden: '숨김',
     active: '활성화',
     muted: '음소거',
-    beta: 'BETA',
+    beta: '베타',
     simple: '간편',
     advanced: '고급'
   },

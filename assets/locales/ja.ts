@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.6.75
+ * Version: 1.6.80
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:00
+ * Updated: 2025-02-22 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -16,7 +16,7 @@ export const ja = {
     hidden: '非表示',
     active: '有効',
     muted: 'ミュート',
-    beta: 'BETA',
+    beta: 'ベータ',
     simple: '簡易',
     advanced: '詳細'
   },

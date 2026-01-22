@@ -7,6 +7,9 @@
 ## 2. 国际化 (i18n) 与自动检测
 - **检测策略:** 优先查询 `navigator.languages`。
 - **支持列表:** en, zh, tw, ja, es, ko, de, fr, ru, ar。
+- **本地化深度:** 
+  - 核心术语 "Beta" 在日韩等亚洲语言中需使用本地化写法 (如 "ベータ", "베타") 以提升亲和力。
+  - RTL 语言 (Arabic) 需严格测试布局镜像。
 
 ## 3. 专业术语标准化
 - **AI Recognition** -> AI 通感识别。
@@ -14,4 +17,4 @@
 - **Wake Lock** -> 屏幕常亮。
 
 ---
-*Aura Flux Storage & i18n - Version 1.6.75*
+*Aura Flux Storage & i18n - Version 1.6.80*

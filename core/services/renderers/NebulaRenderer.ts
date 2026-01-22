@@ -1,9 +1,9 @@
 /**
  * File: core/services/renderers/NebulaRenderer.ts
- * Version: 1.8.0
+ * Version: 1.8.1
  * Author: Sut
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-02-21 18:00
+ * Updated: 2025-02-22 10:00
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -146,6 +146,8 @@ export class NebulaRenderer implements IVisualizerRenderer {
   }
 
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean) {
+    if (w <= 0 || h <= 0) return; // Robustness check
+    
     const safeColors = colors.length > 0 ? colors : ['#4433ff', '#ff00aa'];
     
     if (this.clusters.length === 0) this.initClusters(w, h);
