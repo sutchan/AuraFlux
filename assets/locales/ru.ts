@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.6.75
+ * Version: 1.6.92
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:00
+ * Updated: 2025-02-23 16:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -183,7 +183,7 @@ export const ru = {
     [VisualizerMode.LASERS]: 'Лазерная матрица',
     [VisualizerMode.FLUID_CURVES]: 'Полярное сияние',
     [VisualizerMode.MACRO_BUBBLES]: 'Макро-пузырьки',
-    [VisualizerMode.SILK]: 'Мерцающий шелк (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: 'Кинетическая Стена (WebGL)',
     [VisualizerMode.LIQUID]: 'Жидкая планета (WebGL)',
     [VisualizerMode.WAVEFORM]: 'Цифровая волна'
   },

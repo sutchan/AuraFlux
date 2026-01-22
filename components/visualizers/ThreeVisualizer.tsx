@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.7.12
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-22 20:30
+ * Updated: 2025-02-23 15:00
  */
 
 import React, { Suspense, useMemo } from 'react';
@@ -12,7 +12,7 @@ import { EffectComposer, Bloom, ChromaticAberration, TiltShift, Noise } from '@r
 import * as THREE from 'three';
 import { VisualizerMode, VisualizerSettings } from '../../core/types';
 import { 
-    SilkWavesScene, 
+    KineticWallScene, 
     LiquidSphereScene, 
     CubeFieldScene,
     NeuralFlowScene
@@ -37,7 +37,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
   const bloomIntensity = useMemo(() => {
       const base = 2.0;
       switch (mode) {
-          case VisualizerMode.SILK: return base * 0.8;
+          case VisualizerMode.KINETIC_WALL: return base * 1.5; // High bloom for concert lights
           case VisualizerMode.LIQUID: return base * 1.5;
           case VisualizerMode.CUBE_FIELD: return base * 1.2;
           case VisualizerMode.NEURAL_FLOW: return base * 1.8;
@@ -47,8 +47,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
 
   // Memoize post-processing logic
   const postProcessingEffects = useMemo(() => {
-      // Noise acts as dithering to prevent color banding on 8-bit monitors, especially in dark gradients.
-      // We keep it enabled even if glow is off, as gradients exist in the scene rendering itself.
+      // Noise acts as dithering to prevent color banding on 8-bit monitors
       const ditheringNoise = <Noise opacity={0.025} premultiply />;
 
       if (!settings.glow) return (
@@ -58,8 +57,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
       );
 
       const enableTiltShift = settings.quality === 'high' && (
-          mode === VisualizerMode.LIQUID || 
-          mode === VisualizerMode.SILK
+          mode === VisualizerMode.LIQUID
       );
 
       return (
@@ -71,7 +69,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
                   mipmapBlur={true} 
                   radius={0.7}
               />
-              {/* Noise must be after Bloom to dither the smooth bloom gradients */}
               {ditheringNoise}
               {settings.quality === 'high' && (
                   <ChromaticAberration 
@@ -86,13 +83,13 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
       );
   }, [settings.glow, settings.quality, mode, bloomIntensity]);
 
-  // Memoize the active scene component to avoid expensive tree re-calculation
+  // Memoize the active scene component
   const activeScene = useMemo(() => {
     if (!analyser || !settings) return null;
     
     switch (mode) {
-        case VisualizerMode.SILK:
-            return <SilkWavesScene analyser={analyser} colors={colors} settings={settings} />;
+        case VisualizerMode.KINETIC_WALL:
+            return <KineticWallScene analyser={analyser} colors={colors} settings={settings} />;
         case VisualizerMode.LIQUID:
             return <LiquidSphereScene analyser={analyser} colors={colors} settings={settings} />;
         case VisualizerMode.CUBE_FIELD:
@@ -121,18 +118,8 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         }}
         onCreated={({ gl }) => {
           gl.setClearColor('#000000');
-          
-          const handleContextLost = (event: Event) => {
-            event.preventDefault();
-            console.warn('[ThreeVisualizer] WebGL Context Lost.');
-          };
-
-          const handleContextRestored = () => {
-            console.log('[ThreeVisualizer] WebGL Context Restored.');
-          };
-
+          const handleContextLost = (event: Event) => { event.preventDefault(); };
           gl.domElement.addEventListener('webglcontextlost', handleContextLost, false);
-          gl.domElement.addEventListener('webglcontextrestored', handleContextRestored, false);
         }}
       >
         <Suspense fallback={null}>

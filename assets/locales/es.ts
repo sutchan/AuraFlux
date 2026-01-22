@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.6.76
+ * Version: 1.6.92
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:15
+ * Updated: 2025-02-23 16:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -135,6 +135,7 @@ export const es = {
   customTextPlaceholder: 'ESCRIBE AQUÍ',
   showText: 'Mostrar Superposición',
   pulseBeat: 'Pulsar con el Ritmo',
+  textAudioReactive: 'Reacción al Audio',
   textSize: 'Tamaño de Fuente',
   textRotation: 'Rotación',
   textFont: 'Fuente',
@@ -240,7 +241,7 @@ export const es = {
     [VisualizerMode.LASERS]: 'Matriz de Láseres',
     [VisualizerMode.FLUID_CURVES]: 'Danza de Auroras',
     [VisualizerMode.MACRO_BUBBLES]: 'Burbujas Macro (DoF)',
-    [VisualizerMode.SILK]: 'Seda Flotante (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: 'Muro Cinético (WebGL)',
     [VisualizerMode.LIQUID]: 'Planeta Líquido (WebGL)',
     [VisualizerMode.WAVEFORM]: 'Forma de onda elegante'
   },

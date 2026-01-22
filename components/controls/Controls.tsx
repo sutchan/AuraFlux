@@ -1,8 +1,9 @@
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.1.0
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 10:00
  */
 
 import React, { useState, useEffect } from 'react';
@@ -19,6 +20,14 @@ import { MiniControls } from './MiniControls';
 import { TooltipArea } from '../ui/controls/Tooltip';
 
 type TabType = 'visual' | 'text' | 'audio' | 'ai' | 'system';
+
+const TAB_ICONS: Record<TabType, React.ReactNode> = {
+  visual: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>,
+  text: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>,
+  audio: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>,
+  ai: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
+  system: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+};
 
 const Controls: React.FC = () => {
   const { settings, setSettings, randomizeSettings } = useVisuals();
@@ -80,19 +89,20 @@ const Controls: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings]);
 
-  const tabFontSize = (language === 'zh' || language === 'tw') ? 'text-xs' : 'text-[10px]';
+  const tabFontSize = (language === 'zh' || language === 'tw') ? 'text-xs' : 'text-xs';
 
   return (
     <>
       <MiniControls isExpanded={isExpanded} isIdle={isIdle} setIsExpanded={setIsExpanded} toggleFullscreen={toggleFullscreen} />
       {isExpanded && (
-        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505] border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col">
+        // Enhanced Translucent Background
+        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505]/85 backdrop-blur-xl border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col">
           <div className="max-h-[85dvh] md:max-h-[70vh] overflow-y-auto custom-scrollbar p-3 md:p-6 pb-safe relative flex flex-col">
             <div className="max-w-5xl mx-auto space-y-3 md:space-y-4 w-full">
               
               {/* Sticky Header */}
-              <div className="sticky top-0 z-50 bg-[#050505]/95 backdrop-blur-md pb-2 pt-1 border-b border-white/10 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
-                {/* Scrollable Tabs */}
+              <div className="sticky top-0 z-50 bg-transparent pb-2 pt-1 border-b border-white/10 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
+                {/* Scrollable Tabs with Icons */}
                 <div className="flex bg-white/[0.04] p-1 rounded-xl overflow-x-auto max-w-full scrollbar-hide gap-1 mask-fade-right touch-pan-x" role="tablist" aria-label="Settings Categories">
                   {(['visual', 'text', 'ai', 'audio', 'system'] as TabType[]).map(tab => (
                     <button 
@@ -102,14 +112,16 @@ const Controls: React.FC = () => {
                       aria-selected={activeTab === tab}
                       aria-controls={`panel-${tab}`}
                       id={`tab-${tab}`}
-                      className={`px-4 py-2.5 md:px-5 rounded-lg ${tabFontSize} font-bold uppercase tracking-[0.2em] transition-all duration-300 flex-shrink-0 whitespace-nowrap ${activeTab === tab ? 'bg-white/20 text-white shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>{t?.tabs?.[tab] || tab}
+                      className={`px-4 py-2.5 md:px-5 rounded-lg ${tabFontSize} font-bold uppercase tracking-[0.2em] transition-all duration-300 flex-shrink-0 whitespace-nowrap flex items-center gap-2 ${activeTab === tab ? 'bg-white/20 text-white shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>
+                      {TAB_ICONS[tab]}
+                      <span>{t?.tabs?.[tab] || tab}</span>
                     </button>
                   ))}
                 </div>
                 
                 <div className="flex items-center justify-between lg:justify-end gap-3 md:gap-4">
                   {/* Simple/Advanced Toggle Capsule */}
-                  <div className="bg-white/5 p-1 rounded-lg flex text-[9px] font-bold uppercase tracking-wider border border-white/5 flex-shrink-0">
+                  <div className="bg-white/5 p-1 rounded-lg flex text-[10px] font-bold uppercase tracking-wider border border-white/5 flex-shrink-0">
                       <TooltipArea text={t?.hints?.uiModeSimple}>
                         <button 
                           onClick={() => setSettings({...settings, uiMode: 'simple'})} 
@@ -143,7 +155,7 @@ const Controls: React.FC = () => {
               </div>
               
               <div 
-                className="bg-[#0f0f11] border border-white/5 rounded-2xl overflow-hidden min-h-[40vh] md:min-h-[240px]"
+                className="bg-black/20 border border-white/5 rounded-2xl overflow-hidden min-h-[40vh] md:min-h-[240px]"
                 role="tabpanel"
                 id={`panel-${activeTab}`}
                 aria-labelledby={`tab-${activeTab}`}

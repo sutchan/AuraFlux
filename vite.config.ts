@@ -1,7 +1,6 @@
-
 /**
  * File: vite.config.ts
- * Version: 1.6.74
+ * Version: 1.6.75
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -22,8 +21,16 @@ export default defineConfig({
     // Use 'es' format for modern module workers.
     format: 'es', 
     rollupOptions: {
-      // Bundling dependencies into workers is crucial for stability.
-      external: []
+      // Externalize dependencies to share single instances defined in importmap
+      external: [
+        'react', 
+        'react-dom', 
+        'three', 
+        '@react-three/fiber', 
+        '@react-three/drei', 
+        '@react-three/postprocessing', 
+        '@google/genai'
+      ]
     }
   },
   build: {
@@ -31,7 +38,17 @@ export default defineConfig({
     target: 'esnext',
     minify: 'esbuild',
     rollupOptions: {
-      external: [] // Three.js is now bundled
+      // Externalize dependencies to use the versions defined in index.html importmap
+      // This prevents "Multiple instances of Three.js" warning by avoiding local bundling
+      external: [
+        'react', 
+        'react-dom', 
+        'three', 
+        '@react-three/fiber', 
+        '@react-three/drei', 
+        '@react-three/postprocessing', 
+        '@google/genai'
+      ]
     }
   },
   define: {

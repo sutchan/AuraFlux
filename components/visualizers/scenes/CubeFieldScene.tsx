@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/CubeFieldScene.tsx
- * Version: 1.6.16
+ * Version: 1.6.17
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-22 21:15
+ * Updated: Added per-particle audio reaction smoothing.
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -31,6 +31,8 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
   
   const dataArray = useMemo(() => new Uint8Array(analyser.frequencyBinCount), [analyser]);
 
+  // Use a mutable array for particle data to keep smoothing state across frames
+  // without re-creating objects
   const particles = useMemo(() => {
     const temp = [];
     for (let i = 0; i < count; i++) {
@@ -76,6 +78,7 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
         temp.push({
             x, y, z,
             scale: scaleBase,
+            currentScale: scaleBase, // Smoothing state
             isStructure,
             speedOffset, 
             rotationAxis: rotAxis,
@@ -202,9 +205,16 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
                 dummy.rotation.y += Math.sin(time * 0.1 + p.phase) * 0.002;
             }
 
-            // 最终缩放
-            const finalScale = p.scale * (1.0 + individualReaction * 1.8);
-            dummy.scale.set(finalScale, finalScale, finalScale);
+            // --- SMOOTHING LOGIC ---
+            // Calculate target scale based on audio
+            const targetScale = p.scale * (1.0 + individualReaction * 1.8);
+            
+            // Asymmetric smoothing: Pop out fast (0.3), shrink slow (0.1)
+            const lerpFactor = targetScale > p.currentScale ? 0.3 : 0.1;
+            p.currentScale += (targetScale - p.currentScale) * lerpFactor;
+
+            // Apply smoothed scale
+            dummy.scale.set(p.currentScale, p.currentScale, p.currentScale);
             
             dummy.updateMatrix();
             meshRef.current!.setMatrixAt(i, dummy.matrix);

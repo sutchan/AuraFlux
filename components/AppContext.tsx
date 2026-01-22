@@ -1,9 +1,9 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.1.9
+ * Version: 1.2.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-20 10:45
+ * Updated: 2025-02-24 10:00
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
@@ -13,11 +13,13 @@ import { useLocalStorage } from '../core/hooks/useLocalStorage';
 import { useAppState } from '../core/hooks/useAppState';
 import { useVisualsState } from '../core/hooks/useVisualsState';
 import { useAiState } from '../core/hooks/useAiState';
+import { Toast } from './ui/Toast';
 
 // --- Default Settings ---
 const DEFAULT_SETTINGS: VisualizerSettings = {
-  uiMode: 'advanced', // Updated to default to advanced mode
-  sensitivity: 1.5, speed: 1.0, glow: false, trails: true, autoRotate: false, rotateInterval: 30,
+  uiMode: 'advanced',
+  sensitivity: 1.5, speed: 1.0, glow: false, trails: true, 
+  autoRotate: false, rotateInterval: 30, includedModes: Object.values(VisualizerMode), 
   cycleColors: false, colorInterval: 10, hideCursor: false, smoothing: 0.8, fftSize: 512, 
   quality: 'high', monitor: false, wakeLock: false, customText: 'AURA', showCustomText: false,
   textPulse: true, customTextRotation: 0, customTextSize: 12, customTextFont: 'Inter, sans-serif',
@@ -37,6 +39,7 @@ interface UIContextType {
   resetSettings: () => void;
   toggleFullscreen: () => void;
   t: any;
+  showToast: (message: string, type?: 'success' | 'info' | 'error') => void;
 }
 const UIContext = createContext<UIContextType | null>(null);
 export const useUI = () => {
@@ -109,6 +112,17 @@ const UIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     showOnboarding, isUnsupported, t, handleOnboardingComplete, resetSettings 
   } = useAppState();
 
+  // Toast State
+  const [toast, setToast] = useState<{ message: string | null; type: 'success' | 'info' | 'error' }>({ message: null, type: 'success' });
+
+  const showToast = useCallback((message: string, type: 'success' | 'info' | 'error' = 'success') => {
+    setToast({ message, type });
+  }, []);
+
+  const closeToast = useCallback(() => {
+    setToast(prev => ({ ...prev, message: null }));
+  }, []);
+
   const toggleFullscreen = useCallback(() => {
     const doc = window.document as any;
     const elem = doc.documentElement as any;
@@ -130,9 +144,10 @@ const UIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     <UIContext.Provider value={{
       language, setLanguage, region, setRegion, hasStarted, setHasStarted,
       isUnsupported, showOnboarding, handleOnboardingComplete, resetSettings,
-      toggleFullscreen, t
+      toggleFullscreen, t, showToast
     }}>
       {children}
+      <Toast message={toast.message} type={toast.type} onClose={closeToast} />
     </UIContext.Provider>
   );
 };
@@ -155,7 +170,6 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     setStorage('settings', settings);
   }, [settings, setStorage]);
 
-  // WakeLock Effect
   useEffect(() => {
     let wakeLock: any = null;
     const request = async () => {
@@ -184,9 +198,10 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   
   const resetAudioSettings = useCallback(() => setSettings(p => ({ ...p, sensitivity: DEFAULT_SETTINGS.sensitivity, smoothing: DEFAULT_SETTINGS.smoothing, fftSize: DEFAULT_SETTINGS.fftSize })), [setSettings]);
 
-  // FIX: Removed reference to VisualizerMode.TERRAIN as it is not defined in the VisualizerMode enum.
   const isThreeMode = useMemo(() => 
-    mode === VisualizerMode.SILK || 
+    mode === VisualizerMode.KINETIC_WALL || 
+    mode === VisualizerMode.CYBER_CITY || 
+    mode === VisualizerMode.CRYSTAL_CORE || 
     mode === VisualizerMode.LIQUID || 
     mode === VisualizerMode.CUBE_FIELD ||
     mode === VisualizerMode.NEURAL_FLOW
@@ -260,8 +275,6 @@ const AIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   );
 };
 
-// --- Main App Provider & Legacy Hook ---
-
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <UIProvider>
     <VisualsProvider>
@@ -274,7 +287,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   </UIProvider>
 );
 
-// Legacy God-Hook for backward compatibility
 export const useAppContext = () => {
   const ui = useUI();
   const visuals = useVisuals();

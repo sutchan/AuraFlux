@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.2.2
+ * Version: 1.2.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 20:00
+ * Updated: 2025-02-24 00:00
  */
 
 import React, { useRef } from 'react';
@@ -17,7 +17,7 @@ import { useVisuals, useAI, useUI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 
 const BetaBadge = ({ label }: { label?: string }) => (
-  <span className="ml-2 px-1.5 py-[1px] rounded-[4px] bg-blue-500/20 border border-blue-500/30 text-[9px] font-bold text-blue-300 tracking-wider">
+  <span className="ml-2 px-1.5 py-[1px] rounded-[4px] bg-blue-500/20 border border-blue-500/30 text-[10px] font-bold text-blue-300 tracking-wider">
     {label || 'BETA'}
   </span>
 );
@@ -87,9 +87,9 @@ export const AiSettingsPanel: React.FC = () => {
                      onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
                    />
                    {/* Status Legend */}
-                   <div className="flex gap-3 px-1 mt-1 text-[9px] font-mono text-white/20 uppercase tracking-tight select-none">
-                      <span className="flex items-center gap-1"><span className="text-green-500">🟢</span> API Connected</span>
-                      <span className="flex items-center gap-1"><span className="text-yellow-500">🟡</span> Emulated</span>
+                   <div className="flex gap-4 px-1 mt-2 text-[11px] font-mono text-white/30 uppercase tracking-tight select-none">
+                      <span className="flex items-center gap-1.5"><span className="text-green-500">🟢</span> API Connected</span>
+                      <span className="flex items-center gap-1.5"><span className="text-yellow-500">🟡</span> Emulated</span>
                    </div>
                    
                    <div className="pt-3">

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.91
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 04:00
+ * Updated: 2025-02-23 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -67,7 +67,13 @@ export const zh = {
     lyricsFont: 'AI 歌词的排版风格。',
     lyricsFontSize: '缩放 AI 识别文本的大小。',
     textFont: '自定义文字图层的字体系列。',
-    recognitionSource: '选择 AI 角色或提供商。'
+    recognitionSource: '选择 AI 角色或提供商。',
+    exportConfig: '将当前所有设置导出为 JSON 配置文件。',
+    importConfig: '从 JSON 文件加载配置。',
+    savePreset: '将当前状态保存到浏览器本地存储。',
+    loadPreset: '加载此预设。',
+    cloudProvider: '选择目标云服务以便优化备份文件名。',
+    copyConfig: '将配置代码复制到剪贴板以便分享。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -152,6 +158,30 @@ export const zh = {
     audio: '音频架构',
     ai: '人工智能'
   },
+  config: {
+    title: '云端与数据',
+    export: '导出配置',
+    import: '导入配置',
+    library: '本地预设库',
+    save: '保存',
+    load: '加载',
+    delete: '删除',
+    placeholder: '预设名称...',
+    confirmImport: '覆盖当前设置？',
+    invalidFile: '文件格式无效',
+    importSuccess: '配置加载成功',
+    cloudHint: '选择目标云盘以优化备份文件名:',
+    copy: '复制',
+    copied: '已复制',
+    providers: {
+        gdrive: 'Google Drive',
+        dropbox: 'Dropbox',
+        baidu: '百度网盘',
+        aliyun: '阿里云盘',
+        quark: '夸克网盘',
+        local: '本地文件'
+    }
+  },
   showFps: '显示帧率',
   showTooltips: '显示提示',
   doubleClickFullscreen: '双击全屏',
@@ -165,9 +195,9 @@ export const zh = {
     calm: '数字波形',
     party: '动感派对',
     ambient: '深空星云',
-    cyberpunk: '舞台激光',
+    cyberpunk: '赛博都市', 
     retrowave: '复古夕阳',
-    vocal: '人声专注'
+    vocal: '晶体核心' 
   },
   recognitionSource: 'AI 角色偏好',
   lyricsPosition: '歌词显示位置',
@@ -208,9 +238,29 @@ export const zh = {
     [VisualizerMode.LASERS]: '舞台激光矩阵',
     [VisualizerMode.FLUID_CURVES]: '极光之舞',
     [VisualizerMode.MACRO_BUBBLES]: '微观液泡', 
-    [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: '动感光墙 (WebGL)', 
+    [VisualizerMode.CYBER_CITY]: '赛博都市 (WebGL)', 
+    [VisualizerMode.CRYSTAL_CORE]: '晶体核心 (WebGL)', 
     [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
     [VisualizerMode.WAVEFORM]: '数字波形'
+  },
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: '基于 WebGL 粒子系统的有机流体模拟。',
+    [VisualizerMode.CUBE_FIELD]: '响应频率的几何方块无尽矩阵。',
+    [VisualizerMode.PLASMA]: '基于经典演示场景效果的平滑流体色彩混合。',
+    [VisualizerMode.BARS]: '带有悬浮峰值的经典频谱分析仪。',
+    [VisualizerMode.PARTICLES]: '随节拍强度反应的深空星野穿越。',
+    [VisualizerMode.TUNNEL]: '将你吸入音乐的递归几何隧道。',
+    [VisualizerMode.RINGS]: '从中心向外扩散的霓虹共振环。',
+    [VisualizerMode.NEBULA]: '具有气体物理特性的深空粒子模拟。',
+    [VisualizerMode.LASERS]: '扫过屏幕的高能锐利光束。',
+    [VisualizerMode.FLUID_CURVES]: '水平流动的平滑大气光波。',
+    [VisualizerMode.MACRO_BUBBLES]: '带有景深效果的柔焦微观液泡。',
+    [VisualizerMode.KINETIC_WALL]: '带有 3D 动力学挤出的巨型 LED 舞台背景墙。',
+    [VisualizerMode.CYBER_CITY]: '霓虹均衡器摩天大楼上空的无尽飞行。',
+    [VisualizerMode.CRYSTAL_CORE]: '对舞台灯光和节奏产生折射反应的晶体核心。',
+    [VisualizerMode.LIQUID]: '对低频做出反应的抽象变形球体。',
+    [VisualizerMode.WAVEFORM]: '展现频谱历史的液体丝带。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '标准排版',

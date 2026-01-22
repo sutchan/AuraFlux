@@ -1,18 +1,20 @@
 /**
  * File: core/types/visuals.ts
- * Version: 1.6.76
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:15
+ * Updated: 2025-02-23 19:00
  */
 
 import { Position, Region } from './common';
 import { LyricsStyle } from './audio';
 
 export enum VisualizerMode {
-  // WebGL Modes
+  // WebGL Modes (High Fidelity)
   NEURAL_FLOW = 'NEURAL_FLOW',
-  SILK = 'SILK',
+  KINETIC_WALL = 'KINETIC_WALL', 
+  CYBER_CITY = 'CYBER_CITY',
+  CRYSTAL_CORE = 'CRYSTAL_CORE',
   LIQUID = 'LIQUID',
   CUBE_FIELD = 'CUBE_FIELD',
 
@@ -37,10 +39,15 @@ export interface VisualizerSettings {
   speed: number;
   glow: boolean;
   trails: boolean;
+  
+  // Automation
   autoRotate: boolean;
   rotateInterval: number;
+  includedModes: VisualizerMode[]; // NEW: Whitelist for auto-rotate
+  
   cycleColors: boolean;
   colorInterval: number;
+  
   hideCursor: boolean;
   smoothing: number;
   fftSize: number;
@@ -90,6 +97,7 @@ export interface SmartPreset {
     trails: boolean;
     smoothing: number;
     fftSize?: number;
+    includedModes?: VisualizerMode[]; // Associated modes for this vibe
   };
 }
 

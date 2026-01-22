@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.6.91
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 04:00
+ * Updated: 2025-02-23 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -67,7 +67,13 @@ export const en = {
     lyricsFont: 'Typography style for the AI lyrics.',
     lyricsFontSize: 'Scale the AI identification text.',
     textFont: 'Font family for the custom text layer.',
-    recognitionSource: 'Select the AI personality or provider.'
+    recognitionSource: 'Select the AI personality or provider.',
+    exportConfig: 'Download current settings as a JSON file.',
+    importConfig: 'Load settings from a JSON file.',
+    savePreset: 'Save current state to browser storage.',
+    loadPreset: 'Restore this preset state.',
+    cloudProvider: 'Select target cloud service for optimized file naming.',
+    copyConfig: 'Copy configuration string to clipboard for quick sharing.'
   },
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',
@@ -142,6 +148,30 @@ export const en = {
   systemPanel: {
     interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI'
   },
+  config: {
+    title: 'Cloud & Data',
+    export: 'Export File',
+    import: 'Import File',
+    library: 'Local Library',
+    save: 'Save',
+    load: 'Load',
+    delete: 'Del',
+    placeholder: 'Preset Name...',
+    confirmImport: 'Overwrite current settings?',
+    invalidFile: 'Invalid file format',
+    importSuccess: 'Configuration loaded.',
+    cloudHint: 'Select provider to format backup file:',
+    copy: 'Copy',
+    copied: 'Copied!',
+    providers: {
+        gdrive: 'Google Drive',
+        dropbox: 'Dropbox',
+        baidu: 'Baidu Netdisk',
+        aliyun: 'Aliyun Drive',
+        quark: 'Quark Cloud',
+        local: 'Local File'
+    }
+  },
   showFps: 'Show FPS',
   showTooltips: 'Show Tooltips',
   doubleClickFullscreen: 'Double-Click Fullscreen',
@@ -155,9 +185,9 @@ export const en = {
     calm: 'Digital Waveform',
     party: 'Energetic Party',
     ambient: 'Deep Nebula',
-    cyberpunk: 'Concert Lasers',
+    cyberpunk: 'Cyber City', 
     retrowave: 'Retro Sunset',
-    vocal: 'Vocal Focus'
+    vocal: 'Crystal Core' 
   },
   recognitionSource: 'AI Persona Provider',
   lyricsPosition: 'Lyrics Position',
@@ -197,9 +227,29 @@ export const en = {
     [VisualizerMode.LASERS]: 'Concert Lasers',
     [VisualizerMode.FLUID_CURVES]: 'Aura Waves',
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles (DoF)',
-    [VisualizerMode.SILK]: 'Silk Waves (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: 'Kinetic Wall (WebGL)', 
+    [VisualizerMode.CYBER_CITY]: 'Cyber City (WebGL)', 
+    [VisualizerMode.CRYSTAL_CORE]: 'Crystal Core (WebGL)', 
     [VisualizerMode.LIQUID]: 'Liquid Sphere (WebGL)',
     [VisualizerMode.WAVEFORM]: 'Digital Waveform'
+  },
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particle systems.',
+    [VisualizerMode.CUBE_FIELD]: 'Infinite field of geometric blocks responding to frequency.',
+    [VisualizerMode.PLASMA]: 'Smooth fluid-like color blending based on classic demoscene effects.',
+    [VisualizerMode.BARS]: 'Classic frequency spectrum analyzer with floating peaks.',
+    [VisualizerMode.PARTICLES]: 'Deep space starfield traversal reacting to beat intensity.',
+    [VisualizerMode.TUNNEL]: 'Recursive geometric corridor pulling you into the music.',
+    [VisualizerMode.RINGS]: 'Concentric neon resonance patterns expanding from the center.',
+    [VisualizerMode.NEBULA]: 'Deep space particle simulation with gaseous physics.',
+    [VisualizerMode.LASERS]: 'Sharp high-energy light beams sweeping across the screen.',
+    [VisualizerMode.FLUID_CURVES]: 'Smooth atmospheric light waves flowing horizontally.',
+    [VisualizerMode.MACRO_BUBBLES]: 'Soft focus micro-cellular visuals with depth of field.',
+    [VisualizerMode.KINETIC_WALL]: 'Massive LED stage wall with kinetic 3D extrusions.',
+    [VisualizerMode.CYBER_CITY]: 'Infinite flight over neon equalizer skyscrapers.',
+    [VisualizerMode.CRYSTAL_CORE]: 'Refractive crystal core reacting to stage lights and rhythm.',
+    [VisualizerMode.LIQUID]: 'Abstract morphing sphere reacting to low-end frequencies.',
+    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency history.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamic', [LyricsStyle.MINIMAL]: 'Minimalist'

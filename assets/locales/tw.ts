@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.6.76
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:15
+ * Updated: 2025-02-23 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -67,7 +67,13 @@ export const tw = {
     lyricsFont: 'AI 歌詞的字體樣式。',
     lyricsFontSize: '縮放 AI 辨識文字的大小。',
     textFont: '自訂文字圖層的字體系列。',
-    recognitionSource: '選擇 AI 角色或供應商。'
+    recognitionSource: '選擇 AI 角色或供應商。',
+    exportConfig: '將當前所有設定導出為 JSON 配置檔。',
+    importConfig: '從 JSON 檔案載入配置。',
+    savePreset: '將當前狀態保存到瀏覽器本地存儲。',
+    loadPreset: '載入此預設。',
+    cloudProvider: '選擇目標云端服務以優化備份檔名。',
+    copyConfig: '將配置代碼複製到剪貼簿以便分享。'
   },
   visualizerMode: '視覺化模式',
   styleTheme: '視覺風格',
@@ -143,6 +149,30 @@ export const tw = {
   systemPanel: {
     interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染引擎', audio: '音訊架構', ai: '人工智慧'
   },
+  config: {
+    title: '雲端與資料',
+    export: '導出配置',
+    import: '導入配置',
+    library: '本地預設庫',
+    save: '保存',
+    load: '載入',
+    delete: '刪除',
+    placeholder: '預設名稱...',
+    confirmImport: '覆蓋當前設定？',
+    invalidFile: '檔案格式無效',
+    importSuccess: '配置載入成功',
+    cloudHint: '選擇目標雲端硬碟以優化備份檔名:',
+    copy: '複製',
+    copied: '已複製',
+    providers: {
+        gdrive: 'Google Drive',
+        dropbox: 'Dropbox',
+        baidu: '百度網盤',
+        aliyun: '阿里雲盤',
+        quark: '誇克網盤',
+        local: '本地檔案'
+    }
+  },
   showFps: '顯示幀率',
   showTooltips: '顯示提示',
   doubleClickFullscreen: '雙擊全螢幕',
@@ -156,9 +186,9 @@ export const tw = {
     calm: '數字波形',
     party: '動感派對',
     ambient: '深空星云',
-    cyberpunk: '舞台雷射',
+    cyberpunk: '賽博都市', 
     retrowave: '復古夕陽',
-    vocal: '人聲專注'
+    vocal: '晶體核心' 
   },
   recognitionSource: 'AI 角色偏好',
   lyricsPosition: '歌詞顯示位置',
@@ -193,9 +223,29 @@ export const tw = {
     [VisualizerMode.LASERS]: '舞台雷射矩陣',
     [VisualizerMode.FLUID_CURVES]: '極光之舞',
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
-    [VisualizerMode.SILK]: '流光绸缎 (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: '動感光牆 (WebGL)', 
+    [VisualizerMode.CYBER_CITY]: '賽博都市 (WebGL)', 
+    [VisualizerMode.CRYSTAL_CORE]: '晶體核心 (WebGL)', 
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
     [VisualizerMode.WAVEFORM]: '數字波形'
+  },
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: '基於 WebGL 粒子系統的有機流體模擬。',
+    [VisualizerMode.CUBE_FIELD]: '響應頻率的幾何方塊無盡矩陣。',
+    [VisualizerMode.PLASMA]: '基於經典展示場景效果的平滑流體色彩混合。',
+    [VisualizerMode.BARS]: '帶有懸浮峰值的經典頻譜分析儀。',
+    [VisualizerMode.PARTICLES]: '隨節拍強度反應的深空星野穿越。',
+    [VisualizerMode.TUNNEL]: '將你吸入音樂的遞迴幾何隧道。',
+    [VisualizerMode.RINGS]: '從中心向外擴散的霓虹共振環。',
+    [VisualizerMode.NEBULA]: '具有氣體物理特性的深空粒子模擬。',
+    [VisualizerMode.LASERS]: '掃過螢幕的高能銳利光束。',
+    [VisualizerMode.FLUID_CURVES]: '水平流動的平滑大氣光波。',
+    [VisualizerMode.MACRO_BUBBLES]: '帶有景深效果的柔焦微觀液泡。',
+    [VisualizerMode.KINETIC_WALL]: '帶有 3D 動力學擠出的巨型 LED 舞台背景牆。',
+    [VisualizerMode.CYBER_CITY]: '霓虹等化器摩天大樓上空的無盡飛行。',
+    [VisualizerMode.CRYSTAL_CORE]: '對舞台燈光和節奏產生折射反應的晶體核心。',
+    [VisualizerMode.LIQUID]: '對低頻做出反應的抽象變形球體。',
+    [VisualizerMode.WAVEFORM]: '展現頻譜歷史的液體絲帶。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準排版', [LyricsStyle.KARAOKE]: '動態律動', [LyricsStyle.MINIMAL]: '極簡主義'

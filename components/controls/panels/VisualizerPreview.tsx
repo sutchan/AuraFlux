@@ -1,20 +1,22 @@
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.2.2
+ * Version: 1.7.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 16:00
+ * Updated: 2025-02-24 00:00
  */
 
 import React, { memo } from 'react';
 import { VisualizerMode } from '../../../core/types';
-import { VISUALIZER_PRESETS } from '../../../core/constants';
 import { TooltipArea } from '../../ui/controls/Tooltip';
+import { useUI } from '../../AppContext';
 
 const styles: Partial<Record<VisualizerMode, React.CSSProperties>> = {
     // WebGL High-End
     [VisualizerMode.NEURAL_FLOW]: { background: 'radial-gradient(circle at 30% 30%, #00ffaa, transparent), radial-gradient(circle at 70% 70%, #00aaff, #000)' },
-    [VisualizerMode.SILK]: { background: 'linear-gradient(45deg, #a3e635, #22c55e, #14532d)' },
+    [VisualizerMode.KINETIC_WALL]: { background: 'linear-gradient(90deg, #000 5%, #ff0055 20%, #000 35%, #000 65%, #00ffff 80%, #000 95%)' }, 
+    [VisualizerMode.CYBER_CITY]: { background: 'linear-gradient(to top, #ff00ff 0%, #000 50%, #050011 100%)' }, 
+    [VisualizerMode.CRYSTAL_CORE]: { background: 'radial-gradient(circle, #fff 10%, #00ffff 30%, #000 70%)' }, 
     [VisualizerMode.LIQUID]: { background: 'radial-gradient(circle, #4c1d95, #1e1b4b)' },
     [VisualizerMode.CUBE_FIELD]: { background: 'linear-gradient(180deg, #000 50%, #3b82f6 100%)' },
     
@@ -34,25 +36,51 @@ const styles: Partial<Record<VisualizerMode, React.CSSProperties>> = {
 };
 
 
-export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode, name, isActive, onClick }) => {
-  const description = VISUALIZER_PRESETS[mode]?.description || '';
+export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode, name, isActive, isIncluded, onClick, onToggleInclude }) => {
+  const { t } = useUI();
+  // Fetch description from i18n
+  const description = t?.modeDescriptions?.[mode] || '';
   
   return (
-    <TooltipArea text={description}>
-      <button
-        onClick={onClick}
-        aria-pressed={isActive}
-        className={`relative w-full rounded-xl transition-all duration-300 group overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 ${isActive ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:ring-1 hover:ring-white/30'}`}
-      >
-        <div 
-          className="h-11 w-full bg-black transition-transform duration-500 ease-in-out group-hover:scale-110"
-          style={styles[mode] || { background: 'black' }}
-        ></div>
-        <div className={`absolute inset-0 flex items-center justify-center p-2 text-center transition-colors duration-300 ${isActive ? 'bg-black/40' : 'bg-black/60 group-hover:bg-black/50'}`}>
-          <span className={`text-[10px] font-bold uppercase tracking-widest leading-tight ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white'}`}>{name}</span>
-        </div>
-      </button>
-    </TooltipArea>
+    <div className="relative w-full group">
+      {/* Main Selection Area */}
+      <TooltipArea text={description}>
+        <button
+          onClick={onClick}
+          aria-pressed={isActive}
+          className={`relative w-full rounded-xl transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 text-left ${isActive ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:ring-1 hover:ring-white/30'}`}
+        >
+          <div 
+            className="h-12 w-full bg-black transition-transform duration-500 ease-in-out group-hover:scale-110"
+            style={styles[mode] || { background: 'black' }}
+          ></div>
+          
+          {/* Label Overlay - Left aligned to leave space for toggle */}
+          <div className={`absolute inset-0 flex items-center justify-between px-3 py-2 transition-colors duration-300 ${isActive ? 'bg-black/40' : 'bg-black/60 group-hover:bg-black/50'}`}>
+            <span className={`text-[11px] font-bold uppercase tracking-widest leading-tight truncate pr-2 ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white'}`}>{name}</span>
+            
+            {/* Inline Checkbox Toggle */}
+            <div
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleInclude();
+                }}
+                className={`w-4 h-4 rounded-full flex items-center justify-center transition-all duration-200 border ${
+                    isIncluded 
+                    ? 'bg-green-500 border-green-500 text-black shadow-[0_0_8px_rgba(34,197,94,0.6)]' 
+                    : 'bg-black/30 border-white/20 text-transparent hover:border-white/50'
+                }`}
+                aria-label={isIncluded ? "Disable Auto-Rotate" : "Enable Auto-Rotate"}
+                title={isIncluded ? "Included in Auto-Rotate" : "Excluded from Auto-Rotate"}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+          </div>
+        </button>
+      </TooltipArea>
+    </div>
   );
 });
 
@@ -60,5 +88,7 @@ interface VisualizerPreviewProps {
   mode: VisualizerMode;
   name: string;
   isActive: boolean;
+  isIncluded: boolean;
   onClick: () => void;
+  onToggleInclude: () => void;
 }

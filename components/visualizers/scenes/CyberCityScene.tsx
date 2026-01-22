@@ -1,9 +1,9 @@
-
 /**
  * File: components/visualizers/scenes/CyberCityScene.tsx
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: Added smoothing buffer for building heights.
  */
 
 import React, { useRef, useMemo, useEffect } from 'react';
@@ -29,6 +29,9 @@ export const CyberCityScene: React.FC<SceneProps> = ({ analyser, colors, setting
   const count = 400; // Buildings count
   const dummy = useMemo(() => new THREE.Object3D(), []);
   
+  // Smoothing Buffer for Building Heights
+  const heightBuffer = useMemo(() => new Float32Array(count).fill(5.0), [count]);
+
   const buildings = useMemo(() => {
     const temp = [];
     // Two rows of buildings on sides
@@ -87,8 +90,15 @@ export const CyberCityScene: React.FC<SceneProps> = ({ analyser, colors, setting
             // Audio Reactivity
             // Map freqIdx to FFT data
             const val = dataArray[b.freqIdx % dataArray.length] / 255;
-            const h = 5 + val * 60 * settings.sensitivity; 
+            const targetHeight = 5 + val * 60 * settings.sensitivity; 
             
+            // --- SMOOTHING LOGIC ---
+            // Asymmetric smoothing: Fast up (0.2), Slow down (0.05)
+            const lerpFactor = targetHeight > heightBuffer[i] ? 0.2 : 0.05;
+            heightBuffer[i] += (targetHeight - heightBuffer[i]) * lerpFactor;
+            
+            const h = heightBuffer[i];
+
             dummy.position.set(b.x, h/2, zPos);
             dummy.scale.set(b.w, h, b.d);
             dummy.updateMatrix();

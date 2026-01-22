@@ -1,9 +1,9 @@
-
 /**
  * File: components/controls/MiniControls.tsx
- * Version: 1.0.16
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 14:00
  */
 
 import React from 'react';
@@ -28,7 +28,10 @@ export const MiniControls: React.FC<MiniControlsProps> = ({ isExpanded, isIdle, 
   return (
     <>
       {isIdentifying && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 md:top-8 md:left-8 md:translate-x-0 z-[110] bg-black/60 backdrop-blur-2xl border border-blue-500/30 rounded-full px-5 py-2.5 md:px-6 md:py-3.5 flex items-center gap-3 md:gap-4 animate-pulse shadow-lg shadow-blue-900/20 w-max max-w-[90vw]">
+        // UI FIX: Repositioned to avoid overlapping SongOverlay (Top-Left)
+        // Mobile: Bottom Center (above controls)
+        // Desktop: Top Right
+        <div className="fixed bottom-32 left-1/2 -translate-x-1/2 md:bottom-auto md:top-8 md:left-auto md:right-8 md:translate-x-0 z-[110] bg-black/60 backdrop-blur-2xl border border-blue-500/30 rounded-full px-5 py-2.5 md:px-6 md:py-3.5 flex items-center gap-3 md:gap-4 animate-pulse shadow-lg shadow-blue-900/20 w-max max-w-[90vw]">
           <div className="w-2 h-2 md:w-2.5 md:h-2.5 bg-blue-400 rounded-full animate-ping" />
           <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-blue-100 truncate">{t?.identifying || "AI ANALYZING..."}</span>
         </div>

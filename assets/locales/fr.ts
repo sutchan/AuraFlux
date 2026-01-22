@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.6.75
+ * Version: 1.6.92
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:00
+ * Updated: 2025-02-23 16:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -135,6 +135,7 @@ export const fr = {
   customTextPlaceholder: 'ENTRER TEXTE',
   showText: 'Afficher Superposition',
   pulseBeat: 'Pulsation au Rythme',
+  textAudioReactive: 'Audio-Réactivité',
   textSize: 'Taille',
   textRotation: 'Rotation',
   textFont: 'Police',
@@ -240,7 +241,7 @@ export const fr = {
     [VisualizerMode.LASERS]: 'Matrice Lasers',
     [VisualizerMode.FLUID_CURVES]: 'Danse des Aurores',
     [VisualizerMode.MACRO_BUBBLES]: 'Macro-bulles (DoF)',
-    [VisualizerMode.SILK]: 'Soie Flottante (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: 'Mur Cinétique (WebGL)',
     [VisualizerMode.LIQUID]: 'Sphère Liquide (WebGL)',
     [VisualizerMode.WAVEFORM]: 'Digital Waveform'
   },

@@ -1,14 +1,14 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.6.91
+ * Version: 1.7.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 04:00
+ * Updated: 2025-02-24 14:00
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.6.91';
+export const APP_VERSION = '1.7.3';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
@@ -97,7 +97,7 @@ export const VISUALIZER_PRESETS: Record<string, { description: string }> = {
   // --- WebGL Engines (At the end) ---
   [VisualizerMode.NEURAL_FLOW]: { description: 'Organic fluid simulation powered by WebGL.' },
   [VisualizerMode.CUBE_FIELD]: { description: 'Infinite field of geometric blocks.' },
-  [VisualizerMode.SILK]: { description: 'Ethereal ribbons dancing in 3D space.' },
+  [VisualizerMode.KINETIC_WALL]: { description: 'Massive LED stage wall with kinetic extrusions.' },
   [VisualizerMode.LIQUID]: { description: 'Abstract morphing sphere reacting to rhythm.' },
 };
 
@@ -112,18 +112,20 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
       glow: false,
       trails: true,
       smoothing: 0.9,
+      includedModes: [VisualizerMode.WAVEFORM, VisualizerMode.FLUID_CURVES, VisualizerMode.LIQUID, VisualizerMode.NEBULA]
     }
   },
   party: {
     nameKey: 'party',
     settings: {
-      mode: VisualizerMode.PLASMA,
-      colorTheme: COLOR_THEMES[0], // Vaporwave (Updated)
+      mode: VisualizerMode.KINETIC_WALL, // Updated to new concert mode
+      colorTheme: COLOR_THEMES[0], // Vaporwave
       speed: 1.5,
       sensitivity: 2.0,
       glow: true,
       trails: true,
       smoothing: 0.6,
+      includedModes: [VisualizerMode.KINETIC_WALL, VisualizerMode.LASERS, VisualizerMode.BARS, VisualizerMode.CUBE_FIELD, VisualizerMode.PLASMA]
     }
   },
   ambient: {
@@ -136,6 +138,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
       glow: true,
       trails: true,
       smoothing: 0.95,
+      includedModes: [VisualizerMode.NEBULA, VisualizerMode.MACRO_BUBBLES, VisualizerMode.NEURAL_FLOW, VisualizerMode.PARTICLES]
     }
   },
   cyberpunk: {
@@ -148,6 +151,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
       glow: true,
       trails: true,
       smoothing: 0.7,
+      includedModes: [VisualizerMode.LASERS, VisualizerMode.CYBER_CITY, VisualizerMode.TUNNEL, VisualizerMode.RINGS]
     }
   },
   retrowave: {
@@ -160,6 +164,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
       glow: true,
       trails: false,
       smoothing: 0.8,
+      includedModes: [VisualizerMode.CUBE_FIELD, VisualizerMode.TUNNEL, VisualizerMode.BARS, VisualizerMode.CYBER_CITY]
     }
   },
   vocal: {
@@ -171,7 +176,9 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
       sensitivity: 1.3,
       glow: false,
       trails: true,
-      smoothing: 0.85
+      smoothing: 0.85,
+      // Removed CRYSTAL_CORE as requested
+      includedModes: [VisualizerMode.BARS, VisualizerMode.RINGS, VisualizerMode.WAVEFORM]
     }
   }
 };

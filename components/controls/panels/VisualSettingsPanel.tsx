@@ -1,8 +1,9 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.1.2
+ * Version: 1.3.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 00:00
  */
 
 import React from 'react';
@@ -40,6 +41,25 @@ export const VisualSettingsPanel: React.FC = () => {
     setActivePreset('');
   };
 
+  const handleToggleModeInclusion = (mode: VisualizerMode) => {
+      setSettings(prev => {
+          const currentList = prev.includedModes || [];
+          const exists = currentList.includes(mode);
+          let newList;
+          if (exists) {
+              newList = currentList.filter(m => m !== mode);
+          } else {
+              newList = [...currentList, mode];
+          }
+          return { ...prev, includedModes: newList };
+      });
+  };
+
+  const isModeIncluded = (mode: VisualizerMode) => {
+      // Robustness: Handle legacy state where includedModes might be undefined
+      return (settings.includedModes || []).includes(mode);
+  };
+
   return (
     <>
       {/* Col 1: Visual Modes Selection (Optimized for overflow) */}
@@ -51,15 +71,20 @@ export const VisualSettingsPanel: React.FC = () => {
         {/* Scrollable Area with Fade Mask */}
         <div className="flex-grow overflow-y-auto custom-scrollbar px-4 pb-6 mask-fade-vertical">
             <div className="grid grid-cols-2 gap-3 pb-8">
-               {Object.keys(VISUALIZER_PRESETS).map(m => (
-                 <VisualizerPreview
-                    key={m}
-                    mode={m as VisualizerMode}
-                    name={modes[m as VisualizerMode] || m}
-                    isActive={currentMode === m}
-                    onClick={() => setMode(m as VisualizerMode)}
-                  />
-               ))}
+               {Object.keys(VISUALIZER_PRESETS).map(m => {
+                 const mode = m as VisualizerMode;
+                 return (
+                    <VisualizerPreview
+                        key={mode}
+                        mode={mode}
+                        name={modes[mode] || mode}
+                        isActive={currentMode === mode}
+                        isIncluded={isModeIncluded(mode)}
+                        onClick={() => setMode(mode)}
+                        onToggleInclude={() => handleToggleModeInclusion(mode)}
+                    />
+                 );
+               })}
             </div>
         </div>
         {/* Bottom gradient hint */}
@@ -109,7 +134,7 @@ export const VisualSettingsPanel: React.FC = () => {
                           </TooltipArea>
                           <div className="flex w-full max-w-[200px] bg-white/[0.04] rounded-lg p-0.5">
                           {(['low', 'med', 'high'] as const).map(q => (
-                              <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1.5 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
+                              <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1.5 rounded text-[11px] font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
                           ))}
                           </div>
                      </div>

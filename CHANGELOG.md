@@ -2,19 +2,27 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.7.3] - 2025-02-24
+
+### UI & UX
+*   **📱 Mobile Layout Fix:** Resolved an overlap issue where the "AI ANALYZING" status badge obscured the song title/artist overlay. The badge now appears at the bottom center on mobile devices.
+*   **🖥️ Desktop Refinement:** Moved the "AI ANALYZING" badge to the top-right corner on desktop layouts to keep the song info area (top-left) clean.
+*   **🎨 Toast Notifications:** Implemented a new, lightweight notification system for user actions (Save, Copy, Export).
+
+### Features
+*   **💾 Preset Management:** Added ability to **Delete** and **Rename** user presets in the System panel.
+*   **⚙️ Settings UI:** Reorganized action buttons (Export/Import/Copy) into a cleaner grid layout.
+
+## [v1.6.91] - 2025-02-23
+
+### Core & Stability
+*   **🌍 i18n Synchronization:** Fully synchronized all 10 language files (TW, JA, ES, KO, DE, FR, AR, RU) to include latest UI keys (`customTextCycleColor`, `cycleSpeed`, `textPosition`).
+*   **🛡️ Robustness:** Enhanced `geminiService` with strict API Key validation to prevent empty requests.
+*   **🔊 Audio Engine:** Improved `useAudio` hook with visibility-change detection to auto-resume suspended AudioContexts (fixes iOS Safari silence issue).
+
+### Features
+*   **🌈 Text Color Spectrum:** Added automated color cycling for custom text overlay.
+*   **📍 UI Positioning:** Enabled granular positioning control for both Custom Text and AI Lyrics overlays.
+
 ## [v1.6.90] - 2025-02-23
-
-### UX Improvements
-*   **🎨 Text Color Palette:** Reorganized the custom text color grid into a logical spectrum (Grayscale -> Warm -> Cold -> Deep) for easier selection.
-    *   **Visibility Fix:** Removed low-visibility dark shades (e.g., #2d3748) and replaced them with brighter pastel variants suitable for the dark interface.
-
-## [v1.6.89] - 2025-02-23
-
-### Visuals
-*   **🎨 Palette Overhaul:** Completely reorganized the color theme grid for better aesthetics.
-    *   **New Themes:** Added "Aurora Borealis", "Sunset Boulevard", and "Cotton Candy" to replace low-visibility dark themes.
-    *   **Prioritization:** Vibrant multicolor themes now appear first in the selection list.
-    *   **Smart Presets:** Updated preset combinations to utilize the new high-contrast gradients.
-
-## [v1.6.88] - 2025-02-23
 ...

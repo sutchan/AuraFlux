@@ -1,8 +1,9 @@
 /**
  * File: components/ui/controls/SettingsToggle.tsx
- * Version: 1.0.6
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 10:00
  */
 
 import React, { memo } from 'react';
@@ -21,6 +22,9 @@ interface SettingsToggleProps {
 
 export const SettingsToggle = memo(({ label, value, onChange, activeColor = 'blue', hintText, statusText, children, variant = 'default' }: SettingsToggleProps) => {
   const activeBg = activeColor === 'green' ? 'bg-green-500' : 'bg-blue-600';
+  const neonShadow = value 
+    ? (activeColor === 'green' ? 'shadow-[0_0_12px_rgba(34,197,94,0.6)]' : 'shadow-[0_0_12px_rgba(59,130,246,0.6)]') 
+    : '';
   
   const containerClasses = variant === 'clean' 
     ? 'py-3 flex flex-col group'
@@ -38,15 +42,15 @@ export const SettingsToggle = memo(({ label, value, onChange, activeColor = 'blu
         </TooltipArea>
         <button 
           onClick={onChange} 
-          className={`relative w-9 h-5 rounded-full transition-all duration-200 ease-in-out focus:outline-none flex items-center shrink-0 ${value ? activeBg : 'bg-white/10'}`}
+          className={`relative w-9 h-5 rounded-full transition-all duration-300 ease-in-out focus:outline-none flex items-center shrink-0 ${value ? activeBg : 'bg-white/10'} ${neonShadow}`}
           role="switch" 
           aria-checked={value}
           aria-label={label}
         >
-          <span className={`inline-block w-3 h-3 transform transition-transform duration-200 ease-in-out bg-white rounded-full ${value ? 'translate-x-5' : 'translate-x-1'}`} />
+          <span className={`inline-block w-3 h-3 transform transition-transform duration-200 ease-in-out bg-white rounded-full shadow-sm ${value ? 'translate-x-5' : 'translate-x-1'}`} />
         </button>
       </div>
-      {statusText && <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest text-right mt-1">{statusText}</div>}
+      {statusText && <div className="text-[11px] font-mono text-white/30 uppercase tracking-widest text-right mt-1">{statusText}</div>}
       {value && children && <div className="mt-3 pt-3 border-t border-white/5 animate-fade-in-up w-full">{children}</div>}
     </div>
   );

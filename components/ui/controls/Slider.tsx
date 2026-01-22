@@ -1,8 +1,9 @@
 /**
  * File: components/ui/controls/Slider.tsx
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 00:00
  */
 
 import React, { memo } from 'react';
@@ -25,7 +26,7 @@ export const Slider = memo(({ label, value, min, max, step, onChange, unit = '',
       <TooltipArea text={hintText}>
         <span className="text-xs font-bold uppercase text-white/50 tracking-[0.15em] ml-1">{label}</span>
       </TooltipArea>
-      <span className="text-[10px] font-mono text-white/80">{value.toFixed(step < 1 ? (step < 0.1 ? 2 : 1) : 0)}{unit}</span>
+      <span className="text-xs font-mono text-white/80">{value.toFixed(step < 1 ? (step < 0.1 ? 2 : 1) : 0)}{unit}</span>
     </div>
     <div className="group relative flex items-center h-6 w-full">
         <input 

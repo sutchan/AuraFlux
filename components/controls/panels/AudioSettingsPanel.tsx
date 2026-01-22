@@ -1,8 +1,9 @@
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 00:00
  */
 
 import React from 'react';
@@ -86,8 +87,8 @@ export const AudioSettingsPanel: React.FC = () => {
       {/* Col 3: Actions & Advanced Info */}
       <div className="p-4 pt-6 h-full flex flex-col">
           <div className="flex-grow">
-             <div className="p-4 bg-white/5 rounded-2xl">
-                <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest leading-relaxed">
+             <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                <span className="text-xs font-bold text-white/40 uppercase tracking-widest leading-relaxed block">
                    {t?.audioPanel?.info || "Adjust input sensitivity and smoothing to customize how the visualizer reacts to audio dynamics. Higher FFT sizes provide more spectral detail but consume more CPU."}
                 </span>
              </div>

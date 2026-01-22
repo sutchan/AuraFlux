@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.6.75
+ * Version: 1.6.92
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:00
+ * Updated: 2025-02-23 16:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -183,7 +183,7 @@ export const ar = {
     [VisualizerMode.LASERS]: 'مصفوفة الليزر',
     [VisualizerMode.FLUID_CURVES]: 'رقصة الشفق',
     [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو',
-    [VisualizerMode.SILK]: 'الحرير العائم (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: 'الجدار الحركي (WebGL)',
     [VisualizerMode.LIQUID]: 'الكوكب السائل (WebGL)',
     [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي'
   },

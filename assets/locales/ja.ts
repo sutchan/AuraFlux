@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.6.80
+ * Version: 1.6.92
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-22 10:00
+ * Updated: 2025-02-23 16:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -135,6 +135,7 @@ export const ja = {
   customTextPlaceholder: 'テキストを入力',
   showText: 'オーバーレイを表示',
   pulseBeat: 'ビートに同調',
+  textAudioReactive: 'オーディオ反応',
   textSize: 'フォントサイズ',
   textRotation: '回転',
   textFont: 'フォント',
@@ -240,7 +241,7 @@ export const ja = {
     [VisualizerMode.LASERS]: 'レーザーマトリクス',
     [VisualizerMode.FLUID_CURVES]: '極光の舞',
     [VisualizerMode.MACRO_BUBBLES]: '微細液胞 (DoF)',
-    [VisualizerMode.SILK]: '流光シルク (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: 'キネティック・ウォール (WebGL)',
     [VisualizerMode.LIQUID]: '流体惑星 (WebGL)',
     [VisualizerMode.WAVEFORM]: 'シルク波形'
   },
@@ -293,7 +294,7 @@ export const ja = {
       fftSize: 'スペクトル解析の細かさ（サンプル数）を決定します。'
     },
     projectInfoTitle: 'プロジェクトについて',
-    aboutDescription: '次世代の通感インタラクティブ体験. Aura Fluxは、Web Audioによる高精度解析とGoogle Gemini 3を融合させ、無形の音波を生命感あふれる光へと変換します。VJ、配信、空間演出に最適です。',
+    aboutDescription: '次世代の通感インタラクティブ体験. Aura Fluxは、Web Audioによる高精度解析とGoogle Gemini 3を融合させた、無形の音波を生命感あふれる光へと変換します。VJ、配信、空間演出に最適です。',
     privacyTitle: 'プライバシーと安全',
     privacyText: '音声解析はローカルで完結します。認識時のみ暗号化された特徴量を一時的に送信し、生録音データを保存することはありません。',
     version: 'リリース',

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.6.76
+ * Version: 1.6.92
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:25
+ * Updated: 2025-02-23 16:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -241,7 +241,7 @@ export const de = {
     [VisualizerMode.LASERS]: 'Concert Laser',
     [VisualizerMode.FLUID_CURVES]: 'Aura-Wellen',
     [VisualizerMode.MACRO_BUBBLES]: 'Makro-Blasen (DoF)',
-    [VisualizerMode.SILK]: 'Seidenwellen (WebGL)',
+    [VisualizerMode.KINETIC_WALL]: 'Kinetische Wand (WebGL)',
     [VisualizerMode.LIQUID]: 'Flüssige Sphäre (WebGL)',
     [VisualizerMode.WAVEFORM]: 'Digital Waveform'
   },
