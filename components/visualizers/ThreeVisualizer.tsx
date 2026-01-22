@@ -1,14 +1,14 @@
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.7.11
+ * Version: 1.7.12
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-19 17:00
+ * Updated: 2025-02-22 20:30
  */
 
 import React, { Suspense, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { EffectComposer, Bloom, ChromaticAberration, TiltShift } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, ChromaticAberration, TiltShift, Noise } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { VisualizerMode, VisualizerSettings } from '../../core/types';
 import { 
@@ -47,7 +47,15 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
 
   // Memoize post-processing logic
   const postProcessingEffects = useMemo(() => {
-      if (!settings.glow) return null;
+      // Noise acts as dithering to prevent color banding on 8-bit monitors, especially in dark gradients.
+      // We keep it enabled even if glow is off, as gradients exist in the scene rendering itself.
+      const ditheringNoise = <Noise opacity={0.025} premultiply />;
+
+      if (!settings.glow) return (
+        <EffectComposer multisampling={0}>
+            {ditheringNoise}
+        </EffectComposer>
+      );
 
       const enableTiltShift = settings.quality === 'high' && (
           mode === VisualizerMode.LIQUID || 
@@ -63,6 +71,8 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
                   mipmapBlur={true} 
                   radius={0.7}
               />
+              {/* Noise must be after Bloom to dither the smooth bloom gradients */}
+              {ditheringNoise}
               {settings.quality === 'high' && (
                   <ChromaticAberration 
                       offset={new THREE.Vector2(0.0015, 0.0015)}

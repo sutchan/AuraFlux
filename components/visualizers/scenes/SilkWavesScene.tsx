@@ -1,7 +1,6 @@
-
 /**
  * File: components/visualizers/scenes/SilkWavesScene.tsx
- * Version: 1.0.14
+ * Version: 1.0.15
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -113,6 +112,7 @@ export const SilkWavesScene: React.FC<SceneProps> = ({ analyser, colors, setting
          <primitive object={geometry} attach="geometry" />
          <meshPhysicalMaterial 
             ref={materialRef}
+            dithering={true}
             emissiveIntensity={0.4}
             metalness={0.4}
             roughness={0.25}

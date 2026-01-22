@@ -1,9 +1,9 @@
 /**
  * File: core/services/renderers/MacroBubblesRenderer.ts
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-22 10:00
+ * Updated: 2025-02-22 21:15
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -26,7 +26,8 @@ export class MacroBubblesRenderer implements IVisualizerRenderer {
     const bass = getAverage(data, 0, 10) / 255 * settings.sensitivity;
     const highs = getAverage(data, 120, 200) / 255 * settings.sensitivity;
 
-    const count = settings.quality === 'high' ? 30 : 15;
+    // Optimization: Reduced count to improve performance (Gradient fill is expensive)
+    const count = settings.quality === 'high' ? 24 : settings.quality === 'med' ? 16 : 8;
 
     if (this.bubbles.length !== count) {
       if (this.bubbles.length > count) {

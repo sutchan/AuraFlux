@@ -1,49 +1,50 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.6.83
+ * Version: 1.6.91
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-22 16:45
+ * Updated: 2025-02-23 04:00
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.6.83';
+export const APP_VERSION = '1.6.91';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
-// Expanded to 30 curated color themes with 3 colors each for high-fidelity rendering
+// Expanded to 30 curated color themes.
+// Reordered for visual impact: Multicolors first, then spectrum.
 export const COLOR_THEMES: string[][] = [
-  ['#00f2ff', '#0060ff', '#00c3ff'], // 01: Electric Blue
-  ['#ff00ea', '#ff0055', '#ff00a6'], // 02: Neon Pink
-  ['#00ffaa', '#00aa00', '#00ff41'], // 03: Matrix Green
-  ['#ffcc00', '#ff6600', '#ff9500'], // 04: Gold Sunset
-  ['#af52de', '#5856d6', '#8b5cf6'], // 05: Royal Purple
-  ['#ffffff', '#8e8e93', '#c7c7cc'], // 06: Monochrome
-  ['#ff3c00', '#ff0055', '#ff9500'], // 07: Solar Flare
-  ['#00ffd5', '#008cff', '#5500ff'], // 08: Deep Ocean
-  ['#ff007f', '#7a00ff', '#00e5ff'], // 09: Vaporwave
-  ['#9dff00', '#00ff8c', '#00ccff'], // 10: Cyber Lime
-  ['#ff0000', '#660000', '#330000'], // 11: Blood Moon
-  ['#e0e0e0', '#424242', '#212121'], // 12: Industrial
+  ['#ff007f', '#7a00ff', '#00e5ff'], // 01: Vaporwave (Multicolor)
+  ['#00ff87', '#60efff', '#a100ff'], // 02: Aurora Borealis (Multicolor - New)
+  ['#ff6a00', '#ee0979', '#7b4397'], // 03: Sunset Boulevard (Multicolor - New)
+  ['#00d2ff', '#ff56f6', '#3a7bd5'], // 04: Cotton Candy (Multicolor - New)
+  ['#00f2ff', '#0060ff', '#00c3ff'], // 05: Electric Blue
+  ['#ff00ea', '#ff0055', '#ff00a6'], // 06: Neon Pink
+  ['#00ffaa', '#00aa00', '#00ff41'], // 07: Matrix Green
+  ['#ffcc00', '#ff6600', '#ff9500'], // 08: Gold Sunset
+  ['#af52de', '#5856d6', '#8b5cf6'], // 09: Royal Purple
+  ['#ff3c00', '#ff0055', '#ff9500'], // 10: Solar Flare
+  ['#00ffd5', '#008cff', '#5500ff'], // 11: Deep Ocean
+  ['#9dff00', '#00ff8c', '#00ccff'], // 12: Cyber Lime
   ['#f78fb3', '#cf6a87', '#f8a5c2'], // 13: Sakura
   ['#3dc1d3', '#546de5', '#786fa6'], // 14: Arctic Mist
   ['#f19066', '#f3a683', '#f5cd79'], // 15: Desert Sand
-  ['#574b90', '#303952', '#2c2c54'], // 16: Midnight Blue
-  ['#fffa65', '#fff200', '#ff9f1a'], // 17: Electric Yellow
-  ['#32ff7e', '#3ae374', '#05c46b'], // 18: Emerald City
-  ['#18dcff', '#00d2d3', '#01a3a4'], // 19: Cyanide
-  ['#7d5fff', '#4b4b4b', '#1e272e'], // 20: Phantom
-  ['#ff9ff3', '#f368e0', '#ff4dff'], // 21: Candy Gloss
-  ['#54a0ff', '#00d2d3', '#2e86de'], // 22: Skyward
-  ['#5f27cd', '#341f97', '#222f3e'], // 23: Deep Purple
-  ['#ff9f43', '#ee5253', '#ff6b6b'], // 24: Lava Flow
-  ['#10ac84', '#1dd1a1', '#10ac84'], // 25: Jungle
-  ['#222f3e', '#576574', '#8395a7'], // 26: Storm Cloud
-  ['#00d2d3', '#48dbfb', '#0abde3'], // 27: Glacier
-  ['#ff6b6b', '#ee5253', '#c0392b'], // 28: Crimson
-  ['#feca57', '#ff9f43', '#f39c12'], // 29: Amber
-  ['#9b59b6', '#8e44ad', '#2c3e50'], // 30: Nebula Dream
+  ['#fffa65', '#fff200', '#ff9f1a'], // 16: Electric Yellow
+  ['#32ff7e', '#3ae374', '#05c46b'], // 17: Emerald City
+  ['#18dcff', '#00d2d3', '#01a3a4'], // 18: Cyanide
+  ['#ff9ff3', '#f368e0', '#ff4dff'], // 19: Candy Gloss
+  ['#54a0ff', '#00d2d3', '#2e86de'], // 20: Skyward
+  ['#5f27cd', '#341f97', '#222f3e'], // 21: Deep Purple
+  ['#ff9f43', '#ee5253', '#ff6b6b'], // 22: Lava Flow
+  ['#10ac84', '#1dd1a1', '#10ac84'], // 23: Jungle
+  ['#222f3e', '#576574', '#8395a7'], // 24: Storm Cloud
+  ['#00d2d3', '#48dbfb', '#0abde3'], // 25: Glacier
+  ['#ff6b6b', '#ee5253', '#c0392b'], // 26: Crimson
+  ['#feca57', '#ff9f43', '#f39c12'], // 27: Amber
+  ['#9b59b6', '#8e44ad', '#2c3e50'], // 28: Nebula Dream
+  ['#ffffff', '#8e8e93', '#c7c7cc'], // 29: Monochrome
+  ['#7d5fff', '#4b4b4b', '#1e272e'], // 30: Phantom
 ];
 
 export const REGION_NAMES: Record<string, string> = {
@@ -105,7 +106,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'calm',
     settings: {
       mode: VisualizerMode.WAVEFORM,
-      colorTheme: COLOR_THEMES[0],
+      colorTheme: COLOR_THEMES[4], // Electric Blue
       speed: 0.5,
       sensitivity: 1.0,
       glow: false,
@@ -117,7 +118,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'party',
     settings: {
       mode: VisualizerMode.PLASMA,
-      colorTheme: COLOR_THEMES[1],
+      colorTheme: COLOR_THEMES[0], // Vaporwave (Updated)
       speed: 1.5,
       sensitivity: 2.0,
       glow: true,
@@ -129,7 +130,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'ambient',
     settings: {
       mode: VisualizerMode.NEBULA,
-      colorTheme: COLOR_THEMES[4],
+      colorTheme: COLOR_THEMES[8], // Royal Purple
       speed: 0.3,
       sensitivity: 1.2,
       glow: true,
@@ -141,7 +142,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'cyberpunk',
     settings: {
       mode: VisualizerMode.LASERS,
-      colorTheme: COLOR_THEMES[0],
+      colorTheme: COLOR_THEMES[1], // Aurora (New)
       speed: 1.2,
       sensitivity: 1.8,
       glow: true,
@@ -153,7 +154,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'retrowave',
     settings: {
       mode: VisualizerMode.CUBE_FIELD,
-      colorTheme: COLOR_THEMES[1],
+      colorTheme: COLOR_THEMES[2], // Sunset (New)
       speed: 1.0,
       sensitivity: 1.5,
       glow: true,
@@ -165,7 +166,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'vocal',
     settings: {
       mode: VisualizerMode.BARS,
-      colorTheme: COLOR_THEMES[5],
+      colorTheme: COLOR_THEMES[28], // Monochrome
       speed: 0.8,
       sensitivity: 1.3,
       glow: false,

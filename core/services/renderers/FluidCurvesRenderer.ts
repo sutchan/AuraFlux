@@ -1,9 +1,9 @@
-
 /**
  * File: core/services/renderers/FluidCurvesRenderer.ts
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-22 21:15
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -25,7 +25,8 @@ export class FluidCurvesRenderer implements IVisualizerRenderer {
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     
-    const layerCount = settings.quality === 'high' ? 5 : 3;
+    // Optimization: Reduced layer count (5 -> 4) to reduce fill-rate pressure
+    const layerCount = settings.quality === 'high' ? 4 : 3;
     const time = rotation * settings.speed;
 
     if (this.layerOffsets.length !== layerCount) {
@@ -51,7 +52,8 @@ export class FluidCurvesRenderer implements IVisualizerRenderer {
       const beatAlpha = beat ? 0.2 : 0;
       ctx.globalAlpha = 0.2 + bass * 0.3 + beatAlpha;
       
-      const segments = 20;
+      // Optimization: Reduced segments (20 -> 16)
+      const segments = 16;
       const step = w / segments;
       const points = [];
 

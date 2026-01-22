@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.6.76
+ * Version: 1.6.91
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:15
+ * Updated: 2025-02-23 04:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';

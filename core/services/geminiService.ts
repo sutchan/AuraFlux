@@ -1,9 +1,9 @@
 /**
  * File: core/services/geminiService.ts
- * Version: 1.3.0
+ * Version: 1.3.3
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-02-19 12:00
+ * Updated: 2025-02-23 04:00
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -11,7 +11,7 @@ import { GEMINI_MODEL, REGION_NAMES } from '../constants';
 import { SongInfo, Language, Region } from '../types';
 import { generateFingerprint, saveToLocalCache, findLocalMatch } from './fingerprintService';
 
-// Increased timeout to 30s as requested
+// Increased timeout to 30s as requested for robust processing
 const REQUEST_TIMEOUT_MS = 30000;
 
 // Provider Persona Definitions with enhanced descriptors
@@ -50,11 +50,19 @@ export const identifySongFromAudio = async (
       };
   }
 
-  // 2. Client Initialization
+  // 2. Client Initialization with Robust Check
+  // Ensure process.env.API_KEY is actually populated at build time or runtime
   const apiKey = process.env.API_KEY;
-  if (!apiKey || apiKey.trim() === '') {
-      console.warn("[AI] API Key missing.");
-      return null;
+  if (!apiKey || apiKey.length < 10 || apiKey.includes('YOUR_API_KEY')) {
+      console.warn("[AI] Invalid or missing API Key. Falling back to Mock data.");
+      return {
+          title: "API Config Missing",
+          artist: "System Alert",
+          lyricsSnippet: "Please configure your Google Gemini API Key in the environment variables to enable real AI recognition.",
+          mood: "Configuration Required",
+          identified: false,
+          matchSource: 'MOCK'
+      };
   }
 
   let aiClient: GoogleGenAI;
@@ -88,6 +96,7 @@ export const identifySongFromAudio = async (
         const targetLang = langMap[language] || 'English';
         const personaInstruction = PROVIDER_PROFILES[provider] || PROVIDER_PROFILES['GEMINI'];
 
+        // Updated Instruction v1.3.1: Encouraging richer mood analysis and genre hints
         const systemInstruction = `
           You are the "Aura Flux Synesthesia Intelligence".
           ${personaInstruction}
@@ -97,7 +106,9 @@ export const identifySongFromAudio = async (
           SPECIFIC RULES:
           1. Commercial Match: If identified, set "identified": true and provide exact metadata.
           2. Generative Description: If NO song is identified (identified: false), fill "title" and "artist" with a creative, evocative description of the audio texture (e.g., Title: "Velvet Static", Artist: "Lofi Ambient").
-          3. Mood & Lyrics: Always translate the "mood" and "lyricsSnippet" into ${targetLang}. Use 2-3 words for mood. 
+          3. Mood & Lyrics: Always translate the "mood" and "lyricsSnippet" into ${targetLang}.
+             - MOOD: Provide a vivid 3-5 word summary combining emotion and genre (e.g., "Melancholic Cyberpunk Rain", "High-Energy Industrial Techno", "Warm Acoustic Nostalgia"). Avoid generic single words.
+             - LYRICS/TEXTURE: If lyrics are audible, quote the key lines. If instrumental or unclear, describe the visual texture, lyrical themes, or specific genre elements (e.g., "Distorted basslines with ethereal pads", "Upbeat funky guitar riffs").
           4. Style: If using non-Gemini persona, mirror their characteristic speech patterns.
           5. Response Format: Return RAW JSON only.
         `;
@@ -107,22 +118,23 @@ export const identifySongFromAudio = async (
           contents: { 
             parts: [
               { inlineData: { mimeType: mimeType, data: base64Audio } }, 
-              { text: `Identify audio. Region: ${regionName}. Output Language: ${targetLang}.` }
+              { text: `Identify audio. Region: ${regionName}. Output Language: ${targetLang}. Include genre hints in mood.` }
             ] 
           },
           config: { 
             tools: [{ googleSearch: {} }], 
             systemInstruction: systemInstruction,
-            temperature: 0.7, // Increased to 0.7 for richer, more creative responses
+            temperature: 0.7, // Optimized for creative interpretation
             topP: 0.95,
+            topK: 40, // Added topK for diverse vocabulary in descriptions
             responseMimeType: "application/json",
             responseSchema: {
               type: Type.OBJECT,
               properties: {
                 title: { type: Type.STRING, description: "Track title or poetic audio description." },
                 artist: { type: Type.STRING, description: "Artist name or audio category/genre." },
-                lyricsSnippet: { type: Type.STRING, description: "Key lyrics or sensory description of the audio's texture." },
-                mood: { type: Type.STRING, description: "2-3 word aesthetic mood summary." },
+                lyricsSnippet: { type: Type.STRING, description: "Key lyrics, lyrical themes, or sensory description of the music's texture." },
+                mood: { type: Type.STRING, description: "Descriptive aesthetic mood summary (3-5 words) including genre hints." },
                 identified: { type: Type.BOOLEAN, description: "True if it is a known commercial track." },
               },
               required: ['title', 'artist', 'mood', 'identified']

@@ -1,16 +1,15 @@
 /**
  * File: core/services/renderers/NebulaRenderer.ts
- * Version: 1.8.1
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-02-22 10:00
+ * Updated: 2025-02-23 00:30
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
 import { getAverage } from '../audioUtils';
 
-const EPSILON = 0.0001;
-const MAX_CLUSTERS = 8;
+const MAX_CLUSTERS = 3; // Reduced clusters to concentrate visuals
 
 const createBufferCanvas = (width: number, height: number): OffscreenCanvas | HTMLCanvasElement => {
   if (typeof OffscreenCanvas !== 'undefined') {
@@ -46,16 +45,15 @@ interface NebulaParticle {
   orbitRadius: number;
   rotationSpeed: number;
   colorShift: number;
-  clusterIdx: number; // 所属集群索引，-1 表示游离态
+  clusterIdx: number; 
 }
 
 export class NebulaRenderer implements IVisualizerRenderer {
   private particles: NebulaParticle[] = [];
   private clusters: NebulaCluster[] = [];
   private spriteCache: Record<string, OffscreenCanvas | HTMLCanvasElement> = {};
-  private readonly MAX_SPRITE_CACHE = 128;
+  private readonly MAX_SPRITE_CACHE = 64; 
   private beatImpact = 0; 
-  private lastBeatTime = 0;
 
   init() {
     this.particles = [];
@@ -71,21 +69,22 @@ export class NebulaRenderer implements IVisualizerRenderer {
             x: Math.random() * w,
             y: Math.random() * h,
             strength: 0.5 + Math.random() * 0.5,
-            driftX: (Math.random() - 0.5) * 0.5,
-            driftY: (Math.random() - 0.5) * 0.5
+            driftX: (Math.random() - 0.5) * 0.3,
+            driftY: (Math.random() - 0.5) * 0.3
         });
     }
   }
 
   private getSprite(color: string, type: ParticleType): OffscreenCanvas | HTMLCanvasElement {
-    const key = `${color}_${type}`;
+    const key = `${color}_${type}_v2`; // v2 for contrast update
     if (this.spriteCache[key]) return this.spriteCache[key];
 
     if (Object.keys(this.spriteCache).length >= this.MAX_SPRITE_CACHE) {
       this.spriteCache = {};
     }
 
-    const size = type === 'GAS' ? 512 : 64;
+    // Performance: Keep low res textures, use hardware scaling
+    const size = type === 'GAS' ? 128 : 32;
     const canvas = createBufferCanvas(size, size);
     const ctx = canvas.getContext('2d') as any;
     if (!ctx) return canvas;
@@ -94,15 +93,19 @@ export class NebulaRenderer implements IVisualizerRenderer {
     const g = ctx.createRadialGradient(center, center, 0, center, center, center);
 
     if (type === 'GAS') {
-      g.addColorStop(0, `${color}22`);
-      g.addColorStop(0.4, `${color}0c`);
-      g.addColorStop(0.8, `${color}03`);
-      g.addColorStop(1, `${color}00`);
+      // Contrast Boost: Higher core opacity, faster falloff
+      // Previous: 0.13 core -> 0.01 edge
+      // New: 0.35 core -> transparent edge
+      g.addColorStop(0, `${color}60`); // ~37% opacity core (Much brighter)
+      g.addColorStop(0.3, `${color}20`);
+      g.addColorStop(0.6, `${color}05`);
+      g.addColorStop(1, '#00000000'); // Fully transparent edge
     } else {
+      // Stars: Sharp, bright core
       g.addColorStop(0, '#ffffff');
-      g.addColorStop(0.2, color);
-      g.addColorStop(0.6, `${color}1a`);
-      g.addColorStop(1, `${color}00`);
+      g.addColorStop(0.15, color);
+      g.addColorStop(0.4, `${color}00`); // Sharp drop off
+      g.addColorStop(1, '#00000000');
     }
 
     ctx.fillStyle = g;
@@ -115,17 +118,16 @@ export class NebulaRenderer implements IVisualizerRenderer {
   }
 
   private resetParticle(p: Partial<NebulaParticle>, w: number, h: number, colorsCount: number) {
-    const isGas = Math.random() > 0.3;
+    const isGas = Math.random() > 0.3; // 70% Gas, 30% Stars
     
-    // 85% 概率归属于某个集群，15% 概率为全屏游离星尘
-    const isWanderer = Math.random() > 0.85;
+    const isWanderer = Math.random() > 0.9;
     p.clusterIdx = isWanderer ? -1 : Math.floor(Math.random() * this.clusters.length);
 
     const angle = Math.random() * Math.PI * 2;
-    // 集群内半径分布更紧凑，游离态分布更广
+    // Tighter orbits for denser look
     const orbit = isWanderer 
         ? Math.random() * Math.max(w, h) 
-        : Math.pow(Math.random(), 1.8) * Math.max(w, h) * 0.45;
+        : Math.pow(Math.random(), 2.0) * Math.max(w, h) * 0.35; 
 
     p.type = isGas ? 'GAS' : 'DUST';
     
@@ -135,46 +137,56 @@ export class NebulaRenderer implements IVisualizerRenderer {
     p.x = startX + Math.cos(angle) * orbit;
     p.y = startY + Math.sin(angle) * orbit;
     p.life = 0;
-    p.maxLife = isGas ? 5000 + Math.random() * 7000 : 3000 + Math.random() * 4000;
+    p.maxLife = isGas ? 3000 + Math.random() * 4000 : 1500 + Math.random() * 2000;
     p.colorIndex = Math.floor(Math.random() * Math.max(1, colorsCount));
     p.colorShift = Math.random();
     p.noiseOffset = Math.random() * 5000;
-    p.baseSize = isGas ? (w * 0.3 + Math.random() * w * 0.4) : (1.0 + Math.random() * 4);
+    
+    // Increased size to compensate for lower count
+    p.baseSize = isGas ? (w * 0.6 + Math.random() * w * 0.6) : (4.0 + Math.random() * 8);
+    
     p.angle = angle;
     p.orbitRadius = orbit;
-    p.rotationSpeed = (Math.random() - 0.5) * 0.0015;
+    p.rotationSpeed = (Math.random() - 0.5) * 0.002;
   }
 
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean) {
-    if (w <= 0 || h <= 0) return; // Robustness check
+    if (w <= 0 || h <= 0) return; 
     
     const safeColors = colors.length > 0 ? colors : ['#4433ff', '#ff00aa'];
     
     if (this.clusters.length === 0) this.initClusters(w, h);
 
-    const bass = Math.pow(getAverage(data, 0, 15) / 255, 1.2) * settings.sensitivity;
+    const bass = Math.pow(getAverage(data, 0, 15) / 255, 1.5) * settings.sensitivity; // Sharper bass curve
     const mid = getAverage(data, 20, 120) / 255 * settings.sensitivity;
     const treble = Math.pow(getAverage(data, 130, 255) / 255, 1.5) * settings.sensitivity;
 
     if (beat) {
         this.beatImpact = 1.0;
-        // 节拍触发时，随机让一个集群“瞬移”，产生剧烈的位置变动感
-        const unluckyCluster = Math.floor(Math.random() * MAX_CLUSTERS);
-        this.clusters[unluckyCluster].x = Math.random() * w;
-        this.clusters[unluckyCluster].y = Math.random() * h;
+        // Shift cluster center slightly on beat
+        if (this.clusters[0]) {
+             this.clusters[0].x += (Math.random()-0.5) * 20;
+             this.clusters[0].y += (Math.random()-0.5) * 20;
+        }
     }
     this.beatImpact *= 0.92;
 
-    // 更新集群漂移
     this.clusters.forEach(c => {
-        c.x += c.driftX * (1 + bass * 5);
-        c.y += c.driftY * (1 + bass * 5);
-        // 边缘回弹
-        if (c.x < 0 || c.x > w) c.driftX *= -1;
-        if (c.y < 0 || c.y > h) c.driftY *= -1;
+        c.x += c.driftX * (1 + bass * 2);
+        c.y += c.driftY * (1 + bass * 2);
+        // Soft bounds
+        if (c.x < -w*0.2 || c.x > w*1.2) c.driftX *= -1;
+        if (c.y < -h*0.2 || c.y > h*1.2) c.driftY *= -1;
     });
 
-    const maxParticles = settings.quality === 'high' ? 240 : settings.quality === 'med' ? 120 : 60;
+    // Performance Update: Even lower counts for smoother high-res rendering
+    // High: 60 / Med: 35 / Low: 15
+    const maxParticles = settings.quality === 'high' ? 60 : settings.quality === 'med' ? 35 : 15;
+
+    // Array trimming
+    if (this.particles.length > maxParticles) {
+        this.particles.splice(maxParticles);
+    }
 
     while (this.particles.length < maxParticles) {
       const p = {} as NebulaParticle;
@@ -185,83 +197,79 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
     ctx.save();
     
-    // 背景层：极低饱和度的宇宙微波映射
-    const bgGrad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h));
-    bgGrad.addColorStop(0, `${safeColors[0]}1a`);
-    bgGrad.addColorStop(0.6, `${safeColors[1]}05`);
-    bgGrad.addColorStop(1, '#000000');
-    ctx.fillStyle = bgGrad;
+    // Contrast Update: Darker Background
+    // No more washed out overlay. Deep black.
+    ctx.fillStyle = '#050508'; 
     ctx.fillRect(0, 0, w, h);
 
+    // Use screen blending for light accumulation
     ctx.globalCompositeOperation = 'screen';
 
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
-      p.life += 1.0 * (1 + bass * 0.3);
+      p.life += 1.0 * (1 + bass * 0.5);
 
       if (p.life > p.maxLife) {
         this.resetParticle(p, w, h, safeColors.length);
       }
 
       const lifeRatio = p.life / p.maxLife;
+      // Sine window for opacity (fade in/out)
       const opacityEnv = Math.sin(lifeRatio * Math.PI); 
 
-      // 动力学计算
-      if (p.clusterIdx !== -1) {
+      // Physics
+      if (p.clusterIdx !== -1 && this.clusters[p.clusterIdx]) {
           const c = this.clusters[p.clusterIdx];
-          const orbitSpeed = (p.rotationSpeed) * (1 + mid * 2) * (1 + bass);
-          p.angle += orbitSpeed;
+          p.angle += p.rotationSpeed * (1 + bass * 2);
           
-          const expansion = 1.0 + (bass * 0.05);
-          const tx = c.x + Math.cos(p.angle) * p.orbitRadius * expansion;
-          const ty = c.y + Math.sin(p.angle) * p.orbitRadius * expansion;
+          // Breathing orbit
+          const r = p.orbitRadius * (1.0 + Math.sin(rotation + p.noiseOffset) * 0.1);
           
-          const ease = p.type === 'GAS' ? 0.02 : 0.07;
-          p.x += (tx - p.x) * ease;
-          p.y += (ty - p.y) * ease;
+          const tx = c.x + Math.cos(p.angle) * r;
+          const ty = c.y + Math.sin(p.angle) * r;
+          
+          // Smooth follow
+          p.x += (tx - p.x) * 0.05;
+          p.y += (ty - p.y) * 0.05;
       } else {
-          // 游离粒子：简单的直线漂移
-          p.x += Math.cos(p.angle) * (0.5 + mid * 2);
-          p.y += Math.sin(p.angle) * (0.5 + mid * 2);
-          // 游离态容易飞出屏幕，加速回收
-          if (p.x < -100 || p.x > w + 100 || p.y < -100 || p.y > h + 100) p.life = p.maxLife;
+          p.x += Math.cos(p.angle) * 0.5;
+          p.y += Math.sin(p.angle) * 0.5;
       }
 
-      const colorIdx = Math.floor((p.colorShift * 0.6 + lifeRatio * 0.4) * (safeColors.length - 1));
-      const activeColor = safeColors[colorIdx] || safeColors[0];
+      const colorIdx = Math.floor((p.colorShift + i * 0.1) % safeColors.length);
+      const activeColor = safeColors[colorIdx];
       const sprite = this.getSprite(activeColor, p.type);
       
       let finalSize = p.baseSize;
       let alpha = 0;
 
       if (p.type === 'GAS') {
-        finalSize *= (0.8 + bass * 0.8 + this.beatImpact * 0.5);
-        alpha = (0.12 + mid * 0.3) * opacityEnv;
+        finalSize *= (0.9 + bass * 0.4 + this.beatImpact * 0.2);
+        
+        // Contrast Logic:
+        // Base alpha is lower (0.1), but bass boosts it significantly (up to +0.6).
+        // This makes quiet parts dark and loud parts vivid.
+        alpha = (0.2 + bass * 0.6 + this.beatImpact * 0.4) * opacityEnv; 
       } else {
-        const twinkle = Math.sin(rotation * 8 + p.noiseOffset) * 0.5 + 0.5;
-        finalSize *= (1 + treble * 2.5 + this.beatImpact * 1.5);
-        alpha = (0.3 + treble * 0.6 + this.beatImpact * 0.8) * opacityEnv * (0.4 + twinkle * 0.6);
+        const twinkle = Math.sin(rotation * 10 + p.noiseOffset) * 0.5 + 0.5;
+        finalSize *= (1 + treble * 3.0);
+        alpha = (0.4 + treble * 0.8 + twinkle * 0.3) * opacityEnv;
       }
 
-      if (alpha < 0.005) continue;
+      if (alpha < 0.01) continue;
 
-      ctx.globalAlpha = Math.min(0.95, alpha);
+      ctx.globalAlpha = Math.min(1.0, alpha);
       ctx.drawImage(sprite as any, p.x - finalSize / 2, p.y - finalSize / 2, finalSize, finalSize);
     }
 
-    // 绘制随机出现的引力微透镜（视觉上的深黑色小洞，增加空寂感）
-    if (this.beatImpact > 0.5) {
-        ctx.globalCompositeOperation = 'destination-out';
-        const holeX = this.clusters[0].x;
-        const holeY = this.clusters[0].y;
-        const holeR = 40 * this.beatImpact;
-        const g = ctx.createRadialGradient(holeX, holeY, 0, holeX, holeY, holeR);
-        g.addColorStop(0, 'rgba(0,0,0,1)');
-        g.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(holeX, holeY, holeR, 0, Math.PI * 2);
-        ctx.fill();
+    // Beat Flash (Shockwave)
+    if (this.beatImpact > 0.1) {
+        ctx.globalCompositeOperation = 'lighter'; // Additive for the flash
+        const flashGradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, w * 0.8);
+        flashGradient.addColorStop(0, `rgba(255,255,255,${this.beatImpact * 0.15})`);
+        flashGradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = flashGradient;
+        ctx.fillRect(0, 0, w, h);
     }
 
     ctx.restore();

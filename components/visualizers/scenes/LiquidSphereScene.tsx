@@ -1,9 +1,9 @@
-
 /**
  * File: components/visualizers/scenes/LiquidSphereScene.tsx
- * Version: 1.0.5
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-22 21:15
  */
 
 import React, { useRef, useMemo, Suspense } from 'react';
@@ -32,9 +32,12 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
   const [c0, c1, c2] = smoothedColors;
 
   const geometry = useMemo(() => {
-      let detail = 2;
-      if (settings.quality === 'med') detail = 3;
-      if (settings.quality === 'high') detail = 4;
+      // Optimization v1.1.0: Drastically reduced subdivision detail to prevent CPU bottleneck
+      // Previous High (4) was ~2500 vertices updating per frame in JS.
+      // New High (3) is ~642 vertices. New Med (2) is ~162 vertices.
+      let detail = 1;
+      if (settings.quality === 'med') detail = 2;
+      if (settings.quality === 'high') detail = 3;
       return new THREE.IcosahedronGeometry(4, detail);
   }, [settings.quality]);
   
@@ -96,6 +99,8 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
     if (!meshRef.current) return;
     const positions = meshRef.current.geometry.attributes.position as THREE.BufferAttribute;
 
+    // Vertex Loop: This is the most expensive part.
+    // Reducing count allows us to keep the math complex but fast.
     for (let i = 0; i < positions.count; i++) {
         const ox = originalPositions[i*3];
         const oy = originalPositions[i*3+1];
@@ -129,7 +134,7 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
       <color attach="background" args={['#030303']} />
       <Suspense fallback={null}>
         <group ref={starsRef}>
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+          <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
         </group>
       </Suspense>
       
@@ -143,6 +148,7 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
          <primitive object={geometry} attach="geometry" />
          <meshPhysicalMaterial 
             ref={materialRef}
+            dithering={true}
             metalness={0.95}
             roughness={0.1}
             clearcoat={1.0}

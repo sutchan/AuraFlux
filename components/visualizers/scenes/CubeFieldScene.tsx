@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/CubeFieldScene.tsx
- * Version: 1.6.14
+ * Version: 1.6.16
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:45
+ * Updated: 2025-02-22 21:15
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -25,7 +25,8 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
   const { bass, mids, treble, volume, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1, c2] = smoothedColors;
 
-  const count = settings.quality === 'high' ? 1800 : settings.quality === 'med' ? 1000 : 500;
+  // Optimization: Reduced counts to prevent JS thread blocking during matrix updates
+  const count = settings.quality === 'high' ? 1200 : settings.quality === 'med' ? 800 : 400;
   const dummy = useMemo(() => new THREE.Object3D(), []);
   
   const dataArray = useMemo(() => new Uint8Array(analyser.frequencyBinCount), [analyser]);
@@ -227,6 +228,7 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
       <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial 
+            dithering={true}
             roughness={0.1} 
             metalness={0.95}
         />

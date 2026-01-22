@@ -3,18 +3,25 @@
 ## 1. 持久化存储 (LocalStorage)
 - **前缀:** `av_v1_`。
 - **健壮性策略:** 读取 Enum 类型进行白名单校验，色盘数组非空校验。
+- **版本控制:** 关键数据结构变更时，应通过版本号前缀进行隔离或迁移。
 
 ## 2. 国际化 (i18n) 与自动检测
 - **检测策略:** 优先查询 `navigator.languages`。
-- **支持列表:** en, zh, tw, ja, es, ko, de, fr, ru, ar。
+- **支持列表 (10种语言):**
+  - **英语 (en)**: 基准语言。
+  - **简体中文 (zh)** / **繁體中文 (tw)**
+  - **日语 (ja)** / **韩语 (ko)**
+  - **西班牙语 (es)** / **德语 (de)** / **法语 (fr)** / **俄语 (ru)**
+  - **阿拉伯语 (ar)**: 支持 RTL 布局。
 - **本地化深度:** 
   - 核心术语 "Beta" 在日韩等亚洲语言中需使用本地化写法 (如 "ベータ", "베타") 以提升亲和力。
-  - RTL 语言 (Arabic) 需严格测试布局镜像。
+  - **1.6.91 更新:** 确保 `hints` 中的 "Color Cycle" 及 "Text Position" 相关描述在所有语言中语义准确。
 
 ## 3. 专业术语标准化
-- **AI Recognition** -> AI 通感识别。
+- **AI Recognition** -> AI 通感识别 / AI Synesthesia。
 - **Visualizer Mode** -> 视觉引擎。
-- **Wake Lock** -> 屏幕常亮。
+- **Wake Lock** -> 屏幕常亮 / 防休眠。
+- **Custom Text** -> 弹幕 / 自定义文字。
 
 ---
-*Aura Flux Storage & i18n - Version 1.6.80*
+*Aura Flux Storage & i18n - Version 1.6.91*

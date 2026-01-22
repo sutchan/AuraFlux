@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 20:00
+ * Updated: 2025-02-23 02:00
  */
 
 import React from 'react';
@@ -29,13 +29,18 @@ export const CustomTextSettingsPanel: React.FC = () => {
     setSettings({ ...settings, customTextPosition: value });
   };
 
-  // Expanded color palette (18 original + 12 new = 30 total)
+  // Curated 30-color palette sorted by spectrum for better UX on dark backgrounds
   const colorPresets = [
-    '#ffffff', '#00e5ff', '#00ff41', '#ff007f', '#ffcc00', '#ff9500', '#af52de',
-    '#c0c0c0', '#cd7f32', '#718096', '#4a5568', '#2d3748',
-    '#feb2b2', '#faf089', '#9ae6b4', '#81e6d9', '#90cdf4', '#a3bffa',
-    '#ef4444', '#f87171', '#ea580c', '#facc15', '#84cc16', '#14b8a6', 
-    '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e', '#a1a1aa'
+    // Row 1: Grayscale & Whites (High Contrast)
+    '#ffffff', '#f1f5f9', '#cbd5e1', '#94a3b8', '#64748b', '#475569',
+    // Row 2: Warm Spectrum (Red -> Orange -> Yellow)
+    '#fca5a5', '#f87171', '#ef4444', '#f97316', '#f59e0b', '#facc15',
+    // Row 3: Nature Spectrum (Lime -> Green -> Emerald)
+    '#bef264', '#84cc16', '#4ade80', '#22c55e', '#10b981', '#00ff41',
+    // Row 4: Cool Spectrum (Teal -> Cyan -> Sky)
+    '#14b8a6', '#00e5ff', '#22d3ee', '#38bdf8', '#60a5fa', '#3b82f6',
+    // Row 5: Deep Spectrum (Indigo -> Purple -> Pink)
+    '#6366f1', '#818cf8', '#a78bfa', '#8b5cf6', '#d946ef', '#ff007f'
   ];
 
   return (

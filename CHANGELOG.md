@@ -2,23 +2,19 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
-## [v1.6.83] - 2025-02-22
+## [v1.6.90] - 2025-02-23
+
+### UX Improvements
+*   **🎨 Text Color Palette:** Reorganized the custom text color grid into a logical spectrum (Grayscale -> Warm -> Cold -> Deep) for easier selection.
+    *   **Visibility Fix:** Removed low-visibility dark shades (e.g., #2d3748) and replaced them with brighter pastel variants suitable for the dark interface.
+
+## [v1.6.89] - 2025-02-23
 
 ### Visuals
-*   **🧠 Neural Flow (Hyper-Reactive):** Doubled the reactivity parameters to fix "unnoticeable interaction".
-    *   **Bass Displacement:** Increased from 25.0 to **50.0** for explosive particle movement on drops.
-    *   **Flow Speed:** Dynamic time multiplier increased to **4.0x** at max volume (was 2.5x).
-    *   **Shockwave:** Beat impact force nearly doubled (12.0 -> **25.0**).
+*   **🎨 Palette Overhaul:** Completely reorganized the color theme grid for better aesthetics.
+    *   **New Themes:** Added "Aurora Borealis", "Sunset Boulevard", and "Cotton Candy" to replace low-visibility dark themes.
+    *   **Prioritization:** Vibrant multicolor themes now appear first in the selection list.
+    *   **Smart Presets:** Updated preset combinations to utilize the new high-contrast gradients.
 
-## [v1.6.82] - 2025-02-22
-
-### Performance
-*   **🧠 Neural Flow (Optimization):** Reduced particle count by 50% across all quality settings (High: 24k -> 12k) to significantly improve GPU performance on mobile devices and high-resolution displays, while compensating with slightly larger particle sizes and dynamic flow.
-
-## [v1.6.81] - 2025-02-22
-
-### Optimized
-*   **🧠 Neural Flow (Dynamics):** Implemented audio-driven time integration. The particle flow now accelerates significantly based on volume intensity, creating a "dancing" effect. Bass displacement amplitude increased by 2x for deeper breathing motion.
-
-## [v1.6.80] - 2025-02-22
+## [v1.6.88] - 2025-02-23
 ...

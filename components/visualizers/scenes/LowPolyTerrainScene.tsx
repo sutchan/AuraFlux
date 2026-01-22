@@ -1,7 +1,6 @@
-
 /**
  * File: components/visualizers/scenes/LowPolyTerrainScene.tsx
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -199,6 +198,7 @@ export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, se
         >
             <meshStandardMaterial 
                 ref={materialRef}
+                dithering={true}
                 flatShading={true} 
                 roughness={0.7}
                 metalness={0.3}
