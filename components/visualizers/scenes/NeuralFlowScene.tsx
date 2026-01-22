@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/NeuralFlowScene.tsx
- * Version: 1.3.3
+ * Version: 1.3.6
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 23:55
+ * Updated: 2025-02-22 16:45
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -23,7 +23,8 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
   const { bass, mids, treble, volume, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1] = smoothedColors;
 
-  const count = settings.quality === 'high' ? 24000 : settings.quality === 'med' ? 12000 : 6000;
+  // Optimization: Particle count reduced by 50% across all quality tiers (v1.3.5)
+  const count = settings.quality === 'high' ? 12000 : settings.quality === 'med' ? 6000 : 3000;
 
   const [positions, randomness] = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -54,33 +55,45 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
   }), []);
 
   const beatTimerRef = useRef(0);
+  const accumulatedTimeRef = useRef(0);
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (!pointsRef.current) return;
     
     const mat = pointsRef.current.material as THREE.ShaderMaterial;
-    const time = state.clock.getElapsedTime();
+    const sysTime = state.clock.getElapsedTime();
     
+    // --- Dynamic Time Integration (Hyper-Reactive v1.3.6) ---
+    // Drastically increased dynamic range.
+    // Silence = Restless flow (0.5 base)
+    // Loud = Chaotic turbulence (up to +4.0x speed)
+    accumulatedTimeRef.current += delta * settings.speed * (0.5 + volume * 4.0);
+
     if (isBeat) {
-      beatTimerRef.current = time;
+      beatTimerRef.current = sysTime;
     }
 
-    mat.uniforms.uTime.value = time * settings.speed;
-    mat.uniforms.uBass.value = bass;
+    mat.uniforms.uTime.value = accumulatedTimeRef.current;
+    
+    // Pre-process audio data for sharper response curve
+    // Squaring the input exaggerates peaks relative to background noise
+    mat.uniforms.uBass.value = Math.pow(bass, 1.2); 
     mat.uniforms.uMids.value = mids;
     mat.uniforms.uTreble.value = treble;
     mat.uniforms.uVolume.value = volume;
     
-    // 节拍能量衰减曲线
-    const beatElapsed = time - beatTimerRef.current;
+    // Beat energy decay curve
+    const beatElapsed = sysTime - beatTimerRef.current;
     const beatPhase = Math.max(0, Math.exp(-beatElapsed * 3.5));
     mat.uniforms.uBeat.value = beatPhase;
 
     mat.uniforms.uColor1.value.set(c0);
     mat.uniforms.uColor2.value.set(c1);
     
-    // 旋转速度下调 50%
-    pointsRef.current.rotation.y += (0.00025 + bass * 0.001) * settings.speed;
+    // Dynamic Rotation: Spin significantly faster with Bass
+    pointsRef.current.rotation.y += (0.001 + bass * 0.01) * settings.speed;
+    // Hard tilt on beat
+    pointsRef.current.rotation.x += (isBeat ? 0.005 : 0) * settings.speed;
   });
 
   return (
@@ -150,26 +163,28 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
               vec3 newPos = position;
               float distToCenter = length(position);
               
-              // --- 1. 耦合动力学: 低音位移减半 (2.5 + 12.5) ---
+              // --- 1. Explosive Dynamics: Bass Displacement (4.0 + 50.0) ---
+              // Amplitude doubled (25.0 -> 50.0) for extremely obvious reaction
               float n1 = snoise(position * 0.02 + uTime * 0.15 + aRandom);
               float n2 = snoise(position * 0.015 - uTime * 0.1 + aRandom * 5.0);
               float n3 = snoise(position * 0.025 + uTime * 0.08 + aRandom * 10.0);
-              vec3 flow = vec3(n1, n2, n3) * (2.5 + uBass * 12.5);
+              vec3 flow = vec3(n1, n2, n3) * (4.0 + uBass * 50.0);
               newPos += flow;
 
-              // --- 2. 耦合动力学: 中音聚集位移减半 (17.5) ---
+              // --- 2. Filament Clumping: Driven by Mids ---
               float filamentNoise = snoise(newPos * 0.04 + uTime * 0.05);
               float clumpingPower = 3.0 + uMids * 4.0;
               float clump = pow(abs(filamentNoise), clumpingPower);
-              newPos += normalize(newPos) * clump * 17.5 * (1.0 + uBass);
+              newPos += normalize(newPos) * clump * 20.0 * (1.0 + uBass);
               
-              // --- 3. 高音抖动减半 (2.0) ---
-              float jitter = snoise(newPos * 0.5 + uTime * 10.0) * uTreble * 2.0;
+              // --- 3. High Frequency Jitter (4.0) ---
+              // Faster frequency (20.0) and higher amplitude (4.0) makes high notes "shiver" visibly
+              float jitter = snoise(newPos * 0.8 + uTime * 20.0) * uTreble * 4.0;
               newPos += jitter;
 
-              // --- 4. 节拍冲击减半 (10.0) ---
+              // --- 4. Massive Beat Shockwave (25.0) ---
               float waveFront = exp(-pow(distToCenter * 0.04 - uBeat * 6.0, 2.0) * 8.0);
-              newPos += normalize(newPos) * waveFront * 10.0 * uBeat;
+              newPos += normalize(newPos) * waveFront * 25.0 * uBeat;
 
               vNoise = filamentNoise;
               vSpeed = length(flow) * 0.15 + uTreble * 0.5; 
@@ -177,12 +192,13 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
               vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
               gl_Position = projectionMatrix * mvPosition;
 
-              float sizeBase = 3.0 + aRandom * 15.0;
-              float beatScale = 1.0 + uBeat * 2.5;
+              // Visual Compensation: Slightly increase particle size to maintain volume with fewer particles
+              float sizeBase = 4.0 + aRandom * 16.0; 
+              float beatScale = 1.0 + uBeat * 3.0; // Beat pulse increased to 3.0x
               float treblePulse = 1.0 + sin(uTime * 30.0 + aRandom * 100.0) * uTreble;
               gl_PointSize = sizeBase * beatScale * treblePulse * (300.0 / -mvPosition.z);
               
-              vAlpha = (0.25 + uBass * 0.5 + uBeat * 0.4) * (1.0 - smoothstep(0.0, 160.0, distToCenter));
+              vAlpha = (0.3 + uBass * 0.6 + uBeat * 0.5) * (1.0 - smoothstep(0.0, 200.0, distToCenter));
             }
           `}
           fragmentShader={`
@@ -201,14 +217,15 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
               if(dist > 0.5) discard;
 
               vec3 baseColor = mix(uColor1, uColor2, vNoise * 0.5 + 0.5);
-              vec3 discharge = vec3(1.0) * uBeat * 0.8;
-              vec3 bioluminescence = baseColor + discharge + (vSpeed * 0.6);
+              // Intense discharge on beat (1.5x)
+              vec3 discharge = vec3(1.0) * uBeat * 1.5;
+              vec3 bioluminescence = baseColor + discharge + (vSpeed * 0.8);
               
-              float sparkle = pow(abs(sin(uTime * 15.0 + vNoise * 50.0)), 10.0) * uTreble;
-              bioluminescence += sparkle * 1.2;
+              float sparkle = pow(abs(sin(uTime * 20.0 + vNoise * 50.0)), 10.0) * uTreble;
+              bioluminescence += sparkle * 1.5;
 
               float core = 1.0 - smoothstep(0.0, 0.5, dist);
-              float glow = pow(core, 2.5 - uVolume * 1.5);
+              float glow = pow(core, 2.0 - uVolume * 1.8); // Glow widens significantly with volume
               
               gl_FragColor = vec4(bioluminescence, vAlpha * glow);
             }

@@ -1,7 +1,7 @@
 {
   "name": "aura-flux",
   "private": true,
-  "version": "1.6.80",
+  "version": "1.6.83",
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {

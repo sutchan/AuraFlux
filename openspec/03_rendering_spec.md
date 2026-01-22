@@ -20,11 +20,15 @@
 - **Plasma Flow:** 去除中心 white 点，采用主题色深度渐变。
 
 ## 3. 3D WebGL 渲染
-- **Neural Flow (v3.2.4):** 安全 Curl Noise 引入 `+ 0.0001` 偏移。
+- **Neural Flow (v1.3.6 爆发响应):** 
+  - **粒子优化:** 全档位粒子数量减半以提升帧率。
+  - **极速积分:** 时间累加公式 `time += delta * (0.5 + volume * 4.0)`，高音量下流速提升 450%。
+  - **流场爆发:** 低音位移系数提升至 50.0 (原 25.0)，创造剧烈湍流。
+  - **冲击波:** 节拍冲击波强度提升至 25.0。
 - **Quantum Field (v1.6.14):** 
   - **亮度爆发:** 基础自发光提升至 0.4，高频响应系数提升至 4.0。
   - **材质:** 粗糙度降低至 0.1。
 - **Crystal Core (v1.0.3):** 采用 `dispersion` (色散) 物理材质。
 
 ---
-*Aura Flux Rendering - Version 1.6.80*
+*Aura Flux Rendering - Version 1.6.83*
