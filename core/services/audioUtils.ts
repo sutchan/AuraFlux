@@ -1,9 +1,9 @@
-
 /**
  * File: core/services/audioUtils.ts
- * Version: 1.7.0
+ * Version: 1.8.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-25 23:00
  */
 
 export function getAverage(data: Uint8Array, start: number, end: number) {
@@ -16,92 +16,80 @@ export function getAverage(data: Uint8Array, start: number, end: number) {
 }
 
 /**
+ * Applies Soft-Knee Compression to a normalized value (0.0 - 1.0).
+ * This prevents the "clipping" effect where visuals stay at the top.
+ */
+export function applySoftCompression(val: number, power: number = 0.75): number {
+    // We use a power law to squash the upper range.
+    // At high volumes (val -> 1.0), the growth is slower.
+    return Math.pow(Math.min(val, 1.0), power);
+}
+
+/**
  * Adaptive Noise Filter
- * 
- * Features:
- * 1. Environmental Profiling: Learns the "shape" of constant background noise (fans, AC, hum).
- * 2. Asymmetric Adaptation: Adapts quickly to silence (drops floor) but slowly to sound (avoids filtering music).
- * 3. Spectral Subtraction: Subtracts the learned noise profile from the signal.
  */
 export class AdaptiveNoiseFilter {
   private noiseProfile: Float32Array;
-  // Alpha coefficients for Exponential Moving Average (EMA)
-  private readonly alphaUp = 0.0005; // Extremely slow adaptation to rising levels (keeps music safe)
-  private readonly alphaDown = 0.05; // Fast adaptation to dropping levels (finds new silence floor)
-  private readonly sensitivityMargin = 5; // Additional safety buffer
+  private readonly alphaUp = 0.0005; 
+  private readonly alphaDown = 0.05; 
+  private readonly sensitivityMargin = 5; 
 
   constructor(fftSize: number = 512) {
-    // Initialize profile with zeros. 
-    // It maps 1:1 to frequency bins (half of fftSize in AnalyserNode context usually, but we resize dynamically)
     this.noiseProfile = new Float32Array(fftSize).fill(0);
   }
 
   public process(data: Uint8Array) {
     const len = data.length;
-    
-    // Dynamic resizing if FFT size changes
     if (this.noiseProfile.length !== len) {
       this.noiseProfile = new Float32Array(len).fill(0);
     }
 
-    // 1. Kill DC Offset (Bin 0) immediately
     if (len > 0) data[0] = 0;
 
     for (let i = 1; i < len; i++) {
       const val = data[i];
       const floor = this.noiseProfile[i];
 
-      // 2. Update Noise Profile (Learning Phase)
       if (val < floor) {
-        // Signal dropped below current floor -> noise floor is actually lower
         this.noiseProfile[i] = floor * (1 - this.alphaDown) + val * this.alphaDown;
       } else {
-        // Signal is above floor -> could be music OR noise increasing
-        // Adapt VERY slowly to avoid treating a long synth note as noise
         this.noiseProfile[i] = floor * (1 - this.alphaUp) + val * this.alphaUp;
       }
 
-      // 3. Spectral Subtraction (Filtering Phase)
-      // We subtract the learned floor plus a small margin.
-      // We also apply a slight spectral tilt (more aggressive on highs) for hiss reduction.
       const spectralTilt = (i / len) * 3; 
       const threshold = this.noiseProfile[i] + this.sensitivityMargin + spectralTilt;
 
       let newVal = val - threshold;
-
       if (newVal <= 0) {
         newVal = 0;
       } else {
-        // 4. Soft Expander / Make-up Gain
-        // Restore dynamic range for signals that pass the gate
         newVal *= 1.1; 
       }
-
       data[i] = newVal > 255 ? 255 : Math.floor(newVal);
     }
   }
 }
 
 /**
- * Legacy stateless noise gate. 
- * Kept for backward compatibility or simple use cases.
+ * Peak Limiter Utility
+ * Tracks recent peaks and provides a normalization factor.
  */
-export function applyNoiseFloor(data: Uint8Array, baseThreshold: number) {
-  const len = data.length;
-  const range = 255 - baseThreshold;
-  const scale = 255 / (range > 0 ? range : 1);
+export class DynamicPeakLimiter {
+    private maxPeak = 0.1;
+    private decay = 0.992; // Slow decay (approx 3-4 seconds to reset)
 
-  if (len > 0) data[0] = 0;
+    process(currentEnergy: number): number {
+        // Update peak
+        if (currentEnergy > this.maxPeak) {
+            this.maxPeak = currentEnergy;
+        } else {
+            this.maxPeak *= this.decay;
+        }
 
-  for (let i = 1; i < len; i++) {
-    let val = data[i];
-    const spectralThreshold = baseThreshold + (i / len) * 20;
-
-    if (val < spectralThreshold) {
-      val = 0;
-    } else {
-      val = (val - spectralThreshold) * scale;
+        // Clamp peak floor to avoid boosting noise
+        const effectivePeak = Math.max(this.maxPeak, 0.25);
+        
+        // Return normalization factor
+        return 1.0 / effectivePeak;
     }
-    data[i] = val > 255 ? 255 : Math.floor(val);
-  }
 }

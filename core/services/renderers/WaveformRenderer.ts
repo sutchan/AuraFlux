@@ -1,23 +1,23 @@
 /**
  * File: core/services/renderers/WaveformRenderer.ts
- * Version: 2.9.3
+ * Version: 3.0.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 19:30
- * Description: Optimized resolution for better FPS.
+ * Updated: 2025-02-25 23:00
+ * Description: Added dynamic ceiling protection to prevent waveform flattening.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
-import { getAverage } from '../audioUtils';
+import { getAverage, applySoftCompression } from '../audioUtils';
 
 export class WaveformRenderer implements IVisualizerRenderer {
   private smoothedEnergies: number[] = new Array(6).fill(0);
-  private maxEnergyObserved = 0.1; 
+  private maxEnergyObserved = 0.15; 
   private phaseOffset = 0; 
 
   init() {
     this.smoothedEnergies = new Array(6).fill(0);
-    this.maxEnergyObserved = 0.1;
+    this.maxEnergyObserved = 0.15;
     this.phaseOffset = 0;
   }
 
@@ -30,19 +30,16 @@ export class WaveformRenderer implements IVisualizerRenderer {
     const centerY = h / 2;
     const layerCount = 6;
     
-    // --- 1. 自适应增益优化 ---
+    // --- 1. Enhanced Gain Control ---
     const globalEnergy = getAverage(data, 0, data.length) / 255;
+    
+    // Adaptive Peak Tracking: Slow decay to keep headroom
     this.maxEnergyObserved = Math.max(0.15, this.maxEnergyObserved * 0.995, globalEnergy);
     const autoGainScale = 0.25 / this.maxEnergyObserved;
 
     const beatImpact = beat ? 0.3 : 0;
     this.phaseOffset += (settings.speed * 0.04) + beatImpact;
 
-    /**
-     * 核心参数：
-     * 1. 所有 z 值统一为 1.0，确保线条视觉一致性。
-     * 2. 高频段增益补偿。
-     */
     const configs = [
         { start: 0, end: 6, amp: 0.7, freq: 0.003, width: 3.5, gain: 1.0, z: 1.0 },    
         { start: 7, end: 20, amp: 0.7, freq: 0.008, width: 3.5, gain: 1.5, z: 1.0 }, 
@@ -53,21 +50,24 @@ export class WaveformRenderer implements IVisualizerRenderer {
     ];
 
     for (let i = 0; i < layerCount; i++) {
-        // Optimization: Skip higher layers on low quality setting to save cycles
         if (settings.quality === 'low' && i > 3) continue;
 
         const config = configs[i];
         const color = colors[i % colors.length];
         
-        const localEnergy = getAverage(data, config.start, config.end) / 255;
-        const coupling = i > 3 ? 0.4 : 0; 
-        let combined = (localEnergy * (1 - coupling) + globalEnergy * coupling) * config.gain * autoGainScale;
+        const localEnergyRaw = getAverage(data, config.start, config.end) / 255;
         
-        // 静音死区
+        // --- Soft Clipping & Limiting Logic ---
+        // Apply compression to the local signal to keep it from hitting the top.
+        const compressedLocal = applySoftCompression(localEnergyRaw, 0.75);
+        
+        const coupling = i > 3 ? 0.4 : 0; 
+        let combined = (compressedLocal * (1 - coupling) + globalEnergy * coupling) * config.gain * autoGainScale;
+        
         if (combined < 0.02) combined = 0;
 
-        const targetEnergy = Math.pow(combined * settings.sensitivity, 1.2);
-        const lerpFactor = targetEnergy > this.smoothedEnergies[i] ? 0.2 : 0.04;
+        const targetEnergy = combined * settings.sensitivity;
+        const lerpFactor = targetEnergy > this.smoothedEnergies[i] ? 0.25 : 0.06;
         this.smoothedEnergies[i] += (targetEnergy - this.smoothedEnergies[i]) * lerpFactor;
         
         const energy = this.smoothedEnergies[i];
@@ -82,22 +82,20 @@ export class WaveformRenderer implements IVisualizerRenderer {
 
         ctx.beginPath();
         ctx.strokeStyle = grad;
-        ctx.lineWidth = config.width * (0.8 + energy * 0.5);
-        ctx.globalAlpha = (0.25 + energy * 0.75) * (settings.glow ? 1.0 : 0.6);
+        ctx.lineWidth = config.width * (0.8 + energy * 0.3);
+        ctx.globalAlpha = (0.25 + energy * 0.6) * (settings.glow ? 1.0 : 0.6);
 
-        // Optimization: Reduced path resolution
-        // High: 90 segments, Med: 45, Low: 30
-        // Previously 120/60
         const points = settings.quality === 'high' ? 90 : (settings.quality === 'med' ? 45 : 30);
         const step = w / points;
 
         const getY = (x: number) => {
             const envelope = Math.sin((x / w) * Math.PI);
-            // Simpler jitter calc
             const jitter = (i > 4 && energy > 0.01) ? (Math.random() - 0.5) * 5 * energy : 0;
             
-            // 优化：振幅系数从 0.22 降为 0.11 (降低50%)
-            const amplitude = (h * 0.11 * config.amp) * energy * envelope;
+            // Limit max amplitude to avoid screen exit
+            const maxAmplitude = h * 0.35;
+            const rawAmp = (h * 0.12 * config.amp) * energy * envelope;
+            const amplitude = Math.min(rawAmp, maxAmplitude);
             
             const wave1 = Math.sin(x * config.freq + this.phaseOffset * (1 + i * 0.1) + i);
             const wave2 = Math.sin(x * config.freq * 2.5 - this.phaseOffset * 0.4) * 0.3;
@@ -112,7 +110,6 @@ export class WaveformRenderer implements IVisualizerRenderer {
         for (let j = 0; j < points; j++) {
             const nextX = depthX + (j + 1) * step;
             const nextY = getY(nextX);
-            // Midpoint approximation for smooth curves with fewer points
             const xc = (currentX + nextX) / 2;
             const yc = (currentY + nextY) / 2;
             ctx.quadraticCurveTo(currentX, currentY, xc, yc);
