@@ -1,9 +1,10 @@
 
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.1.2
+ * Version: 1.1.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 16:30
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -69,7 +70,6 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
   const containerRef = useRef<HTMLDivElement>(null);
   const moodStyle = useMemo(() => song && song.mood ? getMoodStyle(song.mood) : getMoodStyle('default'), [song]);
   
-  // Logic Update: Show overlay if we have ANY song data, even if not fully "identified" (commercial match)
   const isEnabled = showLyrics && !!song && (song.identified || !!song.mood || !!song.title) && song.matchSource !== 'PREVIEW';
 
   useAudioPulse({
@@ -83,7 +83,6 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
   if (!isEnabled || !song) return null;
   const t = TRANSLATIONS[language] || TRANSLATIONS['en'];
 
-  // Handle "Unidentified but Described" state
   const displayTitle = song.identified ? song.title : (song.title || "Signal Detected");
   const displayArtist = song.identified ? song.artist : (song.artist || "Analyzing...");
   const isConfidenceLow = !song.identified;
@@ -93,8 +92,6 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
     <div className="pointer-events-none fixed inset-0 z-20 overflow-hidden">
       <div 
         ref={containerRef}
-        // Mobile: top-14 (below notch/AI bar), left-4 right-4 (responsive width)
-        // Desktop: top-8 left-8, max-width fixed
         className={`absolute top-14 left-4 right-4 md:right-auto md:top-8 md:left-8 bg-black/40 backdrop-blur-md border-s-4 ${moodStyle.borderColor} ps-4 py-3 pe-4 rounded-e-xl rounded-l-lg md:rounded-l-none md:max-w-md transition-all duration-700 shadow-[0_4px_10px_rgba(0,0,0,0.5)] pointer-events-auto group origin-top-center md:origin-top-left animate-fade-in-up`}
         style={{ 
           animationDuration: '0.8s',
@@ -131,7 +128,6 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
                   </div>
                 )}
                 
-                {/* Source Badge */}
                 <div className="inline-flex items-center px-2 py-1 bg-white/5 border border-white/10 rounded-full">
                     <span className="text-[9px] font-mono text-white/40 uppercase tracking-widest">via {sourceLabel}</span>
                 </div>
@@ -144,7 +140,16 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
                       <span>Google</span>
                     </a>
                 )}
-                <button onClick={onRetry} className="flex items-center gap-1 text-[10px] text-white/70 hover:text-orange-400 transition-colors">
+                <button 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        // Close current overlay immediately to show state change
+                        onClose();
+                        // Trigger retry logic
+                        setTimeout(onRetry, 100);
+                    }} 
+                    className="flex items-center gap-1 text-[10px] text-white/70 hover:text-orange-400 transition-colors"
+                >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     <span>{t.wrongSong || "Retry"}</span>
                 </button>

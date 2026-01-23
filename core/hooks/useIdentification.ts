@@ -1,23 +1,24 @@
-
 /**
  * File: core/hooks/useIdentification.ts
- * Version: 1.0.5
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 15:30
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { SongInfo, Language, Region } from '../types';
-import { identifySongFromAudio } from '../services/geminiService';
+import { SongInfo, Language, Region, AIProvider } from '../types';
+import { identifySongFromAudio } from '../services/aiService';
 
 interface UseIdentificationProps {
   language: Language;
   region: Region;
-  provider: 'GEMINI' | 'MOCK' | 'OPENAI' | 'CLAUDE' | 'GROK' | 'DEEPSEEK' | 'QWEN';
+  provider: AIProvider;
   showLyrics: boolean;
+  apiKey?: string; // Optional custom key
 }
 
-export const useIdentification = ({ language, region, provider, showLyrics }: UseIdentificationProps) => {
+export const useIdentification = ({ language, region, provider, showLyrics, apiKey }: UseIdentificationProps) => {
   const [isIdentifying, setIsIdentifying] = useState(false);
   const [currentSong, setCurrentSong] = useState<SongInfo | null>(null);
   
@@ -35,10 +36,6 @@ export const useIdentification = ({ language, region, provider, showLyrics }: Us
     };
   }, []);
 
-  /**
-   * 核心修复：根据浏览器支持情况动态获取最佳音频 MIME 类型。
-   * 特别是针对 iOS Safari 需要回退到 audio/mp4。
-   */
   const getSupportedMimeType = useCallback(() => {
     const types = [
       'audio/webm;codecs=opus',
@@ -57,17 +54,24 @@ export const useIdentification = ({ language, region, provider, showLyrics }: Us
   }, []);
 
   const performIdentification = useCallback(async (stream: MediaStream) => {
-    if (!showLyrics || isIdentifying || !stream.active) return;
+    // Note: Removed check for !stream.active because AudioContext streams are always "active" even if paused.
+    // If user forces retry, we ignore isIdentifying state (handled via requestId race condition).
+    if (!showLyrics) return;
     
     const requestId = ++latestRequestId.current;
     const mimeType = getSupportedMimeType();
     
     if (!mimeType) {
-      console.error("[AI] 没有找到受支持的录音格式。");
+      console.error("[AI] No supported audio format.");
       return;
     }
 
     setIsIdentifying(true);
+    
+    // Clear previous song if manual retry
+    if (currentSong?.identified === false) {
+        setCurrentSong(null);
+    }
     
     try {
       const recorder = new MediaRecorder(stream, { mimeType });
@@ -98,10 +102,11 @@ export const useIdentification = ({ language, region, provider, showLyrics }: Us
                return;
             }
 
-            const info = await identifySongFromAudio(base64Data, mimeType, language, region, provider);
+            const info = await identifySongFromAudio(base64Data, mimeType, language, region, provider, apiKey);
             
             if (isMounted.current && requestId === latestRequestId.current) {
-              if (info && info.identified) {
+              if (info) {
+                // Always update song info, even if identified=false, to show "AI Analysis" results
                 setCurrentSong(info);
               }
               setIsIdentifying(false);
@@ -109,14 +114,14 @@ export const useIdentification = ({ language, region, provider, showLyrics }: Us
           };
           reader.readAsDataURL(blob);
         } catch (e) {
-          console.error("[AI] 处理错误:", e);
+          console.error("[AI] Processing Error:", e);
           setIsIdentifying(false);
         }
       };
 
       recorder.start();
       
-      // 录制 6 秒以获取足够的采样
+      // Record 6 seconds for better lyrics capture
       setTimeout(() => {
         if (recorderRef.current && recorderRef.current.state === 'recording') {
           recorderRef.current.stop();
@@ -124,10 +129,10 @@ export const useIdentification = ({ language, region, provider, showLyrics }: Us
       }, 6000); 
 
     } catch (e) {
-      console.error("[AI] 录制错误:", e);
+      console.error("[AI] Recording Error:", e);
       setIsIdentifying(false);
     }
-  }, [showLyrics, isIdentifying, language, region, provider, getSupportedMimeType]);
+  }, [showLyrics, language, region, provider, apiKey, getSupportedMimeType]); // removed currentSong dep to avoid loop
 
   return { isIdentifying, currentSong, setCurrentSong, performIdentification };
 };

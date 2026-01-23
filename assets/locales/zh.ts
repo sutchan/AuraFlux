@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 22:00
+ * Updated: 2025-02-24 16:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -74,6 +74,17 @@ export const zh = {
     loadPreset: '加载此预设。',
     cloudProvider: '选择目标云服务以便优化备份文件名。',
     copyConfig: '将配置代码复制到剪贴板以便分享。'
+  },
+  aiPanel: {
+      keySaved: 'API Key 已验证并保存',
+      keyInvalid: 'API Key 无效',
+      keyCleared: 'API Key 已清除',
+      saved: '已保存',
+      missing: '未配置',
+      save: '保存',
+      update: '更新',
+      geminiHint: '可选。留空则使用默认免费配额。',
+      customHint: '必填。Key 仅保存在本地浏览器中。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',

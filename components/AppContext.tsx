@@ -1,13 +1,13 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.2.3
+ * Version: 1.2.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 10:00
+ * Updated: 2025-02-24 15:30
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
-import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioFeatures } from '../core/types';
+import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioFeatures, AIProvider } from '../core/types';
 import { useAudio } from '../core/hooks/useAudio';
 import { useLocalStorage } from '../core/hooks/useLocalStorage';
 import { useAppState } from '../core/hooks/useAppState';
@@ -95,6 +95,7 @@ interface AIContextType {
   currentSong: SongInfo | null; setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
   performIdentification: (stream: MediaStream) => Promise<void>;
   resetAiSettings: () => void;
+  apiKeys: Record<string, string>; setApiKeys: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 }
 const AIContext = createContext<AIContextType | null>(null);
 export const useAI = () => {
@@ -112,7 +113,6 @@ const UIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     showOnboarding, isUnsupported, t, handleOnboardingComplete, resetSettings 
   } = useAppState();
 
-  // Toast State
   const [toast, setToast] = useState<{ message: string | null; type: 'success' | 'info' | 'error' }>({ message: null, type: 'success' });
 
   const showToast = useCallback((message: string, type: 'success' | 'info' | 'error' = 'success') => {
@@ -259,7 +259,7 @@ const AIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
 
   const {
     lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
-    currentSong, setCurrentSong, performIdentification, resetAiSettings
+    currentSong, setCurrentSong, performIdentification, resetAiSettings, apiKeys, setApiKeys
   } = useAiState({
       language, region, provider: settings.recognitionProvider,
       isListening, isSimulating, mediaStream, initialSettings: DEFAULT_SETTINGS, setSettings
@@ -268,7 +268,7 @@ const AIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   return (
     <AIContext.Provider value={{
       lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
-      currentSong, setCurrentSong, performIdentification, resetAiSettings
+      currentSong, setCurrentSong, performIdentification, resetAiSettings, apiKeys, setApiKeys
     }}>
       {children}
     </AIContext.Provider>

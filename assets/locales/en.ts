@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 22:00
+ * Updated: 2025-02-24 16:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -74,6 +74,17 @@ export const en = {
     loadPreset: 'Restore this preset state.',
     cloudProvider: 'Select target cloud service for optimized file naming.',
     copyConfig: 'Copy configuration string to clipboard for quick sharing.'
+  },
+  aiPanel: {
+      keySaved: 'API Key Verified & Saved',
+      keyInvalid: 'Invalid API Key',
+      keyCleared: 'API Key Cleared',
+      saved: 'SAVED',
+      missing: 'MISSING',
+      save: 'Save',
+      update: 'Update',
+      geminiHint: 'Optional. Uses default free quota if empty.',
+      customHint: 'Required. Key is stored locally in your browser.'
   },
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',

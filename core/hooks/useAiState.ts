@@ -1,16 +1,15 @@
-
 /**
  * File: core/hooks/useAiState.ts
- * Version: 1.0.5
+ * Version: 1.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 15:30
  */
 
-// FIX: Import React to provide types for React.Dispatch and React.SetStateAction.
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { useIdentification } from './useIdentification';
-import { LyricsStyle, Language, Region, VisualizerSettings } from '../types';
+import { LyricsStyle, Language, Region, VisualizerSettings, AIProvider } from '../types';
 
 const DEFAULT_LYRICS_STYLE = LyricsStyle.KARAOKE;
 const DEFAULT_SHOW_LYRICS = false;
@@ -18,7 +17,7 @@ const DEFAULT_SHOW_LYRICS = false;
 interface AiStateProps {
   language: Language;
   region: Region;
-  provider: 'GEMINI' | 'MOCK' | 'OPENAI' | 'CLAUDE' | 'GROK' | 'DEEPSEEK' | 'QWEN';
+  provider: AIProvider;
   isListening: boolean;
   isSimulating: boolean;
   mediaStream: MediaStream | null;
@@ -35,8 +34,17 @@ export const useAiState = ({
   const [lyricsStyle, setLyricsStyle] = useState<LyricsStyle>(() => getStorage('lyricsStyle', DEFAULT_LYRICS_STYLE));
   const [showLyrics, setShowLyrics] = useState<boolean>(() => getStorage('showLyrics', DEFAULT_SHOW_LYRICS));
   
+  // New: Store API Keys per provider
+  const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => getStorage('api_keys_v1', {}));
+
+  // Save keys whenever they change
+  useEffect(() => {
+      setStorage('api_keys_v1', apiKeys);
+  }, [apiKeys, setStorage]);
+
   const { isIdentifying, currentSong, setCurrentSong, performIdentification } = useIdentification({
-    language, region, provider, showLyrics
+    language, region, provider, showLyrics,
+    apiKey: apiKeys[provider] // Pass the custom key for current provider
   });
 
   useEffect(() => {
@@ -75,6 +83,7 @@ export const useAiState = ({
     isIdentifying,
     currentSong, setCurrentSong,
     performIdentification,
-    resetAiSettings
+    resetAiSettings,
+    apiKeys, setApiKeys
   };
 };
