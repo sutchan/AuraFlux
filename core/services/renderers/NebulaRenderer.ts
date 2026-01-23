@@ -1,9 +1,10 @@
 /**
  * File: core/services/renderers/NebulaRenderer.ts
- * Version: 1.8.4
+ * Version: 2.0.0
  * Author: Sut
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-02-23 04:30
+ * Updated: 2025-02-25 12:00
+ * Description: Optimized for high density (5x particles) and extreme scale variance.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -76,14 +77,14 @@ export class NebulaRenderer implements IVisualizerRenderer {
   }
 
   private getSprite(color: string, type: ParticleType): OffscreenCanvas | HTMLCanvasElement {
-    const key = `${color}_${type}_v2`; 
+    const key = `${color}_${type}_v3`; // Cache key updated
     if (this.spriteCache[key]) return this.spriteCache[key];
 
     if (Object.keys(this.spriteCache).length >= this.MAX_SPRITE_CACHE) {
       this.spriteCache = {};
     }
 
-    const size = type === 'GAS' ? 128 : 32;
+    const size = type === 'GAS' ? 128 : 64; // Increased dust resolution for larger particles
     const canvas = createBufferCanvas(size, size);
     const ctx = canvas.getContext('2d') as any;
     if (!ctx) return canvas;
@@ -97,9 +98,10 @@ export class NebulaRenderer implements IVisualizerRenderer {
       g.addColorStop(0.6, `${color}05`);
       g.addColorStop(1, '#00000000'); 
     } else {
+      // Dust/Star texture
       g.addColorStop(0, '#ffffff');
-      g.addColorStop(0.15, color);
-      g.addColorStop(0.4, `${color}00`); 
+      g.addColorStop(0.1, color); // Tighter core
+      g.addColorStop(0.4, `${color}10`); 
       g.addColorStop(1, '#00000000');
     }
 
@@ -113,11 +115,13 @@ export class NebulaRenderer implements IVisualizerRenderer {
   }
 
   private resetParticle(p: Partial<NebulaParticle>, w: number, h: number, colorsCount: number) {
-    // Optimization: More dust/stars (70%), fewer massive gas clouds (30%) to allow higher particle counts
-    const isGas = Math.random() > 0.7; 
+    // 5x DENSITY UPDATE: 
+    // Drastically adjusted ratio. Since we increased total count by 5x, 
+    // we lower GAS probability to 4% (from ~30%) to prevent screen whiteout.
+    // This keeps Gas clouds roughly same number, but floods the screen with Dust/Stars.
+    const isGas = Math.random() > 0.96; 
     
-    // Feature: More randomly drifting particles (40%) to fill the void
-    const isWanderer = Math.random() > 0.6; 
+    const isWanderer = Math.random() > 0.5; 
     p.clusterIdx = isWanderer ? -1 : Math.floor(Math.random() * this.clusters.length);
 
     const angle = Math.random() * Math.PI * 2;
@@ -125,17 +129,14 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
     p.type = isGas ? 'GAS' : 'DUST';
     
-    // Spawn Logic: Wanderers start anywhere on screen, Clusters start relative to center
     if (p.clusterIdx === -1) {
         p.x = Math.random() * w;
         p.y = Math.random() * h;
-        // Wanderers use rotationSpeed as linear velocity scalar
         p.rotationSpeed = 0.3 + Math.random() * 0.8;
     } else {
         const c = this.clusters[p.clusterIdx];
         p.x = c.x + Math.cos(angle) * orbit;
         p.y = c.y + Math.sin(angle) * orbit;
-        // Orbiters use rotationSpeed as angular velocity
         p.rotationSpeed = (Math.random() - 0.5) * 0.002;
     }
 
@@ -145,7 +146,15 @@ export class NebulaRenderer implements IVisualizerRenderer {
     p.colorShift = Math.random();
     p.noiseOffset = Math.random() * 5000;
     
-    p.baseSize = isGas ? (w * 0.5 + Math.random() * w * 0.5) : (3.0 + Math.random() * 6);
+    // 5x SIZE VARIATION UPDATE:
+    if (isGas) {
+        p.baseSize = w * 0.6 + Math.random() * w * 0.6; 
+    } else {
+        // Use a power curve (Math.pow 4) to bias heavily towards small stars (0.5px),
+        // but occasionally produce MASSIVE floating debris (up to 40px).
+        // Range: 0.5px -> 40.5px
+        p.baseSize = 0.5 + Math.pow(Math.random(), 4.0) * 40.0;
+    }
     
     p.angle = angle;
     p.orbitRadius = orbit;
@@ -163,10 +172,11 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
     if (beat) {
         this.beatImpact = 1.0;
-        if (this.clusters[0]) {
-             this.clusters[0].x += (Math.random()-0.5) * 20;
-             this.clusters[0].y += (Math.random()-0.5) * 20;
-        }
+        // Jitter clusters on beat
+        this.clusters.forEach(c => {
+             c.x += (Math.random()-0.5) * 15;
+             c.y += (Math.random()-0.5) * 15;
+        });
     }
     this.beatImpact *= 0.92;
 
@@ -177,8 +187,9 @@ export class NebulaRenderer implements IVisualizerRenderer {
         if (c.y < -h*0.2 || c.y > h*1.2) c.driftY *= -1;
     });
 
-    // Updated Particle Limits: Significantly increased for richer visuals
-    const maxParticles = settings.quality === 'high' ? 150 : settings.quality === 'med' ? 100 : 50;
+    // 5x QUANTITY UPDATE:
+    // Increased limits to create a dense, rich field.
+    const maxParticles = settings.quality === 'high' ? 800 : settings.quality === 'med' ? 400 : 200;
 
     if (this.particles.length > maxParticles) {
         this.particles.splice(maxParticles);
@@ -199,6 +210,12 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
     ctx.globalCompositeOperation = 'screen';
 
+    // Sort particles by size (approximate Z-sorting) so large gas is behind small dust
+    // This isn't perfect but helps visibility
+    // Note: JS sort every frame is expensive with 800 items, but handled by Worker usually.
+    // Optimization: Only simple sort or skip if performance is an issue.
+    // this.particles.sort((a, b) => b.baseSize - a.baseSize); // Draw largest first (background)
+
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
       p.life += 1.0 * (1 + bass * 0.5);
@@ -212,7 +229,6 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
       // Movement Physics
       if (p.clusterIdx !== -1 && this.clusters[p.clusterIdx]) {
-          // Orbiting Logic
           const c = this.clusters[p.clusterIdx];
           p.angle += p.rotationSpeed * (1 + bass * 2);
           const r = p.orbitRadius * (1.0 + Math.sin(rotation + p.noiseOffset) * 0.1);
@@ -221,7 +237,6 @@ export class NebulaRenderer implements IVisualizerRenderer {
           p.x += (tx - p.x) * 0.05;
           p.y += (ty - p.y) * 0.05;
       } else {
-          // Drifting Logic (Wanderers)
           const driftSpeed = p.rotationSpeed * settings.speed * (1 + bass * 0.5);
           p.x += Math.cos(p.angle) * driftSpeed;
           p.y += Math.sin(p.angle) * driftSpeed;
@@ -229,6 +244,10 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
       const colorIdx = Math.floor((p.colorShift + i * 0.1) % safeColors.length);
       const activeColor = safeColors[colorIdx];
+      
+      // Determine if we need to draw big gas first or small stars later
+      // We iterate linear, but effectively, GAS draws huge sprites.
+      
       const sprite = this.getSprite(activeColor, p.type);
       
       let finalSize = p.baseSize;
@@ -239,8 +258,13 @@ export class NebulaRenderer implements IVisualizerRenderer {
         alpha = (0.2 + bass * 0.6 + this.beatImpact * 0.4) * opacityEnv; 
       } else {
         const twinkle = Math.sin(rotation * 10 + p.noiseOffset) * 0.5 + 0.5;
-        finalSize *= (1 + treble * 3.0);
-        alpha = (0.4 + treble * 0.8 + twinkle * 0.3) * opacityEnv;
+        // Treble affects size more for stars
+        finalSize *= (1 + treble * 2.0);
+        
+        // Large dust particles (debris) are more transparent, tiny stars are brighter
+        const densityFactor = p.baseSize > 5 ? 0.4 : 0.8;
+        
+        alpha = (0.3 + treble * 0.8 + twinkle * 0.3) * opacityEnv * densityFactor;
       }
 
       if (alpha < 0.01) continue;

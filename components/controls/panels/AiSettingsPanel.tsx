@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.6.0
+ * Version: 1.7.0
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 20:00
+ * Updated: 2025-02-24 22:45
  */
 
 import React, { useState, useEffect } from 'react';
@@ -30,11 +30,13 @@ export const AiSettingsPanel: React.FC = () => {
 
   const [inputKey, setInputKey] = useState('');
   const [isValidating, setIsValidating] = useState(false);
+  const [showKey, setShowKey] = useState(false);
   
   // Load key when provider changes
   useEffect(() => {
       const currentProvider = settings.recognitionProvider || 'GEMINI';
       setInputKey(apiKeys[currentProvider] || '');
+      setShowKey(false); // Reset visibility on provider change
   }, [settings.recognitionProvider, apiKeys]);
 
   const handleSaveKey = async () => {
@@ -107,6 +109,29 @@ export const AiSettingsPanel: React.FC = () => {
                      onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
                    />
                    
+                   {/* Provider Status Indicators */}
+                   {currentProvider !== 'MOCK' && (
+                       <div className="flex gap-1.5 px-1">
+                           {(['GEMINI', 'GROQ', 'OPENAI'] as const).map(p => {
+                               const isConfigured = !!apiKeys[p];
+                               const isCurrent = currentProvider === p;
+                               return (
+                                   <div 
+                                     key={p} 
+                                     className={`text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors ${
+                                         isConfigured 
+                                            ? (isCurrent ? 'bg-green-500/20 border-green-500/40 text-green-300' : 'bg-white/5 border-green-500/20 text-green-500/60') 
+                                            : 'bg-transparent border-white/5 text-white/20'
+                                     }`}
+                                     title={isConfigured ? `${p}: Ready` : `${p}: Not Configured`}
+                                   >
+                                       {p}
+                                   </div>
+                               );
+                           })}
+                       </div>
+                   )}
+                   
                    {/* API Key Input Section */}
                    {currentProvider !== 'MOCK' && (
                        <div className="bg-white/5 p-3 rounded-xl border border-white/10 space-y-2">
@@ -117,17 +142,32 @@ export const AiSettingsPanel: React.FC = () => {
                                </span>
                            </div>
                            <div className="flex gap-2">
-                               <input 
-                                   type="password" 
-                                   value={inputKey}
-                                   onChange={(e) => setInputKey(e.target.value)}
-                                   placeholder={currentProvider === 'GROQ' ? "gsk_..." : "sk-..."}
-                                   className="flex-1 bg-black/40 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500 transition-colors"
-                               />
+                               <div className="relative flex-1">
+                                   <input 
+                                       type={showKey ? "text" : "password"} 
+                                       value={inputKey}
+                                       onChange={(e) => setInputKey(e.target.value)}
+                                       placeholder={currentProvider === 'GROQ' ? "gsk_..." : "sk-..."}
+                                       className="w-full bg-black/40 border border-white/10 rounded-lg pl-2 pr-7 py-1.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500 transition-colors font-mono"
+                                       autoComplete="off"
+                                       spellCheck={false}
+                                   />
+                                   <button 
+                                       onClick={() => setShowKey(!showKey)}
+                                       className="absolute right-1.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/80 p-0.5 transition-colors"
+                                       title={showKey ? "Hide Key" : "Show Key"}
+                                   >
+                                       {showKey ? (
+                                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                                       ) : (
+                                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                       )}
+                                   </button>
+                               </div>
                                <button 
                                    onClick={handleSaveKey}
                                    disabled={isValidating}
-                                   className="px-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-lg text-[10px] font-bold uppercase transition-colors"
+                                   className="px-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-lg text-[10px] font-bold uppercase transition-colors shrink-0"
                                >
                                    {isValidating ? '...' : (hasKey ? (aiPanel.update || 'Update') : (aiPanel.save || 'Save'))}
                                </button>

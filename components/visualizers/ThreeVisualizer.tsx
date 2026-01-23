@@ -1,14 +1,14 @@
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.8.0
+ * Version: 1.8.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 15:00
+ * Updated: 2025-02-25 18:00
  */
 
 import React, { Suspense, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { EffectComposer, Bloom, ChromaticAberration, TiltShift, Noise } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, Noise } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { VisualizerMode, VisualizerSettings } from '../../core/types';
 import { 
@@ -40,7 +40,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
           case VisualizerMode.KINETIC_WALL: return base * 1.5; // High bloom for concert lights
           case VisualizerMode.LIQUID: return base * 1.5;
           case VisualizerMode.CUBE_FIELD: return base * 1.2;
-          case VisualizerMode.NEURAL_FLOW: return base * 1.8;
+          case VisualizerMode.NEURAL_FLOW: return base * 1.5;
           default: return base;
       }
   }, [mode]);
@@ -56,29 +56,18 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         </EffectComposer>
       );
 
-      const enableTiltShift = settings.quality === 'high' && (
-          mode === VisualizerMode.LIQUID
-      );
-
+      // Removed ChromaticAberration and TiltShift to ensure a clean, sharp neon glow 
+      // without "ghosting" or double-image artifacts on particles.
       return (
           <EffectComposer multisampling={0}>
               <Bloom 
-                  luminanceThreshold={0.15} 
+                  luminanceThreshold={0.2} // Slightly higher threshold to reduce haze
                   luminanceSmoothing={0.9} 
                   intensity={bloomIntensity} 
                   mipmapBlur={true} 
-                  radius={0.7}
+                  radius={0.6} // Tighter radius for cleaner neon edges
               />
               {ditheringNoise}
-              {settings.quality === 'high' && (
-                  <ChromaticAberration 
-                      offset={new THREE.Vector2(0.0015, 0.0015)}
-                      radialModulation={false}
-                  />
-              )}
-              {enableTiltShift && (
-                  <TiltShift blur={0.1} />
-              )}
           </EffectComposer>
       );
   }, [settings.glow, settings.quality, mode, bloomIntensity]);

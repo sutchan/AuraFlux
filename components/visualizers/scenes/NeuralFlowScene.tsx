@@ -1,9 +1,11 @@
 /**
  * File: components/visualizers/scenes/NeuralFlowScene.tsx
- * Version: 1.3.7
+ * Version: 2.0.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 21:00
+ * Updated: 2025-02-25 17:00
+ * Description: Major overhaul for "Neural Fluid" aesthetic.
+ * Features: Filament clustering, synaptic pulsing, and biological luminescence.
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -23,22 +25,28 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
   const { bass, mids, treble, volume, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1] = smoothedColors;
 
-  // Optimization: Particle count reduced by 50% across all quality tiers (v1.3.5)
-  const count = settings.quality === 'high' ? 12000 : settings.quality === 'med' ? 6000 : 3000;
+  // Optimization: Balanced particle count for high visual density without killing GPU
+  const count = settings.quality === 'high' ? 12000 : settings.quality === 'med' ? 8000 : 4000;
 
   const [positions, randomness] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const rnd = new Float32Array(count);
+    
+    // Create a spherical distribution but with some initial "tendrils" bias
     for (let i = 0; i < count; i++) {
-      const r = 20 + Math.random() * 60;
+      const r = 30 + Math.random() * 50; // Base radius
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       
-      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = r * Math.cos(phi);
+      // Inject some initial structure bias
+      const bias = Math.sin(theta * 3) * Math.cos(phi * 5) * 10.0;
       
-      rnd[i] = Math.pow(Math.random(), 2.0);
+      pos[i * 3] = (r + bias) * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = (r + bias) * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = (r + bias) * Math.cos(phi);
+      
+      // Randomness for size variation and phase offsets
+      rnd[i] = Math.random();
     }
     return [pos, rnd];
   }, [count]);
@@ -63,11 +71,9 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
     const mat = pointsRef.current.material as THREE.ShaderMaterial;
     const sysTime = state.clock.getElapsedTime();
     
-    // --- Dynamic Time Integration (Hyper-Reactive v1.3.6) ---
-    // Drastically increased dynamic range.
-    // Silence = Restless flow (0.5 base)
-    // Loud = Chaotic turbulence (up to +4.0x speed)
-    accumulatedTimeRef.current += delta * settings.speed * (0.5 + volume * 4.0);
+    // Fluid time integration: speed varies with volume for "time dilation" effect
+    // Slow breathing when quiet, rushing current when loud.
+    accumulatedTimeRef.current += delta * settings.speed * (0.2 + volume * 2.5);
 
     if (isBeat) {
       beatTimerRef.current = sysTime;
@@ -75,25 +81,24 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
 
     mat.uniforms.uTime.value = accumulatedTimeRef.current;
     
-    // Pre-process audio data for sharper response curve
-    // Squaring the input exaggerates peaks relative to background noise
-    mat.uniforms.uBass.value = Math.pow(bass, 1.2); 
+    // Audio Uniforms
+    // Apply non-linear curves to make the reaction feel more "biological" and "twitchy"
+    mat.uniforms.uBass.value = Math.pow(bass, 1.5); 
     mat.uniforms.uMids.value = mids;
     mat.uniforms.uTreble.value = treble;
     mat.uniforms.uVolume.value = volume;
     
-    // Beat energy decay curve
+    // Decay for the beat impact
     const beatElapsed = sysTime - beatTimerRef.current;
-    const beatPhase = Math.max(0, Math.exp(-beatElapsed * 3.5));
+    const beatPhase = Math.max(0, Math.exp(-beatElapsed * 4.0));
     mat.uniforms.uBeat.value = beatPhase;
 
-    mat.uniforms.uColor1.value.set(c0);
-    mat.uniforms.uColor2.value.set(c1);
+    mat.uniforms.uColor1.value.lerp(new THREE.Color(c0), 0.05);
+    mat.uniforms.uColor2.value.lerp(new THREE.Color(c1), 0.05);
     
-    // Dynamic Rotation: Spin significantly faster with Bass
-    pointsRef.current.rotation.y += (0.001 + bass * 0.01) * settings.speed;
-    // Hard tilt on beat
-    pointsRef.current.rotation.x += (isBeat ? 0.005 : 0) * settings.speed;
+    // Slow organic rotation
+    pointsRef.current.rotation.y = accumulatedTimeRef.current * 0.05;
+    pointsRef.current.rotation.z = Math.sin(accumulatedTimeRef.current * 0.1) * 0.1;
   });
 
   return (
@@ -117,9 +122,10 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
             uniform float uBeat;
             attribute float aRandom;
             varying float vNoise;
-            varying float vSpeed;
-            varying float vAlpha;
+            varying float vSignal;
+            varying float vDist;
 
+            // Simplex Noise (Ashima Arts)
             vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
             vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
             vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -160,46 +166,70 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
             }
 
             void main() {
-              vec3 newPos = position;
-              float distToCenter = length(position);
+              vec3 pos = position;
               
-              // --- 1. Explosive Dynamics: Bass Displacement (4.0 + 25.0) ---
-              // Amplitude reduced (50.0 -> 25.0) to prevent excessive distortion
-              float n1 = snoise(position * 0.02 + uTime * 0.15 + aRandom);
-              float n2 = snoise(position * 0.015 - uTime * 0.1 + aRandom * 5.0);
-              float n3 = snoise(position * 0.025 + uTime * 0.08 + aRandom * 10.0);
-              vec3 flow = vec3(n1, n2, n3) * (4.0 + uBass * 25.0);
-              newPos += flow;
-
-              // --- 2. Filament Clumping: Driven by Mids ---
-              float filamentNoise = snoise(newPos * 0.04 + uTime * 0.05);
-              float clumpingPower = 3.0 + uMids * 4.0;
-              float clump = pow(abs(filamentNoise), clumpingPower);
-              newPos += normalize(newPos) * clump * 20.0 * (1.0 + uBass);
+              // 1. Calculate Base Noise Field
+              float nScale = 0.02;
+              float nSpeed = 0.2;
+              float noise = snoise(pos * nScale + uTime * nSpeed);
               
-              // --- 3. High Frequency Jitter (4.0) ---
-              // Faster frequency (20.0) and higher amplitude (4.0) makes high notes "shiver" visibly
-              float jitter = snoise(newPos * 0.8 + uTime * 20.0) * uTreble * 4.0;
-              newPos += jitter;
+              vNoise = noise;
+              vDist = length(pos);
 
-              // --- 4. Massive Beat Shockwave (15.0) ---
-              // Reduced from 25.0 to 15.0 for cleaner impact
-              float waveFront = exp(-pow(distToCenter * 0.04 - uBeat * 6.0, 2.0) * 8.0);
-              newPos += normalize(newPos) * waveFront * 15.0 * uBeat;
-
-              vNoise = filamentNoise;
-              vSpeed = length(flow) * 0.15 + uTreble * 0.5; 
+              // 2. Filament Formation (The "Veins")
+              // We push particles towards the "ridges" of the noise (where noise ~ 0 or 0.5)
+              // This groups the uniform cloud into organic-looking strands.
+              // 'veinStrength' determines how tightly they cluster.
+              float veinStrength = 1.0 - abs(noise); 
+              veinStrength = pow(veinStrength, 3.0); // Sharpen the ridges
+              
+              // Apply clustering displacement
+              vec3 clusterDir = normalize(pos);
+              // Mids control how tight the neural fibers are
+              float contraction = (1.0 - veinStrength) * (5.0 + uMids * 10.0); 
+              
+              // 3. Turbulent Flow (Curl approximation)
+              // Use a second noise layer to twist the filaments
+              float twist = snoise(pos * 0.03 + vec3(0.0, 10.0, 0.0) + uTime * 0.15);
+              vec3 curl = cross(normal, vec3(0.0, 1.0, 0.0)) * twist;
+              
+              // 4. Combine Forces
+              vec3 newPos = pos;
+              // Add slight contraction to form veins
+              newPos -= clusterDir * contraction * 0.2; 
+              // Add curling motion driven by Bass
+              newPos += curl * (2.0 + uBass * 8.0);
+              
+              // 5. Beat Shockwave (Synaptic Firing)
+              // Expands a spherical shockwave from center
+              float shockwave = smoothstep(0.8, 1.0, sin(length(pos) * 0.1 - uBeat * 5.0));
+              newPos += normal * shockwave * 3.0 * uBeat;
 
               vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
               gl_Position = projectionMatrix * mvPosition;
 
-              // Visual Compensation: Slightly increase particle size to maintain volume with fewer particles
-              float sizeBase = 4.0 + aRandom * 16.0; 
-              float beatScale = 1.0 + uBeat * 3.0; // Beat pulse increased to 3.0x
-              float treblePulse = 1.0 + sin(uTime * 30.0 + aRandom * 100.0) * uTreble;
-              gl_PointSize = sizeBase * beatScale * treblePulse * (300.0 / -mvPosition.z);
+              // 6. Non-Linear Size Distribution (Micro Depth)
+              // 95% of particles are small "neurotransmitters" (dust)
+              // 5% are large "neurons" (nodes)
+              // We use aRandom to decide.
+              float isNode = step(0.95, aRandom); // 1.0 if top 5%, else 0.0
               
-              vAlpha = (0.3 + uBass * 0.6 + uBeat * 0.5) * (1.0 - smoothstep(0.0, 200.0, distToCenter));
+              // Base sizes
+              float sizeDust = 1.5;
+              float sizeNode = 12.0;
+              
+              // Reactivity: Nodes pulse with Bass, Dust sparkles with Treble
+              float dynamicSize = mix(
+                  sizeDust * (1.0 + uTreble * 1.5 + noise * 0.5), 
+                  sizeNode * (1.0 + uBass * 0.8), 
+                  isNode
+              );
+              
+              // Perspective scaling
+              gl_PointSize = dynamicSize * (300.0 / -mvPosition.z);
+              
+              // Pass signal strength to fragment for coloring
+              vSignal = isNode; 
             }
           `}
           fragmentShader={`
@@ -207,28 +237,44 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
             uniform vec3 uColor2;
             uniform float uTime;
             uniform float uTreble;
-            uniform float uBeat;
-            uniform float uVolume;
+            uniform float uBass;
+            
             varying float vNoise;
-            varying float vSpeed;
-            varying float vAlpha;
+            varying float vSignal;
+            varying float vDist;
 
             void main() {
-              float dist = distance(gl_PointCoord, vec2(0.5));
-              if(dist > 0.5) discard;
-
-              vec3 baseColor = mix(uColor1, uColor2, vNoise * 0.5 + 0.5);
-              // Intense discharge on beat (1.5x)
-              vec3 discharge = vec3(1.0) * uBeat * 1.5;
-              vec3 bioluminescence = baseColor + discharge + (vSpeed * 0.8);
+              // Circular particle shape
+              float d = distance(gl_PointCoord, vec2(0.5));
+              if(d > 0.5) discard;
               
-              float sparkle = pow(abs(sin(uTime * 20.0 + vNoise * 50.0)), 10.0) * uTreble;
-              bioluminescence += sparkle * 1.5;
+              // Soft edge glow
+              float alpha = 1.0 - smoothstep(0.0, 0.5, d);
+              alpha = pow(alpha, 2.0); // Exponential falloff for "glowy" look
 
-              float core = 1.0 - smoothstep(0.0, 0.5, dist);
-              float glow = pow(core, 2.0 - uVolume * 1.8); // Glow widens significantly with volume
+              // --- Synaptic Pulse Logic ---
+              // Create a wave that travels along the noise field
+              // High frequency sine wave mapped to the noise value
+              float pulsePhase = vNoise * 8.0 - uTime * 4.0;
+              float synapticPulse = smoothstep(0.8, 1.0, sin(pulsePhase));
               
-              gl_FragColor = vec4(bioluminescence, vAlpha * glow);
+              // --- Bioluminescence Color Mixing ---
+              // Base State: Darker, deeper color (uColor1)
+              // Excited State: Bright, hot color (uColor2)
+              // Excitation factors: High Bass, High Treble, or the Synaptic Pulse passing through
+              
+              float excitation = synapticPulse + uBass * 0.5;
+              
+              vec3 baseCol = mix(uColor1, uColor2, vSignal * 0.5); // Nodes are naturally brighter
+              vec3 activeCol = mix(baseCol, uColor2 * 2.0, excitation);
+              
+              // Add a white-hot core to the pulse
+              activeCol += vec3(1.0) * synapticPulse * uTreble * 2.0;
+
+              // Distance fog (fade out edges)
+              float fog = 1.0 - smoothstep(50.0, 150.0, vDist);
+              
+              gl_FragColor = vec4(activeCol, alpha * fog * (0.6 + uBass * 0.4));
             }
           `}
         />

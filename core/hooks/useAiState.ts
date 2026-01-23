@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useAiState.ts
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 15:30
+ * Updated: 2025-02-24 22:45
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -13,6 +13,16 @@ import { LyricsStyle, Language, Region, VisualizerSettings, AIProvider } from '.
 
 const DEFAULT_LYRICS_STYLE = LyricsStyle.KARAOKE;
 const DEFAULT_SHOW_LYRICS = false;
+
+// Privacy Helper: Simple Base64 obfuscation to prevent shoulder-surfing leaks.
+// Note: This is not encryption. The key is still accessible in the browser.
+const encodeKey = (key: string) => `enc:${btoa(key)}`;
+const decodeKey = (str: string) => {
+    if (typeof str === 'string' && str.startsWith('enc:')) {
+        try { return atob(str.slice(4)); } catch (e) { return ''; }
+    }
+    return str; // Backward compatibility for legacy plain-text keys
+};
 
 interface AiStateProps {
   language: Language;
@@ -34,12 +44,25 @@ export const useAiState = ({
   const [lyricsStyle, setLyricsStyle] = useState<LyricsStyle>(() => getStorage('lyricsStyle', DEFAULT_LYRICS_STYLE));
   const [showLyrics, setShowLyrics] = useState<boolean>(() => getStorage('showLyrics', DEFAULT_SHOW_LYRICS));
   
-  // New: Store API Keys per provider
-  const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => getStorage('api_keys_v1', {}));
+  // Store API Keys per provider with obfuscation
+  const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
+      const raw = getStorage<Record<string, string>>('api_keys_v1', {});
+      const decoded: Record<string, string> = {};
+      if (raw && typeof raw === 'object') {
+          Object.entries(raw).forEach(([k, v]) => {
+              if (typeof v === 'string') decoded[k] = decodeKey(v);
+          });
+      }
+      return decoded;
+  });
 
-  // Save keys whenever they change
+  // Save keys encoded
   useEffect(() => {
-      setStorage('api_keys_v1', apiKeys);
+      const encoded: Record<string, string> = {};
+      Object.entries(apiKeys).forEach(([k, v]) => {
+          if (v) encoded[k] = encodeKey(v);
+      });
+      setStorage('api_keys_v1', encoded);
   }, [apiKeys, setStorage]);
 
   const { isIdentifying, currentSong, setCurrentSong, performIdentification } = useIdentification({
