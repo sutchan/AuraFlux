@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.4
+ * Version: 1.8.6
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 16:30
+ * Updated: 2025-02-24 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const zh = {
+  // ... existing content ...
   common: {
     on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业'
   },
@@ -84,7 +85,8 @@ export const zh = {
       save: '保存',
       update: '更新',
       geminiHint: '可选。留空则使用默认免费配额。',
-      customHint: '必填。Key 仅保存在本地浏览器中。'
+      customHint: '必填。Key 仅保存在本地浏览器中。',
+      groqHint: '必填。用于极速 Whisper+Llama 推理。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -181,7 +183,7 @@ export const zh = {
     confirmImport: '覆盖当前设置？',
     invalidFile: '文件格式无效',
     importSuccess: '配置加载成功',
-    cloudHint: '选择目标云盘以优化备份文件名:',
+    cloudHint: '选择目标云服务以便优化备份文件名:',
     copy: '复制',
     copied: '已复制',
     providers: {

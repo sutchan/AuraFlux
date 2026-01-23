@@ -1,10 +1,9 @@
-
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.1.4
+ * Version: 1.1.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 16:30
+ * Updated: 2025-02-24 17:35
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -54,11 +53,7 @@ const getMoodStyle = (mood: string | undefined | null) => {
 
 const getProviderLabel = (source: string | undefined) => {
     switch(source) {
-        case 'GROK': return 'Grok xAI';
-        case 'CLAUDE': return 'Claude 3.5';
         case 'OPENAI': return 'GPT-4o';
-        case 'DEEPSEEK': return 'DeepSeek';
-        case 'QWEN': return 'Qwen';
         case 'LOCAL': return 'Local Cache';
         case 'MOCK': return 'Simulation';
         case 'GEMINI': 

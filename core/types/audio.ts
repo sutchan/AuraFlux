@@ -1,7 +1,7 @@
 
 /**
  * File: core/types/audio.ts
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -19,7 +19,7 @@ export interface SongInfo {
   mood?: string;
   identified: boolean;
   searchUrl?: string;
-  matchSource?: 'AI' | 'LOCAL' | 'MOCK' | 'GEMINI' | 'OPENAI' | 'CLAUDE' | 'GROK' | 'DEEPSEEK' | 'QWEN' | 'PREVIEW';
+  matchSource?: 'AI' | 'LOCAL' | 'MOCK' | 'GEMINI' | 'OPENAI' | 'CLAUDE' | 'GROQ' | 'DEEPSEEK' | 'QWEN' | 'PREVIEW';
 }
 
 export interface AudioDevice {

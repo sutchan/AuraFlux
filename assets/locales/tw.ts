@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.8.3
+ * Version: 1.8.6
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 22:00
+ * Updated: 2025-02-24 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const tw = {
+  // ... existing content ...
   common: {
     on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業'
   },
@@ -74,6 +75,18 @@ export const tw = {
     loadPreset: '載入此預設。',
     cloudProvider: '選擇目標云端服務以優化備份檔名。',
     copyConfig: '將配置代碼複製到剪貼簿以便分享。'
+  },
+  aiPanel: {
+      keySaved: 'API Key 已驗證並保存',
+      keyInvalid: 'API Key 無效',
+      keyCleared: 'API Key 已清除',
+      saved: '已保存',
+      missing: '未配置',
+      save: '保存',
+      update: '更新',
+      geminiHint: '可選。留空則使用預設免費配額。',
+      customHint: '必填。Key 僅保存在本地瀏覽器中。',
+      groqHint: '必填。用於極速 Whisper+Llama 推理。'
   },
   visualizerMode: '視覺化模式',
   styleTheme: '視覺風格',

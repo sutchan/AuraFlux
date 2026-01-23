@@ -1,9 +1,9 @@
 /**
  * File: core/types/visuals.ts
- * Version: 1.8.2
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 19:00
+ * Updated: 2025-02-24 20:00
  */
 
 import { Position, Region } from './common';
@@ -67,7 +67,7 @@ export interface VisualizerSettings {
   customTextCycleColor: boolean;
   customTextCycleInterval: number;
   lyricsPosition: Position;
-  recognitionProvider: 'GEMINI' | 'MOCK' | 'OPENAI' | 'CLAUDE' | 'GROK' | 'DEEPSEEK' | 'QWEN';
+  recognitionProvider: 'GEMINI' | 'OPENAI' | 'GROQ' | 'MOCK';
   lyricsStyle?: LyricsStyle;
   lyricsFont?: string;
   lyricsFontSize?: number;

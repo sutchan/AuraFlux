@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.6.92
+ * Version: 1.8.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 16:00
+ * Updated: 2025-02-24 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ja = {
+  // ... existing content ...
   common: {
     on: 'ON',
     off: 'OFF',
@@ -80,6 +81,18 @@ export const ja = {
     lyricsFontSize: 'AI識別テキストのスケール。',
     textFont: 'カスタムテキストレイヤーのフォントファミリー。',
     recognitionSource: 'AIペルソナまたはプロバイダーを選択します。'
+  },
+  aiPanel: {
+      keySaved: 'API Key 保存完了',
+      keyInvalid: '無効な API Key',
+      keyCleared: 'API Key 消去完了',
+      saved: '保存済',
+      missing: '未設定',
+      save: '保存',
+      update: '更新',
+      geminiHint: '任意。空の場合はデフォルトの無料枠を使用します。',
+      customHint: '必須。Keyはブラウザにローカル保存されます。',
+      groqHint: '必須。高速Whisper+Llama推論を有効にします。'
   },
   visualizerMode: 'ビジュアルモード',
   styleTheme: '視覚スタイル',

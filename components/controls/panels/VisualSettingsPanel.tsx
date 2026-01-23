@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.3.1
+ * Version: 1.3.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 00:00
+ * Updated: 2025-02-24 21:30
  */
 
 import React from 'react';
@@ -165,12 +165,26 @@ export const VisualSettingsPanel: React.FC = () => {
                     <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{visualPanel.automation || "Automation"}</span>
                     <SettingsToggle label={t?.autoRotate || "Auto Rotate"} value={settings.autoRotate} onChange={() => handleVisualSettingChange('autoRotate', !settings.autoRotate)} hintText={hints?.autoRotate}>
                         <div className="pt-1">
-                            <Slider label={t?.rotateInterval || "Interval"} value={settings.rotateInterval} min={10} max={120} step={5} unit="s" onChange={(v: number) => handleVisualSettingChange('rotateInterval', v)} />
+                            <Slider 
+                                label={t?.rotateInterval || "Interval"} 
+                                value={settings.rotateInterval} 
+                                min={10} max={120} step={5} 
+                                unit="s" 
+                                hintText={hints?.rotateInterval}
+                                onChange={(v: number) => handleVisualSettingChange('rotateInterval', v)} 
+                            />
                         </div>
                     </SettingsToggle>
                     <SettingsToggle label={t?.cycleColors || "Cycle Colors"} value={settings.cycleColors} onChange={() => handleVisualSettingChange('cycleColors', !settings.cycleColors)} hintText={hints?.cycleColors}>
                         <div className="pt-1">
-                            <Slider label={t?.colorInterval || "Interval"} value={settings.colorInterval} min={5} max={60} step={5} unit="s" onChange={(v: number) => handleVisualSettingChange('colorInterval', v)} />
+                            <Slider 
+                                label={t?.colorInterval || "Interval"} 
+                                value={settings.colorInterval} 
+                                min={5} max={60} step={5} 
+                                unit="s" 
+                                hintText={hints?.colorInterval}
+                                onChange={(v: number) => handleVisualSettingChange('colorInterval', v)} 
+                            />
                         </div>
                     </SettingsToggle>
                   </div>

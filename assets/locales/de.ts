@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.6.92
+ * Version: 1.8.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 16:00
+ * Updated: 2025-02-24 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const de = {
+  // ... existing content ...
   common: {
     on: 'AN',
     off: 'AUS',

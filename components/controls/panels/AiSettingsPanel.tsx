@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.5.0
+ * Version: 1.6.0
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 16:15
+ * Updated: 2025-02-24 20:00
  */
 
 import React, { useState, useEffect } from 'react';
@@ -75,6 +75,12 @@ export const AiSettingsPanel: React.FC = () => {
   const currentProvider = settings.recognitionProvider || 'GEMINI';
   const hasKey = !!apiKeys[currentProvider];
 
+  const getKeyHint = () => {
+      if (currentProvider === 'GEMINI') return aiPanel.geminiHint || "Optional. Uses default free quota if empty.";
+      if (currentProvider === 'GROQ') return aiPanel.groqHint || "Required. Enables fast Whisper+Llama inference.";
+      return aiPanel.customHint || "Required. Key is stored locally in your browser.";
+  };
+
   return (
     <>
       {/* Col 1: Core AI Settings & Key Management */}
@@ -93,10 +99,9 @@ export const AiSettingsPanel: React.FC = () => {
                      value={currentProvider} 
                      hintText={hints?.recognitionSource}
                      options={[
-                       { value: 'GEMINI', label: '🟢 Gemini 3.0 (Audio Native)' }, 
-                       { value: 'OPENAI', label: '🔵 GPT-4o (BYO Key)' },
-                       { value: 'DEEPSEEK', label: '🟣 DeepSeek (Text Only)' },
-                       { value: 'GROK', label: '⚪ Grok (Text Only)' },
+                       { value: 'GEMINI', label: '🟢 Gemini 3.0 (Native Audio)' }, 
+                       { value: 'OPENAI', label: '🔵 GPT-4o (Audio Preview)' },
+                       { value: 'GROQ', label: '🟠 Groq (Whisper + Llama 3)' },
                        { value: 'MOCK', label: `⚪ ${t?.simulatedDemo || 'Simulated'} (Offline)` }
                      ]} 
                      onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
@@ -116,7 +121,7 @@ export const AiSettingsPanel: React.FC = () => {
                                    type="password" 
                                    value={inputKey}
                                    onChange={(e) => setInputKey(e.target.value)}
-                                   placeholder="sk-..."
+                                   placeholder={currentProvider === 'GROQ' ? "gsk_..." : "sk-..."}
                                    className="flex-1 bg-black/40 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500 transition-colors"
                                />
                                <button 
@@ -128,9 +133,7 @@ export const AiSettingsPanel: React.FC = () => {
                                </button>
                            </div>
                            <p className="text-[9px] text-white/30 leading-tight">
-                               {currentProvider === 'GEMINI' 
-                                   ? (aiPanel.geminiHint || "Optional. Uses default free quota if empty.") 
-                                   : (aiPanel.customHint || "Required. Key is stored locally in your browser.")}
+                               {getKeyHint()}
                            </p>
                        </div>
                    )}

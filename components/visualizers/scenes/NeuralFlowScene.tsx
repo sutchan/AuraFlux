@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/NeuralFlowScene.tsx
- * Version: 1.3.6
+ * Version: 1.3.7
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-22 16:45
+ * Updated: 2025-02-24 21:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -163,12 +163,12 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
               vec3 newPos = position;
               float distToCenter = length(position);
               
-              // --- 1. Explosive Dynamics: Bass Displacement (4.0 + 50.0) ---
-              // Amplitude doubled (25.0 -> 50.0) for extremely obvious reaction
+              // --- 1. Explosive Dynamics: Bass Displacement (4.0 + 25.0) ---
+              // Amplitude reduced (50.0 -> 25.0) to prevent excessive distortion
               float n1 = snoise(position * 0.02 + uTime * 0.15 + aRandom);
               float n2 = snoise(position * 0.015 - uTime * 0.1 + aRandom * 5.0);
               float n3 = snoise(position * 0.025 + uTime * 0.08 + aRandom * 10.0);
-              vec3 flow = vec3(n1, n2, n3) * (4.0 + uBass * 50.0);
+              vec3 flow = vec3(n1, n2, n3) * (4.0 + uBass * 25.0);
               newPos += flow;
 
               // --- 2. Filament Clumping: Driven by Mids ---
@@ -182,9 +182,10 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
               float jitter = snoise(newPos * 0.8 + uTime * 20.0) * uTreble * 4.0;
               newPos += jitter;
 
-              // --- 4. Massive Beat Shockwave (25.0) ---
+              // --- 4. Massive Beat Shockwave (15.0) ---
+              // Reduced from 25.0 to 15.0 for cleaner impact
               float waveFront = exp(-pow(distToCenter * 0.04 - uBeat * 6.0, 2.0) * 8.0);
-              newPos += normalize(newPos) * waveFront * 25.0 * uBeat;
+              newPos += normalize(newPos) * waveFront * 15.0 * uBeat;
 
               vNoise = filamentNoise;
               vSpeed = length(flow) * 0.15 + uTreble * 0.5; 

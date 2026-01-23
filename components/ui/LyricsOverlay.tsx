@@ -1,9 +1,9 @@
-
 /**
  * File: components/ui/LyricsOverlay.tsx
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-24 18:00
  */
 
 import React, { useRef } from 'react';
@@ -22,8 +22,13 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   const containerRef = useRef<HTMLDivElement>(null);
 
   const isPreview = song?.matchSource === 'PREVIEW';
+  
+  // Filter out system error messages from the main lyrics display
+  // We want these errors to only appear in the SongOverlay (badge), not as giant floating text
+  const isSystemError = song?.title === "Quota Exceeded" || song?.title === "Server Error" || song?.artist === "System Alert";
+
   // Allow showing text if we have a snippet, even if identified is false (generic description case)
-  const isEnabled = isPreview || (showLyrics && !!song && (!!song.lyricsSnippet || song.identified || !!song.title));
+  const isEnabled = !isSystemError && (isPreview || (showLyrics && !!song && (!!song.lyricsSnippet || song.identified || !!song.title)));
   
   useAudioPulse({
     elementRef: containerRef,

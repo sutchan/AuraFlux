@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.6.92
+ * Version: 1.8.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 16:00
+ * Updated: 2025-02-24 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const es = {
+  // ... existing content ...
   common: {
     on: 'ON',
     off: 'OFF',
@@ -80,6 +81,18 @@ export const es = {
     lyricsFontSize: 'Escalar el texto de identificación de IA.',
     textFont: 'Familia tipográfica para la capa de texto personalizado.',
     recognitionSource: 'Seleccionar la personalidad o proveedor de IA.'
+  },
+  aiPanel: {
+      keySaved: 'Clave API guardada',
+      keyInvalid: 'Clave API inválida',
+      keyCleared: 'Clave API borrada',
+      saved: 'GUARDADO',
+      missing: 'FALTA',
+      save: 'Guardar',
+      update: 'Actualizar',
+      geminiHint: 'Opcional. Usa cuota gratuita si está vacío.',
+      customHint: 'Requerido. Se guarda localmente.',
+      groqHint: 'Requerido. Habilita inferencia rápida Whisper+Llama.'
   },
   visualizerMode: 'Modo Visualizador',
   styleTheme: 'Tema Visual',

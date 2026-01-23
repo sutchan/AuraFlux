@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.6.92
+ * Version: 1.8.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 16:00
+ * Updated: 2025-02-24 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ar = {
+  // ... existing content ...
   common: {
     on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم'
   },
@@ -68,6 +69,18 @@ export const ar = {
     lyricsFontSize: 'تغيير حجم نص التعريف بالذكاء الاصطناعي.',
     textFont: 'عائلة الخط لطبقة النص المخصص.',
     recognitionSource: 'اختر شخصية الذكاء الاصطناعي أو المزود.'
+  },
+  aiPanel: {
+      keySaved: 'تم حفظ المفتاح',
+      keyInvalid: 'مفتاح غير صالح',
+      keyCleared: 'تم مسح المفتاح',
+      saved: 'محفوظ',
+      missing: 'مفقود',
+      save: 'حفظ',
+      update: 'تحديث',
+      geminiHint: 'اختياري. يستخدم الحصة المجانية إذا كان فارغاً.',
+      customHint: 'مطلوب. يتم الحفظ محلياً في المتصفح.',
+      groqHint: 'مطلوب. يمكّن استدلال Whisper+Llama السريع.'
   },
   visualizerMode: 'محرك العرض المرئي',
   styleTheme: 'سمة الألوان',

@@ -1,9 +1,9 @@
 /**
  * File: core/services/geminiService.ts
- * Version: 1.3.3
+ * Version: 1.3.4
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-02-23 04:00
+ * Updated: 2025-02-25 10:00
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -18,7 +18,7 @@ const REQUEST_TIMEOUT_MS = 30000;
 const PROVIDER_PROFILES: Record<string, string> = {
     GEMINI: "Role: Google Gemini. Style: Balanced, high-fidelity analysis. Focus on accurate metadata and holistic emotional context.",
     
-    GROK: "Role: Grok (xAI). Style: Witty, rebellious, and raw. Use punchy, creative language. In the 'mood' field, feel free to use unconventional or high-energy descriptors. If the track is unknown, describe its 'vibe' with an edgy twist.",
+    GROQ: "Role: Grok (xAI). Style: Witty, rebellious, and raw. Use punchy, creative language. In the 'mood' field, feel free to use unconventional or high-energy descriptors. If the track is unknown, describe its 'vibe' with an edgy twist.",
     
     CLAUDE: "Role: Claude (Anthropic). Style: Sophisticated, poetic, and musicological. Focus on texture, harmonic depth, and the 'soul' of the sound. Use elegant and descriptive terminology.",
     
@@ -34,7 +34,7 @@ export const identifySongFromAudio = async (
   mimeType: string, 
   language: Language = 'en', 
   region: Region = 'global',
-  provider: 'GEMINI' | 'MOCK' | 'OPENAI' | 'CLAUDE' | 'GROK' | 'DEEPSEEK' | 'QWEN' = 'GEMINI'
+  provider: 'GEMINI' | 'MOCK' | 'OPENAI' | 'CLAUDE' | 'GROQ' | 'DEEPSEEK' | 'QWEN' = 'GEMINI'
 ): Promise<SongInfo | null> => {
   // 1. Mock Mode (Demo)
   if (provider === 'MOCK') {

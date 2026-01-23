@@ -1,6 +1,6 @@
 /**
  * File: core/types/index.ts
- * Version: 1.0.9
+ * Version: 1.2.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -10,4 +10,4 @@ export * from './common';
 export * from './audio';
 export * from './visuals';
 
-export type AIProvider = 'GEMINI' | 'OPENAI' | 'DEEPSEEK' | 'QWEN' | 'GROK' | 'CLAUDE' | 'MOCK';
+export type AIProvider = 'GEMINI' | 'OPENAI' | 'GROQ' | 'MOCK';

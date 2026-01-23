@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.4
+ * Version: 1.8.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 16:30
+ * Updated: 2025-02-24 20:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const en = {
+  // ... existing content ...
   common: {
     on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED'
   },
@@ -84,7 +85,8 @@ export const en = {
       save: 'Save',
       update: 'Update',
       geminiHint: 'Optional. Uses default free quota if empty.',
-      customHint: 'Required. Key is stored locally in your browser.'
+      customHint: 'Required. Key is stored locally in your browser.',
+      groqHint: 'Required. Enables fast Whisper+Llama inference.'
   },
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',

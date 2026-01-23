@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.6.92
+ * Version: 1.8.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 16:00
+ * Updated: 2025-02-24 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ko = {
+  // ... existing content ...
   common: {
     on: 'ON',
     off: 'OFF',
@@ -80,6 +81,18 @@ export const ko = {
     lyricsFontSize: 'AI 식별 텍스트의 크기를 조절합니다.',
     textFont: '사용자 정의 텍스트 레이어의 글꼴 모음입니다.',
     recognitionSource: 'AI 페르소나 또는 공급자를 선택하세요.'
+  },
+  aiPanel: {
+      keySaved: 'API Key 저장 완료',
+      keyInvalid: '유효하지 않은 API Key',
+      keyCleared: 'API Key 삭제됨',
+      saved: '저장됨',
+      missing: '누락됨',
+      save: '저장',
+      update: '업데이트',
+      geminiHint: '선택. 비워두면 무료 할당량이 사용됩니다.',
+      customHint: '필수. 키는 브라우저에 로컬 저장됩니다.',
+      groqHint: '필수. 고속 Whisper+Llama 추론을 활성화합니다.'
   },
   visualizerMode: '시각화 모드',
   styleTheme: '비주얼 테마',

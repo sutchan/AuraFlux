@@ -1,9 +1,9 @@
 /**
  * File: core/services/aiService.ts
- * Version: 2.1.2
+ * Version: 2.2.2
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-02-24 17:00
+ * Updated: 2025-02-24 21:00
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -16,16 +16,29 @@ const REQUEST_TIMEOUT_MS = 30000;
 // Provider Configurations
 const PROVIDERS = {
     GEMINI: { name: 'Gemini 3.0', endpoint: '', model: GEMINI_MODEL },
-    OPENAI: { name: 'GPT-4o', endpoint: 'https://api.openai.com/v1/chat/completions', model: 'gpt-4o' },
-    DEEPSEEK: { name: 'DeepSeek V3', endpoint: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat' },
-    QWEN: { name: 'Qwen Max', endpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-max' },
-    GROK: { name: 'Grok Beta', endpoint: 'https://api.x.ai/v1/chat/completions', model: 'grok-beta' },
-    // Mock/Persona providers use Gemini under the hood if no custom key is provided
-    CLAUDE: { name: 'Claude 3.5 (Sim)', endpoint: '', model: '' },
+    OPENAI: { name: 'GPT-4o Audio', endpoint: 'https://api.openai.com/v1/chat/completions', model: 'gpt-4o-audio-preview' },
+    GROQ: { 
+        name: 'Groq (Whisper+Llama)', 
+        transcribeEndpoint: 'https://api.groq.com/openai/v1/audio/transcriptions', 
+        chatEndpoint: 'https://api.groq.com/openai/v1/chat/completions',
+        audioModel: 'distil-whisper-large-v3-en',
+        chatModel: 'llama-3.3-70b-versatile'
+    },
     MOCK: { name: 'Simulation', endpoint: '', model: '' }
 };
 
-// Prompt Engineering: Optimized for Accuracy via Lyrics & Region
+// Utility to convert base64 to Blob
+const base64ToBlob = (base64: string, mimeType: string): Blob => {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+};
+
+// Prompt Engineering
 const generateSystemPrompt = (lang: string, region: string, persona: string) => `
 You are the "Aura Flux Synesthesia Intelligence", a world-class musicologist.
 ${persona}
@@ -48,6 +61,19 @@ ${persona}
 Return ONLY raw JSON. No markdown.
 `;
 
+// Simple schema for Llama/GPT to follow via prompt engineering
+const JSON_INSTRUCTION = `
+Format your response as a valid JSON object with these keys: 
+{
+  "title": "string",
+  "artist": "string",
+  "lyricsSnippet": "string",
+  "mood": "string",
+  "identified": boolean
+}
+Do not include markdown code blocks. Just the raw JSON string.
+`;
+
 const RESPONSE_SCHEMA = {
   type: Type.OBJECT,
   properties: {
@@ -65,22 +91,37 @@ export const validateApiKey = async (provider: AIProvider, key: string): Promise
     try {
         if (provider === 'GEMINI') {
             const client = new GoogleGenAI({ apiKey: key });
-            // Simple dry run
             await client.models.generateContent({ 
                 model: GEMINI_MODEL, 
                 contents: { parts: [{ text: "ping" }] } 
             });
             return true;
-        } else if (['OPENAI', 'DEEPSEEK', 'QWEN', 'GROK'].includes(provider)) {
-            const config = PROVIDERS[provider as keyof typeof PROVIDERS];
-            const res = await fetch(config.endpoint, {
+        } else if (provider === 'OPENAI' || provider === 'GROQ') {
+            let endpoint: string;
+            let model: string;
+
+            if (provider === 'GROQ') {
+                const config = PROVIDERS.GROQ;
+                endpoint = config.chatEndpoint;
+                model = config.chatModel;
+            } else {
+                const config = PROVIDERS.OPENAI;
+                endpoint = config.endpoint;
+                model = config.model;
+            }
+            
+            const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-                body: JSON.stringify({ model: config.model, messages: [{role: 'user', content: 'ping'}], max_tokens: 1 })
+                body: JSON.stringify({ 
+                    model: model, 
+                    messages: [{role: 'user', content: 'ping'}], 
+                    max_tokens: 1 
+                })
             });
             return res.ok;
         }
-        return true; // Mock/Others assumed valid for now
+        return true; 
     } catch (e) {
         console.warn(`[AI] Validation failed for ${provider}:`, e);
         return false;
@@ -124,7 +165,7 @@ export const identifySongFromAudio = async (
   const callGemini = async (retryCount = 0): Promise<SongInfo | null> => {
     try {
         // --- GEMINI HANDLER ---
-        if (provider === 'GEMINI' || provider === 'CLAUDE') { 
+        if (provider === 'GEMINI') { 
             const apiKey = customKey || process.env.API_KEY;
             if (!apiKey || apiKey.includes('YOUR_API_KEY')) throw new Error("Missing Gemini API Key");
 
@@ -164,45 +205,99 @@ export const identifySongFromAudio = async (
             return songInfo;
         } 
         
-        // --- OPENAI COMPATIBLE HANDLER ---
-        else if (['OPENAI', 'DEEPSEEK', 'QWEN', 'GROK'].includes(provider)) {
+        // --- GROQ HANDLER (Whisper + Llama) ---
+        else if (provider === 'GROQ') {
+            if (!customKey) throw new Error("Groq requires a Custom API Key.");
+            const config = PROVIDERS.GROQ;
+            
+            // Step 1: Transcription via Whisper
+            const audioBlob = base64ToBlob(base64Audio, mimeType);
+            const formData = new FormData();
+            formData.append('file', audioBlob, 'audio.webm'); // Filename is needed for Groq
+            formData.append('model', config.audioModel);
+            formData.append('language', 'en'); // Force EN for better lyrics capture, Llama translates later
+
+            const transRes = await fetch(config.transcribeEndpoint!, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${customKey}` },
+                body: formData
+            });
+            
+            if (!transRes.ok) throw new Error(`Groq Transcription Failed: ${transRes.status}`);
+            const transJson = await transRes.json();
+            const transcript = transJson.text || "";
+            
+            if (!transcript && retryCount < 2) throw new Error("Empty Transcription");
+
+            // Step 2: Analysis via Llama 3
+            const systemPrompt = generateSystemPrompt(targetLang, regionName, "Role: Music Analyst. You analyze lyrics text to identify songs.") + JSON_INSTRUCTION;
+            
+            const chatRes = await fetch(config.chatEndpoint!, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${customKey}` },
+                body: JSON.stringify({
+                    model: config.chatModel,
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: `Analyze these lyrics/audio transcript: "${transcript}". Identify the song.` }
+                    ],
+                    temperature: 0.5,
+                    response_format: { type: "json_object" }
+                })
+            });
+
+            if (!chatRes.ok) throw new Error(`Groq Analysis Failed: ${chatRes.status}`);
+            const chatJson = await chatRes.json();
+            const content = chatJson.choices[0]?.message?.content;
+            
+            let songInfo: SongInfo = JSON.parse(content);
+            songInfo.matchSource = provider;
+            
+            if (songInfo.identified && features.length > 0) saveToLocalCache(features, songInfo);
+            return songInfo;
+        }
+
+        // --- OPENAI HANDLER ---
+        else if (provider === 'OPENAI') {
             if (!customKey) throw new Error(`${provider} requires a Custom API Key.`);
-            
-            const config = PROVIDERS[provider as keyof typeof PROVIDERS];
-            const systemPrompt = generateSystemPrompt(targetLang, regionName, `Role: ${config.name}.`);
-            
-            if (provider === 'OPENAI') {
-               throw new Error("OpenAI Audio not fully implemented in client-side build.");
-            }
-            
-            throw new Error("This provider does not support direct audio analysis in this version.");
+            throw new Error("OpenAI Audio Analysis is reserved for future updates.");
         }
         return null;
 
     } catch (error: any) {
-        // Determine error type before logging
         const errMsg = error.message || JSON.stringify(error);
-        const isQuota = errMsg.includes('429') || errMsg.includes('RESOURCE_EXHAUSTED') || error.status === 429 || error?.error?.code === 429;
-        
+        const isQuota = errMsg.includes('429') || errMsg.includes('RESOURCE_EXHAUSTED') || errMsg.includes('exceeded quota') || error.status === 429;
+        const isServerErr = errMsg.includes('500') || errMsg.includes('503') || error.status === 500;
+
         if (isQuota) {
-             console.warn(`[AI] Quota Exceeded for ${provider}. Displaying fallback UI.`);
+             console.warn(`[AI] Quota Exceeded for ${provider}.`);
              return {
                 title: "Quota Exceeded",
                 artist: "Service Busy",
-                lyricsSnippet: "The free AI limit has been reached. Please try again later or add your own API Key in Settings.",
+                lyricsSnippet: "", 
                 mood: "System Pause",
                 identified: false,
                 matchSource: provider
             };
         }
 
-        // Only log actual errors if it's not a quota issue
         console.error(`[AI] ${provider} Error (Try ${retryCount}):`, error);
         
-        // Retry Logic for transient errors
-        if (retryCount < 1 && !errMsg.includes('API Key')) {
-            await new Promise(r => setTimeout(r, 1000));
+        if (retryCount < 2 && !errMsg.includes('API Key') && !isQuota) {
+            const delay = 1000 * Math.pow(2, retryCount);
+            await new Promise(r => setTimeout(r, delay));
             return callGemini(retryCount + 1);
+        }
+
+        if (isServerErr) {
+             return {
+                title: "Server Error",
+                artist: "System Glitch",
+                lyricsSnippet: "",
+                mood: "Signal Lost",
+                identified: false,
+                matchSource: provider
+            };
         }
         
         return null;

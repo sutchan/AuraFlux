@@ -1,14 +1,15 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.6.92
+ * Version: 1.8.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 16:00
+ * Updated: 2025-02-24 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ru = {
+  // ... existing content ...
   common: {
     on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ'
   },
@@ -68,6 +69,18 @@ export const ru = {
     lyricsFontSize: 'Масштаб текста идентификации ИИ.',
     textFont: 'Семейство шрифтов для слоя пользовательского текста.',
     recognitionSource: 'Выберите личность или провайдера ИИ.'
+  },
+  aiPanel: {
+      keySaved: 'API Key сохранен',
+      keyInvalid: 'Неверный API Key',
+      keyCleared: 'API Key удален',
+      saved: 'СОХРАНЕН',
+      missing: 'НЕТ',
+      save: 'Сохранить',
+      update: 'Обновить',
+      geminiHint: 'Необязательно. Использует бесплатную квоту по умолчанию.',
+      customHint: 'Обязательно. Ключ хранится локально в браузере.',
+      groqHint: 'Обязательно. Включает быстрый Whisper+Llama.'
   },
   visualizerMode: 'Визуальный движок',
   styleTheme: 'Цветовая тема',
@@ -169,7 +182,7 @@ export const ru = {
     active: 'ИИ Активен', enable: 'Включить ИИ'
   },
   regions: {
-    global: 'Глобальный', US: 'США / Запад', CN: 'Китай', JP: 'Япония', KR: 'Корея', EU: 'Европа', LATAM: 'Латинская Америка'
+    global: 'Глобальный', US: 'США / Запад', CN: 'Китай', JP: 'Япония', KR: 'Япония', EU: 'Европа', LATAM: 'Латинская Америка'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: 'Нейронный поток (WebGL)',
