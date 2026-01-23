@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 21:00
+ * Updated: 2025-02-26 02:00
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -108,16 +108,42 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
   }, [colorTheme, setStorage]);
 
   const randomizeSettings = useCallback(() => {
+    // 1. Pick a random color theme
     setColorThemeInternal(COLOR_THEMES[Math.floor(Math.random() * COLOR_THEMES.length)]);
     
-    // UPDATE: Use includedModes pool if available, otherwise all modes
+    // 2. Pick a mode from the whitelist or global list
     const availableModes = (settings.includedModes && settings.includedModes.length > 0)
         ? settings.includedModes
         : Object.values(VisualizerMode);
-        
-    setModeInternal(availableModes[Math.floor(Math.random() * availableModes.length)]);
     
-    setSettings(p => ({ ...p, speed: 0.8 + Math.random() * 0.8, sensitivity: 1.2 + Math.random() * 1.0, glow: Math.random() > 0.15, trails: Math.random() > 0.2, smoothing: 0.7 + Math.random() * 0.2 }));
+    const nextMode = availableModes[Math.floor(Math.random() * availableModes.length)];
+    setModeInternal(nextMode);
+    
+    // 3. Performance-Aware Setting Randomization
+    // Resource-heavy modes (WebGL and dense 2D) should have reduced probability of enabling heavy post-processing
+    const heavyModes = [
+        VisualizerMode.NEURAL_FLOW,
+        VisualizerMode.KINETIC_WALL,
+        VisualizerMode.LIQUID,
+        VisualizerMode.CUBE_FIELD,
+        VisualizerMode.CYBER_CITY,
+        VisualizerMode.CRYSTAL_CORE,
+        VisualizerMode.NEBULA,
+        VisualizerMode.MACRO_BUBBLES
+    ];
+    
+    const isHeavy = heavyModes.includes(nextMode);
+
+    setSettings(p => ({ 
+        ...p, 
+        speed: 0.8 + Math.random() * 0.8, 
+        sensitivity: 1.2 + Math.random() * 1.0, 
+        // Logic: if heavy, 30% chance for glow/trails. If light, 85/80% chance.
+        glow: isHeavy ? Math.random() > 0.7 : Math.random() > 0.15, 
+        trails: isHeavy ? Math.random() > 0.6 : Math.random() > 0.2, 
+        smoothing: 0.7 + Math.random() * 0.2 
+    }));
+
     setActivePreset('');
   }, [settings.includedModes]);
 

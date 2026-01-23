@@ -1,15 +1,14 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.8.6
+ * Version: 1.7.11
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 22:00
+ * Updated: 2025-02-26 14:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const tw = {
-  // ... existing content ...
   common: {
     on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業'
   },
@@ -20,7 +19,7 @@ export const tw = {
     mode: '選擇用於生成視覺效果的數學渲染引擎。',
     theme: '應用精心調校的場景配色方案。',
     speed: '時間流速倍率。低數值催眠舒緩，高數值動感強烈。',
-    glow: '開啟後期泛光（Bloom）。關閉可提升低階裝置效能。',
+    glow: '開啟後期泛光 (Bloom)。關閉可提升低階裝置效能。',
     trails: '控制光影殘留時間。高數值可產生如油畫般的流動感。',
     sensitivity: '音訊響應增益。在安靜環境下調高此值可增強視覺爆發力。',
     smoothing: '時域阻尼係數。高數值如液體般柔順，低數值則反應銳利。',
@@ -43,14 +42,14 @@ export const tw = {
     help: '查看快捷鍵操作指南與專案詳細文件。',
     mic: '啟動或靜音系統麥克風訊號。',
     device: '選擇當前活動的音訊輸入硬體。',
-    monitor: '透過揚聲器監聽輸入訊號（警告：可能產生回音）。',
+    monitor: '透過揚聲器監聽輸入訊號。',
     hideCursor: '自動隱藏滑鼠游標以獲得純淨視覺體驗。',
     wakeLock: '啟用後，只要視覺化處於活動狀態，螢幕將保持常亮。',
-    showFps: '在螢幕左上角顯示即時的幀率（FPS）計數器。',
+    showFps: '在螢幕左上角顯示即時的幀率 (FPS) 計數器。',
     showTooltips: '滑鼠懸停在控制項上時顯示功能說明。',
     doubleClickFullscreen: '允許透過雙擊螢幕任意位置切換全螢幕模式。',
     autoHideUi: '在無操作時自動隱藏底部控制面板。',
-    mirrorDisplay: '水平翻轉畫面（適用於背投或攝影機模式）。',
+    mirrorDisplay: '水平翻轉畫面 (適用於背投或攝影機模式)。',
     showCustomText: '切換自訂文字圖層的可見性。',
     textPulse: '文字大小隨音樂節奏動態縮放。',
     textAudioReactive: '文字的透明度和大小將響應即時音量。',
@@ -73,7 +72,6 @@ export const tw = {
     importConfig: '從 JSON 檔案載入配置。',
     savePreset: '將當前狀態保存到瀏覽器本地存儲。',
     loadPreset: '載入此預設。',
-    cloudProvider: '選擇目標云端服務以優化備份檔名。',
     copyConfig: '將配置代碼複製到剪貼簿以便分享。'
   },
   aiPanel: {
@@ -111,11 +109,11 @@ export const tw = {
   stopMic: '停止音訊採集',
   listening: '監聽中',
   identifying: '正在捕獲聲景特徵...',
-  startExperience: '開啟視聽盛宴',
+  startExperience: '步入流光之境',
   welcomeTitle: 'Aura Flux | 靈動流光',
-  welcomeText: '將旋律凝煉為極光，讓節奏躍然屏上。融合 Gemini AI 即時聲景分析，為您開啟感官交響的全新維度。',
+  welcomeText: '讓每一縷振動凝結為視覺傑作。由 Gemini AI 驅動，將聲音重構為觸手可及的光影藝術。',
   unsupportedTitle: '瀏覽器不受支援',
-  unsupportedText: 'Aura Flux 需要現代瀏覽器功能（例如麥克風存取權限）才能運作。請更新至最新版本的 Chrome, Firefox 或 Safari。',
+  unsupportedText: 'Aura Flux 需要現代瀏覽器功能才能運作。請更新 Chrome, Edge 或 Safari。',
   hideOptions: '收起',
   showOptions: '顯示設定',
   reset: '重置全域設定',
@@ -127,11 +125,11 @@ export const tw = {
   randomize: '隨機美學組合',
   help: '說明與協助',
   close: '關閉',
-  betaDisclaimer: 'Beta 協議：通感神經網絡正在校準中。',
+  betaDisclaimer: 'Beta：通感神經網絡正在校準中。',
   wrongSong: '特徵不匹配？重新採樣',
   hideCursor: '隱藏滑鼠游標',
   customColor: '文字顏色',
-  randomizeTooltip: '隨機視覺設定 (快捷鍵: R)',
+  randomizeTooltip: '隨機視覺設定 (R)',
   smoothing: '動態平滑度',
   fftSize: '頻域解析度 (FFT)',
   appInfo: '關於應用',
@@ -154,13 +152,13 @@ export const tw = {
     low: '流暢', med: '均衡', high: '極致'
   },
   visualPanel: {
-    effects: '特效', automation: '自動化', display: '顯示'
+    effects: '視覺特效', automation: '自動化', display: '顯示'
   },
   audioPanel: {
-    info: '調節「靈敏度」以改變視覺對聲音的反應強度，「平滑度」控制動畫的流暢性。更高的 FFT 解析度能提供更精細的細節，但會增加 CPU 負載。'
+    info: '調節「靈敏度」以改變反應強度。更高的 FFT 解析度能提供更精細的細節。'
   },
   systemPanel: {
-    interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染引擎', audio: '音訊架構', ai: '人工智慧'
+    interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染架構', audio: '音訊架構', ai: 'AI'
   },
   config: {
     title: '雲端與資料',
@@ -174,26 +172,18 @@ export const tw = {
     confirmImport: '覆蓋當前設定？',
     invalidFile: '檔案格式無效',
     importSuccess: '配置載入成功',
-    cloudHint: '選擇目標雲端硬碟以優化備份檔名:',
     copy: '複製',
     copied: '已複製',
-    providers: {
-        gdrive: 'Google Drive',
-        dropbox: 'Dropbox',
-        baidu: '百度網盤',
-        aliyun: '阿里雲盤',
-        quark: '誇克網盤',
-        local: '本地檔案'
-    }
+    limitReached: '最多只能儲存 5 個預設。'
   },
   showFps: '顯示幀率',
   showTooltips: '顯示提示',
   doubleClickFullscreen: '雙擊全螢幕',
-  autoHideUi: '自動隱藏 UI',
+  autoHideUi: '自動隱藏控制欄',
   mirrorDisplay: '鏡像翻轉',
   presets: {
     title: '智慧預設',
-    hint: '一鍵應用由專家精心調校的視覺參數組合。',
+    hint: '一鍵應用由專家精心調校的參數組合。',
     select: '選擇一種心境...',
     custom: '自定義 / 已修改',
     calm: '數字波形',
@@ -207,7 +197,7 @@ export const tw = {
   lyricsPosition: '歌詞顯示位置',
   lyricsFont: '字體樣式',
   lyricsFontSize: '字體大小',
-  simulatedDemo: '模擬演示 (Demo)',
+  simulatedDemo: '演示模式 (離線)',
   positions: {
       top: '頂部', center: '居中', bottom: '底部', tl: '左上', tc: '中上', tr: '右上', ml: '左中', mc: '正中', mr: '右中', bl: '左下', bc: '中下', br: '右下'
   },
@@ -216,13 +206,7 @@ export const tw = {
     shortcuts: { mic: '麥克風', ui: '介面', mode: '模式', random: '隨機' }
   },
   errors: {
-    title: '音訊錯誤', accessDenied: '無法存取麥克風，請檢查瀏覽器權限。', noDevice: '未偵測到音訊輸入裝置。', deviceBusy: '音訊裝置被佔用或無效。', general: '無法存取音訊裝置。', tryDemo: '嘗試演示模式 (無音訊)'
-  },
-  aiState: {
-    active: '通感辨識已運行', enable: '激活通感引擎'
-  },
-  regions: {
-    global: '全球', US: '美國 / 西方', CN: '中國大陸', JP: '日本', KR: '韓國', EU: '歐洲', LATAM: '拉丁美洲'
+    title: '音訊錯誤', accessDenied: '權限被拒絕', noDevice: '未發現設備', deviceBusy: '設備忙', general: '無法訪問音訊', tryDemo: '演示模式'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: '神經流體 (WebGL)',
@@ -237,8 +221,6 @@ export const tw = {
     [VisualizerMode.FLUID_CURVES]: '極光之舞',
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
     [VisualizerMode.KINETIC_WALL]: '動感光牆 (WebGL)', 
-    [VisualizerMode.CYBER_CITY]: '賽博都市 (WebGL)', 
-    [VisualizerMode.CRYSTAL_CORE]: '晶體核心 (WebGL)', 
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
     [VisualizerMode.WAVEFORM]: '數字波形'
   },
@@ -248,59 +230,60 @@ export const tw = {
     [VisualizerMode.PLASMA]: '基於經典展示場景效果的平滑流體色彩混合。',
     [VisualizerMode.BARS]: '帶有懸浮峰值的經典頻譜分析儀。',
     [VisualizerMode.PARTICLES]: '隨節拍強度反應的深空星野穿越。',
-    [VisualizerMode.TUNNEL]: '將你吸入音樂的遞迴幾何隧道。',
+    [VisualizerMode.TUNNEL]: '遞迴幾何隧道。',
     [VisualizerMode.RINGS]: '從中心向外擴散的霓虹共振環。',
-    [VisualizerMode.NEBULA]: '具有氣體物理特性的深空粒子模擬。',
-    [VisualizerMode.LASERS]: '掃過螢幕的高能銳利光束。',
-    [VisualizerMode.FLUID_CURVES]: '水平流動的平滑大氣光波。',
-    [VisualizerMode.MACRO_BUBBLES]: '帶有景深效果的柔焦微觀液泡。',
+    [VisualizerMode.NEBULA]: '深空粒子模擬。',
+    [VisualizerMode.LASERS]: '高能銳利光束。',
+    [VisualizerMode.FLUID_CURVES]: '平滑大氣光波。',
+    [VisualizerMode.MACRO_BUBBLES]: '柔焦微觀液泡。',
     [VisualizerMode.KINETIC_WALL]: '帶有 3D 動力學擠出的巨型 LED 舞台背景牆。',
-    [VisualizerMode.CYBER_CITY]: '霓虹等化器摩天大樓上空的無盡飛行。',
-    [VisualizerMode.CRYSTAL_CORE]: '對舞台燈光和節奏產生折射反應的晶體核心。',
-    [VisualizerMode.LIQUID]: '對低頻做出反應的抽象變形球體。',
+    [VisualizerMode.LIQUID]: '對低頻做出反應的抽象球體。',
     [VisualizerMode.WAVEFORM]: '展現頻譜歷史的液體絲帶。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準排版', [LyricsStyle.KARAOKE]: '動態律動', [LyricsStyle.MINIMAL]: '極簡主義'
   },
   helpModal: {
-    title: 'Aura Flux 互動指南',
-    tabs: { guide: '指南', shortcuts: '快捷鍵', about: '關於' },
-    intro: 'Aura Flux 是一款沉浸式的視聽互動工具，它利用高精度麥克風取樣，結合 Gemini 3 智能大腦，將音訊訊號即時轉化為數學生成的數位藝術。',
-    shortcutsTitle: '控制快捷鍵',
-    gesturesTitle: '觸控手势',
+    title: 'Aura Flux 交互指南',
+    tabs: { guide: '指南', shortcuts: '控制', about: '關於' },
+    intro: 'Aura Flux 利用高精度採樣，結合 Gemini 3 智能大腦，將音訊實時轉化為數學生成的數字藝術。',
+    shortcutsTitle: '快捷操作鍵',
+    gesturesTitle: '觸控手勢',
     shortcutItems: {
-      toggleMic: '麥克風', fullscreen: '全螢幕', randomize: '隨機', lyrics: '曲目辨識', hideUi: '顯示/隱藏面板', glow: '霓虹光暈', trails: '動態殘影', changeMode: '切換模式', changeTheme: '切換配色'
+      toggleMic: '麥克風', fullscreen: '全屏', randomize: '隨機', lyrics: '曲目辨識', hideUi: '顯示/隱藏面板', glow: '霓虹光暈', trails: '動態殘影', changeMode: '切換模式', changeTheme: '切換配色'
     },
     gestureItems: {
-        swipeMode: '水平滑動：切換模式', swipeSens: '垂直滑動：調節靈敏度', longPress: '長按：AI 通感辨識'
+        swipeMode: '左右滑動切換模式', swipeSens: '上下滑動調節靈敏度', longPress: '長按激活 AI 辨識'
     },
-    howItWorksTitle: '使用流程',
+    howItWorksTitle: '使用指南',
     howItWorksSteps: [
-      '1. 連接: 點擊「開啟體驗」並授權麥克風，啟動音訊響應引擎。',
-      '2. 視覺: 播放音樂。使用「智慧預設」一鍵設定完美氛圍。',
-      '3. 客製: 切換「專業模式 (Advanced)」以微調靈敏度、FFT參數或添加「自訂文字」。',
-      '4. 互動: 左右滑動切換模式，上下滑動調節靈敏度，長按啟動 AI 辨識。',
-      '5. 探索: 按 H 打開設置，F 全螢幕，R 隨機切換風格。'
+      '1. 連接: 點擊「開啟體驗」並授權麥克風。',
+      '2. 視覺: 播放音樂。使用「智慧預設」設定氛圍。',
+      '3. 定制: 切換「專業模式」以微調參數。',
+      '4. 交互: 滑動切換模式，長按 AI 辨識。',
+      '5. 探索: 按 H 打開設置，F 全屏，R 隨機。'
     ],
     settingsTitle: '核心參數指南',
     settingsDesc: {
-      sensitivity: '控制視覺元素對振幅反應的增益。', speed: '調節生成演算法在時間維度上的演化速率。', glow: '後期處理中的全域泛光強度，增強氛圍感。', trails: '控制像素在畫面上的停留時間，產生運動模糊效果。', smoothing: '音訊資料的平滑係數，越高則過渡越圓滑。', fftSize: '決定了頻譜分析的顆粒度，即頻段採樣數量。'
+      sensitivity: '振幅反應增益。', speed: '時間演化速率。', glow: '全域輝光強度。', trails: '運動模糊效果。', smoothing: '平滑係數。', fftSize: '頻譜採樣精度。'
     },
-    projectInfoTitle: '專案簡介',
-    aboutDescription: '下一代通感互動體驗。Aura Flux 融合了高精度即時頻譜分析與 Google Gemini 3 多模態人工智慧，將無形的聲波轉化為有生命的動態光影藝術。適用於 VJ 演出、直播背景及沉浸式冥想。',
-    privacyTitle: '隱私與安全',
-    privacyText: '音訊分析完全在本地完成。僅在辨識歌曲時，會將加密的頻率特徵臨時發送至 Gemini 引擎，絕不存儲或上傳任何原始錄音數據。',
-    version: '版本號', coreTech: '核心技術', repository: '程式庫', support: '技術支援', reportBug: '回報 Bug'
+    projectInfoTitle: '項目簡介',
+    aboutDescription: '新一代視聽交互工具。適用於直播、VJ 演出及沉浸式環境。',
+    privacyTitle: '隱私安全',
+    privacyText: '音訊分析在本地完成。僅在辨識時發送加密特徵至 Gemini。',
+    version: '版本號', coreTech: '技術棧', repository: '倉庫', support: '支持', reportBug: '反饋'
   },
   onboarding: {
-    welcome: '歡迎體驗 Aura Flux', subtitle: '新一代 AI 音樂通感引擎', selectLanguage: '選擇您的語言', next: '繼續', back: '返回', skip: '跳過', finish: '立即開啟',
+    welcome: '歡迎體驗 Aura Flux',
+    subtitle: '新一代 AI 音樂通感引擎',
+    selectLanguage: '選擇您的偏好語言',
+    next: '繼續', back: '返回', skip: '跳過', finish: '開啟盛宴',
     features: {
-      title: '核心特性',
-      visuals: { title: '生成式藝術傑作', desc: '15+ 種基於 WebGL 的數學動力學引擎，將聲波具象化。' },
-      ai: { title: 'Gemini AI 智能大腦', desc: '實時識別曲目元數據與視覺情緒，由 Google Gemini 3 提供支持。' },
-      privacy: { title: '隱私安全保障', desc: '音訊分析完全在本地運行，我們絕不記錄或存儲您的私人聲音數據。' }
+      title: '感官特性',
+      visuals: { title: '數學生成藝術', desc: '內置 15+ 種基於 WebGL 的數學動力學引擎，將聲波具象化。' },
+      ai: { title: 'Gemini 智能核心', desc: '實時感知曲目元數據與視覺情緒，由 Google Gemini 3 提供支持。' },
+      privacy: { title: '邊緣計算保護', desc: '所有分析均在本地執行，我們絕不記錄或存儲您的私人聲音數據。' }
     },
-    shortcuts: { title: '極速交互', desc: '通過以下快捷鍵，像指揮家一樣掌控全場。' }
+    shortcuts: { title: '指揮官快捷鍵', desc: '像指揮家一樣掌控全場，通過鍵盤即時調遣光影。' }
   }
 };

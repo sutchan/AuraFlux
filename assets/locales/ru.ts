@@ -1,15 +1,14 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.8.6
- * Author: Aura Vision Team
+ * Version: 1.7.11
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 22:00
+ * Updated: 2025-02-26 14:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ru = {
-  // ... existing content ...
   common: {
     on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ'
   },
@@ -68,7 +67,12 @@ export const ru = {
     lyricsFont: 'Стиль типографики для текстов ИИ.',
     lyricsFontSize: 'Масштаб текста идентификации ИИ.',
     textFont: 'Семейство шрифтов для слоя пользовательского текста.',
-    recognitionSource: 'Выберите личность или провайдера ИИ.'
+    recognitionSource: 'Выберите личность или провайдера ИИ.',
+    exportConfig: 'Экспорт настроек в файл JSON.',
+    importConfig: 'Импорт настроек из файла JSON.',
+    savePreset: 'Сохранить текущие настройки локально.',
+    loadPreset: 'Загрузить этот пресет.',
+    copyConfig: 'Копировать код конфигурации в буфер обмена.'
   },
   aiPanel: {
       keySaved: 'API Key сохранен',
@@ -155,6 +159,22 @@ export const ru = {
   systemPanel: {
     interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ'
   },
+  config: {
+    title: 'Облако и Данные',
+    export: 'Экспорт',
+    import: 'Импорт',
+    library: 'Библиотека',
+    save: 'Сохранить',
+    load: 'Загрузить',
+    delete: 'Удалить',
+    placeholder: 'Имя...',
+    confirmImport: 'Перезаписать текущие настройки?',
+    invalidFile: 'Неверный формат файла',
+    importSuccess: 'Конфигурация загружена',
+    copy: 'Копировать',
+    copied: 'Готово!',
+    limitReached: 'Максимум 5 пресетов.'
+  },
   showFps: 'Показать FPS',
   showTooltips: 'Подсказки',
   doubleClickFullscreen: 'Двойной клик: Экран',
@@ -176,62 +196,7 @@ export const ru = {
     shortcuts: { mic: 'Мик', ui: 'UI', mode: 'Режим', random: 'Рандом' }
   },
   errors: {
-    title: 'Ошибка аудио', accessDenied: 'Доступ запрещен. Проверьте права микрофона.', noDevice: 'Устройство не найдено.', deviceBusy: 'Устройство занято.', general: 'Ошибка доступа.', tryDemo: 'Демо-режим'
-  },
-  aiState: {
-    active: 'ИИ Активен', enable: 'Включить ИИ'
-  },
-  regions: {
-    global: 'Глобальный', US: 'США / Запад', CN: 'Китай', JP: 'Япония', KR: 'Япония', EU: 'Европа', LATAM: 'Латинская Америка'
-  },
-  modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'Нейронный поток (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: 'Квантовое поле (WebGL)',
-    [VisualizerMode.PLASMA]: 'Плазменный поток',
-    [VisualizerMode.BARS]: 'Спектральный анализатор',
-    [VisualizerMode.PARTICLES]: 'Звездное поле',
-    [VisualizerMode.TUNNEL]: 'Геометрический туннель',
-    [VisualizerMode.RINGS]: 'Неоновые кольца',
-    [VisualizerMode.NEBULA]: 'Глубокая туманность',
-    [VisualizerMode.LASERS]: 'Лазерная матрица',
-    [VisualizerMode.FLUID_CURVES]: 'Полярное сияние',
-    [VisualizerMode.MACRO_BUBBLES]: 'Макро-пузырьки',
-    [VisualizerMode.KINETIC_WALL]: 'Кинетическая Стена (WebGL)',
-    [VisualizerMode.LIQUID]: 'Жидкая планета (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Цифровая волна'
-  },
-  lyricsStyles: {
-    [LyricsStyle.STANDARD]: 'Стандарт', [LyricsStyle.KARAOKE]: 'Динамичный', [LyricsStyle.MINIMAL]: 'Минимализм'
-  },
-  helpModal: {
-    title: 'Гайд Aura Flux',
-    tabs: { guide: 'Гайд', shortcuts: 'Клавиши', about: 'О проекте' },
-    intro: 'Aura Flux преобразует звук в генеративное цифровое искусство на основе спектрального анализа и интеллекта Gemini 3.',
-    shortcutsTitle: 'Горячие клавиши',
-    gesturesTitle: 'Сенсорные жесты',
-    shortcutItems: {
-      toggleMic: 'Вкл/Выкл Аудио', fullscreen: 'Полный экран', randomize: 'Случайный стиль', lyrics: 'Инфо о треке ИИ', hideUi: 'Панель управления', glow: 'Неоновое свечение', trails: 'Шлейфы движения', changeMode: 'Смена режима', changeTheme: 'Смена темы'
-    },
-    gestureItems: {
-        swipeMode: 'Свайп гориз.: Режим', swipeSens: 'Свайп верт.: Чувствительность', longPress: 'Долгое нажатие: ИИ-анализ'
-    },
-    howItWorksTitle: 'Начало работы',
-    howItWorksSteps: [
-      '1. Подключение: Нажмите "Запустить" и разрешите микрофон.',
-      '2. Визуал: Включите музыку. Используйте "Смарт-пресеты".',
-      '3. Настройка: Режим "Профи" для точной настройки FFT и "Своего текста".',
-      '4. Управление: Свайп для смены режима. Долгое нажатие для ИИ.',
-      '5. Экспорт: H для опций, F для экрана, R для рандома.'
-    ],
-    settingsTitle: 'Руководство по параметрам',
-    settingsDesc: {
-      sensitivity: 'Усиление реакции визуала на звук.', speed: 'Скорость эволюции паттернов.', glow: 'Интенсивность свечения.', trails: 'Плавность движений шлейфа.', smoothing: 'Временное сглаживание спектра.', fftSize: 'Точность спектрального анализа.'
-    },
-    projectInfoTitle: 'Описание проекта',
-    aboutDescription: 'Aura Flux объединяет прецизионный Web Audio анализ с Google Gemini 3 для превращения звука в живой свет. Идеально для VJs и стримеров.',
-    privacyTitle: 'Приватность',
-    privacyText: 'Анализ аудио локальный. Шифрованные данные отправляются в Gemini только для поиска; записи не сохраняются.',
-    version: 'Релиз', coreTech: 'Технологии', repository: 'Репозиторий', support: 'Поддержка', reportBug: 'Сообщить об ошибке'
+    title: 'Ошибка аудио', accessDenied: 'Доступ запрещен.', noDevice: 'Устройство не найдено.', deviceBusy: 'Устройство занято.', general: 'Ошибка доступа.', tryDemo: 'Демо-режим'
   },
   onboarding: {
     welcome: 'Добро пожаловать в Aura Flux', subtitle: 'ИИ-Движок Синестезии Нового Поколения', selectLanguage: 'Выберите язык', next: 'Далее', back: 'Назад', skip: 'Пропустить', finish: 'Начать',

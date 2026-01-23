@@ -1,32 +1,19 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.8.6
- * Author: Aura Vision Team
+ * Version: 1.7.11
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 22:00
+ * Updated: 2025-02-26 14:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ko = {
-  // ... existing content ...
   common: {
-    on: 'ON',
-    off: 'OFF',
-    visible: '표시',
-    hidden: '숨김',
-    active: '활성화',
-    muted: '음소거',
-    beta: '베타',
-    simple: '간편',
-    advanced: '고급'
+    on: 'ON', off: 'OFF', visible: '표시', hidden: '숨김', active: '활성화', muted: '음소거', beta: '베타', simple: '간편', advanced: '고급'
   },
   tabs: {
-    visual: '시각 효과',
-    text: '텍스트',
-    audio: '오디오',
-    ai: '트랙 인식',
-    system: '시스템'
+    visual: '시각 효과', text: '텍스트', audio: '오디오', ai: '트랙 인식', system: '시스템'
   },
   hints: {
     mode: '시각 효과 생성을 위한 핵심 수리 렌더링 엔진을 선택합니다.',
@@ -80,7 +67,12 @@ export const ko = {
     lyricsFont: 'AI 가사의 타이포그래피 스타일입니다.',
     lyricsFontSize: 'AI 식별 텍스트의 크기를 조절합니다.',
     textFont: '사용자 정의 텍스트 레이어의 글꼴 모음입니다.',
-    recognitionSource: 'AI 페르소나 또는 공급자를 선택하세요.'
+    recognitionSource: 'AI 페르소나 또는 공급자를 선택하세요.',
+    exportConfig: '설정을 JSON 파일로 내보냅니다.',
+    importConfig: 'JSON 파일에서 설정을 가져옵니다.',
+    savePreset: '현재 설정을 로컬에 저장합니다.',
+    loadPreset: '이 프리셋을 불러옵니다.',
+    copyConfig: '설정 코드를 클립보드에 복사합니다.'
   },
   aiPanel: {
       keySaved: 'API Key 저장 완료',
@@ -156,25 +148,32 @@ export const ko = {
   textPosition: '위치',
   quality: '렌더링 품질',
   qualities: {
-    low: '낮음',
-    med: '중간',
-    high: '높음'
+    low: '낮음', med: '중간', high: '높음'
   },
   visualPanel: {
-    effects: '효과',
-    automation: '자동화',
-    display: '화면'
+    effects: '효과', automation: '자동화', display: '화면'
   },
   audioPanel: {
     info: '감도와 평활도를 조절하여 시각화의 반응성을 최적화하세요. 높은 FFT 해상도는 정밀한 디테일을 제공하지만 CPU 사용량이 증가합니다.'
   },
   systemPanel: {
-    interface: '인터페이스',
-    behavior: '동작',
-    maintenance: '유지 관리',
-    engine: '엔진',
-    audio: '오디오',
-    ai: 'AI'
+    interface: '인터페이스', behavior: '동작', maintenance: '유지 관리', engine: '엔진', audio: '오디오', ai: 'AI'
+  },
+  config: {
+    title: '클라우드 & 데이터',
+    export: '내보내기',
+    import: '가져오기',
+    library: '로컬 라이브러리',
+    save: '저장',
+    load: '불러오기',
+    delete: '삭제',
+    placeholder: '이름 입력...',
+    confirmImport: '현재 설정을 덮어쓰시겠습니까?',
+    invalidFile: '파일 형식이 유효하지 않습니다',
+    importSuccess: '설정을 가져왔습니다',
+    copy: '복사',
+    copied: '복사됨',
+    limitReached: '최대 5개의 프리셋만 저장할 수 있습니다.'
   },
   showFps: 'FPS 표시',
   showTooltips: '툴팁 표시',
@@ -199,149 +198,26 @@ export const ko = {
   lyricsFontSize: '크기',
   simulatedDemo: '데모 모드 (Simulated)',
   positions: {
-      top: '상단',
-      center: '중앙',
-      bottom: '하단',
-      tl: '왼쪽 상단',
-      tc: '중앙 상단',
-      tr: '오른쪽 상단',
-      ml: '왼쪽 중앙',
-      mc: '정중앙',
-      mr: '오른쪽 중앙',
-      bl: '왼쪽 하단',
-      bc: '중앙 하단',
-      br: '오른쪽 하단'
+      top: '상단', center: '중앙', bottom: '하단', tl: '왼쪽 상단', tc: '중앙 상단', tr: '오른쪽 상단', ml: '왼쪽 중앙', mc: '정중앙', mr: '오른쪽 중앙', bl: '왼쪽 하단', bc: '중앙 하단', br: '오른쪽 하단'
   },
   wakeLock: '화면 꺼짐 방지',
   system: {
-    shortcuts: {
-      mic: '마이크',
-      ui: 'UI',
-      mode: '모드',
-      random: '랜덤'
-    }
+    shortcuts: { mic: '마이크', ui: 'UI', mode: '모드', random: '랜덤' }
   },
   errors: {
-    title: '오디오 오류',
-    accessDenied: '마이크 접근이 거부되었습니다. 브라우저 권한 설정을 확인하세요.',
-    noDevice: '입력 장치를 찾을 수 없습니다.',
-    deviceBusy: '장치가 사용 중이거나 유효하지 않습니다.',
-    general: '오디오 장치에 접근할 수 없습니다.',
-    tryDemo: '데모 모드 시도 (오디오 없음)'
-  },
-  aiState: {
-    active: '인식 활성화됨',
-    enable: 'AI 인식 시작'
-  },
-  regions: {
-    global: '글로벌',
-    US: '북미 / 서구권',
-    CN: '중국',
-    JP: '일본',
-    KR: '대한민국',
-    EU: '유럽',
-    LATAM: '남미'
-  },
-  modes: {
-    [VisualizerMode.NEURAL_FLOW]: '신경 유체 (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: '양자 필드 (WebGL)',
-    [VisualizerMode.PLASMA]: '플라즈마 플로우',
-    [VisualizerMode.BARS]: '주파수 바',
-    [VisualizerMode.PARTICLES]: '성간 항해',
-    [VisualizerMode.TUNNEL]: '기하학적 터널',
-    [VisualizerMode.RINGS]: '네온 링',
-    [VisualizerMode.NEBULA]: '심우주 성운',
-    [VisualizerMode.LASERS]: '레이저 매트릭스',
-    [VisualizerMode.FLUID_CURVES]: '오로라의 춤',
-    [VisualizerMode.MACRO_BUBBLES]: '마이크로 버블 (DoF)',
-    [VisualizerMode.KINETIC_WALL]: '키네틱 월 (WebGL)',
-    [VisualizerMode.LIQUID]: '유체 행성 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '디지털 파형'
-  },
-  lyricsStyles: {
-    [LyricsStyle.STANDARD]: '표준',
-    [LyricsStyle.KARAOKE]: '동적',
-    [LyricsStyle.MINIMAL]: '미니멀리즘'
-  },
-  helpModal: {
-    title: 'Aura Flux 가이드',
-    tabs: {
-        guide: '가이드',
-        shortcuts: '단축키',
-        about: '정보'
-    },
-    intro: 'Aura Flux는 고정밀 오디오 샘플링을 기반으로 소리를 실시간 수리적 디지털 아트로 변환하는 공감각 도구입니다.',
-    shortcutsTitle: '키보드 조작',
-    gesturesTitle: '터치 제스처',
-    shortcutItems: {
-      toggleMic: '오디오 입력 전환',
-      fullscreen: '전체 화면 전환',
-      randomize: '미학 요소 랜덤화',
-      lyrics: '트랙 정보 전환',
-      hideUi: '제어 패널 표시/숨김',
-      glow: '글로우 효과 전환',
-      trails: '잔상 효과 전환',
-      changeMode: '모드 순환',
-      changeTheme: '테마 순환'
-    },
-    gestureItems: {
-        swipeMode: '가로 스와이프: 모드 변경',
-        swipeSens: '세로 스와이프: 감도 조절',
-        longPress: '길게 누르기: AI 인식'
-    },
-    howItWorksTitle: '사용 방법',
-    howItWorksSteps: [
-      '1. 연결: "시작"을 클릭하고 마이크 권한을 허용하세요.',
-      '2. 비주얼: 음악을 재생합니다. "스마트 프리셋"으로 분위기를 즉시 전환하세요.',
-      '3. 커스텀: "고급 모드(Advanced)"에서 감도, FFT, "사용자 정의 텍스트"를 설정하세요.',
-      '4. 조작: 스와이프하여 모드/감도 변경, 길게 눌러 AI 인식을 실행합니다.',
-      '5. 탐색: H 설정, F 전체 화면, R 무작위 설정을 사용하세요.'
-    ],
-    settingsTitle: '주요 매개변수 가이드',
-    settingsDesc: {
-      sensitivity: '음향 신호에 대한 반응 강도를 조절합니다.',
-      speed: '생성 알고리즘의 시간적 진화 속도를 제어합니다.',
-      glow: '공간감을 더해주는 포스트 프로세싱 광채 강도입니다.',
-      trails: '픽셀의 화면 잔류 시간을 제어하여 부드러운 움직임을 만듭니다.',
-      smoothing: '오디오 데이터의 평활화 계수입니다. 높을수록 부드러워집니다.',
-      fftSize: '주파수 분석의 정밀도(샘플 수)를 결정합니다.'
-    },
-    projectInfoTitle: '프로젝트 소개',
-    aboutDescription: '차세대 공감각적 상호작용 체험. Aura Flux는 고정밀 실시간 스펙트럼 분석과 Google Gemini 3 AI를 융합하여 무형의 음파를 살아있는 빛으로 변환합니다. VJ, 스트리밍, 공간 연출에 최적화되어 있습니다.',
-    privacyTitle: '개인정보 및 보안',
-    privacyText: '오디오 분석은 로컬에서만 수행됩니다. 인식 시에만 암호화된 특징점을 임시 전송하며, 실제 녹음 데이터는 저장되지 않습니다.',
-    version: '릴리스',
-    coreTech: '핵심 기술',
-    repository: '저장소',
-    support: '지원',
-    reportBug: '부그 신고'
+    title: '오디오 오류', accessDenied: '마이크 접근이 거부되었습니다.', noDevice: '입력 장치를 찾을 수 없습니다.', deviceBusy: '장치가 사용 중이거나 유효하지 않습니다.', general: '오디오 장치에 접근할 수 없습니다.', tryDemo: '데모 모드 시도'
   },
   onboarding: {
     welcome: 'Aura Flux에 오신 것을 환영합니다',
     subtitle: '차세대 AI 음악 공감각 엔진',
     selectLanguage: '언어를 선택해 주세요',
-    next: '계속하기',
-    back: '이전',
-    skip: '건너뛰기',
-    finish: '앱 시작',
+    next: '계속하기', back: '이전', skip: '건너뛰기', finish: '앱 시작',
     features: {
       title: '핵심 기능',
-      visuals: {
-        title: '제너레이티브 아트',
-        desc: '15+ 종 기반의 수학 엔진이 음파를 형상화합니다.'
-      },
-      ai: {
-        title: 'Gemini AI 인텔리전스',
-        desc: 'Google Gemini 3를 통해 트랙 메타데이터와 시각적 무드를 실시간 인식합니다.'
-      },
-      privacy: {
-        title: '안전 및 프라이버시',
-        desc: '분석은 로컬에서 이루어집니다. 개인의 오디오 데이터를 기록하거나 저장하지 않습니다.'
-      }
+      visuals: { title: '제너레이티브 아트', desc: '15+ 종 기반의 수학 엔진이 음파를 형상화합니다.' },
+      ai: { title: 'Gemini AI 인텔리전스', desc: 'Google Gemini 3를 통해 트랙 메타데이터와 시각적 무드를 실시간 인식합니다.' },
+      privacy: { title: '안전 및 프라이버시', desc: '분석은 로컬에서 이루어집니다. 개인의 오디오 데이터를 기록하거나 저장하지 않습니다.' }
     },
-    shortcuts: {
-      title: '다이내믹 컨트롤',
-      desc: '단축키를 통해 빛의 지휘자가 되어보세요.'
-    }
+    shortcuts: { title: '다이내믹 컨트롤', desc: '단축키를 통해 빛의 지휘자가 되어보세요.' }
   }
 };

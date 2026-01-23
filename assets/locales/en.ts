@@ -1,6 +1,6 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.7.9
+ * Version: 1.7.11
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -107,9 +107,9 @@ export const en = {
   stopMic: 'Disable Audio',
   listening: 'Active',
   identifying: 'AI Analyzing Track...',
-  startExperience: 'Launch Experience',
+  startExperience: 'Enter the Flux',
   welcomeTitle: 'Aura Flux | The Sound of Light',
-  welcomeText: 'Transmute every vibration into generative masterpieces. Powered by Gemini AI for real-time recognition.',
+  welcomeText: 'Transmute every vibration into a generative masterpiece. Powered by Gemini AI for real-time recognition, redefining the sensory experience.',
   unsupportedTitle: 'Incompatible Browser',
   unsupportedText: 'Aura Flux requires modern Web Audio features. Please use Chrome, Edge, or Safari.',
   hideOptions: 'Collapse',
@@ -170,7 +170,8 @@ export const en = {
     invalidFile: 'Invalid file format',
     importSuccess: 'Configuration loaded.',
     copy: 'Copy',
-    copied: 'Copied!'
+    copied: 'Copied!',
+    limitReached: 'Maximum of 5 presets allowed.'
   },
   showFps: 'Show FPS',
   showTooltips: 'Show Tooltips',
@@ -292,14 +293,14 @@ export const en = {
   onboarding: {
     welcome: 'Welcome to Aura Flux',
     subtitle: 'Next-Gen AI Synesthesia Engine',
-    selectLanguage: 'Choose your language',
-    next: 'Proceed', back: 'Previous', skip: 'Skip', finish: 'Launch App',
+    selectLanguage: 'Select your preferred language',
+    next: 'Proceed', back: 'Previous', skip: 'Skip', finish: 'Begin Experience',
     features: {
-      title: 'Experience Features',
-      visuals: { title: 'Generative Art', desc: '15+ reactive engines powered by WebGL and math.' },
-      ai: { title: 'Gemini AI', desc: 'Instant track and mood recognition.' },
-      privacy: { title: 'Secure & Private', desc: 'Processing stays local. No recording.' }
+      title: 'Sensory Features',
+      visuals: { title: 'Generative Sculptures', desc: '15+ reactive engines powered by WebGL and advanced mathematics.' },
+      ai: { title: 'Gemini Intelligence', desc: 'Instant track metadata and mood recognition powered by Google Gemini 3.' },
+      privacy: { title: 'Edge Intelligence', desc: 'Processing stays local. We never record or store your private audio data.' }
     },
-    shortcuts: { title: 'Dynamic Controls', desc: 'Master your environment with these keys.' }
+    shortcuts: { title: 'Dynamic Controls', desc: 'Master your environment like a conductor with these keyboard commands.' }
   }
 };

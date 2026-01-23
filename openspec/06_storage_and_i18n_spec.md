@@ -15,13 +15,13 @@
   - **阿拉伯语 (ar)**: 支持 RTL 布局。
 - **本地化深度:** 
   - 核心术语 "Beta" 在日韩等亚洲语言中需使用本地化写法 (如 "ベータ", "베타") 以提升亲和力。
-  - **1.6.91 更新:** 确保 `hints` 中的 "Color Cycle" 及 "Text Position" 相关描述在所有语言中语义准确。
+  - **1.7.10 更新:** 完成了所有 10 种语言的 Onboarding（启动引导）流程文案的文学化升华，并实现了 100% 的键值对对齐，确保全球用户体验的一致性。
 
 ## 3. 专业术语标准化
-- **AI Recognition** -> AI 通感识别 / AI Synesthesia。
+- **AI Synesthesia** -> AI 通感识别 / AI Synesthesia。
 - **Visualizer Mode** -> 视觉引擎。
 - **Wake Lock** -> 屏幕常亮 / 防休眠。
-- **Custom Text** -> 弹幕 / 自定义文字。
+- **Edge Intelligence** -> 边缘计算 / 边缘智能。
 
 ---
-*Aura Flux Storage & i18n - Version 1.6.91*
+*Aura Flux Storage & i18n - Version 1.7.10*

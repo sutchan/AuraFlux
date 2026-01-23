@@ -1,32 +1,19 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.8.6
- * Author: Aura Vision Team
+ * Version: 1.7.11
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 22:00
+ * Updated: 2025-02-26 14:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ja = {
-  // ... existing content ...
   common: {
-    on: 'ON',
-    off: 'OFF',
-    visible: '表示',
-    hidden: '非表示',
-    active: '有効',
-    muted: 'ミュート',
-    beta: 'ベータ',
-    simple: '簡易',
-    advanced: '詳細'
+    on: 'ON', off: 'OFF', visible: '表示', hidden: '非表示', active: '有効', muted: 'ミュート', beta: 'ベータ', simple: '簡易', advanced: '詳細'
   },
   tabs: {
-    visual: 'ビジュアル',
-    text: 'テキスト',
-    audio: 'オーディオ',
-    ai: 'AI 曲識別',
-    system: 'システム'
+    visual: 'ビジュアル', text: 'テキスト', audio: 'オーディオ', ai: 'AI 曲識別', system: 'システム'
   },
   hints: {
     mode: '視覚表現の核となる数理レンダリングエンジンを選択します。',
@@ -80,7 +67,12 @@ export const ja = {
     lyricsFont: 'AI歌詞のタイポグラフィスタイル。',
     lyricsFontSize: 'AI識別テキストのスケール。',
     textFont: 'カスタムテキストレイヤーのフォントファミリー。',
-    recognitionSource: 'AIペルソナまたはプロバイダーを選択します。'
+    recognitionSource: 'AIペルソナまたはプロバイダーを選択します。',
+    exportConfig: '設定をJSONファイルとして書き出します。',
+    importConfig: 'JSONファイルから設定を読み込みます。',
+    savePreset: '現在の設定をローカル保存します。',
+    loadPreset: 'このプリセットを適用します。',
+    copyConfig: '設定コードをクリップボードにコピーします。'
   },
   aiPanel: {
       keySaved: 'API Key 保存完了',
@@ -156,25 +148,32 @@ export const ja = {
   textPosition: '表示位置',
   quality: '描画品質',
   qualities: {
-    low: '低',
-    med: '中',
-    high: '高'
+    low: '低', med: '中', high: '高'
   },
   visualPanel: {
-    effects: 'エフェクト',
-    automation: 'オートメーション',
-    display: '表示'
+    effects: 'エフェクト', automation: 'オートメーション', display: '表示'
   },
   audioPanel: {
     info: '感度とスムージングを調整して、オーディオのダイナミクスに対する反応をカスタマイズします。FFT解像度を上げると精細になりますが、CPU負荷が増大します。'
   },
   systemPanel: {
-    interface: 'インターフェース',
-    behavior: 'システム挙動',
-    maintenance: 'メンテナンス',
-    engine: 'エンジン',
-    audio: 'オーディオ',
-    ai: '人工知能'
+    interface: 'インターフェース', behavior: 'システム挙動', maintenance: 'メンテナンス', engine: 'エンジン', audio: 'オーディオ', ai: '人工知能'
+  },
+  config: {
+    title: 'クラウド & データ',
+    export: '書き出し',
+    import: '読み込み',
+    library: 'ローカルライブラリ',
+    save: '保存',
+    load: '適用',
+    delete: '削除',
+    placeholder: '名前を入力...',
+    confirmImport: '現在の設定を上書きしますか？',
+    invalidFile: 'ファイル形式が無効です',
+    importSuccess: '設定を読み込みました',
+    copy: 'コピー',
+    copied: 'コピー完了',
+    limitReached: 'プリセットの保存は最大5つまでです。'
   },
   showFps: 'FPSを表示',
   showTooltips: 'ツールチップを表示',
@@ -199,149 +198,26 @@ export const ja = {
   lyricsFontSize: 'サイズ',
   simulatedDemo: 'シミュレーション (Demo)',
   positions: {
-      top: '上部',
-      center: '中央',
-      bottom: '下部',
-      tl: '左上',
-      tc: '中上',
-      tr: '右上',
-      ml: '左中央',
-      mc: '中央',
-      mr: '右中央',
-      bl: '左下',
-      bc: '中下',
-      br: '右下'
+      top: '上部', center: '中央', bottom: '下部', tl: '左上', tc: '中上', tr: '右上', ml: '左中央', mc: '中央', mr: '右中央', bl: '左下', bc: '中下', br: '右下'
   },
   wakeLock: 'スリープ無効化',
   system: {
-    shortcuts: {
-      mic: 'マイク',
-      ui: 'UI',
-      mode: 'モード',
-      random: 'ランダム'
-    }
+    shortcuts: { mic: 'マイク', ui: 'UI', mode: 'モード', random: 'ランダム' }
   },
   errors: {
-    title: 'オーディオエラー',
-    accessDenied: 'マイクへのアクセスが拒否されました。ブラウザの権限設定を確認してください。',
-    noDevice: '入力デバイスが見つかりません。',
-    deviceBusy: 'デバイスが使用中または無効です。',
-    general: 'オーディオデバイスにアクセスできません。',
-    tryDemo: 'デモモードを試す (オーディオなし)'
-  },
-  aiState: {
-    active: 'AI認識 有効',
-    enable: 'AI認識を開始'
-  },
-  regions: {
-    global: 'グローバル',
-    US: '北米 / 西欧',
-    CN: '中国',
-    JP: '日本',
-    KR: '韓国',
-    EU: '欧州',
-    LATAM: '中南米'
-  },
-  modes: {
-    [VisualizerMode.NEURAL_FLOW]: '神経流体 (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: '量子フィールド (WebGL)',
-    [VisualizerMode.PLASMA]: '流体プラズマ',
-    [VisualizerMode.BARS]: 'スペクトルバー',
-    [VisualizerMode.PARTICLES]: '星間航行',
-    [VisualizerMode.TUNNEL]: '幾何学トンネル',
-    [VisualizerMode.RINGS]: '共鳴ネオンリング',
-    [VisualizerMode.NEBULA]: '深宇宙星雲',
-    [VisualizerMode.LASERS]: 'レーザーマトリクス',
-    [VisualizerMode.FLUID_CURVES]: '極光の舞',
-    [VisualizerMode.MACRO_BUBBLES]: '微細液胞 (DoF)',
-    [VisualizerMode.KINETIC_WALL]: 'キネティック・ウォール (WebGL)',
-    [VisualizerMode.LIQUID]: '流体惑星 (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'シルク波形'
-  },
-  lyricsStyles: {
-    [LyricsStyle.STANDARD]: '標準レイアウト',
-    [LyricsStyle.KARAOKE]: 'ダイナミック',
-    [LyricsStyle.MINIMAL]: 'ミニマル'
-  },
-  helpModal: {
-    title: 'Aura Flux 操作ガイド',
-    tabs: {
-        guide: 'ガイド',
-        shortcuts: 'ショートカット',
-        about: '詳細'
-    },
-    intro: 'Aura Fluxは、高精度の音声サンプリングに基づき、音をリアルタイムで数理的なデジタルアートへ変換する通感ツールです。',
-    shortcutsTitle: 'キーボード操作',
-    gesturesTitle: 'タッチジェスチャー',
-    shortcutItems: {
-      toggleMic: 'マイクのオン/オフ',
-      fullscreen: '全画面表示の切替',
-      randomize: 'ビジュアルのランダム化',
-      lyrics: 'AI認識の切替',
-      hideUi: 'パネルの表示/非表示',
-      glow: '光彩エフェクトの切替',
-      trails: '残像エフェクトの切替',
-      changeMode: 'モードの切り替え',
-      changeTheme: 'テーマの切り替え'
-    },
-    gestureItems: {
-        swipeMode: '水平スワイプ：モード切替',
-        swipeSens: '垂直スワイプ：感度調整',
-        longPress: '長押し：AI認識'
-    },
-    howItWorksTitle: '使用方法',
-    howItWorksSteps: [
-      '1. 接続: 「体験を開始」をクリックし、マイク権限を許可します。',
-      '2. 視覚: 音楽を再生します。**スマートプリセット**で瞬時に雰囲気を演出できます。',
-      '3. 設定: **詳細モード (Advanced)** で感度やFFT、**カスタムテキスト**を調整します。',
-      '4. 操作: スワイプでモード/感度変更、長押しで **AI認識** を起動します。',
-      '5. 探索: Hで設定、Fで全画面、Rでランダム化します。'
-    ],
-    settingsTitle: '主要パラメータ解説',
-    settingsDesc: {
-      sensitivity: '音声信号に対する反応の増幅率を調整します。',
-      speed: '生成アルゴリズムの時間的な進化速度を制御します。',
-      glow: '画面全体の光の広がりを調整し、雰囲気を高めます。',
-      trails: 'ピクセルの残像時間を制御し、動きの滑らかさを生みます。',
-      smoothing: '音声データの平滑化係数。高いほど滑らかになります。',
-      fftSize: 'スペクトル解析の細かさ（サンプル数）を決定します。'
-    },
-    projectInfoTitle: 'プロジェクトについて',
-    aboutDescription: '次世代の通感インタラクティブ体験. Aura Fluxは、Web Audioによる高精度解析とGoogle Gemini 3を融合させた、無形の音波を生命感あふれる光へと変換します。VJ、配信、空間演出に最適です。',
-    privacyTitle: 'プライバシーと安全',
-    privacyText: '音声解析はローカルで完結します。認識時のみ暗号化された特徴量を一時的に送信し、生録音データを保存することはありません。',
-    version: 'リリース',
-    coreTech: 'コア技術',
-    repository: 'リポジトリ',
-    support: 'サポート',
-    reportBug: 'バグ報告'
+    title: 'オーディオエラー', accessDenied: 'マイクへのアクセスが拒否されました。', noDevice: '入力デバイスが見つかりません。', deviceBusy: 'デバイスが使用中または無効です。', general: 'オーディオデバイスにアクセスできません。', tryDemo: 'デモモードを試す'
   },
   onboarding: {
     welcome: 'Aura Fluxへようこそ',
     subtitle: '次世代 AI 通感エンジン',
     selectLanguage: '言語を選択してください',
-    next: '次へ',
-    back: '戻る',
-    skip: 'スキップ',
-    finish: '体験を開始',
+    next: '次へ', back: '戻る', skip: 'スキップ', finish: '体験を開始',
     features: {
       title: '主な特徴',
-      visuals: {
-        title: '生成的な芸術作品',
-        desc: 'WebGLベースの12種類以上の数理エンジンが音を具現化します。'
-      },
-      ai: {
-        title: 'Gemini AI インテリジェンス',
-        desc: '楽曲メタデータと雰囲気をGoogle Gemini 3が瞬時に解析します。'
-      },
-      privacy: {
-        title: 'セキュア＆プライベート',
-        desc: '解析はローカルで実行されます。音声データが記録・保存されることはありません。'
-      }
+      visuals: { title: '生成的な芸術作品', desc: 'WebGLベースの12種類以上の数理エンジンが音を具現化します。' },
+      ai: { title: 'Gemini AI インテリジェンス', desc: '楽曲メタデータと雰囲気をGoogle Gemini 3が瞬時に解析します。' },
+      privacy: { title: 'セキュア＆プライベート', desc: '解析はローカルで実行されます。音声データが記録・保存されることはありません。' }
     },
-    shortcuts: {
-      title: 'ダイナミック・コントロール',
-      desc: 'キーボードを操り、光の指揮者になりましょう。'
-    }
+    shortcuts: { title: 'ダイナミック・コントロール', desc: 'キーボードを操り、光の指揮者になりましょう。' }
   }
 };

@@ -1,15 +1,14 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.8.6
- * Author: Aura Vision Team
+ * Version: 1.7.11
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 22:00
+ * Updated: 2025-02-26 14:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ar = {
-  // ... existing content ...
   common: {
     on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم'
   },
@@ -68,7 +67,12 @@ export const ar = {
     lyricsFont: 'نمط الطباعة لكلمات الذكاء الاصطناعي.',
     lyricsFontSize: 'تغيير حجم نص التعريف بالذكاء الاصطناعي.',
     textFont: 'عائلة الخط لطبقة النص المخصص.',
-    recognitionSource: 'اختر شخصية الذكاء الاصطناعي أو المزود.'
+    recognitionSource: 'اختر شخصية الذكاء الاصطناعي أو المزود.',
+    exportConfig: 'تصدير الإعدادات كملف JSON.',
+    importConfig: 'استيراد الإعدادات من ملف JSON.',
+    savePreset: 'حفظ الإعدادات الحالية محلياً.',
+    loadPreset: 'تحميل هذا الإعداد المسبق.',
+    copyConfig: 'نسخ رمز التكوين إلى الحافظة.'
   },
   aiPanel: {
       keySaved: 'تم حفظ المفتاح',
@@ -155,6 +159,22 @@ export const ar = {
   systemPanel: {
     interface: 'الواجهة', behavior: 'السلوك', maintenance: 'الصيانة', engine: 'المحرك', audio: 'الصوت', ai: 'الذكاء الاصطناعي'
   },
+  config: {
+    title: 'البيانات والسحابة',
+    export: 'تصدير',
+    import: 'استيراد',
+    library: 'المكتبة المحلية',
+    save: 'حفظ',
+    load: 'تحميل',
+    delete: 'حذف',
+    placeholder: 'الاسم...',
+    confirmImport: 'استبدال الإعدادات الحالية؟',
+    invalidFile: 'تنسيق الملف غير صالح',
+    importSuccess: 'تم تحميل التكوين',
+    copy: 'نسخ',
+    copied: 'تم النسخ!',
+    limitReached: 'الحد الأقصى 5 إعدادات مسبقة.'
+  },
   showFps: 'عرض FPS',
   showTooltips: 'عرض تلميحات',
   doubleClickFullscreen: 'ملء الشاشة بالنقر المزدوج',
@@ -176,62 +196,7 @@ export const ar = {
     shortcuts: { mic: 'ميكروفون', ui: 'واجهة', mode: 'وضع', random: 'عشوائي' }
   },
   errors: {
-    title: 'خطأ صوتي', accessDenied: 'تم رفض الوصول للميكروفون.', noDevice: 'لم يتم العثور على جهاز.', deviceBusy: 'الجهاز مشغول.', general: 'تعذر الوصول للصوت.', tryDemo: 'وضع العرض'
-  },
-  aiState: {
-    active: 'التمييز نشط', enable: 'بدء التمييز'
-  },
-  regions: {
-    global: 'عالمي', US: 'أمريكا / الغرب', CN: 'الصين', JP: 'اليابان', KR: 'كوريا', EU: 'أوروبا', LATAM: 'أمريكا اللاتينية'
-  },
-  modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'التدفق العصبي (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: 'المجال الكمي (WebGL)',
-    [VisualizerMode.PLASMA]: 'تدفق البلازما',
-    [VisualizerMode.BARS]: 'أشرطة التردد',
-    [VisualizerMode.PARTICLES]: 'الملاحة بين النجوم',
-    [VisualizerMode.TUNNEL]: 'النفق الهندسي',
-    [VisualizerMode.RINGS]: 'حلقات النيون',
-    [VisualizerMode.NEBULA]: 'سديم عميق',
-    [VisualizerMode.LASERS]: 'مصفوفة الليزر',
-    [VisualizerMode.FLUID_CURVES]: 'رقصة الشفق',
-    [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو',
-    [VisualizerMode.KINETIC_WALL]: 'الجدار الحركي (WebGL)',
-    [VisualizerMode.LIQUID]: 'الكوكب السائل (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي'
-  },
-  lyricsStyles: {
-    [LyricsStyle.STANDARD]: 'تنسيق قياسي', [LyricsStyle.KARAOKE]: 'ديناميكي', [LyricsStyle.MINIMAL]: 'بسيط جداً'
-  },
-  helpModal: {
-    title: 'دليل Aura Flux',
-    tabs: { guide: 'دليل', shortcuts: 'اختصارات', about: 'حول' },
-    intro: 'Aura Flux يحول الصوت إلى فن رقمي رياضي في الوقت الفعلي باستخدام تحليل طيفي عالي الدقة وذكاء Gemini 3.',
-    shortcutsTitle: 'التحكم بلوحة المفاتيح',
-    gesturesTitle: 'إيماءات اللمس',
-    shortcutItems: {
-      toggleMic: 'تشغيل/إيقاف الصوت', fullscreen: 'تبديل ملء الشاشة', randomize: 'عشوائية الجماليات', lyrics: 'تبديل معلومات المسار', hideUi: 'إظهار/إخفاء اللوحة', glow: 'تأثير التوهج', trails: 'تأثير الآثار', changeMode: 'تغيير النمط', changeTheme: 'تغيير السمة'
-    },
-    gestureItems: {
-        swipeMode: 'سحب أفقي: تغيير الوضع', swipeSens: 'سحب عمودي: ضبط الحساسية', longPress: 'ضغطة طويلة: تمييز بالذكاء الاصطناعي'
-    },
-    howItWorksTitle: 'كيفية الاستخدام',
-    howItWorksSteps: [
-      '1. الاتصال: انقر على "بدء" واسمح باستخدام الميكروفون.',
-      '2. المشاهدة: شغل الموسيقى واستخدم "الإعدادات المسبقة".',
-      '3. التخصيص: انتقل إلى الوضع "المتقدم" لضبط FFT و "النص المخصص".',
-      '4. التفاعل: اسحب لتغيير الوضع/الحساسية.',
-      '5. الاستكشاف: H للخيارات، F لملء الشاشة، R للعشوائي.'
-    ],
-    settingsTitle: 'دليل المعايير',
-    settingsDesc: {
-      sensitivity: 'التحكم في كسب رد الفعل للمؤثرات البصرية.', speed: 'سرعة التطور الزمني للخوارزميات.', glow: 'شدة الإضاءة المحيطة.', trails: 'تراكم البكسل للحركة.', smoothing: 'التنعيم الطيفي للبيانات.', fftSize: 'دقة التحليل الطيفي.'
-    },
-    projectInfoTitle: 'عن المشروع',
-    aboutDescription: 'تجربة تفاعلية تدمج التحليل الطيفي مع Google Gemini 3 لتحويل الأمواج الصوتية إلى ضوء حي. مثالي للبث المباشر والديكور.',
-    privacyTitle: 'الخصوصية',
-    privacyText: 'التحليل الصوتي محلي. يتم إرسال بصمات مشفرة فقط لتمييز الأغنية؛ لا يتم حفظ تسجيلات.',
-    version: 'الإصدار', coreTech: 'التقنيات', repository: 'المستودع', support: 'الدعم', reportBug: 'الإبلاغ عن خطأ'
+    title: 'خطأ صوتي', accessDenied: 'تم رفض الوصول.', noDevice: 'لم يتم العثور على جهاز.', deviceBusy: 'الجهاز مشغول.', general: 'تعذر الوصول للصوت.', tryDemo: 'وضع العرض'
   },
   onboarding: {
     welcome: 'مرحباً بك في Aura Flux', subtitle: 'محرك الحس المرافق بالذكاء الاصطناعي', selectLanguage: 'يرجى اختيار اللغة', next: 'التالي', back: 'العودة', skip: 'تخطي', finish: 'بدء التجربة',

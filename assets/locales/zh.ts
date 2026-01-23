@@ -1,6 +1,6 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.7.9
+ * Version: 1.7.11
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -107,9 +107,9 @@ export const zh = {
   stopMic: '停止音频采集',
   listening: '监听中',
   identifying: '正在捕获声景特征...', 
-  startExperience: '开启视听盛宴',
+  startExperience: '步入流光之境',
   welcomeTitle: 'Aura Flux | 灵动流光',
-  welcomeText: '将旋律凝炼为极光，让节奏跃然屏上。由 Gemini AI 提供实时声景分析支持。',
+  welcomeText: '让每一缕振动凝结为视觉杰作。由 Gemini AI 驱动，将声音重构为触手可及的光影艺术。',
   unsupportedTitle: '浏览器不受支持',
   unsupportedText: 'Aura Flux 需要现代浏览器功能才能运行。请更新 Chrome, Edge 或 Safari。',
   hideOptions: '收起面板',
@@ -171,7 +171,8 @@ export const zh = {
     invalidFile: '文件格式无效',
     importSuccess: '配置加载成功',
     copy: '复制',
-    copied: '已复制'
+    copied: '已复制',
+    limitReached: '最多只能保存 5 个预设。'
   },
   showFps: '显示帧率',
   showTooltips: '显示提示',
@@ -273,14 +274,14 @@ export const zh = {
   onboarding: {
     welcome: '欢迎体验 Aura Flux',
     subtitle: '新一代 AI 音乐通感引擎',
-    selectLanguage: '选择语言',
-    next: '继续', back: '返回', skip: '跳过', finish: '开启体验',
+    selectLanguage: '选择您的偏好语言',
+    next: '继续', back: '返回', skip: '跳过', finish: '开启盛宴',
     features: {
-      title: '核心特性',
-      visuals: { title: '生成式艺术', desc: '15+ 种 WebGL 数学动力学引擎。' },
-      ai: { title: 'Gemini AI', desc: '实时曲目与情绪识别。' },
-      privacy: { title: '隐私安全', desc: '本地处理，不存储录音。' }
+      title: '感官特性',
+      visuals: { title: '数学生成艺术', desc: '内置 15+ 种基于 WebGL 的数学动力学引擎，将声波具象化。' },
+      ai: { title: 'Gemini 智能核心', desc: '实时感知曲目元数据与视觉情绪，由 Google Gemini 3 提供支持。' },
+      privacy: { title: '边缘计算保护', desc: '所有分析均在本地执行，我们绝不记录或存储您的私人声音数据。' }
     },
-    shortcuts: { title: '极速交互', desc: '掌控全场的快捷键。' }
+    shortcuts: { title: '指挥官快捷键', desc: '像指挥家一样掌控全场，通过键盘实时调遣光影。' }
   }
 };
