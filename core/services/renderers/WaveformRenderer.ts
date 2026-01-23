@@ -1,9 +1,10 @@
 /**
  * File: core/services/renderers/WaveformRenderer.ts
- * Version: 2.9.2
+ * Version: 2.9.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 23:25
+ * Updated: 2025-02-25 19:30
+ * Description: Optimized resolution for better FPS.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -52,6 +53,9 @@ export class WaveformRenderer implements IVisualizerRenderer {
     ];
 
     for (let i = 0; i < layerCount; i++) {
+        // Optimization: Skip higher layers on low quality setting to save cycles
+        if (settings.quality === 'low' && i > 3) continue;
+
         const config = configs[i];
         const color = colors[i % colors.length];
         
@@ -81,11 +85,15 @@ export class WaveformRenderer implements IVisualizerRenderer {
         ctx.lineWidth = config.width * (0.8 + energy * 0.5);
         ctx.globalAlpha = (0.25 + energy * 0.75) * (settings.glow ? 1.0 : 0.6);
 
-        const points = settings.quality === 'high' ? 120 : 60;
+        // Optimization: Reduced path resolution
+        // High: 90 segments, Med: 45, Low: 30
+        // Previously 120/60
+        const points = settings.quality === 'high' ? 90 : (settings.quality === 'med' ? 45 : 30);
         const step = w / points;
 
         const getY = (x: number) => {
             const envelope = Math.sin((x / w) * Math.PI);
+            // Simpler jitter calc
             const jitter = (i > 4 && energy > 0.01) ? (Math.random() - 0.5) * 5 * energy : 0;
             
             // 优化：振幅系数从 0.22 降为 0.11 (降低50%)
@@ -104,6 +112,7 @@ export class WaveformRenderer implements IVisualizerRenderer {
         for (let j = 0; j < points; j++) {
             const nextX = depthX + (j + 1) * step;
             const nextY = getY(nextX);
+            // Midpoint approximation for smooth curves with fewer points
             const xc = (currentX + nextX) / 2;
             const yc = (currentY + nextY) / 2;
             ctx.quadraticCurveTo(currentX, currentY, xc, yc);

@@ -1,24 +1,23 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.7.7
+ * Version: 1.7.8
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 22:00
+ * Updated: 2025-02-25 22:15
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.7.7';
+export const APP_VERSION = '1.7.8';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
 // Expanded to 30 curated color themes.
-// Reordered for visual impact: Multicolors first, then spectrum.
 export const COLOR_THEMES: string[][] = [
-  ['#ff007f', '#7a00ff', '#00e5ff'], // 01: Vaporwave (Multicolor)
-  ['#00ff87', '#60efff', '#a100ff'], // 02: Aurora Borealis (Multicolor - New)
-  ['#ff6a00', '#ee0979', '#7b4397'], // 03: Sunset Boulevard (Multicolor - New)
-  ['#00d2ff', '#ff56f6', '#3a7bd5'], // 04: Cotton Candy (Multicolor - New)
+  ['#ff007f', '#7a00ff', '#00e5ff'], // 01: Vaporwave
+  ['#00ff87', '#60efff', '#a100ff'], // 02: Aurora Borealis
+  ['#ff6a00', '#ee0979', '#7b4397'], // 03: Sunset Boulevard
+  ['#00d2ff', '#ff56f6', '#3a7bd5'], // 04: Cotton Candy
   ['#00f2ff', '#0060ff', '#00c3ff'], // 05: Electric Blue
   ['#ff00ea', '#ff0055', '#ff00a6'], // 06: Neon Pink
   ['#00ffaa', '#00aa00', '#00ff41'], // 07: Matrix Green
@@ -76,13 +75,7 @@ export const getPositionOptions = (t: any) => [
   { value: 'br', label: t?.positions?.br || 'Bottom Right' },
 ];
 
-/**
- * Visualizer Presets Sorting:
- * 1. 2D / Classic Engines (High performance, pure canvas)
- * 2. WebGL Engines (High fidelity, 3D scenes - moved to end per user request)
- */
 export const VISUALIZER_PRESETS: Record<string, { description: string }> = {
-  // --- 2D & Classic Engines ---
   [VisualizerMode.PLASMA]: { description: 'Smooth fluid-like color blending.' },
   [VisualizerMode.BARS]: { description: 'Classic frequency spectrum analyzer.' },
   [VisualizerMode.PARTICLES]: { description: 'Deep space starfield traversal.' },
@@ -93,8 +86,6 @@ export const VISUALIZER_PRESETS: Record<string, { description: string }> = {
   [VisualizerMode.FLUID_CURVES]: { description: 'Smooth atmospheric light waves.' },
   [VisualizerMode.MACRO_BUBBLES]: { description: 'Soft focus micro-cellular visuals.' },
   [VisualizerMode.WAVEFORM]: { description: 'Liquid ribbons of spectral frequency.' },
-
-  // --- WebGL Engines (At the end) ---
   [VisualizerMode.NEURAL_FLOW]: { description: 'Organic fluid simulation powered by WebGL.' },
   [VisualizerMode.CUBE_FIELD]: { description: 'Infinite field of geometric blocks.' },
   [VisualizerMode.KINETIC_WALL]: { description: 'Massive LED stage wall with kinetic extrusions.' },
@@ -106,7 +97,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'calm',
     settings: {
       mode: VisualizerMode.WAVEFORM,
-      colorTheme: COLOR_THEMES[4], // Electric Blue
+      colorTheme: COLOR_THEMES[4],
       speed: 0.5,
       sensitivity: 1.0,
       glow: false,
@@ -118,8 +109,8 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
   party: {
     nameKey: 'party',
     settings: {
-      mode: VisualizerMode.KINETIC_WALL, // Updated to new concert mode
-      colorTheme: COLOR_THEMES[0], // Vaporwave
+      mode: VisualizerMode.KINETIC_WALL,
+      colorTheme: COLOR_THEMES[0],
       speed: 1.5,
       sensitivity: 2.0,
       glow: true,
@@ -132,7 +123,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'ambient',
     settings: {
       mode: VisualizerMode.NEBULA,
-      colorTheme: COLOR_THEMES[8], // Royal Purple
+      colorTheme: COLOR_THEMES[8],
       speed: 0.3,
       sensitivity: 1.2,
       glow: true,
@@ -145,39 +136,38 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'cyberpunk',
     settings: {
       mode: VisualizerMode.LASERS,
-      colorTheme: COLOR_THEMES[1], // Aurora (New)
+      colorTheme: COLOR_THEMES[1],
       speed: 1.2,
       sensitivity: 1.8,
       glow: true,
       trails: true,
       smoothing: 0.7,
-      includedModes: [VisualizerMode.LASERS, VisualizerMode.CYBER_CITY, VisualizerMode.TUNNEL, VisualizerMode.RINGS]
+      includedModes: [VisualizerMode.LASERS, VisualizerMode.TUNNEL, VisualizerMode.RINGS]
     }
   },
   retrowave: {
     nameKey: 'retrowave',
     settings: {
       mode: VisualizerMode.CUBE_FIELD,
-      colorTheme: COLOR_THEMES[2], // Sunset (New)
+      colorTheme: COLOR_THEMES[2],
       speed: 1.0,
       sensitivity: 1.5,
       glow: true,
       trails: false,
       smoothing: 0.8,
-      includedModes: [VisualizerMode.CUBE_FIELD, VisualizerMode.TUNNEL, VisualizerMode.BARS, VisualizerMode.CYBER_CITY]
+      includedModes: [VisualizerMode.CUBE_FIELD, VisualizerMode.TUNNEL, VisualizerMode.BARS]
     }
   },
   vocal: {
     nameKey: 'vocal',
     settings: {
       mode: VisualizerMode.BARS,
-      colorTheme: COLOR_THEMES[28], // Monochrome
+      colorTheme: COLOR_THEMES[28],
       speed: 0.8,
       sensitivity: 1.3,
       glow: false,
       trails: true,
       smoothing: 0.85,
-      // Removed CRYSTAL_CORE as requested
       includedModes: [VisualizerMode.BARS, VisualizerMode.RINGS, VisualizerMode.WAVEFORM]
     }
   }

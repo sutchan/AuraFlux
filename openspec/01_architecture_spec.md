@@ -20,7 +20,7 @@
 ## 3. 并发与生命周期健壮性
 - **React 19 Compatibility:** 全面支持 Concurrent Mode。
 - **Web GL Context:** 实现了上下文丢失自动恢复监听。
-- **渲染画质适配:** 提供低/中/高三档密度配置，通过减少 50% 粒子基数 (v1.6.61) 确保移动设备的热稳定性。
+- **渲染画质适配 (v1.7.8):** 为 Kinetic Wall 引入动态长宽比适配算法，确保全屏覆盖且无边缘黑隙。
 
 ---
-*Aura Flux Architecture - Version 1.6.75*
+*Aura Flux Architecture - Version 1.7.8*

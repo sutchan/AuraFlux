@@ -1,9 +1,9 @@
-
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.1.6
+ * Version: 1.1.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-25 19:30
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -73,8 +73,13 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
         ctx.clearRect(0, 0, width, height);
       }
 
-      // --- 核心修复：原生 Canvas 辉光实现 ---
-      if (currentSettings.glow) {
+      // --- Performance Optimization ---
+      // Sprite-based renderers (Nebula, Bubbles) generate their own glow/gradients.
+      // Applying Canvas `shadowBlur` to hundreds of semi-transparent sprites kills GPU fill-rate.
+      // We disable the global shadow context for these specific modes to restore 60FPS.
+      const isSelfGlowingMode = currentMode === VisualizerMode.NEBULA || currentMode === VisualizerMode.MACRO_BUBBLES;
+
+      if (currentSettings.glow && !isSelfGlowingMode) {
         // 使用第一个主题色作为发光底色
         ctx.shadowColor = currentColors[0] || '#ffffff';
         // 阴影模糊程度随灵敏度微调

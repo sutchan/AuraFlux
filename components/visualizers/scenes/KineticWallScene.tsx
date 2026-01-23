@@ -1,14 +1,15 @@
 /**
  * File: components/visualizers/scenes/KineticWallScene.tsx
- * Version: 2.1.1
- * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Description: GPU-Accelerated Kinetic Wall. 
- * Animation logic moved to Vertex Shader via DataTexture for 60FPS at 8000+ instances.
+ * Version: 3.2.0
+ * Author: Sut
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
+ * Updated: 2025-02-25 22:00
+ * Description: Full-screen Kinetic Wall with dynamic aspect ratio adaptation.
  */
 
-import React, { useRef, useMemo, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
+import React, { useRef, useMemo, useLayoutEffect } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import * as THREE from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
@@ -21,309 +22,202 @@ interface SceneProps {
 
 export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null);
-  const reflectionRef = useRef<THREE.InstancedMesh>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const beamGroupRef = useRef<THREE.Group>(null);
+  const { viewport } = useThree();
   
-  // Lights
-  const spotLightLeft = useRef<THREE.SpotLight>(null);
-  const spotLightRight = useRef<THREE.SpotLight>(null);
-  const spotLightCenter = useRef<THREE.SpotLight>(null);
+  const { bass, volume, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
+  const [c0, c1] = smoothedColors;
 
-  const { bass, mids, treble, isBeat, smoothedColors } = useAudioReactive({ analyser, colors, settings });
-  const [c0, c1, c2] = smoothedColors;
-
-  // --- Configuration ---
-  // Drastically increased density due to GPU optimization
-  const cols = settings.quality === 'high' ? 128 : settings.quality === 'med' ? 80 : 64;
-  const rows = settings.quality === 'high' ? 64 : settings.quality === 'med' ? 40 : 32;
-  const count = cols * rows;
-
-  // --- GPU Audio Texture ---
-  // We use a DataTexture to pass the entire frequency spectrum to the shader
-  const fftSize = analyser.frequencyBinCount; // Usually 1024 or 2048
-  const dataArray = useMemo(() => new Uint8Array(fftSize), [fftSize]);
-  
-  const audioTexture = useMemo(() => {
-    const tex = new THREE.DataTexture(
-      dataArray,
-      fftSize,
-      1,
-      THREE.RedFormat,
-      THREE.UnsignedByteType
-    );
-    tex.needsUpdate = true;
-    return tex;
-  }, [fftSize]);
-
-  // --- Instance Attributes ---
-  // Pre-calculate static data: Layout position (u,v) and Frequency Index
-  const attributes = useMemo(() => {
-    const layout = new Float32Array(count * 4); // x, y, u, v
+  // --- 1. Dynamic Grid Logic ---
+  // We calculate a grid that is roughly 20% larger than the required viewport coverage
+  // to account for camera oscillations and "breathing" movement.
+  const { count, cols, rows, aLayoutData } = useMemo(() => {
+    const aspect = window.innerWidth / window.innerHeight;
+    const baseDensity = settings.quality === 'high' ? 85 : 55;
     
-    const radius = 90;
-    const heightSpread = 80;
-    const angleSpread = Math.PI * 0.8;
+    // Adjust columns and rows to be aspect-aware
+    const c = Math.ceil(baseDensity * Math.max(aspect, 1.0));
+    const r = Math.ceil(baseDensity / Math.min(aspect, 1.0));
+    const total = c * r;
 
-    for (let i = 0; i < count; i++) {
-        const col = i % cols;
-        const row = Math.floor(i / cols);
-        
-        const u = col / (cols - 1); // 0..1 horizontal
-        const v = row / (rows - 1); // 0..1 vertical
-
-        // Cylindrical Layout mapping
-        const angle = (u - 0.5) * angleSpread;
-        
-        // Save normalized coordinates for shader to calculate position
-        // We pack: [Angle, HeightPercent, FreqMap, Random]
-        // x: Angle (-0.5 to 0.5 range approx)
-        // y: Height (-0.5 to 0.5)
-        // z: Frequency Lookup (0..1)
-        // w: Random offset
-        
-        // Freq mapping: Low freqs in center, highs at edges
-        const centerDist = Math.abs(u - 0.5) * 2.0; 
-        const freqMap = centerDist * 0.5; // Map to lower half of spectrum (usually where music is)
-
-        layout[i * 4 + 0] = angle;
-        layout[i * 4 + 1] = v - 0.5;
-        layout[i * 4 + 2] = freqMap;
-        layout[i * 4 + 3] = Math.random();
+    const data = new Float32Array(total * 2); 
+    for (let i = 0; i < total; i++) {
+        const row = Math.floor(i / c);
+        const col = i % c;
+        const cx = col - c / 2;
+        const cy = row - r / 2;
+        data[i * 2 + 0] = Math.sqrt(cx * cx + cy * cy); // distFromCenter for ripples
+        data[i * 2 + 1] = Math.random(); // phase for breathing
     }
-    return layout;
-  }, [cols, rows]);
 
-  // --- Shader Uniforms ---
+    return { count: total, cols: c, rows: r, aLayoutData: data };
+  }, [settings.quality]); // Re-calculate grid only on quality change
+
+  // Create standard geometry for instances
+  const geometry = useMemo(() => new RoundedBoxGeometry(0.92, 0.92, 1.0, 3, 0.12), []);
+
+  // Sync attribute to geometry
+  useLayoutEffect(() => {
+    if (geometry) {
+      geometry.setAttribute('aLayout', new THREE.InstancedBufferAttribute(aLayoutData, 2));
+    }
+  }, [geometry, aLayoutData]);
+
+  // Audio Texture Data
+  const dataArray = useMemo(() => new Uint8Array(analyser.frequencyBinCount), [analyser]);
+  const audioTexture = useMemo(() => {
+    const tex = new THREE.DataTexture(dataArray, dataArray.length, 1, THREE.RedFormat, THREE.UnsignedByteType);
+    tex.magFilter = THREE.LinearFilter;
+    return tex;
+  }, [dataArray.length]);
+
   const uniforms = useMemo(() => ({
     uAudioTexture: { value: audioTexture },
     uTime: { value: 0 },
-    uColor1: { value: new THREE.Color(0,0,0) },
-    uColor2: { value: new THREE.Color(0,0,0) },
-    uColor3: { value: new THREE.Color(0,0,0) },
-    uSensitivity: { value: 1.0 },
+    uColor1: { value: new THREE.Color() },
+    uColor2: { value: new THREE.Color() },
     uBeat: { value: 0.0 },
-    uRadius: { value: 90.0 },
-    uHeight: { value: 80.0 }
+    uSensitivity: { value: 1.0 }
   }), [audioTexture]);
 
-  // --- Material Compilation ---
   const onBeforeCompile = useMemo(() => (shader: any) => {
     Object.assign(shader.uniforms, uniforms);
-    
-    // Vertex Shader Injection
+
     shader.vertexShader = `
+      attribute vec2 aLayout;
+      varying float vFluxHeat;
       uniform sampler2D uAudioTexture;
       uniform float uTime;
-      uniform float uSensitivity;
-      uniform float uRadius;
-      uniform float uHeight;
       uniform float uBeat;
-      uniform vec3 uColor1;
-      uniform vec3 uColor2;
-      uniform vec3 uColor3; // Hot peak color
-      
-      attribute vec4 aLayout; // x: angle, y: heightPct, z: freqMap, w: random
-      
-      varying vec3 vInstanceColor;
-      varying float vExtrusion;
-
-      // Helper to rotate vector
-      vec3 rotateY(vec3 v, float angle) {
-        float c = cos(angle);
-        float s = sin(angle);
-        return vec3(v.x * c + v.z * s, v.y, -v.x * s + v.z * c);
-      }
-
+      uniform float uSensitivity;
       ${shader.vertexShader}
-    `;
-
-    shader.vertexShader = shader.vertexShader.replace(
+    `.replace(
       '#include <begin_vertex>',
       `
       #include <begin_vertex>
+      
+      // Dynamic scaling: Higher quality = more bins sampled
+      float flux_freqIdx = clamp(aLayout.x / 60.0, 0.0, 0.85);
+      float flux_rawAudio = texture2D(uAudioTexture, vec2(flux_freqIdx, 0.5)).r;
 
-      // 1. Retrieve Audio Data
-      float freqIndex = aLayout.z;
-      float rawAudio = texture2D(uAudioTexture, vec2(freqIndex, 0.0)).r; // 0..1
-      
-      // 2. Add organic wave motion
-      float wave = sin(aLayout.x * 10.0 - uTime * 2.0) * cos(aLayout.y * 8.0 + uTime);
-      float signal = rawAudio * (1.0 + wave * 0.2);
-      
-      // 3. Calculate Extrusion
-      float extrusion = 0.5 + signal * 20.0 * uSensitivity;
-      
-      // Add Beat Punch
-      if (uBeat > 0.01) {
-         extrusion += uBeat * 5.0 * rawAudio;
-      }
+      // 1. MECHANICAL QUANTIZATION (Industrial stepper motor feel)
+      float flux_levels = 12.0; 
+      float flux_quantized = floor(flux_rawAudio * flux_levels) / flux_levels;
 
-      vExtrusion = extrusion;
-
-      // 4. Transform Position (Cylindrical Layout)
-      // Base mesh is a 1x1x1 cube centered at 0.
+      // 2. BREATHING & RIPPLE
+      float flux_breathe = sin(uTime * 0.4 + aLayout.y * 6.28) * 0.15;
+      float flux_wave = sin(aLayout.x * 0.35 - uTime * 4.0) * 0.5 + 0.5;
+      float flux_ripple = flux_wave * uBeat * 4.0;
       
-      // Scale logic:
-      // X/Y scale is static (block size)
-      // Z scale is dynamic (extrusion)
-      // We apply this scaling to the *local* vertex position before placing it in the world
+      // Apply Displacement to Z
+      float flux_ext = (flux_quantized * 16.0 * uSensitivity) + flux_ripple + flux_breathe;
+      transformed.z += max(0.0, flux_ext);
       
-      vec3 transformedPos = position;
-      transformedPos.x *= 1.2; // Block width
-      transformedPos.y *= 1.2; // Block height
-      transformedPos.z *= extrusion; // Dynamic depth
-      
-      // Now position the block in the cylinder
-      float angle = aLayout.x * 2.5; // Spread factor
-      float yPos = aLayout.y * uHeight;
-      
-      // Base position on cylinder surface
-      vec3 instancePos = vec3(0.0, yPos, -uRadius);
-      
-      // Rotate the position around Y axis
-      vec3 finalPos = rotateY(instancePos, -angle);
-      
-      // Rotate the local vertex (block itself) to face center
-      vec3 finalVertex = rotateY(transformedPos, -angle);
-      
-      // Combine
-      transformed = finalPos + finalVertex;
-      
-      // 5. Calculate Color (Heatmap)
-      float heat = smoothstep(0.1, 0.8, signal * uSensitivity);
-      vec3 cBase = mix(uColor2, uColor1, heat); // Cold -> Hot
-      
-      // Add white-hot bloom tip
-      float tip = smoothstep(0.8, 1.0, signal * uSensitivity);
-      vInstanceColor = mix(cBase, uColor3, tip);
-      
-      // Fix normal for lighting
-      // Ideally we should rotate normal too, but for box it's roughly ok or we use flat shading
-      objectNormal = rotateY(objectNormal, -angle);
+      vFluxHeat = flux_quantized;
       `
     );
 
-    // Fragment Shader Injection to use vertex color
     shader.fragmentShader = `
-      varying vec3 vInstanceColor;
+      uniform vec3 uColor1;
+      uniform vec3 uColor2;
+      uniform float uBeat;
+      varying float vFluxHeat;
       ${shader.fragmentShader}
-    `;
-    
-    shader.fragmentShader = shader.fragmentShader.replace(
+    `.replace(
       '#include <color_fragment>',
       `
       #include <color_fragment>
-      // Override diffuse color with our calculated instance color
-      diffuseColor.rgb = vInstanceColor;
+      
+      // Improved Fresnel with View Position check
+      vec3 flux_fNormal = normalize(vNormal);
+      vec3 flux_viewDir = normalize(vViewPosition);
+      float flux_fresnel = pow(1.0 - clamp(dot(flux_fNormal, -flux_viewDir), 0.0, 1.0), 3.0);
+      
+      // Blend colors based on local intensity
+      vec3 flux_baseCol = mix(uColor1, uColor2, vFluxHeat);
+      
+      // Edge Pop: Stronger rim lighting on beat
+      vec3 flux_rimCol = mix(flux_baseCol, vec3(1.0), 0.4);
+      float flux_edgeGlow = flux_fresnel * (1.5 + uBeat * 4.0 + vFluxHeat * 3.0);
+      
+      diffuseColor.rgb = mix(flux_baseCol, flux_rimCol, flux_fresnel * 0.5) + (flux_rimCol * flux_edgeGlow * 0.3);
+      `
+    ).replace(
+      '#include <emissivemap_fragment>',
+      `
+      #include <emissivemap_fragment>
+      float flux_fres2 = pow(1.0 - clamp(dot(normalize(vNormal), -normalize(vViewPosition)), 0.0, 1.0), 4.0);
+      totalEmissiveRadiance = diffuseColor.rgb * (vFluxHeat * 0.6 + uBeat * 0.8 + flux_fres2 * 0.5);
       `
     );
   }, [uniforms]);
 
-  // --- Rendering Loop ---
+  const beatRef = useRef(0);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
     analyser.getByteFrequencyData(dataArray);
-    
-    // Update Texture
     audioTexture.needsUpdate = true;
-    
-    // Update Uniforms
-    uniforms.uTime.value = time * settings.speed;
+
+    if (isBeat) beatRef.current = 1.0;
+    beatRef.current *= 0.93; 
+
+    uniforms.uTime.value = time;
+    uniforms.uBeat.value = beatRef.current;
     uniforms.uSensitivity.value = settings.sensitivity;
-    uniforms.uColor1.value.set(c0);
-    uniforms.uColor2.value.set(c1);
-    uniforms.uColor3.value.set(isBeat ? '#ffffff' : c0); // Flash white on beat
-    uniforms.uBeat.value = THREE.MathUtils.lerp(uniforms.uBeat.value, isBeat ? 1.0 : 0.0, 0.15);
+    uniforms.uColor1.value.set(c1);
+    uniforms.uColor2.value.set(c0);
 
-    // Lights
-    if (spotLightLeft.current && spotLightRight.current && spotLightCenter.current) {
-        spotLightLeft.current.color.set(c0);
-        spotLightRight.current.color.set(c1);
-        spotLightCenter.current.color.set(c2);
-
-        spotLightLeft.current.target.position.set(Math.sin(time) * 30, 0, -80);
-        spotLightLeft.current.target.updateMatrixWorld();
-        
-        spotLightRight.current.target.position.set(Math.cos(time * 0.8) * 30, 0, -80);
-        spotLightRight.current.target.updateMatrixWorld();
-
-        const flash = isBeat ? 10 : 0;
-        spotLightLeft.current.intensity = 100 + bass * 300 + flash * 20;
-        spotLightRight.current.intensity = 100 + mids * 300 + flash * 20;
-        spotLightCenter.current.intensity = 50 + treble * 500;
+    // Update Matrix (Staggered Brick Layout)
+    if (meshRef.current) {
+        // We use a slight multiplier to ensure visual continuity
+        const spacing = 1.06; 
+        for (let i = 0; i < count; i++) {
+            const r = Math.floor(i / cols);
+            const c = i % cols;
+            const rowOffset = (r % 2) * 0.5;
+            dummy.position.set(
+                (c + rowOffset - cols / 2) * spacing,
+                (r - rows / 2) * spacing,
+                0
+            );
+            dummy.updateMatrix();
+            meshRef.current.setMatrixAt(i, dummy.matrix);
+        }
+        meshRef.current.instanceMatrix.needsUpdate = true;
     }
+
+    // --- Dynamic Cinematic Camera Optimization ---
+    // Constraints: Ensure camera never pans far enough to show the edges of the wall.
+    // X pan is tied to cols, Z depth is tied to bass.
+    const maxPanX = (cols * 0.2); 
+    const camX = Math.sin(time * 0.2) * maxPanX;
     
-    // Camera Shake
-    const camShakeX = Math.sin(time * 0.2) * 5;
-    const camShakeY = Math.cos(time * 0.15) * 3;
-    state.camera.position.x += (camShakeX - state.camera.position.x) * 0.05;
-    state.camera.position.y += (camShakeY - state.camera.position.y) * 0.05;
-    state.camera.lookAt(0, 0, -70);
+    // Closer Z-base (50 instead of 55) to ensure we are "inside" the wall boundaries
+    const camZ = 50 - (bass * 14);
     
-    // Volumetric Beams
-    if (beamGroupRef.current) {
-        beamGroupRef.current.rotation.x = Math.PI / 2 + Math.sin(time * 0.5) * 0.1;
-        beamGroupRef.current.rotation.z = Math.sin(time * 0.2) * 0.1;
-        beamGroupRef.current.children.forEach((child, i) => {
-             const mat = (child as THREE.Mesh).material as THREE.MeshBasicMaterial;
-             const beamFlash = isBeat ? 0.2 : 0.02;
-             mat.opacity = THREE.MathUtils.lerp(mat.opacity, beamFlash * (1+bass), 0.2);
-             mat.color.set(i % 2 === 0 ? c0 : c1);
-        });
-    }
+    state.camera.position.x += (camX - state.camera.position.x) * 0.05;
+    state.camera.position.z += (camZ - state.camera.position.z) * 0.05;
+    state.camera.lookAt(0, 0, 0);
   });
-
-  const geometry = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
 
   return (
     <>
-      <color attach="background" args={['#000000']} />
-      <fog attach="fog" args={['#000000', 30, 150]} />
+      <color attach="background" args={['#010103']} />
+      <ambientLight intensity={0.25} />
+      <pointLight position={[50, 50, 60]} intensity={35} color={c0} />
+      <pointLight position={[-50, -50, 30]} intensity={20} color={c1} />
       
-      <spotLight ref={spotLightLeft} position={[40, 50, 40]} angle={0.3} penumbra={0.5} distance={200} decay={2} />
-      <spotLight ref={spotLightRight} position={[-40, -50, 40]} angle={0.3} penumbra={0.5} distance={200} decay={2} />
-      <spotLight ref={spotLightCenter} position={[0, 60, 10]} angle={0.5} penumbra={1} distance={150} decay={2} />
-      <ambientLight intensity={0.1} />
-
-      {/* Primary Wall */}
-      <instancedMesh ref={meshRef} args={[geometry, undefined, count]} frustumCulled={false}>
-        <instancedBufferAttribute attach="geometry-attributes-aLayout" args={[attributes, 4]} />
+      <instancedMesh ref={meshRef} args={[geometry, undefined, count]}>
         <meshStandardMaterial 
             ref={materialRef}
-            roughness={0.4} 
-            metalness={0.8}
             onBeforeCompile={onBeforeCompile}
-        />
-      </instancedMesh>
-      
-      {/* Floor Reflection (Cheap Trick: Scaled Y -1) */}
-      <instancedMesh 
-        ref={reflectionRef} 
-        args={[geometry, undefined, count]} 
-        position={[0, -2, 0]} 
-        scale={[1, -1, 1]}
-        frustumCulled={false}
-      >
-        <instancedBufferAttribute attach="geometry-attributes-aLayout" args={[attributes, 4]} />
-        <meshStandardMaterial 
-            roughness={0.1} 
             metalness={0.9}
-            transparent
-            opacity={0.3}
-            onBeforeCompile={onBeforeCompile}
+            roughness={0.15}
+            envMapIntensity={0.8}
         />
       </instancedMesh>
-      
-      {/* Volumetrics */}
-      <group ref={beamGroupRef} position={[0, 0, -50]}>
-         {[...Array(5)].map((_, i) => (
-             <mesh key={i} rotation={[0, 0, (i / 5) * Math.PI * 2]} position={[0, 0, 0]}>
-                 <coneGeometry args={[5 + i*2, 120, 32, 1, true]} />
-                 <meshBasicMaterial color="#ffffff" transparent opacity={0.05} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} depthWrite={false} />
-             </mesh>
-         ))}
-      </group>
     </>
   );
 };

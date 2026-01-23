@@ -1,15 +1,14 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.5
+ * Version: 1.7.8
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 20:00
+ * Updated: 2025-02-25 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const en = {
-  // ... existing content ...
   common: {
     on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED'
   },
@@ -44,7 +43,6 @@ export const en = {
     mic: 'Activate or mute microphone input.',
     device: 'Select the hardware audio input source.',
     monitor: 'Pass microphone input to speakers. WARNING: Can cause loud feedback loops.',
-    wakeLock: 'Prevent the screen from turning off while the visualizer is active.',
     showFps: 'Display a real-time frames-per-second counter.',
     showTooltips: 'Enable helpful floating hints when hovering over controls.',
     doubleClickFullscreen: 'Toggle fullscreen mode by double-clicking anywhere on the visualizer.',
@@ -73,7 +71,6 @@ export const en = {
     importConfig: 'Load settings from a JSON file.',
     savePreset: 'Save current state to browser storage.',
     loadPreset: 'Restore this preset state.',
-    cloudProvider: 'Select target cloud service for optimized file naming.',
     copyConfig: 'Copy configuration string to clipboard for quick sharing.'
   },
   aiPanel: {
@@ -91,7 +88,7 @@ export const en = {
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',
   settings: 'Tuning',
-  sensitivity: 'Response Sensitivity',
+  sensitivity: 'Sensitivity',
   speed: 'Evolution Speed',
   glow: 'Neon Bloom',
   trails: 'Motion Trails',
@@ -113,9 +110,9 @@ export const en = {
   identifying: 'AI Analyzing Track...',
   startExperience: 'Launch Experience',
   welcomeTitle: 'Aura Flux | The Sound of Light',
-  welcomeText: 'Transmute every vibration into generative masterpieces. Powered by Gemini AI for real-time recognition, experience the ultimate synesthetic journey.',
+  welcomeText: 'Transmute every vibration into generative masterpieces. Powered by Gemini AI for real-time recognition.',
   unsupportedTitle: 'Incompatible Browser',
-  unsupportedText: 'Aura Flux requires modern Web Audio features. Please switch to a recent version of Chrome, Edge, or Safari to continue.',
+  unsupportedText: 'Aura Flux requires modern Web Audio features. Please use Chrome, Edge, or Safari.',
   hideOptions: 'Collapse',
   showOptions: 'Expand Options',
   reset: 'Reset System',
@@ -156,7 +153,7 @@ export const en = {
     effects: 'Effects', automation: 'Automation', display: 'Display'
   },
   audioPanel: {
-    info: 'Adjust input sensitivity and smoothing to customize how the visualizer reacts to audio dynamics. Higher FFT sizes provide more spectral detail but consume more CPU.'
+    info: 'Adjust input sensitivity and smoothing to customize reaction. Higher FFT sizes provide more detail.'
   },
   systemPanel: {
     interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI'
@@ -173,17 +170,8 @@ export const en = {
     confirmImport: 'Overwrite current settings?',
     invalidFile: 'Invalid file format',
     importSuccess: 'Configuration loaded.',
-    cloudHint: 'Select provider to format backup file:',
     copy: 'Copy',
-    copied: 'Copied!',
-    providers: {
-        gdrive: 'Google Drive',
-        dropbox: 'Dropbox',
-        baidu: 'Baidu Netdisk',
-        aliyun: 'Aliyun Drive',
-        quark: 'Quark Cloud',
-        local: 'Local File'
-    }
+    copied: 'Copied!'
   },
   showFps: 'Show FPS',
   showTooltips: 'Show Tooltips',
@@ -195,14 +183,14 @@ export const en = {
     hint: 'Apply a curated aesthetic combination with one click.',
     select: 'Select a mood...',
     custom: 'Custom / Modified',
-    calm: 'Digital Waveform',
+    calm: 'Hypnotic Calm',
     party: 'Energetic Party',
     ambient: 'Deep Nebula',
     cyberpunk: 'Cyber City', 
     retrowave: 'Retro Sunset',
     vocal: 'Crystal Core' 
   },
-  recognitionSource: 'AI Persona Provider',
+  recognitionSource: 'AI Source',
   lyricsPosition: 'Lyrics Position',
   lyricsFont: 'Font Family',
   lyricsFontSize: 'Font Size',
@@ -216,52 +204,42 @@ export const en = {
   },
   errors: {
     title: 'Audio Error',
-    accessDenied: 'Access denied. Please check your browser permissions for microphone.',
-    noDevice: 'No audio input device found.',
-    deviceBusy: 'Audio device is busy or invalid.',
-    general: 'Could not access audio device.',
-    tryDemo: 'Try Demo Mode (No Audio)'
-  },
-  aiState: {
-    active: 'Recognition Active', enable: 'Enable AI Recognition'
-  },
-  regions: {
-    global: 'Global', US: 'USA / West', CN: 'China', JP: 'Japan', KR: 'Korea', EU: 'Europe', LATAM: 'Latin America'
+    accessDenied: 'Access denied. Please check microphone permissions.',
+    noDevice: 'No device found.',
+    deviceBusy: 'Device busy.',
+    general: 'Access error.',
+    tryDemo: 'Demo Mode'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: 'Neural Flow (WebGL)',
     [VisualizerMode.CUBE_FIELD]: 'Quantum Field (WebGL)',
     [VisualizerMode.PLASMA]: 'Plasma Flow',
     [VisualizerMode.BARS]: 'Frequency Bars',
-    [VisualizerMode.PARTICLES]: 'Starfield (Drift)',
+    [VisualizerMode.PARTICLES]: 'Starfield',
     [VisualizerMode.TUNNEL]: 'Geometric Tunnel',
     [VisualizerMode.RINGS]: 'Neon Rings',
     [VisualizerMode.NEBULA]: 'Deep Nebula',
     [VisualizerMode.LASERS]: 'Concert Lasers',
     [VisualizerMode.FLUID_CURVES]: 'Aura Waves',
-    [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles (DoF)',
+    [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles',
     [VisualizerMode.KINETIC_WALL]: 'Kinetic Wall (WebGL)', 
-    [VisualizerMode.CYBER_CITY]: 'Cyber City (WebGL)', 
-    [VisualizerMode.CRYSTAL_CORE]: 'Crystal Core (WebGL)', 
     [VisualizerMode.LIQUID]: 'Liquid Sphere (WebGL)',
     [VisualizerMode.WAVEFORM]: 'Digital Waveform'
   },
   modeDescriptions: {
-    [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particle systems.',
+    [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particles.',
     [VisualizerMode.CUBE_FIELD]: 'Infinite field of geometric blocks responding to frequency.',
-    [VisualizerMode.PLASMA]: 'Smooth fluid-like color blending based on classic demoscene effects.',
-    [VisualizerMode.BARS]: 'Classic frequency spectrum analyzer with floating peaks.',
-    [VisualizerMode.PARTICLES]: 'Deep space starfield traversal reacting to beat intensity.',
-    [VisualizerMode.TUNNEL]: 'Recursive geometric corridor pulling you into the music.',
-    [VisualizerMode.RINGS]: 'Concentric neon resonance patterns expanding from the center.',
+    [VisualizerMode.PLASMA]: 'Smooth fluid-like color blending.',
+    [VisualizerMode.BARS]: 'Classic frequency spectrum analyzer with peaks.',
+    [VisualizerMode.PARTICLES]: 'Deep space starfield traversal reacting to intensity.',
+    [VisualizerMode.TUNNEL]: 'Recursive geometric corridor pulling you in.',
+    [VisualizerMode.RINGS]: 'Concentric neon resonance patterns.',
     [VisualizerMode.NEBULA]: 'Deep space particle simulation with gaseous physics.',
-    [VisualizerMode.LASERS]: 'Sharp high-energy light beams sweeping across the screen.',
-    [VisualizerMode.FLUID_CURVES]: 'Smooth atmospheric light waves flowing horizontally.',
-    [VisualizerMode.MACRO_BUBBLES]: 'Soft focus micro-cellular visuals with depth of field.',
+    [VisualizerMode.LASERS]: 'Sharp high-energy light beams sweeping the screen.',
+    [VisualizerMode.FLUID_CURVES]: 'Smooth atmospheric light waves.',
+    [VisualizerMode.MACRO_BUBBLES]: 'Soft focus micro-cellular visuals.',
     [VisualizerMode.KINETIC_WALL]: 'Massive LED stage wall with kinetic 3D extrusions.',
-    [VisualizerMode.CYBER_CITY]: 'Infinite flight over neon equalizer skyscrapers.',
-    [VisualizerMode.CRYSTAL_CORE]: 'Refractive crystal core reacting to stage lights and rhythm.',
-    [VisualizerMode.LIQUID]: 'Abstract morphing sphere reacting to low-end frequencies.',
+    [VisualizerMode.LIQUID]: 'Abstract morphing sphere reacting to low frequencies.',
     [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency history.'
   },
   lyricsStyles: {
@@ -269,8 +247,8 @@ export const en = {
   },
   helpModal: {
     title: 'Aura Flux Guide',
-    tabs: { guide: 'Guide', shortcuts: 'Controls', about: 'About' },
-    intro: 'Aura Flux transforms your microphone input into highly responsive, generative digital art using advanced spectral analysis and Gemini 3 Flash Intelligence.',
+    tabs: { guide: 'Guide', shortcuts: 'Shortcuts', about: 'About' },
+    intro: 'Aura Flux transforms audio into generative digital art using spectral analysis and Gemini 3 Intelligence.',
     shortcutsTitle: 'Keyboard Shortcuts',
     gesturesTitle: 'Touch Gestures',
     shortcutItems: {
@@ -291,26 +269,26 @@ export const en = {
     },
     howItWorksTitle: 'How to Use',
     howItWorksSteps: [
-      '1. Connect: Click "Start" to authorize microphone access for audio reactivity.',
-      '2. Visualize: Play music. Use "Smart Presets" to instantly set the mood.',
-      '3. Customize: Toggle "Advanced Mode" to tune Sensitivity, FFT, and enable "Custom Text".',
-      '4. Interact: Swipe horizontal/vertical to change modes or sensitivity. Long-press for AI.',
-      '5. Explore: Press H for options, F for fullscreen, or R to randomize.'
+      '1. Connect: Click "Start" and allow microphone access.',
+      '2. Visualize: Play music. Use "Smart Presets" to set the vibe.',
+      '3. Customize: Use "Advanced Mode" for sensitivity and custom text.',
+      '4. Interact: Swipe to change modes or long-press for AI.',
+      '5. Explore: Press H for options, F for fullscreen, R for random.'
     ],
     settingsTitle: 'Parameter Guide',
     settingsDesc: {
-      sensitivity: 'Gain control for audio-reactive elements.',
-      speed: 'Temporal frequency of the generative patterns.',
+      sensitivity: 'Gain control for audio reaction.',
+      speed: 'Temporal frequency of patterns.',
       glow: 'Bloom intensity for atmospheric depth.',
-      trails: 'Temporal accumulation for fluid movement.',
-      smoothing: 'Temporal damping of the frequency data.',
-      fftSize: 'Sub-band count for spectral resolution.'
+      trails: 'Pixel persistence for fluid motion.',
+      smoothing: 'Temporal damping of spectral data.',
+      fftSize: 'Frequency resolution.'
     },
-    projectInfoTitle: 'Project Description',
-    aboutDescription: 'A next-generation synesthetic experience. Aura Flux fuses high-precision Web Audio spectral analysis with Google Gemini 3 to transform sound into living, reactive light. Designed for VJs, Streamers, and immersive environments.',
-    privacyTitle: 'Privacy Policy',
-    privacyText: 'Audio is analyzed locally. Temporary encrypted high-frequency snapshots are sent to Gemini solely for identification.',
-    version: 'Release', coreTech: 'Core Technology', repository: 'Repository', support: 'Support', reportBug: 'Report Bug'
+    projectInfoTitle: 'Project Info',
+    aboutDescription: 'A next-gen synesthetic experience. Designed for VJs, Streamers, and immersive environments.',
+    privacyTitle: 'Privacy',
+    privacyText: 'Audio is analyzed locally. Snapshots are sent to Gemini solely for identification.',
+    version: 'Release', coreTech: 'Tech', repository: 'Source', support: 'Support', reportBug: 'Bug'
   },
   onboarding: {
     welcome: 'Welcome to Aura Flux',
@@ -319,9 +297,9 @@ export const en = {
     next: 'Proceed', back: 'Previous', skip: 'Skip', finish: 'Launch App',
     features: {
       title: 'Experience Features',
-      visuals: { title: 'Generative Masterpieces', desc: '15+ reactive engines powered by WebGL and math-driven procedural art.' },
-      ai: { title: 'Gemini AI Intelligence', desc: 'Instant recognition of tracks and aesthetic mood through advanced AI grounding.' },
-      privacy: { title: 'Secure & Private', desc: 'Processing stays local. We never record or store your private audio data.' }
+      visuals: { title: 'Generative Art', desc: '15+ reactive engines powered by WebGL and math.' },
+      ai: { title: 'Gemini AI', desc: 'Instant track and mood recognition.' },
+      privacy: { title: 'Secure & Private', desc: 'Processing stays local. No recording.' }
     },
     shortcuts: { title: 'Dynamic Controls', desc: 'Master your environment with these keys.' }
   }
