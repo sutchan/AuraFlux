@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.7.23
+ * Version: 1.7.25
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 21:30
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -53,7 +53,7 @@ export const fr = {
     textPulse: 'Le texte change d\'échelle dynamiquement avec le rythme de la musique.',
     textAudioReactive: 'L\'opacité et la taille du texte réagissent à l\'amplitude audio.',
     customTextCycleColor: 'Fait défiler automatiquement le spectre des couleurs pour le texte.',
-    hideCursor: 'Masque automatiquement le curseur de la souris après inactivité.',
+    hideCursor: 'Masque automatically le curseur de la souris après inactivité.',
     uiModeSimple: 'Masquer les paramètres techniques et se concentrer sur l\'esthétique principale.',
     uiModeAdvanced: 'Afficher tous les paramètres de réglage pour un contrôle précis.',
     quality: 'Ajuster la résolution de rendu et la densité des particules.',
@@ -117,6 +117,8 @@ export const fr = {
   hideOptions: 'Réduire',
   showOptions: 'Étendre les Options',
   reset: 'Réinitialisation Système',
+  resetEngine: 'RÉINIT. MOTEUR',
+  confirmResetAction: 'CONFIRMER RÉINIT.',
   resetVisual: 'Réinit. Esthétique',
   resetText: 'Réinit. Texte',
   resetAudio: 'Réinit. Audio',
@@ -177,12 +179,12 @@ export const fr = {
     hint: 'Appliquez une combinaison esthétique soignée en un clic.',
     select: 'Choisir une ambiance...',
     custom: 'Personnalisé / Modifié',
-    calm: 'Vague Numérique',
-    party: 'Fête Énergique',
+    calm: 'Forme d\'Onde Numérique',
+    party: 'Fête Cinétique',
     ambient: 'Nébuleuse Profonde',
-    cyberpunk: 'Ville Cyber',
-    retrowave: 'Coucher de Soleil Rétro',
-    vocal: 'Noyau de Cristal'
+    cyberpunk: 'Lasers Cyber',
+    retrowave: 'Champ Rétro',
+    vocal: 'Barres Vocales'
   },
   recognitionSource: 'Source IA',
   lyricsPosition: 'Position des Paroles',
@@ -209,7 +211,9 @@ export const fr = {
     [VisualizerMode.MACRO_BUBBLES]: 'Macro-bulles',
     [VisualizerMode.KINETIC_WALL]: 'Mur Cinétique (WebGL)',
     [VisualizerMode.LIQUID]: 'Sphère Liquide (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Forme d\'Onde Numérique'
+    [VisualizerMode.WAVEFORM]: 'Forme d\'Onde Numérique',
+    [VisualizerMode.CYBER_CITY]: 'Ville Cyber (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: 'Noyau de Cristal (WebGL)'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Simulation de fluide organique propulsée par des particules WebGL.',
@@ -225,7 +229,9 @@ export const fr = {
     [VisualizerMode.MACRO_BUBBLES]: 'Visuels microcellulaires à mise au point douce.',
     [VisualizerMode.KINETIC_WALL]: 'Mur de scène LED massif avec des extrusions 3D cinétiques.',
     [VisualizerMode.LIQUID]: 'Sphère abstraite en métamorphose réagissant aux basses fréquences.',
-    [VisualizerMode.WAVEFORM]: 'Rubans liquides de l\'historique des fréquences spectrales.'
+    [VisualizerMode.WAVEFORM]: 'Rubans liquides de l\'historique des fréquences spectrales.',
+    [VisualizerMode.CYBER_CITY]: 'Une autoroute sans fin à travers une métropole baignée de néons, pulsant au rythme.',
+    [VisualizerMode.CRYSTAL_CORE]: 'Un cœur cristallin central et multifacette qui réfracte la lumière et pulse avec l\'énergie sonore.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamique', [LyricsStyle.MINIMAL]: 'Minimaliste'

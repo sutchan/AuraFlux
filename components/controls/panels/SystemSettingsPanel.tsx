@@ -308,7 +308,7 @@ export const SystemSettingsPanel: React.FC = () => {
                         className={`w-full py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 relative overflow-hidden ${confirmReset ? 'bg-red-600 text-white scale-[1.02]' : 'bg-red-500/5 border border-red-500/20 text-red-400/60 hover:text-red-400 hover:bg-red-500/10'}`}>
                         {confirmReset && <div className="absolute inset-0 bg-red-400 animate-pulse opacity-10" />}
                         <svg className={`h-3 w-3 ${confirmReset ? 'animate-bounce' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                        {confirmReset ? "CONFIRM RESET" : "RESET ENGINE"}
+                        {confirmReset ? (t?.confirmResetAction || 'CONFIRM RESET') : (t?.resetEngine || 'RESET ENGINE')}
                     </button>
                 </div>
             </div>

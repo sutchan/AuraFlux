@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.7.1
- * Author: Aura Vision Team
+ * Version: 1.7.25
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 00:00
+ * Updated: 2025-02-28 10:00
  */
 
 import React, { memo } from 'react';
@@ -14,15 +14,15 @@ import { useUI } from '../../AppContext';
 const styles: Partial<Record<VisualizerMode, React.CSSProperties>> = {
     // WebGL High-End
     [VisualizerMode.NEURAL_FLOW]: { background: 'radial-gradient(circle at 30% 30%, #00ffaa, transparent), radial-gradient(circle at 70% 70%, #00aaff, #000)' },
-    [VisualizerMode.KINETIC_WALL]: { background: 'linear-gradient(90deg, #000 5%, #ff0055 20%, #000 35%, #000 65%, #00ffff 80%, #000 95%)' }, 
-    [VisualizerMode.CYBER_CITY]: { background: 'linear-gradient(to top, #ff00ff 0%, #000 50%, #050011 100%)' }, 
-    [VisualizerMode.CRYSTAL_CORE]: { background: 'radial-gradient(circle, #fff 10%, #00ffff 30%, #000 70%)' }, 
+    [VisualizerMode.KINETIC_WALL]: { background: 'radial-gradient(ellipse at bottom, #1e3a8a 20%, #020617 80%), repeating-conic-gradient(from 45deg, #020617 0% 2.5%, #1e3a8a22 2.5% 5%)' }, 
     [VisualizerMode.LIQUID]: { background: 'radial-gradient(circle, #4c1d95, #1e1b4b)' },
-    [VisualizerMode.CUBE_FIELD]: { background: 'linear-gradient(180deg, #000 50%, #3b82f6 100%)' },
+    [VisualizerMode.CUBE_FIELD]: { background: 'linear-gradient(to top, #0c4a6e, #020617 70%), linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' },
+    [VisualizerMode.CYBER_CITY]: { background: 'linear-gradient(to top, #000 0%, #1a0033 60%), radial-gradient(ellipse at 50% 10%, #ff00ff 0%, transparent 50%)' }, 
+    [VisualizerMode.CRYSTAL_CORE]: { background: 'radial-gradient(circle, #fff 5%, #00ffff 25%, #050505 60%)' }, 
     
     // Modern 2D
-    [VisualizerMode.WAVEFORM]: { background: 'linear-gradient(to right, #00e5ff, #ffffff, #af52de)' },
-    [VisualizerMode.FLUID_CURVES]: { background: 'linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899)'},
+    [VisualizerMode.WAVEFORM]: { background: 'radial-gradient(ellipse 50% 10% at 50% 40%, #8b5cf6, transparent), radial-gradient(ellipse 50% 10% at 50% 60%, #ec4899, transparent), #050508' },
+    [VisualizerMode.FLUID_CURVES]: { background: 'radial-gradient(ellipse at 50% 0%, #3b82f6 0%, transparent 50%), radial-gradient(ellipse at 50% 100%, #ec4899 0%, transparent 50%), #050508' },
     [VisualizerMode.NEBULA]: { background: 'radial-gradient(ellipse at bottom, #2e1065, #000)' },
     [VisualizerMode.MACRO_BUBBLES]: { background: 'radial-gradient(circle at 20% 30%, #8b5cf6 20%, transparent 21%), radial-gradient(circle at 75% 80%, #ec4899 15%, transparent 16%), black' },
     
@@ -30,9 +30,9 @@ const styles: Partial<Record<VisualizerMode, React.CSSProperties>> = {
     [VisualizerMode.TUNNEL]: { background: 'radial-gradient(circle, transparent 20%, #8b5cf6 50%, black 80%)' },
     [VisualizerMode.LASERS]: { background: 'linear-gradient(10deg, transparent 48%, #ff00ff 50%, transparent 52%), linear-gradient(170deg, transparent 48%, #00ffff 50%, transparent 52%), black' },
     [VisualizerMode.RINGS]: { background: 'radial-gradient(circle, transparent 30%, #ec4899 35%, transparent 40%), radial-gradient(circle, transparent 60%, #8b5cf6 65%, transparent 70%), black' },
-    [VisualizerMode.PARTICLES]: { background: 'radial-gradient(circle, white 2%, transparent 4%), black' },
+    [VisualizerMode.PARTICLES]: { background: 'radial-gradient(circle, white 0.5px, transparent 1px), black', backgroundSize: '15px 15px' },
     [VisualizerMode.PLASMA]: { background: 'radial-gradient(circle, #ec4899, #8b5cf6, #3b82f6)' },
-    [VisualizerMode.BARS]: { background: 'linear-gradient(to top, #3b82f6, #8b5cf6 50%, #3b82f6)' },
+    [VisualizerMode.BARS]: { background: 'linear-gradient(to top, #3b82f6, #8b5cf6)', WebkitMask: 'repeating-linear-gradient(90deg, transparent 0 3px, black 3px 6px)' },
 };
 
 
@@ -48,7 +48,7 @@ export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode,
         <button
           onClick={onClick}
           aria-pressed={isActive}
-          className={`relative w-full rounded-xl transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 text-left ${isActive ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:ring-1 hover:ring-white/30'}`}
+          className={`relative w-full rounded-xl transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 text-left ${isActive ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:ring-1 hover:ring-white/30'} ${isIncluded ? '' : 'grayscale group-hover:grayscale-0'}`}
         >
           <div 
             className="h-12 w-full bg-black transition-transform duration-500 ease-in-out group-hover:scale-110"

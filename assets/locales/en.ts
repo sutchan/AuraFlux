@@ -1,8 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.7.11
+ * Version: 1.7.25
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -115,6 +116,9 @@ export const en = {
   hideOptions: 'Collapse',
   showOptions: 'Expand Options',
   reset: 'Reset System',
+  confirmReset: 'Confirm Reset?',
+  resetEngine: 'RESET ENGINE',
+  confirmResetAction: 'CONFIRM RESET',
   resetVisual: 'Reset Aesthetics',
   resetText: 'Reset Text',
   resetAudio: 'Reset Audio',
@@ -183,12 +187,12 @@ export const en = {
     hint: 'Apply a curated aesthetic combination with one click.',
     select: 'Select a mood...',
     custom: 'Custom / Modified',
-    calm: 'Hypnotic Calm',
-    party: 'Energetic Party',
+    calm: 'Digital Waveform',
+    party: 'Kinetic Wall Party',
     ambient: 'Deep Nebula',
-    cyberpunk: 'Cyber City', 
-    retrowave: 'Retro Sunset',
-    vocal: 'Crystal Core' 
+    cyberpunk: 'Cyber Lasers', 
+    retrowave: 'Retro Field',
+    vocal: 'Vocal Bars' 
   },
   recognitionSource: 'AI Source',
   lyricsPosition: 'Lyrics Position',
@@ -224,7 +228,9 @@ export const en = {
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles',
     [VisualizerMode.KINETIC_WALL]: 'Kinetic Wall (WebGL)', 
     [VisualizerMode.LIQUID]: 'Liquid Sphere (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Digital Waveform'
+    [VisualizerMode.WAVEFORM]: 'Digital Waveform',
+    [VisualizerMode.CYBER_CITY]: 'Cyber City (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: 'Crystal Core (WebGL)'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particles.',
@@ -240,7 +246,9 @@ export const en = {
     [VisualizerMode.MACRO_BUBBLES]: 'Soft focus micro-cellular visuals.',
     [VisualizerMode.KINETIC_WALL]: 'Massive LED stage wall with kinetic 3D extrusions.',
     [VisualizerMode.LIQUID]: 'Abstract morphing sphere reacting to low frequencies.',
-    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency history.'
+    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency history.',
+    [VisualizerMode.CYBER_CITY]: 'An endless highway through a neon-drenched metropolis, pulsating with the beat.',
+    [VisualizerMode.CRYSTAL_CORE]: 'A central, multifaceted crystalline heart that refracts light and pulses with sonic energy.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamic', [LyricsStyle.MINIMAL]: 'Minimalist'

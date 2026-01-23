@@ -1,10 +1,10 @@
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.7.9
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 22:45
- * Description: Refactored with strict memoization for core WebGL parameters.
+ * Updated: 2025-02-28 10:00
+ * Description: Integrated new WebGL scenes for robustness.
  */
 
 import React, { Suspense, useMemo } from 'react';
@@ -15,7 +15,9 @@ import {
     KineticWallScene, 
     LiquidSphereScene, 
     CubeFieldScene,
-    NeuralFlowScene
+    NeuralFlowScene,
+    CyberCityScene,
+    CrystalCoreScene
 } from './ThreeScenes';
 
 interface ThreeVisualizerProps {
@@ -59,6 +61,8 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
           case VisualizerMode.LIQUID: return base * 1.5;
           case VisualizerMode.CUBE_FIELD: return base * 1.2;
           case VisualizerMode.NEURAL_FLOW: return base * 1.5;
+          case VisualizerMode.CYBER_CITY: return base * 1.8;
+          case VisualizerMode.CRYSTAL_CORE: return base * 2.2;
           default: return base;
       }
   }, [mode]);
@@ -103,6 +107,10 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             return <CubeFieldScene {...sceneProps} />;
         case VisualizerMode.NEURAL_FLOW:
             return <NeuralFlowScene {...sceneProps} />;
+        case VisualizerMode.CYBER_CITY:
+            return <CyberCityScene {...sceneProps} />;
+        case VisualizerMode.CRYSTAL_CORE:
+            return <CrystalCoreScene {...sceneProps} />;
         default:
             return <NeuralFlowScene {...sceneProps} />;
     }

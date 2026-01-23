@@ -1,10 +1,10 @@
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.1.5
- * Author: Aura Vision Team
+ * Version: 1.1.7
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 19:30
- * Description: Standardized font styles for improved readability and consistency.
+ * Updated: 2025-02-27 20:30
+ * Description: Reduced color presets by 2 and added auto-contrasting text for color value display.
  */
 
 import React from 'react';
@@ -30,12 +30,27 @@ export const CustomTextSettingsPanel: React.FC = () => {
     setSettings({ ...settings, customTextPosition: value });
   };
 
+  const getTextColorForBg = (hexColor: string): string => {
+      if (!hexColor || hexColor.length < 4) return '#ffffff';
+
+      let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+      hexColor = hexColor.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+
+      let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexColor);
+      if (!result) return '#ffffff';
+
+      const r = parseInt(result[1], 16);
+      const g = parseInt(result[2], 16);
+      const b = parseInt(result[3], 16);
+      
+      const hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+      return hsp > 127.5 ? '#000000' : '#ffffff';
+  };
+
   const colorPresets = [
-    '#ffffff', '#f1f5f9', '#cbd5e1', '#94a3b8', '#64748b', '#475569',
-    '#fca5a5', '#f87171', '#ef4444', '#f97316', '#f59e0b', '#facc15',
-    '#bef264', '#84cc16', '#4ade80', '#22c55e', '#10b981', '#00ff41',
-    '#14b8a6', '#00e5ff', '#22d3ee', '#38bdf8', '#60a5fa', '#3b82f6',
-    '#6366f1', '#818cf8', '#a78bfa', '#8b5cf6', '#d946ef', '#ff007f'
+    '#ffffff', '#64748b', '#475569', '#f87171', '#ef4444', '#f97316', 
+    '#facc15', '#84cc16', '#22c55e', '#00ff41', '#14b8a6', '#00e5ff',
+    '#38bdf8', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#ff007f'
   ];
 
   return (
@@ -107,7 +122,10 @@ export const CustomTextSettingsPanel: React.FC = () => {
                     <div className="relative w-full h-8 rounded-lg border border-white/20 overflow-hidden group cursor-pointer shadow-md">
                         <div className="absolute inset-0 transition-colors duration-300" style={{ backgroundColor: settings.customTextColor || '#ffffff' }} />
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <span className="text-xs font-black text-white uppercase tracking-widest drop-shadow-md">
+                            <span 
+                              className="text-xs font-black uppercase tracking-widest drop-shadow-md transition-colors duration-300"
+                              style={{ color: getTextColorForBg(settings.customTextColor || '#ffffff') }}
+                            >
                                 {settings.customTextColor}
                             </span>
                         </div>

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.7.23
+ * Version: 1.7.25
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 21:30
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -117,6 +117,8 @@ export const es = {
   hideOptions: 'Contraer',
   showOptions: 'Expandir Opciones',
   reset: 'Reiniciar Sistema',
+  resetEngine: 'REINICIAR MOTOR',
+  confirmResetAction: 'CONFIRMAR REINICIO',
   resetVisual: 'Reiniciar Estética',
   resetText: 'Reiniciar Texto',
   resetAudio: 'Reiniciar Audio',
@@ -177,12 +179,12 @@ export const es = {
     hint: 'Aplica una combinación estética curada con un solo clic.',
     select: 'Elige un ambiente...',
     custom: 'Personalizado / Modificado',
-    calm: 'Hipnótico y Calmo',
-    party: 'Fiesta Energética',
+    calm: 'Forma de Onda Digital',
+    party: 'Fiesta Cinética',
     ambient: 'Nebulosa Profunda',
-    cyberpunk: 'Ciudad Ciber',
-    retrowave: 'Atardecer Retro',
-    vocal: 'Núcleo de Cristal'
+    cyberpunk: 'Láseres Ciber',
+    retrowave: 'Campo Retro',
+    vocal: 'Barras Vocales'
   },
   recognitionSource: 'Fuente de IA',
   lyricsPosition: 'Posición de Letras',
@@ -209,7 +211,9 @@ export const es = {
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Burbujas',
     [VisualizerMode.KINETIC_WALL]: 'Muro Cinético (WebGL)',
     [VisualizerMode.LIQUID]: 'Esfera Líquida (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Forma de Onda Digital'
+    [VisualizerMode.WAVEFORM]: 'Forma de Onda Digital',
+    [VisualizerMode.CYBER_CITY]: 'Ciudad Cibernética (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: 'Núcleo de Cristal (WebGL)'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Simulación de fluidos orgánicos impulsada por partículas WebGL.',
@@ -225,7 +229,9 @@ export const es = {
     [VisualizerMode.MACRO_BUBBLES]: 'Visuales microcelulares de enfoque suave.',
     [VisualizerMode.KINETIC_WALL]: 'Muro de escenario LED masivo con extrusiones 3D cinéticas.',
     [VisualizerMode.LIQUID]: 'Esfera abstracta que se transforma reaccionando a las bajas frecuencias.',
-    [VisualizerMode.WAVEFORM]: 'Cintas líquidas del historial de frecuencia espectral.'
+    [VisualizerMode.WAVEFORM]: 'Cintas líquidas del historial de frecuencia espectral.',
+    [VisualizerMode.CYBER_CITY]: 'Una autopista sin fin a través de una metrópolis bañada en neón, pulsando con el ritmo.',
+    [VisualizerMode.CRYSTAL_CORE]: 'Un corazón cristalino central y multifacético que refracta la luz y pulsa con la energía sónica.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Estándar', [LyricsStyle.KARAOKE]: 'Dinámico', [LyricsStyle.MINIMAL]: 'Minimalista'

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.7.23
+ * Version: 1.7.25
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 21:30
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -117,6 +117,8 @@ export const ja = {
   hideOptions: 'パネルを隠す',
   showOptions: 'オプションを表示',
   reset: 'システムリセット',
+  resetEngine: 'エンジンリセット',
+  confirmResetAction: 'リセットを確認',
   resetVisual: '外観をリセット',
   resetText: 'テキストをリセット',
   resetAudio: '音響をリセット',
@@ -185,12 +187,12 @@ export const ja = {
     hint: '専門家が調整したビジュアル設定を一クリックで適用します。',
     select: 'ムードを選択...',
     custom: 'カスタム / 変更済み',
-    calm: '催眠的・穏やか',
-    party: 'エネルギッシュ',
-    ambient: 'アンビエント',
-    cyberpunk: 'サイバーパンク',
-    retrowave: 'レトロウェイブ',
-    vocal: 'ボーカル特化'
+    calm: 'デジタル波形',
+    party: 'キネティックパーティー',
+    ambient: '深宇宙星雲',
+    cyberpunk: 'サイバーレーザー',
+    retrowave: 'レトロフィールド',
+    vocal: 'ボーカルスペクトラム'
   },
   recognitionSource: 'AIプロバイダー',
   lyricsPosition: '表示位置',
@@ -206,6 +208,90 @@ export const ja = {
   },
   errors: {
     title: 'オーディオエラー', accessDenied: 'マイクへのアクセスが拒否されました。', noDevice: '入力デバイスが見つかりません。', deviceBusy: 'デバイスが使用中または無効です。', general: 'オーディオデバイスにアクセスできません。', tryDemo: 'デモモードを試す'
+  },
+  modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'ニューラル・フロー (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: '量子フィールド (WebGL)',
+    [VisualizerMode.PLASMA]: 'プラズマ・フロー',
+    [VisualizerMode.BARS]: '周波数バー',
+    [VisualizerMode.PARTICLES]: 'スターフィールド',
+    [VisualizerMode.TUNNEL]: '幾何学トンネル',
+    [VisualizerMode.RINGS]: 'ネオンリング',
+    [VisualizerMode.NEBULA]: '深宇宙星雲',
+    [VisualizerMode.LASERS]: 'コンサートレーザー',
+    [VisualizerMode.FLUID_CURVES]: 'オーラウェーブ',
+    [VisualizerMode.MACRO_BUBBLES]: 'マクロバブル',
+    [VisualizerMode.KINETIC_WALL]: 'キネティックウォール (WebGL)',
+    [VisualizerMode.LIQUID]: '液体球体 (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'デジタル波形',
+    [VisualizerMode.CYBER_CITY]: 'サイバーシティ (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: 'クリスタルコア (WebGL)'
+  },
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: 'WebGLパーティクルによる有機的な流体シミュレーション。',
+    [VisualizerMode.CUBE_FIELD]: '周波数に反応する幾何学的なブロックの無限フィールド。',
+    [VisualizerMode.PLASMA]: '滑らかで流体のようなカラーブレンディング。',
+    [VisualizerMode.BARS]: 'ピークを持つ古典的な周波数スペクトラムアナライザ。',
+    [VisualizerMode.PARTICLES]: '強度に反応する深宇宙の星空飛行。',
+    [VisualizerMode.TUNNEL]: '引き込まれるような再帰的な幾何学コリドー。',
+    [VisualizerMode.RINGS]: '同心円状に広がるネオンの共鳴パターン。',
+    [VisualizerMode.NEBULA]: 'ガス状物理学を用いた深宇宙パーティクルシミュレーション。',
+    [VisualizerMode.LASERS]: '画面を横切るシャープで高エネルギーの光線。',
+    [VisualizerMode.FLUID_CURVES]: '滑らかな雰囲気の光の波。',
+    [VisualizerMode.MACRO_BUBBLES]: 'ソフトフォーカスの微細細胞ビジュアル。',
+    [VisualizerMode.KINETIC_WALL]: 'キネティックな3D押し出しを持つ巨大なLEDステージウォール。',
+    [VisualizerMode.LIQUID]: '低周波に反応して変形する抽象的な球体。',
+    [VisualizerMode.WAVEFORM]: 'スペクトル周波数履歴の液体リボン。',
+    [VisualizerMode.CYBER_CITY]: 'ビートに合わせて脈動するネオン街の無限のハイウェイを駆け抜ける。',
+    [VisualizerMode.CRYSTAL_CORE]: '音のエネルギーに反応して脈動し、光を屈折させる中央の多面的な結晶の心臓。'
+  },
+  lyricsStyles: {
+    [LyricsStyle.STANDARD]: '標準', [LyricsStyle.KARAOKE]: 'ダイナミック', [LyricsStyle.MINIMAL]: 'ミニマル'
+  },
+  helpModal: {
+    title: 'Aura Flux ガイド',
+    tabs: { guide: 'ガイド', shortcuts: 'ショートカット', about: '概要' },
+    intro: 'Aura Fluxは、スペクトル解析とGemini 3インテリジェンスを使用して、オーディオを生成的なデジタルアートに変換します。',
+    shortcutsTitle: 'キーボードショートカット',
+    gesturesTitle: 'タッチジェスチャー',
+    shortcutItems: {
+      toggleMic: 'オーディオ入力の切替',
+      fullscreen: 'フルスクリーン',
+      randomize: 'ランダムな外観',
+      lyrics: 'AI情報の切替',
+      hideUi: 'コントロールパネルの切替',
+      glow: 'ブルームの切替',
+      trails: 'モーションブラーの切替',
+      changeMode: 'モードの循環',
+      changeTheme: 'テーマの循環'
+    },
+    gestureItems: {
+      swipeMode: '水平スワイプ：モード変更',
+      swipeSens: '垂直スワイプ：感度調整',
+      longPress: '長押し：AI識別'
+    },
+    howItWorksTitle: '使い方',
+    howItWorksSteps: [
+      '1. 接続：「開始」をクリックし、マイクへのアクセスを許可します。',
+      '2. 視覚化：音楽を再生します。「スマートプリセット」で雰囲気を設定します。',
+      '3. カスタマイズ：「詳細モード」で感度やカスタムテキストを調整します。',
+      '4. 操作：スワイプでモードを変更したり、長押しでAIを起動します。',
+      '5. 探索：Hでオプション、Fでフルスクリーン、Rでランダム化。'
+    ],
+    settingsTitle: 'パラメータガイド',
+    settingsDesc: {
+      sensitivity: 'オーディオ反応のゲイン制御。',
+      speed: 'パターンの時間的頻度。',
+      glow: '雰囲気の深みを出すブルーム強度。',
+      trails: '滑らかな動きのためのピクセル持続性。',
+      smoothing: 'スペクトルデータの時間的減衰。',
+      fftSize: '周波数解像度。'
+    },
+    projectInfoTitle: 'プロジェクト情報',
+    aboutDescription: 'VJ、ストリーマー、没入型環境向けに設計された次世代の共感覚体験。',
+    privacyTitle: 'プライバシー',
+    privacyText: 'オーディオはローカルで解析されます。スナップショットは識別のためだけにGeminiに送信されます。',
+    version: 'リリース', coreTech: '技術', repository: 'ソース', support: 'サポート', reportBug: 'バグ'
   },
   onboarding: {
     welcome: 'Aura Fluxへようこそ',

@@ -1,10 +1,10 @@
 /**
  * File: components/visualizers/scenes/KineticWallScene.tsx
- * Version: 3.8.0
+ * Version: 3.8.1
  * Author: Sut
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-02-26 16:15
- * Description: Sensitivity calibration - Reduced audio gain by an additional 50% for high-fidelity stability.
+ * Updated: 2025-02-26 22:15
+ * Description: Increased brick size by 2x for a bolder visual impact.
  */
 
 import React, { useRef, useMemo, useLayoutEffect } from 'react';
@@ -30,7 +30,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
   // --- 1. Overscan Grid Logic ---
   const { count, cols, rows, aLayoutData } = useMemo(() => {
     const aspect = window.innerWidth / window.innerHeight;
-    const baseDensity = settings.quality === 'high' ? 85 : 55;
+    const baseDensity = settings.quality === 'high' ? 45 : 30; // Reduced density for larger bricks
     
     // Width Buffer (Overscan) to prevent black background leakage
     const c = Math.ceil(baseDensity * Math.max(aspect, 1.0) * 1.5);
@@ -50,7 +50,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
     return { count: total, cols: c, rows: r, aLayoutData: data };
   }, [settings.quality]);
 
-  const geometry = useMemo(() => new RoundedBoxGeometry(0.92, 0.92, 2.0, 3, 0.2), []);
+  const geometry = useMemo(() => new RoundedBoxGeometry(1.84, 1.84, 2.0, 3, 0.2), []); // Increased size by 2x
 
   useLayoutEffect(() => {
     if (geometry) {
@@ -169,7 +169,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
 
     // Update Matrix
     if (meshRef.current) {
-        const spacing = 1.06; 
+        const spacing = 2.12; // Increased spacing by 2x
         for (let i = 0; i < count; i++) {
             const r = Math.floor(i / cols);
             const c = i % cols;
@@ -186,7 +186,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
     }
 
     // --- Overscan Camera Bound ---
-    const gridHalfWidth = (cols * 1.06) / 2;
+    const gridHalfWidth = (cols * 2.12) / 2; // Use new spacing for bounds calculation
     const maxPanX = gridHalfWidth * 0.35; 
     
     const camX = Math.sin(time * 0.2) * maxPanX;

@@ -1,10 +1,10 @@
 /**
  * File: core/services/renderers/WaveformRenderer.ts
- * Version: 3.1.0
+ * Version: 3.2.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 20:20
- * Description: Re-enabled horizontal movement with a parallax effect for enhanced visual depth.
+ * Updated: 2025-02-27 19:30
+ * Description: Increased thickness of main bass line by 3x for visual emphasis.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -41,8 +41,8 @@ export class WaveformRenderer implements IVisualizerRenderer {
     this.phaseOffset += (settings.speed * 0.04) + beatImpact; // Horizontal phase shift for parallax scrolling
 
     const configs = [
-        { start: 0, end: 6, amp: 0.7, freq: 0.003, width: 3.5, gain: 1.0, z: 1.0 },    
-        { start: 7, end: 20, amp: 0.7, freq: 0.008, width: 3.5, gain: 1.5, z: 1.0 }, 
+        { start: 0, end: 6, amp: 0.7, freq: 0.003, width: 10.5, gain: 1.0, z: 1.0 }, // 3x thicker main line 
+        { start: 7, end: 20, amp: 0.7, freq: 0.008, width: 7.0, gain: 1.5, z: 1.0 },  // 2x thicker secondary line
         { start: 25, end: 60, amp: 0.7, freq: 0.015, width: 3.5, gain: 2.0, z: 1.0 }, 
         { start: 65, end: 110, amp: 0.7, freq: 0.03, width: 3.5, gain: 3.0, z: 1.0 }, 
         { start: 120, end: 180, amp: 0.7, freq: 0.06, width: 3.5, gain: 4.5, z: 1.0 }, 

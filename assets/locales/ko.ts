@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.7.23
+ * Version: 1.7.25
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 21:30
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -16,63 +16,63 @@ export const ko = {
     visual: '시각 효과', text: '텍스트', audio: '오디오', ai: '트랙 인식', system: '시스템'
   },
   hints: {
-    mode: '시각 효과 생성을 위한 핵심 수리 렌더링 엔진을 선택합니다.',
-    theme: '장면에 최적화된 컬러 팔레트를 적용합니다.',
-    speed: '시간의 흐름 배율입니다. 낮은 값은 최면적이고 높은 값은 역동적입니다.',
-    glow: '포스트 프로세싱 글로우 효과입니다. 성능을 높이려면 비활성화하세요.',
-    trails: '픽셀 잔상 강도입니다. 높은 값은 유체와 같은 부드러운 움직임을 만듭니다.',
-    sensitivity: '오디오 게인 제어입니다. 조용한 환경에서는 값을 높여 시각적 반응을 증폭시키세요.',
-    smoothing: '시계열 댐핑 계수입니다. 높은 값은 액체처럼 부드럽게, 낮은 값은 날카롭게 반응합니다.',
-    fftSize: '주파수 분석 해상도입니다. 4096은 정밀한 디테일을 제공하나 CPU 부하가 증가합니다.',
-    lyrics: 'AI 기반 트랙 식별 기능을 토글합니다.',
-    lyricsStyle: '식별된 정보의 레이아웃 스타일을 변경합니다.',
-    region: 'AI 검색 엔진의 가중치를 특정 지역의 음악 시장에 맞게 최적화합니다.',
-    autoRotate: '다양한 시각 효과 엔진을 일정 시간마다 자동으로 순환시킵니다.',
-    rotateInterval: '다음 엔진으로 전환되기 전까지의 대기 시간(초)입니다.',
-    cycleColors: '시간 경과에 따라 컬러 테마를 자동으로 부드럽게 전환합니다.',
-    colorInterval: '다음 컬러 팔레트로 블렌딩되는 시간(초)입니다.',
-    reset: '모든 설정, 언어 및 오디오 옵션을 공장 초기 상태로 되돌립니다.',
-    confirmReset: '초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
-    resetVisual: '시각적 매개변수(속도, 광채, 잔상)만 초기화합니다.',
-    resetText: '사용자 정의 텍스트, 글꼴 및 위치 설정을 지웁니다.',
-    resetAudio: '감도, 평활도 및 FFT를 기본값으로 복원합니다.',
-    resetAi: 'AI 페르소나, 지역 및 가사 레이아웃을 재설정합니다.',
-    randomize: '시각 모드와 색상의 독창적인 조합을 무작위로 생성합니다.',
-    fullscreen: '몰입형 전체 화면 모드로 전환합니다.',
-    help: '단축키 가이드 및 프로젝트 문서를 확인합니다.',
-    mic: '마이크 입력을 활성화하거나 음소거합니다.',
-    device: '사용할 하드웨어 오디오 입력 장치를 선택합니다.',
-    monitor: '입력 신호를 스피커로 출력합니다(피드백 하울링에 주의하세요).',
-    wakeLock: '시각화가 활성화된 동안 화면 절전 모드를 방지합니다.',
-    showFps: '화면 상단에 실시간 프레임 레이트(FPS)를 표시합니다.',
-    showTooltips: '컨트롤 위에 마우스를 올리면 도움말 힌트를 표시합니다.',
-    doubleClickFullscreen: '화면 아무 곳이나 더블 클릭하여 전체 화면을 토글합니다.',
-    autoHideUi: '조작이 없을 때 제어 패널을 자동으로 숨깁니다.',
-    mirrorDisplay: '화면을 좌우 반전시킵니다(후면 투사나 웹캠 모드에 유용).',
-    showCustomText: '사용자 정의 텍스트 오버레이의 표시 여부를 전환합니다.',
-    textPulse: '텍스트 크기가 음악 비트에 맞춰 동적으로 조절됩니다.',
-    textAudioReactive: '텍스트의 투명도와 크기가 실시간 볼륨에 반응합니다.',
-    customTextCycleColor: '텍스트 색상을 스펙트럼 전반에 걸쳐 자동으로 순환시킵니다.',
-    hideCursor: '일정 시간 활동이 없으면 마우스 커서를 자동으로 숨깁니다.',
-    uiModeSimple: '기술적 매개변수를 숨기고 핵심 미학에 집중합니다.',
-    uiModeAdvanced: '정밀한 제어를 위해 모든 튜닝 매개변수를 표시합니다.',
-    quality: '렌더링 해상도와 입자 밀도를 조정합니다.',
-    textSize: '사용자 정의 텍스트 레이어의 크기를 조절합니다.',
-    textRotation: '텍스트 오버레이를 회전합니다.',
-    textPosition: '사용자 정의 텍스트의 앵커 포인트입니다.',
-    lyricsPosition: 'AI 가사 오버레이의 앵커 포인트입니다.',
-    customTextPlaceholder: '메시지를 입력하세요.',
-    textOpacity: '사용자 정의 텍스트의 투명도 수준입니다.',
-    cycleSpeed: '전체 색상 주기가 완료되는 시간(초)입니다.',
-    lyricsFont: 'AI 가사의 타이포그래피 스타일입니다.',
-    lyricsFontSize: 'AI 식별 텍스트의 크기를 조절합니다.',
-    textFont: '사용자 정의 텍스트 레이어의 글꼴 모음입니다.',
-    recognitionSource: 'AI 페르소나 또는 공급자를 선택하세요.',
-    exportConfig: '설정을 JSON 파일로 내보냅니다.',
-    importConfig: 'JSON 파일에서 설정을 가져옵니다.',
-    savePreset: '현재 설정을 로컬에 저장합니다.',
-    loadPreset: '이 프리셋을 불러옵니다.',
-    copyConfig: '설정 코드를 클립보드에 복사합니다.'
+    mode: '시각 효과 생성을 위한 핵심 수리 렌더링 엔진을 선택합니다。',
+    theme: '장면에 최적화된 컬러 팔레트를 적용합니다。',
+    speed: '시간의 흐름 배율입니다. 낮은 값은 최면적이고 높은 값은 역동적입니다。',
+    glow: '포스트 프로세싱 글로우 효과입니다. 성능을 높이려면 비활성화하세요。',
+    trails: '픽셀 잔상 강도입니다. 높은 값은 유체와 같은 부드러운 움직임을 만듭니다。',
+    sensitivity: '오디오 게인 제어입니다. 조용한 환경에서는 값을 높여 시각적 반응을 증폭시키세요。',
+    smoothing: '시계열 댐핑 계수입니다. 높은 값은 액체처럼 부드럽게, 낮은 값은 날카롭게 반응합니다。',
+    fftSize: '주파수 분석 해상도입니다. 4096은 정밀한 디테일을 제공하나 CPU 부하가 증가합니다。',
+    lyrics: 'AI 기반 트랙 식별 기능을 토글합니다。',
+    lyricsStyle: '식별된 정보의 레이아웃 스타일을 변경합니다。',
+    region: 'AI 검색 엔진의 가중치를 특정 지역의 음악 시장에 맞게 최적화합니다。',
+    autoRotate: '다양한 시각 효과 엔진을 일정 시간마다 자동으로 순환시킵니다。',
+    rotateInterval: '다음 엔진으로 전환되기 전까지의 대기 시간(초)입니다。',
+    cycleColors: '시간 경과에 따라 컬러 테마를 자동으로 부드럽게 전환합니다。',
+    colorInterval: '다음 컬러 팔레트로 블렌딩되는 시간(초)입니다。',
+    reset: '모든 설정, 언어 및 오디오 옵션을 공장 초기 상태로 되돌립니다。',
+    confirmReset: '초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다。',
+    resetVisual: '시각적 매개변수(속도, 광채, 잔상)만 초기화합니다。',
+    resetText: '사용자 정의 텍스트, 글꼴 및 위치 설정을 지웁니다。',
+    resetAudio: '감도, 평활도 및 FFT를 기본값으로 복원합니다。',
+    resetAi: 'AI 페르소나, 지역 및 가사 레이아웃을 재설정합니다。',
+    randomize: '시각 모드와 색상의 독창적인 조합을 무작위로 생성합니다。',
+    fullscreen: '몰입형 전체 화면 모드로 전환합니다。',
+    help: '단축키 가이드 및 프로젝트 문서를 확인합니다。',
+    mic: '마이크 입력을 활성화하거나 음소거합니다。',
+    device: '사용할 하드웨어 오디오 입력 장치를 선택합니다。',
+    monitor: '입력 신호를 스피커로 출력합니다(피드백 하울링에 주의하세요)。',
+    wakeLock: '시각화가 활성화된 동안 화면 절전 모드를 방지합니다。',
+    showFps: '화면 상단에 실시간 프레임 레이트(FPS)를 표시합니다。',
+    showTooltips: '컨트롤 위에 마우스를 올리면 도움말 힌트를 표시합니다。',
+    doubleClickFullscreen: '화면 아무 곳이나 더블 클릭하여 전체 화면을 토글합니다。',
+    autoHideUi: '조작이 없을 때 제어 패널을 자동으로 숨깁니다。',
+    mirrorDisplay: '화면을 좌우 반전시킵니다(후면 투사나 웹캠 모드에 유용)。',
+    showCustomText: '사용자 정의 텍스트 오버레이의 표시 여부를 전환합니다。',
+    textPulse: '텍스트 크기가 음악 비트에 맞춰 동적으로 조절됩니다。',
+    textAudioReactive: '텍스트의 투명도와 크기가 실시간 볼륨에 반응합니다。',
+    customTextCycleColor: '텍스트 색상을 스펙트럼 전반에 걸쳐 자동으로 순환시킵니다。',
+    hideCursor: '일정 시간 활동이 없으면 마우스 커서를 자동으로 숨깁니다。',
+    uiModeSimple: '기술적 매개변수를 숨기고 핵심 미학에 집중합니다。',
+    uiModeAdvanced: '정밀한 제어를 위해 모든 튜닝 매개변수를 표시합니다。',
+    quality: '렌더링 해상도와 입자 밀도를 조정합니다。',
+    textSize: '사용자 정의 텍스트 레이어의 크기를 조절합니다。',
+    textRotation: '텍스트 오버레이를 회전합니다。',
+    textPosition: '사용자 정의 텍스트의 앵커 포인트입니다。',
+    lyricsPosition: 'AI 가사 오버레이의 앵커 포인트입니다。',
+    customTextPlaceholder: '메시지를 입력하세요。',
+    textOpacity: '사용자 정의 텍스트의 투명도 수준입니다。',
+    cycleSpeed: '전체 색상 주기가 완료되는 시간(초)입니다。',
+    lyricsFont: 'AI 가사의 타이포그래피 스타일입니다。',
+    lyricsFontSize: 'AI 식별 텍스트의 크기를 조절합니다。',
+    textFont: '사용자 정의 텍스트 레이어의 글꼴 모음입니다。',
+    recognitionSource: 'AI 페르소나 또는 공급자를 선택하세요。',
+    exportConfig: '설정을 JSON 파일로 내보냅니다。',
+    importConfig: 'JSON 파일에서 설정을 가져옵니다。',
+    savePreset: '현재 설정을 로컬에 저장합니다。',
+    loadPreset: '이 프리셋을 불러옵니다。',
+    copyConfig: '설정 코드를 클립보드에 복사합니다。'
   },
   aiPanel: {
       keySaved: 'API Key 저장 완료',
@@ -82,9 +82,9 @@ export const ko = {
       missing: '누락됨',
       save: '저장',
       update: '업데이트',
-      geminiHint: '선택. 비워두면 무료 할당량이 사용됩니다.',
-      customHint: '필수. 키는 브라우저에 로컬 저장됩니다.',
-      groqHint: '필수. 고속 Whisper+Llama 추론을 활성화합니다.'
+      geminiHint: '선택. 비워두면 무료 할당량이 사용됩니다。',
+      customHint: '필수. 키는 브라우저에 로컬 저장됩니다。',
+      groqHint: '필수. 고속 Whisper+Llama 추론을 활성화합니다。'
   },
   visualizerMode: '시각화 모드',
   styleTheme: '비주얼 테마',
@@ -111,12 +111,14 @@ export const ko = {
   identifying: 'AI가 트랙 분석 중...',
   startExperience: '시각 체험 시작',
   welcomeTitle: 'Aura Flux | 빛의 선율',
-  welcomeText: '선율을 오로라로, 리듬을 예술로 승화시키세요. Gemini AI 기반 실시간 인식을 통해 궁극의 공감각적 여정을 경험하세요.',
+  welcomeText: '선율을 오로라로, 리듬을 예술로 승화시키세요. Gemini AI 기반 실시간 인식을 통해 궁극의 공감각적 여정을 경험하세요。',
   unsupportedTitle: '지원되지 않는 브라우저',
-  unsupportedText: 'Aura Flux는 최신 Web Audio 기능이 필요합니다. 최신 버전의 Chrome, Edge 또는 Safari를 사용해 주세요.',
+  unsupportedText: 'Aura Flux는 최신 Web Audio 기능이 필요합니다. 최신 버전의 Chrome, Edge 또는 Safari를 사용해 주세요。',
   hideOptions: '패널 접기',
   showOptions: '설정 표시',
   reset: '시스템 전체 초기화',
+  resetEngine: '엔진 초기화',
+  confirmResetAction: '초기화 확인',
   resetVisual: '미학 설정 초기화',
   resetText: '텍스트 설정 초기화',
   resetAudio: '오디오 설정 초기화',
@@ -124,7 +126,7 @@ export const ko = {
   randomize: '스마트 무작위 조합',
   help: '도움말 및 가이드',
   close: '닫기',
-  betaDisclaimer: 'AI 인식은 베타 기능이며 지속적으로 최적화 중입니다.',
+  betaDisclaimer: 'AI 인식은 베타 기능이며 지속적으로 최적화 중입니다。',
   wrongSong: '인식이 잘못되었나요? 재시도',
   hideCursor: '마우스 커서 숨김',
   customColor: '텍스트 색상',
@@ -132,7 +134,7 @@ export const ko = {
   smoothing: '평활도',
   fftSize: '해상도 (FFT)',
   appInfo: '앱 정보',
-  appDescription: '실시간 스펙트럼 분석과 Gemini AI 인식을 결합한 몰입형 음악 시각화 도구.',
+  appDescription: '실시간 스펙트럼 분석과 Gemini AI 인식을 결합한 몰입형 음악 시각화 도구。',
   version: '빌드',
   defaultMic: '시스템 기본 마이크',
   customText: '사용자 정의 텍스트',
@@ -154,7 +156,7 @@ export const ko = {
     effects: '효과', automation: '자동화', display: '화면'
   },
   audioPanel: {
-    info: '감도와 평활도를 조절하여 시각화의 반응성을 최적화하세요. 높은 FFT 해상도는 정밀한 디테일을 제공하지만 CPU 사용량이 증가합니다.'
+    info: '감도와 평활도를 조절하여 시각화의 반응성을 최적화하세요. 높은 FFT 해상도는 정밀한 디테일을 제공하지만 CPU 사용량이 증가합니다。'
   },
   systemPanel: {
     interface: '인터페이스', behavior: '동작', maintenance: '유지 관리', engine: '엔진', audio: '오디오', ai: 'AI'
@@ -173,7 +175,7 @@ export const ko = {
     importSuccess: '설정을 가져왔습니다',
     copy: '복사',
     copied: '복사됨',
-    limitReached: '최대 5개의 프리셋만 저장할 수 있습니다.'
+    limitReached: '최대 5개의 프리셋만 저장할 수 있습니다。'
   },
   showFps: 'FPS 표시',
   showTooltips: '툴팁 표시',
@@ -182,15 +184,15 @@ export const ko = {
   mirrorDisplay: '화면 미러링',
   presets: {
     title: '스마트 프리셋',
-    hint: '전문가가 튜닝한 시각적 조합을 한 번의 클릭으로 적용합니다.',
+    hint: '전문가가 튜닝한 시각적 조합을 한 번의 클릭으로 적용합니다。',
     select: '무드 선택...',
     custom: '사용자 지정 / 수정됨',
     calm: '디지털 파형',
-    party: '에너제틱 파티',
-    ambient: '앰비언트 포커스',
-    cyberpunk: '사이버펑크',
-    retrowave: '레트로 웨이브',
-    vocal: '보컬 강조'
+    party: '키네틱 월 파티',
+    ambient: '심우주 성운',
+    cyberpunk: '사이버 레이저',
+    retrowave: '레트로 필드',
+    vocal: '보컬 스펙트럼'
   },
   recognitionSource: 'AI 페르소나',
   lyricsPosition: '가사 위치',
@@ -205,7 +207,91 @@ export const ko = {
     shortcuts: { mic: '마이크', ui: 'UI', mode: '모드', random: '랜덤' }
   },
   errors: {
-    title: '오디오 오류', accessDenied: '마이크 접근이 거부되었습니다.', noDevice: '입력 장치를 찾을 수 없습니다.', deviceBusy: '장치가 사용 중이거나 유효하지 않습니다.', general: '오디오 장치에 접근할 수 없습니다.', tryDemo: '데모 모드 시도'
+    title: '오디오 오류', accessDenied: '마이크 접근이 거부되었습니다。', noDevice: '입력 장치를 찾을 수 없습니다。', deviceBusy: '장치가 사용 중이거나 유효하지 않습니다。', general: '오디오 장치에 접근할 수 없습니다。', tryDemo: '데모 모드 시도'
+  },
+  modes: {
+    [VisualizerMode.NEURAL_FLOW]: '뉴럴 플로우 (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: '퀀텀 필드 (WebGL)',
+    [VisualizerMode.PLASMA]: '플라즈마 플로우',
+    [VisualizerMode.BARS]: '주파수 막대',
+    [VisualizerMode.PARTICLES]: '스타필드',
+    [VisualizerMode.TUNNEL]: '기하학 터널',
+    [VisualizerMode.RINGS]: '네온 링',
+    [VisualizerMode.NEBULA]: '심우주 성운',
+    [VisualizerMode.LASERS]: '콘서트 레이저',
+    [VisualizerMode.FLUID_CURVES]: '오라 웨이브',
+    [VisualizerMode.MACRO_BUBBLES]: '매크로 버블',
+    [VisualizerMode.KINETIC_WALL]: '키네틱 월 (WebGL)',
+    [VisualizerMode.LIQUID]: '액체 구체 (WebGL)',
+    [VisualizerMode.WAVEFORM]: '디지털 파형',
+    [VisualizerMode.CYBER_CITY]: '사이버 도시 (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: '크리스탈 코어 (WebGL)'
+  },
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: 'WebGL 파티클로 구동되는 유기적 유체 시뮬레이션。',
+    [VisualizerMode.CUBE_FIELD]: '주파수에 반응하는 기하학적 블록의 무한한 필드。',
+    [VisualizerMode.PLASMA]: '부드러운 유체 같은 색상 혼합。',
+    [VisualizerMode.BARS]: '피크가 있는 클래식 주파수 스펙트럼 분석기。',
+    [VisualizerMode.PARTICLES]: '강도에 반응하는 심우주 별밭 횡단。',
+    [VisualizerMode.TUNNEL]: '당신을 끌어들이는 재귀적인 기하학적 복도。',
+    [VisualizerMode.RINGS]: '동심원의 네온 공명 패턴。',
+    [VisualizerMode.NEBULA]: '가스 물리학을 이용한 심우주 파티클 시뮬레이션。',
+    [VisualizerMode.LASERS]: '화면을 가로지르는 날카로운 고에너지 광선。',
+    [VisualizerMode.FLUID_CURVES]: '부드러운 대기광 파동。',
+    [VisualizerMode.MACRO_BUBBLES]: '부드러운 초점의 미세 세포 비주얼。',
+    [VisualizerMode.KINETIC_WALL]: '운동성 3D 돌출부가 있는 거대한 LED 무대 벽。',
+    [VisualizerMode.LIQUID]: '저주파에 반응하여 변형되는 추상 구체。',
+    [VisualizerMode.WAVEFORM]: '스펙트럼 주파수 히스토리의 액체 리본。',
+    [VisualizerMode.CYBER_CITY]: '비트에 맞춰 맥동하는 네온 도시의 끝없는 고속도로를 질주합니다。',
+    [VisualizerMode.CRYSTAL_CORE]: '소리 에너지에 반응하여 맥동하고 빛을 굴절시키는 중앙의 다면체 크리스탈 심장。'
+  },
+  lyricsStyles: {
+    [LyricsStyle.STANDARD]: '표준', [LyricsStyle.KARAOKE]: '다이내믹', [LyricsStyle.MINIMAL]: '미니멀'
+  },
+  helpModal: {
+    title: 'Aura Flux 가이드',
+    tabs: { guide: '가이드', shortcuts: '단축키', about: '정보' },
+    intro: 'Aura Flux는 스펙트럼 분석과 Gemini 3 인텔리전스를 사용하여 오디오를 생성적인 디지털 아트로 변환합니다。',
+    shortcutsTitle: '키보드 단축키',
+    gesturesTitle: '터치 제스처',
+    shortcutItems: {
+      toggleMic: '오디오 입력 토글',
+      fullscreen: '전체 화면',
+      randomize: '무작위 미학',
+      lyrics: 'AI 정보 토글',
+      hideUi: '제어판 토글',
+      glow: '블룸 토글',
+      trails: '모션 블러 토글',
+      changeMode: '모드 순환',
+      changeTheme: '테마 순환'
+    },
+    gestureItems: {
+      swipeMode: '가로 스와이프: 모드 변경',
+      swipeSens: '세로 스와이프: 감도 조절',
+      longPress: '길게 누르기: AI 식별'
+    },
+    howItWorksTitle: '사용 방법',
+    howItWorksSteps: [
+      '1. 연결: "시작"을 클릭하고 마이크 접근을 허용합니다。',
+      '2. 시각화: 음악을 재생합니다. "스마트 프리셋"을 사용하여 분위기를 설정합니다。',
+      '3. 사용자 정의: "고급 모드"를 사용하여 감도 및 사용자 정의 텍스트를 조정합니다。',
+      '4. 상호 작용: 스와이프하여 모드를 변경하거나 AI를 위해 길게 누릅니다。',
+      '5. 탐색: 옵션은 H, 전체 화면은 F, 무작위는 R을 누릅니다。'
+    ],
+    settingsTitle: '매개변수 가이드',
+    settingsDesc: {
+      sensitivity: '오디오 반응에 대한 게인 제어。',
+      speed: '패턴의 시간적 빈도。',
+      glow: '대기 깊이를 위한 블룸 강도。',
+      trails: '부드러운 움직임을 위한 픽셀 지속성。',
+      smoothing: '스펙트럼 데이터의 시간적 감쇠。',
+      fftSize: '주파수 해상도。'
+    },
+    projectInfoTitle: '프로젝트 정보',
+    aboutDescription: 'VJ, 스트리머 및 몰입형 환경을 위해 설계된 차세대 공감각적 경험。',
+    privacyTitle: '개인 정보 보호',
+    privacyText: '오디오는 로컬에서 분석됩니다. 스냅샷은 식별을 위해서만 Gemini로 전송됩니다。',
+    version: '릴리스', coreTech: '기술', repository: '소스', support: '지원', reportBug: '버그'
   },
   onboarding: {
     welcome: 'Aura Flux에 오신 것을 환영합니다',
@@ -214,10 +300,10 @@ export const ko = {
     next: '계속하기', back: '이전', skip: '건너뛰기', finish: '앱 시작',
     features: {
       title: '핵심 기능',
-      visuals: { title: '제너레이티브 아트', desc: '15+ 종 기반의 수학 엔진이 음파를 형상화합니다.' },
-      ai: { title: 'Gemini AI 인텔리전스', desc: 'Google Gemini 3를 통해 트랙 메타데이터와 시각적 무드를 실시간 인식합니다.' },
-      privacy: { title: '안전 및 프라이버시', desc: '분석은 로컬에서 이루어집니다. 개인의 오디오 데이터를 기록하거나 저장하지 않습니다.' }
+      visuals: { title: '제너레이티브 아트', desc: '15+ 종 기반의 수학 엔진이 음파를 형상화합니다。' },
+      ai: { title: 'Gemini AI 인텔리전스', desc: 'Google Gemini 3를 통해 트랙 메타데이터와 시각적 무드를 실시간 인식합니다。' },
+      privacy: { title: '안전 및 프라이버시', desc: '분석은 로컬에서 이루어집니다. 개인의 오디오 데이터를 기록하거나 저장하지 않습니다。' }
     },
-    shortcuts: { title: '다이내믹 컨트롤', desc: '단축키를 통해 빛의 지휘자가 되어보세요.' }
+    shortcuts: { title: '다이내믹 컨트롤', desc: '단축키를 통해 빛의 지휘자가 되어보세요。' }
   }
 };

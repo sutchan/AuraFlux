@@ -1,8 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.7.11
+ * Version: 1.7.25
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -116,6 +117,8 @@ export const zh = {
   showOptions: '显示设置',
   reset: '重置全局设置',
   confirmReset: '确认重置？',
+  resetEngine: '重置引擎',
+  confirmResetAction: '确认重置',
   resetVisual: '重置视觉参数',
   resetText: '重置文字设置',
   resetAudio: '重置音频设置',
@@ -185,11 +188,11 @@ export const zh = {
     select: '选择一种心境...',
     custom: '自定义 / 已修改',
     calm: '数字波形',
-    party: '动感派对',
+    party: '动感光墙派对',
     ambient: '深空星云',
-    cyberpunk: '赛博都市', 
-    retrowave: '复古夕阳',
-    vocal: '晶体核心' 
+    cyberpunk: '赛博激光', 
+    retrowave: '复古力场',
+    vocal: '人声频谱' 
   },
   recognitionSource: 'AI 角色偏好',
   lyricsPosition: '歌词显示位置',
@@ -220,7 +223,9 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '微观液泡', 
     [VisualizerMode.KINETIC_WALL]: '动感光墙 (WebGL)', 
     [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '数字波形'
+    [VisualizerMode.WAVEFORM]: '数字波形',
+    [VisualizerMode.CYBER_CITY]: '赛博都市 (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: '晶体核心 (WebGL)'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基于 WebGL 粒子系统的有机流体模拟。',
@@ -236,7 +241,9 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微观液泡。',
     [VisualizerMode.KINETIC_WALL]: '带有 3D 动力学挤出的巨型 LED 舞台背景墙。',
     [VisualizerMode.LIQUID]: '对低频做出反应的抽象球体。',
-    [VisualizerMode.WAVEFORM]: '展现频谱历史的液体丝带。'
+    [VisualizerMode.WAVEFORM]: '展现频谱历史的液体丝带。',
+    [VisualizerMode.CYBER_CITY]: '穿梭在随节拍脉动的霓虹都市无尽高速公路上。',
+    [VisualizerMode.CRYSTAL_CORE]: '一个中央多面晶体心脏，随着声能脉动并折射光线。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '标准排版', [LyricsStyle.KARAOKE]: '动态律动', [LyricsStyle.MINIMAL]: '极简主义'

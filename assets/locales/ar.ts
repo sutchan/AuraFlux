@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.7.23
+ * Version: 1.7.25
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 21:30
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -117,6 +117,8 @@ export const ar = {
   hideOptions: 'طي اللوحة',
   showOptions: 'توسيع الخيارات',
   reset: 'إعادة تعيين النظام',
+  resetEngine: 'إعادة ضبط المحرك',
+  confirmResetAction: 'تأكيد إعادة الضبط',
   resetVisual: 'إعادة تعيين الجماليات',
   resetText: 'إعادة تعيين النص',
   resetAudio: 'إعادة تعيين الصوت',
@@ -173,7 +175,7 @@ export const ar = {
   autoHideUi: 'إخفاء الواجهة تلقائيًا',
   mirrorDisplay: 'عكس العرض',
   presets: {
-    title: 'إعدادات مسبقة ذكية', hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.', select: 'اختر مزاجاً...', custom: 'معدل', calm: 'شكل موجي رقمي', party: 'حفلة نشطة', ambient: 'سديم عميق', cyberpunk: 'مدينة سايبر', retrowave: 'غروب ريترو', vocal: 'نواة بلورية'
+    title: 'إعدادات مسبقة ذكية', hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.', select: 'اختر مزاجاً...', custom: 'معدل', calm: 'شكل موجي رقمي', party: 'حفلة حركية', ambient: 'سديم عميق', cyberpunk: 'ليزر سايبر', retrowave: 'مجال ريترو', vocal: 'أشرطة صوتية'
   },
   recognitionSource: 'مصدر الذكاء الاصطناعي',
   lyricsPosition: 'موضع الكلمات',
@@ -200,7 +202,9 @@ export const ar = {
     [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو',
     [VisualizerMode.KINETIC_WALL]: 'جدار حركي (WebGL)',
     [VisualizerMode.LIQUID]: 'كرة سائلة (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي'
+    [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي',
+    [VisualizerMode.CYBER_CITY]: 'مدينة سايبر (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: 'نواة بلورية (WebGL)'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'محاكاة سوائل عضوية مدعومة بجزيئات WebGL.',
@@ -216,7 +220,9 @@ export const ar = {
     [VisualizerMode.MACRO_BUBBLES]: 'مرئيات ميكرو-خلوية ذات تركيز ناعم.',
     [VisualizerMode.KINETIC_WALL]: 'جدار مسرح LED ضخم مع بروزات ثلاثية الأبعاد حركية.',
     [VisualizerMode.LIQUID]: 'كرة مجردة متحولة تتفاعل مع الترددات المنخفضة.',
-    [VisualizerMode.WAVEFORM]: 'شرائط سائلة لتاريخ التردد الطيفي.'
+    [VisualizerMode.WAVEFORM]: 'شرائط سائلة لتاريخ التردد الطيفي.',
+    [VisualizerMode.CYBER_CITY]: 'طريق سريع لا نهاية له عبر مدينة غارقة في النيون، ينبض مع الإيقاع.',
+    [VisualizerMode.CRYSTAL_CORE]: 'قلب بلوري مركزي متعدد الأوجه يكسر الضوء وينبض بالطاقة الصوتية.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'قياسي', [LyricsStyle.KARAOKE]: 'ديناميكي', [LyricsStyle.MINIMAL]: 'بسيط'

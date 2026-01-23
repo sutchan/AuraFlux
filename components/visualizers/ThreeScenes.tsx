@@ -1,11 +1,13 @@
 /**
  * File: components/visualizers/ThreeScenes.tsx
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Aura Vision Team
- * Updated: 2025-02-23 15:00
+ * Updated: 2025-02-28 10:00
  */
 
 export { KineticWallScene } from './scenes/KineticWallScene';
 export { LiquidSphereScene } from './scenes/LiquidSphereScene';
 export { CubeFieldScene } from './scenes/CubeFieldScene';
 export { NeuralFlowScene } from './scenes/NeuralFlowScene';
+export { CyberCityScene } from './scenes/CyberCityScene';
+export { CrystalCoreScene } from './scenes/CrystalCoreScene';

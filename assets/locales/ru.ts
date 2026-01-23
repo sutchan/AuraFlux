@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.7.23
+ * Version: 1.7.25
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 21:30
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -117,6 +117,8 @@ export const ru = {
   hideOptions: 'Свернуть',
   showOptions: 'Расширить опции',
   reset: 'Сброс системы',
+  resetEngine: 'СБРОС ДВИЖКА',
+  confirmResetAction: 'ПОДТВЕРДИТЬ СБРОС',
   resetVisual: 'Сброс эстетики',
   resetText: 'Сброс текста',
   resetAudio: 'Сброс аудио',
@@ -173,7 +175,7 @@ export const ru = {
   autoHideUi: 'Авто-скрытие UI',
   mirrorDisplay: 'Отражение',
   presets: {
-    title: 'Смарт-пресеты', hint: 'Применить эстетику в один клик.', select: 'Выберите настроение...', custom: 'Изменено', calm: 'Цифровая волна', party: 'Энергичная вечеринка', ambient: 'Глубокая туманность', cyberpunk: 'Кибер-город', retrowave: 'Ретро-закат', vocal: 'Кристальное ядро'
+    title: 'Смарт-пресеты', hint: 'Применить эстетику в один клик.', select: 'Выберите настроение...', custom: 'Изменено', calm: 'Цифровая волна', party: 'Кинетическая вечеринка', ambient: 'Глубокая туманность', cyberpunk: 'Кибер-лазеры', retrowave: 'Ретро-поле', vocal: 'Вокальные столбы'
   },
   recognitionSource: 'Источник ИИ',
   lyricsPosition: 'Позиция текста',
@@ -186,6 +188,90 @@ export const ru = {
   wakeLock: 'Экран всегда включен',
   system: { shortcuts: { mic: 'Мик', ui: 'UI', mode: 'Режим', random: 'Рандом' } },
   errors: { title: 'Ошибка аудио', accessDenied: 'Доступ запрещен.', noDevice: 'Устройство не найдено.', deviceBusy: 'Устройство занято.', general: 'Ошибка доступа.', tryDemo: 'Демо-режим' },
+  modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'Нейронный поток (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Квантовое поле (WebGL)',
+    [VisualizerMode.PLASMA]: 'Поток плазмы',
+    [VisualizerMode.BARS]: 'Частотные столбцы',
+    [VisualizerMode.PARTICLES]: 'Звездное поле',
+    [VisualizerMode.TUNNEL]: 'Геометрический туннель',
+    [VisualizerMode.RINGS]: 'Неоновые кольца',
+    [VisualizerMode.NEBULA]: 'Глубокая туманность',
+    [VisualizerMode.LASERS]: 'Концертные лазеры',
+    [VisualizerMode.FLUID_CURVES]: 'Волны ауры',
+    [VisualizerMode.MACRO_BUBBLES]: 'Макро-пузыри',
+    [VisualizerMode.KINETIC_WALL]: 'Кинетическая стена (WebGL)',
+    [VisualizerMode.LIQUID]: 'Жидкая сфера (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Цифровая волна',
+    [VisualizerMode.CYBER_CITY]: 'Кибер-город (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: 'Кристальное ядро (WebGL)'
+  },
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: 'Органическая симуляция жидкости на основе частиц WebGL.',
+    [VisualizerMode.CUBE_FIELD]: 'Бесконечное поле геометрических блоков, реагирующих на частоту.',
+    [VisualizerMode.PLASMA]: 'Плавное смешивание цветов, похожее на жидкость.',
+    [VisualizerMode.BARS]: 'Классический анализатор частотного спектра с пиками.',
+    [VisualizerMode.PARTICLES]: 'Путешествие по звездному полю, реагирующему на интенсивность.',
+    [VisualizerMode.TUNNEL]: 'Рекурсивный геометрический коридор, затягивающий внутрь.',
+    [VisualizerMode.RINGS]: 'Концентрические неоновые резонансные узоры.',
+    [VisualizerMode.NEBULA]: 'Симуляция частиц глубокого космоса с газовой физикой.',
+    [VisualizerMode.LASERS]: 'Резкие высокоэнергетические лучи света, проносящиеся по экрану.',
+    [VisualizerMode.FLUID_CURVES]: 'Плавные атмосферные световые волны.',
+    [VisualizerMode.MACRO_BUBBLES]: 'Микроклеточные визуальные эффекты с мягким фокусом.',
+    [VisualizerMode.KINETIC_WALL]: 'Массивная светодиодная сценическая стена с кинетическими 3D-выступами.',
+    [VisualizerMode.LIQUID]: 'Абстрактная изменяющаяся сфера, реагирующая на низкие частоты.',
+    [VisualizerMode.WAVEFORM]: 'Жидкие ленты истории спектральных частот.',
+    [VisualizerMode.CYBER_CITY]: 'Бесконечное шоссе через неоновый мегаполис, пульсирующий в такт.',
+    [VisualizerMode.CRYSTAL_CORE]: 'Центральное многогранное кристаллическое сердце, преломляющее свет и пульсирующее со звуковой энергией.'
+  },
+  lyricsStyles: {
+    [LyricsStyle.STANDARD]: 'Стандартный', [LyricsStyle.KARAOKE]: 'Динамический', [LyricsStyle.MINIMAL]: 'Минималистичный'
+  },
+  helpModal: {
+    title: 'Руководство по Aura Flux',
+    tabs: { guide: 'Руководство', shortcuts: 'Клавиши', about: 'О приложении' },
+    intro: 'Aura Flux преобразует аудио в генеративное цифровое искусство с помощью спектрального анализа и интеллекта Gemini 3.',
+    shortcutsTitle: 'Горячие клавиши',
+    gesturesTitle: 'Сенсорные жесты',
+    shortcutItems: {
+      toggleMic: 'Переключить аудиовход',
+      fullscreen: 'Во весь экран',
+      randomize: 'Случайная эстетика',
+      lyrics: 'Переключить ИИ-инфо',
+      hideUi: 'Переключить панель',
+      glow: 'Переключить свечение',
+      trails: 'Переключить шлейфы',
+      changeMode: 'Цикл режимов',
+      changeTheme: 'Цикл тем'
+    },
+    gestureItems: {
+      swipeMode: 'Свайп по горизонтали: Сменить режим',
+      swipeSens: 'Свайп по вертикали: Настроить чувствительность',
+      longPress: 'Долгое нажатие: ИИ-идентификация'
+    },
+    howItWorksTitle: 'Как использовать',
+    howItWorksSteps: [
+      '1. Подключите: Нажмите "Старт" и разрешите доступ к микрофону.',
+      '2. Визуализируйте: Включите музыку. Используйте "Смарт-пресеты", чтобы задать атмосферу.',
+      '3. Настройте: Используйте "Профи-режим" для чувствительности и текста.',
+      '4. Взаимодействуйте: Смахивайте для смены режимов или удерживайте для ИИ.',
+      '5. Исследуйте: Нажмите H для опций, F для полного экрана, R для случайного выбора.'
+    ],
+    settingsTitle: 'Руководство по параметрам',
+    settingsDesc: {
+      sensitivity: 'Регулировка усиления для реакции на аудио.',
+      speed: 'Временная частота узоров.',
+      glow: 'Интенсивность свечения для атмосферной глубины.',
+      trails: 'Стойкость пикселей для плавного движения.',
+      smoothing: 'Временное сглаживание спектральных данных.',
+      fftSize: 'Разрешение по частоте.'
+    },
+    projectInfoTitle: 'Информация о проекте',
+    aboutDescription: 'Синестетический опыт нового поколения. Предназначен для VJ-ев, стримеров и иммерсивных сред.',
+    privacyTitle: 'Конфиденциальность',
+    privacyText: 'Аудио анализируется локально. Снимки отправляются в Gemini только для идентификации.',
+    version: 'Сборка', coreTech: 'Технологии', repository: 'Источник', support: 'Поддержка', reportBug: 'Ошибка'
+  },
   onboarding: {
     welcome: 'Добро пожаловать в Aura Flux', subtitle: 'ИИ-Движок Синестезии Нового Поколения', selectLanguage: 'Выберите язык', next: 'Далее', back: 'Назад', skip: 'Пропустить', finish: 'Начать',
     features: {

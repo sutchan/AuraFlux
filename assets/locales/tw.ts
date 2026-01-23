@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.7.23
+ * Version: 1.7.25
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 21:30
+ * Updated: 2025-02-28 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -118,6 +118,8 @@ export const tw = {
   showOptions: '顯示設定',
   reset: '重置全域設定',
   confirmReset: '確認重設？',
+  resetEngine: '重置引擎',
+  confirmResetAction: '確認重置',
   resetVisual: '重置視覺參數',
   resetText: '重置文字設定',
   resetAudio: '重置音訊設定',
@@ -186,12 +188,12 @@ export const tw = {
     hint: '一鍵應用由專家精心調校的參數組合。',
     select: '選擇一種心境...',
     custom: '自定義 / 已修改',
-    calm: '數字波形',
-    party: '動感派對',
-    ambient: '深空星云',
-    cyberpunk: '賽博都市', 
-    retrowave: '復古夕陽',
-    vocal: '晶體核心' 
+    calm: '數位波形',
+    party: '動感光牆派對',
+    ambient: '深空星雲',
+    cyberpunk: '賽博雷射', 
+    retrowave: '復古力場',
+    vocal: '人聲頻譜' 
   },
   recognitionSource: 'AI 角色偏好',
   lyricsPosition: '歌詞顯示位置',
@@ -216,13 +218,15 @@ export const tw = {
     [VisualizerMode.PARTICLES]: '星際穿越', 
     [VisualizerMode.TUNNEL]: '幾何時空隧道',
     [VisualizerMode.RINGS]: '霓虹共振環',
-    [VisualizerMode.NEBULA]: '深空星云',
+    [VisualizerMode.NEBULA]: '深空星雲',
     [VisualizerMode.LASERS]: '舞台雷射矩陣',
     [VisualizerMode.FLUID_CURVES]: '極光之舞',
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
     [VisualizerMode.KINETIC_WALL]: '動感光牆 (WebGL)', 
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '數字波形'
+    [VisualizerMode.WAVEFORM]: '數位波形',
+    [VisualizerMode.CYBER_CITY]: '賽博都市 (WebGL)',
+    [VisualizerMode.CRYSTAL_CORE]: '晶體核心 (WebGL)'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基於 WebGL 粒子系統的有機流體模擬。',
@@ -238,7 +242,9 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微觀液泡。',
     [VisualizerMode.KINETIC_WALL]: '帶有 3D 動力學擠出的巨型 LED 舞台背景牆。',
     [VisualizerMode.LIQUID]: '對低頻做出反應的抽象球體。',
-    [VisualizerMode.WAVEFORM]: '展現頻譜歷史的液體絲帶。'
+    [VisualizerMode.WAVEFORM]: '展現頻譜歷史的液體絲帶。',
+    [VisualizerMode.CYBER_CITY]: '穿梭在隨節拍脈動的霓虹都市無盡高速公路上。',
+    [VisualizerMode.CRYSTAL_CORE]: '一個中央多面晶體心臟，隨著聲能脈動並折射光線。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準排版', [LyricsStyle.KARAOKE]: '動態律動', [LyricsStyle.MINIMAL]: '極簡主義'

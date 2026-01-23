@@ -1,10 +1,10 @@
 /**
  * File: core/services/renderers/GeometryRenderers.ts
- * Version: 2.1.0
+ * Version: 2.3.0
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 22:30
- * Description: Optimized Geometric Tunnel with path batching and vertex caching to reduce performance overhead.
+ * Updated: 2025-02-27 19:30
+ * Description: Enlarged the tunnel's base radius to make it feel fuller.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -41,9 +41,9 @@ export class TunnelRenderer implements IVisualizerRenderer {
     const cy = h / 2;
     
     // Performance Optimization: Scaled down ring/side counts
-    // High: 32/20 (Was 40/24), Med: 20/12, Low: 12/8
-    const rings = settings.quality === 'high' ? 32 : (settings.quality === 'med' ? 20 : 12);
-    const sides = settings.quality === 'high' ? 20 : (settings.quality === 'med' ? 12 : 8);
+    // High: 24/16, Med: 16/10, Low: 10/6
+    const rings = settings.quality === 'high' ? 24 : (settings.quality === 'med' ? 16 : 10);
+    const sides = settings.quality === 'high' ? 16 : (settings.quality === 'med' ? 10 : 6);
     
     this.updateCache(sides);
 
@@ -99,7 +99,7 @@ export class TunnelRenderer implements IVisualizerRenderer {
         const cosTwist = Math.cos(twistAngle);
         const sinTwist = Math.sin(twistAngle);
 
-        const baseR = 380; 
+        const baseR = 500; // Increased from 380 for a fuller tunnel
         const audioAmp = 280 * settings.sensitivity;
 
         ctx.beginPath();
