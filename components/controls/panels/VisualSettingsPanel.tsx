@@ -1,9 +1,10 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.3.2
+ * Version: 1.3.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 21:30
+ * Updated: 2025-02-26 19:30
+ * Description: Standardized font styles for improved readability and consistency.
  */
 
 import React from 'react';
@@ -56,21 +57,19 @@ export const VisualSettingsPanel: React.FC = () => {
   };
 
   const isModeIncluded = (mode: VisualizerMode) => {
-      // Robustness: Handle legacy state where includedModes might be undefined
       return (settings.includedModes || []).includes(mode);
   };
 
   return (
     <>
-      {/* Col 1: Visual Modes Selection (Optimized for overflow) */}
+      {/* Col 1: Visual Modes Selection */}
       <div className="flex flex-col h-full border-b lg:border-b-0 lg:border-e border-white/5 overflow-hidden relative">
-        <div className="p-4 pb-2 shrink-0 z-10 bg-[#0f0f11]">
-            <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1">{t?.visualizerMode || "Visualizer Mode"}</span>
+        <div className="p-3 pb-1.5 shrink-0 z-10">
+            <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1">{t?.visualizerMode || "Visualizer Mode"}</span>
         </div>
         
-        {/* Scrollable Area with Fade Mask */}
-        <div className="flex-grow overflow-y-auto custom-scrollbar px-4 pb-6 mask-fade-vertical">
-            <div className="grid grid-cols-2 gap-3 pb-8">
+        <div className="flex-grow overflow-y-auto custom-scrollbar px-3 pb-4 mask-fade-vertical">
+            <div className="grid grid-cols-2 gap-2 pb-6">
                {Object.keys(VISUALIZER_PRESETS).map(m => {
                  const mode = m as VisualizerMode;
                  return (
@@ -87,14 +86,12 @@ export const VisualSettingsPanel: React.FC = () => {
                })}
             </div>
         </div>
-        {/* Bottom gradient hint */}
-        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#0f0f11] to-transparent pointer-events-none" />
       </div>
       
       {/* Col 2: Themes, Smart Presets & Quality */}
-      <div className="flex flex-col p-4 h-full border-b lg:border-b-0 lg:border-e border-white/5 pt-6 overflow-hidden">
-        <div className="space-y-6 flex-grow overflow-y-auto custom-scrollbar pe-2">
-            <div className="mb-2">
+      <div className="flex flex-col p-3 h-full border-b lg:border-b-0 lg:border-e border-white/5 pt-4 overflow-hidden">
+        <div className="space-y-4 flex-grow overflow-y-auto custom-scrollbar pe-1.5">
+            <div className="mb-1">
               <CustomSelect 
                 label={presets.title || 'Smart Presets'}
                 value={activePreset}
@@ -117,24 +114,24 @@ export const VisualSettingsPanel: React.FC = () => {
             </div>
 
             <div>
-                <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2 flex-shrink-0">{t?.styleTheme || "Visual Theme"}</span>
-                <div className="grid grid-cols-6 gap-2 p-1 content-start mb-2">
+                <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1 mb-1.5 flex-shrink-0">{t?.styleTheme || "Visual Theme"}</span>
+                <div className="grid grid-cols-6 gap-1.5 p-0.5 content-start mb-1">
                   {COLOR_THEMES.map((theme, i) => (
-                    <button key={i} onClick={() => setColorTheme(theme)} aria-label={`Theme ${i+1}`} className={`aspect-square rounded-full flex-shrink-0 transition-all duration-300 ${JSON.stringify(colorTheme) === JSON.stringify(theme) ? 'ring-2 ring-white/80 scale-110 shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'opacity-60 hover:opacity-100'}`} style={{background: `linear-gradient(135deg, ${theme[0]}, ${theme[1]})` }} />
+                    <button key={i} onClick={() => setColorTheme(theme)} aria-label={`Theme ${i+1}`} className={`aspect-square rounded-full flex-shrink-0 transition-all duration-300 ${JSON.stringify(colorTheme) === JSON.stringify(theme) ? 'ring-2 ring-white/80 scale-110 shadow-[0_0_10px_rgba(255,255,255,0.25)]' : 'opacity-60 hover:opacity-100'}`} style={{background: `linear-gradient(135deg, ${theme[0]}, ${theme[1]})` }} />
                   ))}
                 </div>
             </div>
 
             {isAdvanced && (
-                <div className="pt-2 border-t border-white/5 animate-fade-in-up">
-                   <div className="py-2">
-                     <div className="flex items-center gap-2 justify-between">
+                <div className="pt-1.5 border-t border-white/5 animate-fade-in-up">
+                   <div className="py-1">
+                     <div className="flex items-center gap-1.5 justify-between">
                           <TooltipArea text={hints?.quality}>
                             <span className="text-xs font-bold uppercase text-white/60 tracking-wider whitespace-nowrap">{t?.quality || "Quality"}</span>
                           </TooltipArea>
-                          <div className="flex w-full max-w-[200px] bg-white/[0.04] rounded-lg p-0.5">
+                          <div className="flex w-full max-w-[180px] bg-white/[0.04] rounded-lg p-0.5">
                           {(['low', 'med', 'high'] as const).map(q => (
-                              <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1.5 rounded text-[11px] font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
+                              <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1 rounded text-xs font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
                           ))}
                           </div>
                      </div>
@@ -145,26 +142,26 @@ export const VisualSettingsPanel: React.FC = () => {
       </div>
       
       {/* Col 3: Tuning & Automation */}
-      <div className="flex flex-col p-4 h-full pt-6 overflow-hidden">
-        <div className="space-y-4 flex-grow overflow-y-auto custom-scrollbar pe-2">
-          <div className="space-y-4">
+      <div className="flex flex-col p-3 h-full pt-4 overflow-hidden">
+        <div className="space-y-3 flex-grow overflow-y-auto custom-scrollbar pe-1.5">
+          <div className="space-y-3">
             <Slider label={t?.speed || "Speed"} hintText={hints?.speed} value={settings.speed} min={0.1} max={3.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('speed', v)} />
             <Slider label={t?.sensitivity || "Sensitivity"} hintText={hints?.sensitivity} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('sensitivity', v)} />
           </div>
           
           {isAdvanced && (
               <>
-                  <div className="space-y-3 pt-3 border-t border-white/5 animate-fade-in-up">
-                      <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{visualPanel.effects || "Effects"}</span>
-                      <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-2 pt-2 border-t border-white/5 animate-fade-in-up">
+                      <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1 mb-1">{visualPanel.effects || "Effects"}</span>
+                      <div className="grid grid-cols-2 gap-1.5">
                           <SettingsToggle label={t?.glow || "Glow"} value={settings.glow} onChange={() => handleVisualSettingChange('glow', !settings.glow)} hintText={`${hints?.glow || "Glow"} [G]`} />
                           <SettingsToggle label={t?.trails || "Trails"} value={settings.trails} onChange={() => handleVisualSettingChange('trails', !settings.trails)} hintText={`${hints?.trails || "Trails"} [T]`} />
                       </div>
                   </div>
-                  <div className="space-y-2 pt-3 border-t border-white/5 animate-fade-in-up">
-                    <span className="text-xs font-bold uppercase text-white/50 tracking-[0.25em] block ms-1 mb-2">{visualPanel.automation || "Automation"}</span>
+                  <div className="space-y-1.5 pt-2 border-t border-white/5 animate-fade-in-up">
+                    <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1 mb-1">{visualPanel.automation || "Automation"}</span>
                     <SettingsToggle label={t?.autoRotate || "Auto Rotate"} value={settings.autoRotate} onChange={() => handleVisualSettingChange('autoRotate', !settings.autoRotate)} hintText={hints?.autoRotate}>
-                        <div className="pt-1">
+                        <div className="pt-0.5">
                             <Slider 
                                 label={t?.rotateInterval || "Interval"} 
                                 value={settings.rotateInterval} 
@@ -176,7 +173,7 @@ export const VisualSettingsPanel: React.FC = () => {
                         </div>
                     </SettingsToggle>
                     <SettingsToggle label={t?.cycleColors || "Cycle Colors"} value={settings.cycleColors} onChange={() => handleVisualSettingChange('cycleColors', !settings.cycleColors)} hintText={hints?.cycleColors}>
-                        <div className="pt-1">
+                        <div className="pt-0.5">
                             <Slider 
                                 label={t?.colorInterval || "Interval"} 
                                 value={settings.colorInterval} 
@@ -191,9 +188,9 @@ export const VisualSettingsPanel: React.FC = () => {
               </>
           )}
         </div>
-        <div className="mt-auto pt-4">
+        <div className="mt-auto pt-3">
           <TooltipArea text={hints?.resetVisual}>
-            <button onClick={resetVisualSettings} className="w-full py-3 bg-white/[0.04] rounded-xl text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all flex items-center justify-center gap-2 border border-transparent hover:border-white/10"><svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>
+            <button onClick={resetVisualSettings} className="w-full py-2 bg-white/[0.04] rounded-lg text-xs font-bold uppercase tracking-wider text-white/50 hover:text-white transition-all flex items-center justify-center gap-1.5 border border-transparent hover:border-white/10"><svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>
           </TooltipArea>
         </div>
       </div>

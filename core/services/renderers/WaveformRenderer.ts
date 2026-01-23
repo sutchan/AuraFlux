@@ -1,10 +1,10 @@
 /**
  * File: core/services/renderers/WaveformRenderer.ts
- * Version: 3.0.0
+ * Version: 3.1.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 23:00
- * Description: Added dynamic ceiling protection to prevent waveform flattening.
+ * Updated: 2025-02-26 20:20
+ * Description: Re-enabled horizontal movement with a parallax effect for enhanced visual depth.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -38,7 +38,7 @@ export class WaveformRenderer implements IVisualizerRenderer {
     const autoGainScale = 0.25 / this.maxEnergyObserved;
 
     const beatImpact = beat ? 0.3 : 0;
-    this.phaseOffset += (settings.speed * 0.04) + beatImpact;
+    this.phaseOffset += (settings.speed * 0.04) + beatImpact; // Horizontal phase shift for parallax scrolling
 
     const configs = [
         { start: 0, end: 6, amp: 0.7, freq: 0.003, width: 3.5, gain: 1.0, z: 1.0 },    
@@ -88,6 +88,9 @@ export class WaveformRenderer implements IVisualizerRenderer {
         const points = settings.quality === 'high' ? 90 : (settings.quality === 'med' ? 45 : 30);
         const step = w / points;
 
+        // Parallax multiplier: Layers with higher 'i' (closer) move faster.
+        const parallaxMultiplier = 0.5 + (i / (layerCount - 1)); // Ranges from 0.5x to 1.5x
+
         const getY = (x: number) => {
             const envelope = Math.sin((x / w) * Math.PI);
             const jitter = (i > 4 && energy > 0.01) ? (Math.random() - 0.5) * 5 * energy : 0;
@@ -97,8 +100,8 @@ export class WaveformRenderer implements IVisualizerRenderer {
             const rawAmp = (h * 0.12 * config.amp) * energy * envelope;
             const amplitude = Math.min(rawAmp, maxAmplitude);
             
-            const wave1 = Math.sin(x * config.freq + this.phaseOffset * (1 + i * 0.1) + i);
-            const wave2 = Math.sin(x * config.freq * 2.5 - this.phaseOffset * 0.4) * 0.3;
+            const wave1 = Math.sin(x * config.freq + this.phaseOffset * parallaxMultiplier + i);
+            const wave2 = Math.sin(x * config.freq * 2.5 - this.phaseOffset * 0.4 * parallaxMultiplier);
             
             return centerY + yOffset + ((wave1 + wave2) * amplitude) + jitter;
         };

@@ -1,8 +1,9 @@
 /**
  * File: components/ui/controls/CustomSelect.tsx
- * Version: 1.0.6
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-26 19:30
  */
 
 import React, { memo } from 'react';
@@ -17,15 +18,15 @@ interface CustomSelectProps {
 }
 
 export const CustomSelect = memo(({ label, value, options, onChange, hintText }: CustomSelectProps) => (
-  <div className="space-y-2">
+  <div className="space-y-1.5">
     <TooltipArea text={hintText}>
-      <span className="text-xs font-bold uppercase text-white/50 tracking-[0.15em] block ml-1">{label}</span>
+      <span className="text-xs font-bold uppercase text-white/60 tracking-wider block ml-1">{label}</span>
     </TooltipArea>
     <div className="relative">
       <select 
         value={value} 
         onChange={(e) => onChange(e.target.value)} 
-        className="w-full bg-white/[0.04] rounded-xl px-4 py-3 text-xs font-bold text-white uppercase tracking-wider appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors cursor-pointer"
+        className="w-full bg-white/[0.04] rounded-xl px-4 py-2.5 text-xs font-bold text-white uppercase tracking-wider appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors cursor-pointer"
         aria-label={label}
       >
         {options.map(opt => (

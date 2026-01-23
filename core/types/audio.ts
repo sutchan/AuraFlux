@@ -1,9 +1,9 @@
-
 /**
  * File: core/types/audio.ts
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-26 20:00
  */
 
 export enum LyricsStyle {
@@ -17,6 +17,7 @@ export interface SongInfo {
   artist: string;
   lyricsSnippet?: string;
   mood?: string;
+  mood_en_keywords?: string; // Canonical English keywords for styling
   identified: boolean;
   searchUrl?: string;
   matchSource?: 'AI' | 'LOCAL' | 'MOCK' | 'GEMINI' | 'OPENAI' | 'CLAUDE' | 'GROQ' | 'DEEPSEEK' | 'QWEN' | 'PREVIEW';

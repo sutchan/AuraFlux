@@ -1,9 +1,9 @@
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 17:35
+ * Updated: 2025-02-26 20:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -21,15 +21,15 @@ interface SongOverlayProps {
   sensitivity?: number;
 }
 
-const getMoodStyle = (mood: string | undefined | null) => {
-  if (!mood || typeof mood !== 'string') {
+const getMoodStyle = (keywords: string | undefined | null) => {
+  if (!keywords || typeof keywords !== 'string') {
       return {
           textColor: 'text-purple-300', borderColor: 'border-blue-500',
           gradient: 'from-purple-500/10 to-blue-500/10', badgeGradient: 'from-purple-500/20 to-blue-500/20',
           icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clipRule="evenodd" /></svg>
       };
   }
-  const m = mood.toLowerCase();
+  const m = keywords.toLowerCase();
   if (m.match(/happy|upbeat|energetic|dance|party|fun|joy|pop|bright/)) {
     return {
       textColor: 'text-yellow-300', borderColor: 'border-yellow-400',
@@ -63,7 +63,7 @@ const getProviderLabel = (source: string | undefined) => {
 
 const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, onRetry, onClose, analyser, sensitivity = 1.0 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const moodStyle = useMemo(() => song && song.mood ? getMoodStyle(song.mood) : getMoodStyle('default'), [song]);
+  const moodStyle = useMemo(() => song ? getMoodStyle(song.mood_en_keywords) : getMoodStyle('default'), [song]);
   
   const isEnabled = showLyrics && !!song && (song.identified || !!song.mood || !!song.title) && song.matchSource !== 'PREVIEW';
 

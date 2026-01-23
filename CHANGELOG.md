@@ -2,6 +2,12 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.7.23] - 2025-02-26
+
+### Internationalization & Robustness
+*   **🌍 Full I18N Sync:** Completed and verified translations for all 10 supported languages (ZH, TW, JA, KO, ES, DE, FR, RU, AR). The application now offers a fully localized experience, including all tooltips, panel text, and onboarding instructions.
+*   **🛡️ AI Schema Hardening:** Added a dedicated `mood_en_keywords` field to the AI response schema. This ensures consistent UI styling based on mood, regardless of the display language, fixing a critical internationalization bug.
+
 ## [v1.7.10] - 2025-02-26
 
 ### Optimization

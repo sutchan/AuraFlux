@@ -1,32 +1,19 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.8.6
+ * Version: 1.7.23
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 22:00
+ * Updated: 2025-02-26 21:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const es = {
-  // ... existing content ...
   common: {
-    on: 'ON',
-    off: 'OFF',
-    visible: 'VISIBLE',
-    hidden: 'OCULTO',
-    active: 'ACTIVO',
-    muted: 'SILENCIADO',
-    beta: 'BETA',
-    simple: 'Simple',
-    advanced: 'Avanzado'
+    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'OCULTO', active: 'ACTIVO', muted: 'SILENCIADO', beta: 'BETA', simple: 'Simple', advanced: 'Avanzado'
   },
   tabs: {
-    visual: 'Visual',
-    text: 'Texto',
-    audio: 'Audio',
-    ai: 'Identificación IA',
-    system: 'Sistema'
+    visual: 'Visual', text: 'Texto', audio: 'Audio', ai: 'Sinestesia IA', system: 'Sistema'
   },
   hints: {
     mode: 'Selecciona el motor matemático principal para la generación visual.',
@@ -37,8 +24,8 @@ export const es = {
     sensitivity: 'Amplifica la reacción visual al audio. Aumentar para entornos silenciosos.',
     smoothing: 'Amortiguación temporal. Valores altos dan fluidez líquida; bajos son más nerviosos.',
     fftSize: 'Resolución espectral. 4096 ofrece detalles finos pero consume más CPU.',
-    lyrics: 'Letras IA síncronas para visualización.',
-    lyricsStyle: 'Personaliza la presentación visual de las letras sincronizadas.',
+    lyrics: 'Alterna la identificación de canciones y la descripción sinestésica por IA.',
+    lyricsStyle: 'Personaliza la presentación visual de los metadatos sincronizados.',
     region: 'Orienta el motor de búsqueda IA hacia la música de este mercado específico.',
     autoRotate: 'Cicla automáticamente a través de diferentes motores visuales.',
     rotateInterval: 'Tiempo en segundos antes de cambiar al siguiente motor visual.',
@@ -80,268 +67,225 @@ export const es = {
     lyricsFont: 'Estilo tipográfico para las letras de IA.',
     lyricsFontSize: 'Escalar el texto de identificación de IA.',
     textFont: 'Familia tipográfica para la capa de texto personalizado.',
-    recognitionSource: 'Seleccionar la personalidad o proveedor de IA.'
+    recognitionSource: 'Seleccionar la personalidad o proveedor de IA.',
+    exportConfig: 'Descargar la configuración actual como un archivo JSON.',
+    importConfig: 'Cargar configuración desde un archivo JSON.',
+    savePreset: 'Guardar el estado actual en el almacenamiento del navegador.',
+    loadPreset: 'Restaurar este estado preestablecido.',
+    copyConfig: 'Copiar la cadena de configuración al portapapeles para compartirla rápidamente.'
   },
   aiPanel: {
-      keySaved: 'Clave API guardada',
-      keyInvalid: 'Clave API inválida',
-      keyCleared: 'Clave API borrada',
+      keySaved: 'Clave API Verificada y Guardada',
+      keyInvalid: 'Clave API Inválida',
+      keyCleared: 'Clave API Borrada',
       saved: 'GUARDADO',
       missing: 'FALTA',
       save: 'Guardar',
       update: 'Actualizar',
-      geminiHint: 'Opcional. Usa cuota gratuita si está vacío.',
-      customHint: 'Requerido. Se guarda localmente.',
-      groqHint: 'Requerido. Habilita inferencia rápida Whisper+Llama.'
+      geminiHint: 'Opcional. Usa la cuota gratuita por defecto si está vacío.',
+      customHint: 'Requerido. La clave se almacena localmente en tu navegador.',
+      groqHint: 'Requerido. Habilita la inferencia rápida de Whisper+Llama.'
   },
-  visualizerMode: 'Modo Visualizador',
-  styleTheme: 'Tema Visual',
-  settings: 'Avanzado',
+  visualizerMode: 'Motor Visual',
+  styleTheme: 'Tema de Color',
+  settings: 'Ajuste',
   sensitivity: 'Sensibilidad',
   speed: 'Velocidad de Evolución',
   glow: 'Resplandor Neón',
   trails: 'Estelas de Movimiento',
-  autoRotate: 'Ciclo de Modos',
+  autoRotate: 'Ciclo Automático de Motor',
   rotateInterval: 'Intervalo (s)',
-  cycleColors: 'Ciclo de Colores',
+  cycleColors: 'Ciclo Automático de Colores',
   colorInterval: 'Intervalo (s)',
-  cycleSpeed: 'Duración Ciclo (s)',
+  cycleSpeed: 'Duración del Ciclo (s)',
   monitorAudio: 'Monitor de Audio',
   audioInput: 'Dispositivo de Entrada',
-  lyrics: 'Letras IA',
+  lyrics: 'Sinestesia IA',
   showLyrics: 'Habilitar Reconocimiento',
-  displaySettings: 'Configuración de Pantalla',
-  language: 'Idioma del Sistema',
-  region: 'Mercado de Referencia',
-  startMic: 'Activar Captura',
-  stopMic: 'Detener Captura',
-  listening: 'Escuchando',
-  identifying: 'IA Analizando pista...',
-  startExperience: 'Lanzar Experiencia',
+  displaySettings: 'Ajustes de Pantalla',
+  language: 'Idioma de la Interfaz',
+  region: 'Mercado Objetivo',
+  startMic: 'Activar Audio',
+  stopMic: 'Desactivar Audio',
+  listening: 'Activo',
+  identifying: 'IA Analizando Pista...',
+  startExperience: 'Entrar al Flujo',
   welcomeTitle: 'Aura Flux | El Sonido de la Luz',
-  welcomeText: 'Transmuta cada vibración en una obra maestra generativa. Impulsado por Gemini AI para reconocimiento en tiempo real, vive el viaje sinestésico definitivo.',
+  welcomeText: 'Transmuta cada vibración en una obra maestra generativa. Impulsado por Gemini AI para reconocimiento en tiempo real, redefiniendo la experiencia sensorial.',
   unsupportedTitle: 'Navegador no compatible',
   unsupportedText: 'Aura Flux requiere funciones modernas de Web Audio. Por favor, usa una versión reciente de Chrome, Edge o Safari.',
   hideOptions: 'Contraer',
-  showOptions: 'Descripción',
+  showOptions: 'Expandir Opciones',
   reset: 'Reiniciar Sistema',
   resetVisual: 'Reiniciar Estética',
   resetText: 'Reiniciar Texto',
   resetAudio: 'Reiniciar Audio',
   resetAi: 'Reiniciar IA',
   randomize: 'Aleatorio Inteligente',
-  help: 'Soporte y Guía',
-  close: 'Cerrar',
-  betaDisclaimer: 'El reconocimiento por IA está en fase Beta.',
-  wrongSong: '¿Canción incorrecta? Reintentar',
+  help: 'Soporte',
+  close: 'Descartar',
+  betaDisclaimer: 'El Reconocimiento por IA está actualmente en Beta.',
+  wrongSong: '¿No es la canción correcta?',
   hideCursor: 'Ocultar Cursor',
-  customColor: 'Color de Texto',
-  randomizeTooltip: 'Aleatorizar estética visual (R)',
+  customColor: 'Personalizado',
+  randomizeTooltip: 'Aleatorizar toda la configuración visual',
   smoothing: 'Suavizado',
   fftSize: 'Resolución (FFT)',
-  appInfo: 'Sobre Aura Flux',
-  appDescription: 'Una suite de visualización inmersiva impulsada por análisis espectral y IA Gemini.',
-  version: 'Versión',
+  appInfo: 'Sobre la App',
+  appDescription: 'Una suite de visualización inmersiva impulsada por análisis espectral en tiempo real y reconocimiento por IA de Gemini.',
+  version: 'Compilación',
   defaultMic: 'Micrófono Predeterminado',
-  customText: 'Texto Personalizado',
+  customText: 'Contenido de Texto Personalizado',
   textProperties: 'Tipografía y Diseño',
-  customTextPlaceholder: 'ESCRIBE AQUÍ',
+  customTextPlaceholder: 'ESCRIBE TEXTO',
   showText: 'Mostrar Superposición',
   pulseBeat: 'Pulsar con el Ritmo',
-  textAudioReactive: 'Reacción al Audio',
+  textAudioReactive: 'Reactivo al Audio',
   textSize: 'Tamaño de Fuente',
   textRotation: 'Rotación',
-  textFont: 'Fuente',
+  textFont: 'Familia Tipográfica',
   textOpacity: 'Opacidad',
-  textPosition: 'Posición',
+  textPosition: 'Posición del Texto',
   quality: 'Calidad de Renderizado',
-  qualities: {
-    low: 'Baja',
-    med: 'Media',
-    high: 'Alta'
-  },
-  visualPanel: {
-    effects: 'Efectos',
-    automation: 'Automatización',
-    display: 'Visualización'
-  },
-  audioPanel: {
-    info: 'Ajusta la sensibilidad y el suavizado para personalizar cómo reacciona el visualizador. Resoluciones FFT más altas ofrecen más detalle pero consumen más CPU.'
-  },
-  systemPanel: {
-    interface: 'Interfaz',
-    behavior: 'Comportamiento',
-    maintenance: 'Mantenimiento',
-    engine: 'Motor',
-    audio: 'Audio',
-    ai: 'IA'
+  qualities: { low: 'Fluido', med: 'Equilibrado', high: 'Supremo' },
+  visualPanel: { effects: 'Efectos', automation: 'Automatización', display: 'Visualización' },
+  audioPanel: { info: 'Ajusta la sensibilidad y el suavizado para personalizar la reacción. Tamaños de FFT más altos proporcionan más detalle.' },
+  systemPanel: { interface: 'Interfaz', behavior: 'Comportamiento', maintenance: 'Mantenimiento', engine: 'Motor', audio: 'Audio', ai: 'IA' },
+  config: {
+    title: 'Nube y Datos',
+    export: 'Exportar Archivo',
+    import: 'Importar Archivo',
+    library: 'Biblioteca Local',
+    save: 'Guardar',
+    load: 'Cargar',
+    delete: 'Eliminar',
+    placeholder: 'Nombre del preajuste...',
+    confirmImport: '¿Sobrescribir la configuración actual?',
+    invalidFile: 'Formato de archivo no válido',
+    importSuccess: 'Configuración cargada.',
+    copy: 'Copiar',
+    copied: '¡Copiado!',
+    limitReached: 'Máximo de 5 preajustes permitidos.'
   },
   showFps: 'Mostrar FPS',
   showTooltips: 'Mostrar Ayuda',
-  doubleClickFullscreen: 'Doble Clic Fullscreen',
-  autoHideUi: 'Ocultar UI auto.',
-  mirrorDisplay: 'Espejar Pantalla',
+  doubleClickFullscreen: 'Doble Clic para Pantalla Completa',
+  autoHideUi: 'Ocultar Controles Automáticamente',
+  mirrorDisplay: 'Reflejar Pantalla',
   presets: {
     title: 'Ajustes Inteligentes',
-    hint: 'Aplica combinaciones estéticas profesionales con un clic.',
+    hint: 'Aplica una combinación estética curada con un solo clic.',
     select: 'Elige un ambiente...',
     custom: 'Personalizado / Modificado',
     calm: 'Hipnótico y Calmo',
     party: 'Fiesta Energética',
-    ambient: 'Enfoque Ambiental',
-    cyberpunk: 'Frenesí Cyberpunk',
-    retrowave: 'Ocaso Retro',
-    vocal: 'Enfoque Vocal'
+    ambient: 'Nebulosa Profunda',
+    cyberpunk: 'Ciudad Ciber',
+    retrowave: 'Atardecer Retro',
+    vocal: 'Núcleo de Cristal'
   },
-  recognitionSource: 'Proveedor de IA',
+  recognitionSource: 'Fuente de IA',
   lyricsPosition: 'Posición de Letras',
-  lyricsFont: 'Fuente',
-  lyricsFontSize: 'Tamaño',
-  simulatedDemo: 'Simulado (Demo)',
+  lyricsFont: 'Familia Tipográfica',
+  lyricsFontSize: 'Tamaño de Fuente',
+  simulatedDemo: 'Simulado (Sin Conexión)',
   positions: {
-      top: 'Arriba',
-      center: 'Centro',
-      bottom: 'Abajo',
-      tl: 'Sup. Izquierda',
-      tc: 'Sup. Centro',
-      tr: 'Sup. Derecha',
-      ml: 'Med. Izquierda',
-      mc: 'Centro',
-      mr: 'Med. Derecha',
-      bl: 'Inf. Izquierda',
-      bc: 'Inf. Centro',
-      br: 'Inf. Derecha'
+      top: 'Arriba', center: 'Centro', bottom: 'Abajo', tl: 'Sup. Izquierda', tc: 'Sup. Centro', tr: 'Sup. Derecha', ml: 'Med. Izquierda', mc: 'Centro', mr: 'Med. Derecha', bl: 'Inf. Izquierda', bc: 'Inf. Centro', br: 'Inf. Derecha'
   },
-  wakeLock: 'No dormir pantalla',
-  system: {
-    shortcuts: {
-      mic: 'Micro',
-      ui: 'Interfaz',
-      mode: 'Modo',
-      random: 'Azar'
-    }
-  },
-  errors: {
-    title: 'Error de Audio',
-    accessDenied: 'Acceso denegado. Revisa los permisos del micrófono en tu navegador.',
-    noDevice: 'No se detectó ningún dispositivo de entrada.',
-    deviceBusy: 'El dispositivo está ocupado o no es válido.',
-    general: 'No se pudo acceder al audio.',
-    tryDemo: 'Modo Demo (Sin Audio)'
-  },
-  aiState: {
-    active: 'Identificación Activa',
-    enable: 'Habilitar Reconocimiento'
-  },
-  regions: {
-    global: 'Global',
-    US: 'EE.UU. / Occidente',
-    CN: 'China',
-    JP: 'Japón',
-    KR: 'Corea',
-    EU: 'Europa',
-    LATAM: 'Latinoamérica'
-  },
+  wakeLock: 'Pantalla Siempre Encendida',
+  system: { shortcuts: { mic: 'Micro', ui: 'UI', mode: 'Modo', random: 'Aleatorio' } },
+  errors: { title: 'Error de Audio', accessDenied: 'Acceso denegado.', noDevice: 'No se encontró dispositivo.', deviceBusy: 'Dispositivo ocupado.', general: 'Error de acceso.', tryDemo: 'Modo Demo' },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: 'Flujo Neuronal (WebGL)',
     [VisualizerMode.CUBE_FIELD]: 'Campo Cuántico (WebGL)',
     [VisualizerMode.PLASMA]: 'Flujo de Plasma',
-    [VisualizerMode.BARS]: 'Espectro de Barras',
-    [VisualizerMode.PARTICLES]: 'Viaje Estelar',
+    [VisualizerMode.BARS]: 'Barras de Frecuencia',
+    [VisualizerMode.PARTICLES]: 'Campo Estelar',
     [VisualizerMode.TUNNEL]: 'Túnel Geométrico',
-    [VisualizerMode.RINGS]: 'Anillos de Resonancia',
+    [VisualizerMode.RINGS]: 'Anillos de Neón',
     [VisualizerMode.NEBULA]: 'Nebulosa Profunda',
-    [VisualizerMode.LASERS]: 'Matriz de Láseres',
-    [VisualizerMode.FLUID_CURVES]: 'Danza de Auroras',
-    [VisualizerMode.MACRO_BUBBLES]: 'Burbujas Macro (DoF)',
+    [VisualizerMode.LASERS]: 'Láseres de Concierto',
+    [VisualizerMode.FLUID_CURVES]: 'Ondas de Aura',
+    [VisualizerMode.MACRO_BUBBLES]: 'Macro Burbujas',
     [VisualizerMode.KINETIC_WALL]: 'Muro Cinético (WebGL)',
-    [VisualizerMode.LIQUID]: 'Planeta Líquido (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Forma de onda elegante'
+    [VisualizerMode.LIQUID]: 'Esfera Líquida (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Forma de Onda Digital'
+  },
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: 'Simulación de fluidos orgánicos impulsada por partículas WebGL.',
+    [VisualizerMode.CUBE_FIELD]: 'Campo infinito de bloques geométricos que responden a la frecuencia.',
+    [VisualizerMode.PLASMA]: 'Mezcla de colores suave y fluida.',
+    [VisualizerMode.BARS]: 'Analizador de espectro de frecuencia clásico con picos.',
+    [VisualizerMode.PARTICLES]: 'Travesía por un campo estelar del espacio profundo que reacciona a la intensidad.',
+    [VisualizerMode.TUNNEL]: 'Corredor geométrico recursivo que te atrae.',
+    [VisualizerMode.RINGS]: 'Patrones de resonancia de neón concéntricos.',
+    [VisualizerMode.NEBULA]: 'Simulación de partículas del espacio profundo con física gaseosa.',
+    [VisualizerMode.LASERS]: 'Haces de luz nítidos de alta energía que barren la pantalla.',
+    [VisualizerMode.FLUID_CURVES]: 'Ondas de luz atmosféricas suaves.',
+    [VisualizerMode.MACRO_BUBBLES]: 'Visuales microcelulares de enfoque suave.',
+    [VisualizerMode.KINETIC_WALL]: 'Muro de escenario LED masivo con extrusiones 3D cinéticas.',
+    [VisualizerMode.LIQUID]: 'Esfera abstracta que se transforma reaccionando a las bajas frecuencias.',
+    [VisualizerMode.WAVEFORM]: 'Cintas líquidas del historial de frecuencia espectral.'
   },
   lyricsStyles: {
-    [LyricsStyle.STANDARD]: 'Diseño Estándar',
-    [LyricsStyle.KARAOKE]: 'Dinámico',
-    [LyricsStyle.MINIMAL]: 'Minimalista'
+    [LyricsStyle.STANDARD]: 'Estándar', [LyricsStyle.KARAOKE]: 'Dinámico', [LyricsStyle.MINIMAL]: 'Minimalista'
   },
   helpModal: {
     title: 'Guía de Aura Flux',
-    tabs: {
-        guide: 'Guía',
-        shortcuts: 'Atajos',
-        about: 'Acerca de'
-    },
-    intro: 'Aura Flux transforma la señal de tu micrófono en arte digital generativo altamente reactivo mediante análisis espectral avanzado.',
-    shortcutsTitle: 'Interacción por Teclado',
+    tabs: { guide: 'Guía', shortcuts: 'Atajos', about: 'Acerca de' },
+    intro: 'Aura Flux transforma el audio en arte digital generativo utilizando análisis espectral y la inteligencia de Gemini 3.',
+    shortcutsTitle: 'Atajos de Teclado',
     gesturesTitle: 'Gestos Táctiles',
     shortcutItems: {
       toggleMic: 'Activar/Desactivar Audio',
       fullscreen: 'Pantalla Completa',
-      randomize: 'Estética al Azar',
+      randomize: 'Estética Aleatoria',
       lyrics: 'Info de Pista IA',
-      hideUi: 'Panel de Control',
-      glow: 'Efecto Brillo',
-      trails: 'Estelas de Movimiento',
-      changeMode: 'Cambiar Modo',
-      changeTheme: 'Cambiar Colores'
+      hideUi: 'Alternar Panel de Control',
+      glow: 'Alternar Resplandor',
+      trails: 'Alternar Desenfoque de Movimiento',
+      changeMode: 'Cambiar Modos',
+      changeTheme: 'Cambiar Temas'
     },
     gestureItems: {
         swipeMode: 'Deslizar Horizontal: Cambiar Modo',
         swipeSens: 'Deslizar Vertical: Ajustar Sensibilidad',
-        longPress: 'Pulsación Larga: Info IA'
+        longPress: 'Pulsación Larga: Identificación IA'
     },
-    howItWorksTitle: 'Cómo usar',
+    howItWorksTitle: 'Cómo Usar',
     howItWorksSteps: [
-      '1. Conectar: Haz clic en "Lanzar" y autoriza el micrófono.',
-      '2. Visualizar: Reproduce música. Usa "Ajustes Inteligentes" para cambiar de ambiente.',
-      '3. Personalizar: Activa el "Modo Avanzado" para ajustar sensibilidad, FFT y "Texto Personalizado".',
-      '4. Interactuar: Desliza para cambiar modo/sensibilidad. Mantén pulsado para IA.',
-      '5. Explorar: H para opciones, F para pantalla completa, R para aleatorio.'
+      '1. Conectar: Haz clic en "Entrar" y permite el acceso al micrófono.',
+      '2. Visualizar: Reproduce música. Usa "Ajustes Inteligentes" para establecer el ambiente.',
+      '3. Personalizar: Usa el "Modo Avanzado" para la sensibilidad y el texto personalizado.',
+      '4. Interactuar: Desliza para cambiar de modo o mantén presionado para la IA.',
+      '5. Explorar: Presiona H para opciones, F para pantalla completa, R para aleatorio.'
     ],
     settingsTitle: 'Guía de Parámetros',
     settingsDesc: {
-      sensitivity: 'Control de ganancia para la reactividad visual.',
-      speed: 'Frecuencia temporal de los patrones generativos.',
-      glow: 'Intensidad de la iluminación atmosférica.',
-      trails: 'Acumulación temporal para un movimiento fluido.',
-      smoothing: 'Suavizado de los datos de frecuencia.',
-      fftSize: 'Precisión del análisis espectral.'
+      sensitivity: 'Control de ganancia para la reacción del audio.',
+      speed: 'Frecuencia temporal de los patrones.',
+      glow: 'Intensidad del resplandor para la profundidad atmosférica.',
+      trails: 'Persistencia de píxeles para un movimiento fluido.',
+      smoothing: 'Amortiguación temporal de los datos espectrales.',
+      fftSize: 'Resolución de frecuencia.'
     },
-    projectInfoTitle: 'Descripción del Proyecto',
-    aboutDescription: 'Una experiencia sinestésica de próxima generación. Aura Flux fusiona el análisis espectral de alta precisión con IA Gemini 3 para transformar el sonido en luz viva. Diseñado para VJs, streamers y ambientes inmersivos.',
-    privacyTitle: 'Privacidad y Seguridad',
-    privacyText: 'El análisis de audio es local. Solo se envían firmas espectrales cifradas a Gemini para la identificación, nunca audio real.',
-    version: 'Lanzamiento',
-    coreTech: 'Tecnología Principal',
-    repository: 'Repositorio',
-    support: 'Soporte',
-    reportBug: 'Reportar Error'
+    projectInfoTitle: 'Info del Proyecto',
+    aboutDescription: 'Una experiencia sinestésica de última generación. Diseñado para VJs, Streamers y entornos inmersivos.',
+    privacyTitle: 'Privacidad',
+    privacyText: 'El análisis de audio es local. Solo se envían instantáneas a Gemini para identificación.',
+    version: 'Lanzamiento', coreTech: 'Tecnología', repository: 'Fuente', support: 'Soporte', reportBug: 'Error'
   },
   onboarding: {
     welcome: 'Bienvenido a Aura Flux',
-    subtitle: 'Motor de Sinestesia AI de Nueva Generación',
-    selectLanguage: 'Elige tu idioma',
-    next: 'Continuar',
-    back: 'Atrás',
-    skip: 'Omitir',
-    finish: 'Lanzar App',
+    subtitle: 'Motor de Sinestesia IA de Nueva Generación',
+    selectLanguage: 'Elige tu idioma preferido',
+    next: 'Continuar', back: 'Anterior', skip: 'Saltar', finish: 'Comenzar Experiencia',
     features: {
-      title: 'Características Principales',
-      visuals: {
-        title: 'Obras Generativas',
-        desc: '12+ motores basados en WebGL que materializan las ondas sonoras.'
-      },
-      ai: {
-        title: 'Cerebro Gemini AI',
-        desc: 'Identificación instantánea de pistas y estados de ánimo con Google Gemini 3.'
-      },
-      privacy: {
-        title: 'Seguro y Privado',
-        desc: 'El procesamiento es local. Jamás grabamos o almacenamos tus datos de audio privados.'
-      }
+      title: 'Características Sensoriales',
+      visuals: { title: 'Esculturas Generativas', desc: 'Más de 15 motores reactivos impulsados por WebGL y matemáticas avanzadas.' },
+      ai: { title: 'Inteligencia Gemini', desc: 'Metadatos de pistas instantáneos y reconocimiento de estado de ánimo impulsado por Google Gemini 3.' },
+      privacy: { title: 'Inteligencia en el Borde', desc: 'El procesamiento se mantiene local. Nunca grabamos ni almacenamos tus datos de audio privados.' }
     },
-    shortcuts: {
-      title: 'Control Dinámico',
-      desc: 'Domina el entorno con estas teclas.'
-    }
+    shortcuts: { title: 'Controles Dinámicos', desc: 'Domina tu entorno como un director de orquesta con estos comandos de teclado.' }
   }
 };

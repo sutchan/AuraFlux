@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.7.11
+ * Version: 1.7.23
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 14:15
+ * Updated: 2025-02-26 21:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,7 @@ export const ru = {
     on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ'
   },
   tabs: {
-    visual: 'Визуал', text: 'Текст', audio: 'Аудио', ai: 'ИИ-Распознавание', system: 'Система'
+    visual: 'Визуал', text: 'Текст', audio: 'Аудио', ai: 'ИИ-Синестезия', system: 'Система'
   },
   hints: {
     mode: 'Выберите основной математический движок для генерации визуальных эффектов.',
@@ -24,8 +24,8 @@ export const ru = {
     sensitivity: 'Усиление реакции на звук. Увеличьте для тихих помещений.',
     smoothing: 'Временное сглаживание. Высокие значения — плавность, низкие — резкость.',
     fftSize: 'Спектральное разрешение. 4096 дает детализацию, но нагружает ЦП.',
-    lyrics: 'Идентификация песен с помощью ИИ [L].',
-    lyricsStyle: 'Настроить визуальное представление синхронизированных текстов.',
+    lyrics: 'Включить/выключить идентификацию песен и синестетическое описание с помощью ИИ.',
+    lyricsStyle: 'Настроить визуальное представление синхронизированных метаданных.',
     region: 'Ориентировать поиск ИИ на музыку этого конкретного рынка.',
     autoRotate: 'Автоматически переключать визуальные движки.',
     rotateInterval: 'Время перед переключением на следующий движок.',
@@ -37,10 +37,10 @@ export const ru = {
     resetText: 'Очистить текст, шрифты и настройки положения.',
     resetAudio: 'Сбросить чувствительность, сглаживание и FFT.',
     resetAi: 'Сбросить ИИ-персону, регион и макет текста.',
-    randomize: 'Случайная комбинация режима и цветов [R].',
-    fullscreen: 'Полноэкранный режим [F].',
+    randomize: 'Случайная комбинация режима и цветов.',
+    fullscreen: 'Переключить полноэкранный режим.',
     help: 'Посмотреть горячие клавиши и документацию.',
-    mic: 'Включить или отключить вход микрофона [Space].',
+    mic: 'Включить или отключить вход микрофона.',
     device: 'Выберите аппаратный источник аудиовхода.',
     monitor: 'Направить звук микрофона на динамики.',
     wakeLock: 'Предотвратить выключение экрана.',
@@ -75,16 +75,16 @@ export const ru = {
     copyConfig: 'Копировать код конфигурации в буфер обмена.'
   },
   aiPanel: {
-      keySaved: 'API Key сохранен',
-      keyInvalid: 'Неверный API Key',
-      keyCleared: 'API Key удален',
+      keySaved: 'API-ключ проверен и сохранен',
+      keyInvalid: 'Неверный API-ключ',
+      keyCleared: 'API-ключ удален',
       saved: 'СОХРАНЕН',
       missing: 'НЕТ',
       save: 'Сохранить',
       update: 'Обновить',
-      geminiHint: 'Необязательно. Использует бесплатную квоту по умолчанию.',
-      customHint: 'Обязательно. Ключ хранится локально в браузере.',
-      groqHint: 'Обязательно. Включает быстрый Whisper+Llama.'
+      geminiHint: 'Необязательно. Использует бесплатную квоту по умолчанию, если пусто.',
+      customHint: 'Обязательно. Ключ хранится локально в вашем браузере.',
+      groqHint: 'Обязательно. Включает быструю обработку Whisper+Llama.'
   },
   visualizerMode: 'Визуальный движок',
   styleTheme: 'Цветовая тема',
@@ -93,52 +93,52 @@ export const ru = {
   speed: 'Скорость эволюции',
   glow: 'Неоновое свечение',
   trails: 'Шлейфы движения',
-  autoRotate: 'Цикл движков',
+  autoRotate: 'Авто-цикл движков',
   rotateInterval: 'Интервал (с)',
-  cycleColors: 'Цикл цветов',
+  cycleColors: 'Авто-цикл цветов',
   colorInterval: 'Интервал (с)',
   cycleSpeed: 'Длительность (с)',
-  monitorAudio: 'Мониторинг',
+  monitorAudio: 'Мониторинг аудио',
   audioInput: 'Устройство ввода',
   lyrics: 'ИИ-Синестезия',
-  showLyrics: 'Включить ИИ',
-  displaySettings: 'Отображение',
+  showLyrics: 'Включить распознавание',
+  displaySettings: 'Настройки дисплея',
   language: 'Язык интерфейса',
   region: 'Целевой рынок',
-  startMic: 'Включить звук',
-  stopMic: 'Выключить звук',
+  startMic: 'Включить аудио',
+  stopMic: 'Выключить аудио',
   listening: 'Активен',
   identifying: 'ИИ анализирует трек...',
-  startExperience: 'Запустить',
+  startExperience: 'Войти в поток',
   welcomeTitle: 'Aura Flux | Звук Света',
-  welcomeText: 'Превратите каждую вибрацию в генеративное цифровое искусство. Работает на базе Gemini AI для распознавания в реальном времени.',
+  welcomeText: 'Превратите каждую вибрацию в генеративное цифровое искусство. Работает на базе Gemini AI для распознавания в реальном времени, переопределяя сенсорный опыт.',
   unsupportedTitle: 'Браузер не поддерживается',
-  unsupportedText: 'Aura Flux требует современных функций Web Audio. Пожалуйста, используйте Chrome, Edge или Safari.',
+  unsupportedText: 'Aura Flux требует современных функций Web Audio. Пожалуйста, используйте последнюю версию Chrome, Edge или Safari.',
   hideOptions: 'Свернуть',
-  showOptions: 'Опции',
-  reset: 'Сброс Системы',
-  resetVisual: 'Сброс Эстетики',
-  resetText: 'Сброс Текста',
-  resetAudio: 'Сброс Аудио',
+  showOptions: 'Расширить опции',
+  reset: 'Сброс системы',
+  resetVisual: 'Сброс эстетики',
+  resetText: 'Сброс текста',
+  resetAudio: 'Сброс аудио',
   resetAi: 'Сброс ИИ',
-  randomize: 'Умный Рандом',
-  help: 'Помощь',
+  randomize: 'Умный рандом',
+  help: 'Поддержка',
   close: 'Закрыть',
-  betaDisclaimer: 'ИИ-распознавание находится в бета-версии.',
+  betaDisclaimer: 'Распознавание ИИ в настоящее время находится в бета-версии.',
   wrongSong: 'Не та песня?',
   hideCursor: 'Скрыть курсор',
-  customColor: 'Цвет текста',
-  randomizeTooltip: 'Случайные настройки (R)',
+  customColor: 'Пользовательский',
+  randomizeTooltip: 'Случайные настройки всех визуальных эффектов',
   smoothing: 'Сглаживание',
   fftSize: 'Разрешение (FFT)',
   appInfo: 'О приложении',
-  appDescription: 'Иммерсивный набор визуализации на основе спектрального анализа и ИИ Gemini.',
+  appDescription: 'Иммерсивный набор визуализации на основе спектрального анализа в реальном времени и распознавания Gemini AI.',
   version: 'Сборка',
   defaultMic: 'Микрофон по умолчанию',
-  customText: 'Текстовый слой',
+  customText: 'Пользовательский текст',
   textProperties: 'Типографика и макет',
   customTextPlaceholder: 'ВВЕДИТЕ ТЕКСТ',
-  showText: 'Показать текст',
+  showText: 'Показать оверлей',
   pulseBeat: 'Пульсация под бит',
   textAudioReactive: 'Аудио-реактивность',
   textSize: 'Размер шрифта',
@@ -147,33 +147,25 @@ export const ru = {
   textOpacity: 'Прозрачность',
   textPosition: 'Позиция текста',
   quality: 'Качество рендера',
-  qualities: {
-    low: 'Скорость', med: 'Баланс', high: 'Ультима'
-  },
-  visualPanel: {
-    effects: 'Эффекты', automation: 'Автоматизация', display: 'Экран'
-  },
-  audioPanel: {
-    info: 'Настройте чувствительность и сглаживание. Высокий FFT дает детали, но нагружает ЦП.'
-  },
-  systemPanel: {
-    interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ'
-  },
+  qualities: { low: 'Скорость', med: 'Баланс', high: 'Ультима' },
+  visualPanel: { effects: 'Эффекты', automation: 'Автоматизация', display: 'Экран' },
+  audioPanel: { info: 'Настройте чувствительность и сглаживание. Высокий FFT дает детали, но нагружает ЦП.' },
+  systemPanel: { interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ' },
   config: {
     title: 'Облако и Данные',
-    export: 'Экспорт',
-    import: 'Импорт',
-    library: 'Библиотека',
+    export: 'Экспорт файла',
+    import: 'Импорт файла',
+    library: 'Локальная библиотека',
     save: 'Сохранить',
     load: 'Загрузить',
     delete: 'Удалить',
-    placeholder: 'Имя...',
+    placeholder: 'Имя пресета...',
     confirmImport: 'Перезаписать текущие настройки?',
     invalidFile: 'Неверный формат файла',
-    importSuccess: 'Конфигурация загружена',
+    importSuccess: 'Конфигурация загружена.',
     copy: 'Копировать',
-    copied: 'Готово!',
-    limitReached: 'Максимум 5 пресетов.'
+    copied: 'Скопировано!',
+    limitReached: 'Максимум 5 пресетов разрешено.'
   },
   showFps: 'Показать FPS',
   showTooltips: 'Подсказки',
@@ -181,23 +173,19 @@ export const ru = {
   autoHideUi: 'Авто-скрытие UI',
   mirrorDisplay: 'Отражение',
   presets: {
-    title: 'Смарт-пресеты', hint: 'Применить эстетику в один клик.', select: 'Выберите настроение...', custom: 'Изменено', calm: 'Цифровая волна', party: 'Энергичная вечеринка', ambient: 'Глубокая туманность', cyberpunk: 'Концертные лазеры', retrowave: 'Ретро-закат', vocal: 'Акцент на вокал'
+    title: 'Смарт-пресеты', hint: 'Применить эстетику в один клик.', select: 'Выберите настроение...', custom: 'Изменено', calm: 'Цифровая волна', party: 'Энергичная вечеринка', ambient: 'Глубокая туманность', cyberpunk: 'Кибер-город', retrowave: 'Ретро-закат', vocal: 'Кристальное ядро'
   },
-  recognitionSource: 'ИИ-Провайдер',
-  lyricsPosition: 'Позиция ИИ-текста',
-  lyricsFont: 'Шрифт ИИ',
-  lyricsFontSize: 'Размер ИИ',
+  recognitionSource: 'Источник ИИ',
+  lyricsPosition: 'Позиция текста',
+  lyricsFont: 'Шрифт',
+  lyricsFontSize: 'Размер',
   simulatedDemo: 'Демо (Офлайн)',
   positions: {
       top: 'Вверх', center: 'Центр', bottom: 'Вниз', tl: 'Слева Вверху', tc: 'Центр Вверху', tr: 'Справа Вверху', ml: 'Слева Посередине', mc: 'Центр', mr: 'Справа Посередине', bl: 'Слева Внизу', bc: 'Центр Внизу', br: 'Справа Внизу'
   },
   wakeLock: 'Экран всегда включен',
-  system: {
-    shortcuts: { mic: 'Мик', ui: 'UI', mode: 'Режим', random: 'Рандом' }
-  },
-  errors: {
-    title: 'Ошибка аудио', accessDenied: 'Доступ запрещен.', noDevice: 'Устройство не найдено.', deviceBusy: 'Устройство занято.', general: 'Ошибка доступа.', tryDemo: 'Демо-режим'
-  },
+  system: { shortcuts: { mic: 'Мик', ui: 'UI', mode: 'Режим', random: 'Рандом' } },
+  errors: { title: 'Ошибка аудио', accessDenied: 'Доступ запрещен.', noDevice: 'Устройство не найдено.', deviceBusy: 'Устройство занято.', general: 'Ошибка доступа.', tryDemo: 'Демо-режим' },
   onboarding: {
     welcome: 'Добро пожаловать в Aura Flux', subtitle: 'ИИ-Движок Синестезии Нового Поколения', selectLanguage: 'Выберите язык', next: 'Далее', back: 'Назад', skip: 'Пропустить', finish: 'Начать',
     features: {

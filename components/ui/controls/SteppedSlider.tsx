@@ -1,9 +1,9 @@
 /**
  * File: components/ui/controls/SteppedSlider.tsx
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 00:00
+ * Updated: 2025-02-26 19:30
  */
 
 import React, { memo } from 'react';
@@ -45,7 +45,7 @@ export const SteppedSlider = memo(({ label, value, min, max, step, onChange, opt
         <div className="space-y-2">
             <div className="flex justify-between items-center">
                 <TooltipArea text={hintText}>
-                    <span className="text-xs font-bold uppercase text-white/50 tracking-[0.15em] ml-1">{label}</span>
+                    <span className="text-xs font-bold uppercase text-white/60 tracking-wider ml-1">{label}</span>
                 </TooltipArea>
                 <span className="text-xs font-mono text-white/80">{displayLabel}</span>
             </div>

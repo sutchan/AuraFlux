@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.7.11
+ * Version: 1.7.23
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 14:15
+ * Updated: 2025-02-26 21:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,7 @@ export const ar = {
     on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم'
   },
   tabs: {
-    visual: 'بصري', text: 'نص', audio: 'صوت', ai: 'تمييز المسار', system: 'نظام'
+    visual: 'بصري', text: 'نص', audio: 'صوت', ai: 'تحسس الذكاء الاصطناعي', system: 'النظام'
   },
   hints: {
     mode: 'اختر المحرك الرياضي الأساسي لتوليد المؤثرات البصرية.',
@@ -24,8 +24,8 @@ export const ar = {
     sensitivity: 'تضخيم التفاعل البصري مع الصوت. قم بزيادته في البيئات الهادئة.',
     smoothing: 'التخميد الزمني. القيم العالية تعطي حركة سائلة.',
     fftSize: 'الدقة الطيفية. 4096 يوفر تفاصيل دقيقة ولكنه يستهلك المزيد من المعالج.',
-    lyrics: 'تفعيل/تعطيل التعرف على الأغاني بواسطة الذكاء الاصطناعي [L].',
-    lyricsStyle: 'تخصيص العرض المرئي للكلمات المتزامنة.',
+    lyrics: 'تفعيل/تعطيل التعرف على الأغاني والوصف الحسي بواسطة الذكاء الاصطناعي.',
+    lyricsStyle: 'تخصيص العرض المرئي للبيانات الوصفية المتزامنة.',
     region: 'توجيه محرك بحث الذكاء الاصطناعي نحو الموسيقى في هذا السوق المحدد.',
     autoRotate: 'التنقل تلقائيًا عبر محركات بصرية مختلفة.',
     rotateInterval: 'الوقت بالثواني قبل التبديل إلى المحرك التالي.',
@@ -37,10 +37,10 @@ export const ar = {
     resetText: 'مسح النص المخصص والخطوط وإعدادات الموضع.',
     resetAudio: 'استعادة الحساسية والتنعيم و FFT إلى الوضع الافتراضي.',
     resetAi: 'إعادة تعيين شخصية الذكاء الاصطناعي والمنطقة وتخطيط النصوص.',
-    randomize: 'توليد مزيج عشوائي من الأوضاع والألوان [R].',
-    fullscreen: 'تبديل وضع ملء الشاشة الغامر [F].',
+    randomize: 'توليد مزيج عشوائي من الأوضاع والألوان.',
+    fullscreen: 'تبديل وضع ملء الشاشة الغامر.',
     help: 'عرض اختصارات لوحة المفاتيح والوثائق.',
-    mic: 'تنشيط أو كتم إدخال الميكروفون [Space].',
+    mic: 'تنشيط أو كتم إدخال الميكروفون.',
     device: 'اختر مصدر إدخال الصوت من الجهاز.',
     monitor: 'تمرير إدخال الميكروفون إلى مكبرات الصوت.',
     wakeLock: 'منع الشاشة من الانطفاء.',
@@ -75,16 +75,16 @@ export const ar = {
     copyConfig: 'نسخ رمز التكوين إلى الحافظة.'
   },
   aiPanel: {
-      keySaved: 'تم حفظ المفتاح',
-      keyInvalid: 'مفتاح غير صالح',
-      keyCleared: 'تم مسح المفتاح',
+      keySaved: 'تم التحقق من مفتاح API وحفظه',
+      keyInvalid: 'مفتاح API غير صالح',
+      keyCleared: 'تم مسح مفتاح API',
       saved: 'محفوظ',
       missing: 'مفقود',
       save: 'حفظ',
       update: 'تحديث',
-      geminiHint: 'اختياري. يستخدم الحصة المجانية إذا كان فارغاً.',
-      customHint: 'مطلوب. يتم الحفظ محلياً في المتصفح.',
-      groqHint: 'مطلوب. يمكّن استدلال Whisper+Llama السريع.'
+      geminiHint: 'اختياري. يستخدم الحصة المجانية الافتراضية إذا كان فارغًا.',
+      customHint: 'مطلوب. يتم تخزين المفتاح محليًا في متصفحك.',
+      groqHint: 'مطلوب. يُمكّن استدلال Whisper+Llama السريع.'
   },
   visualizerMode: 'محرك العرض المرئي',
   styleTheme: 'سمة الألوان',
@@ -93,14 +93,14 @@ export const ar = {
   speed: 'سرعة التطور',
   glow: 'توهج نيون',
   trails: 'آثار الحركة',
-  autoRotate: 'دورة المحركات',
+  autoRotate: 'دورة المحركات التلقائية',
   rotateInterval: 'الفاصل (ث)',
-  cycleColors: 'دورة الألوان',
+  cycleColors: 'دورة الألوان التلقائية',
   colorInterval: 'الفاصل (ث)',
   cycleSpeed: 'مدة الدورة (ث)',
-  monitorAudio: 'المراقبة',
+  monitorAudio: 'مراقبة الصوت',
   audioInput: 'جهاز الإدخال',
-  lyrics: 'تمييز المسار',
+  lyrics: 'تحسس الذكاء الاصطناعي',
   showLyrics: 'تفعيل التمييز',
   displaySettings: 'إعدادات العرض',
   language: 'لغة الواجهة',
@@ -109,13 +109,13 @@ export const ar = {
   stopMic: 'إيقاف الصوت',
   listening: 'نشط',
   identifying: 'الذكاء الاصطناعي يحلل المسار...',
-  startExperience: 'بدء التجربة',
+  startExperience: 'ادخل إلى التدفق',
   welcomeTitle: 'Aura Flux | صوت الضوء',
-  welcomeText: 'حول كل اهتزاز إلى تحفة فنية توليدية. مدعوم بذكاء Gemini للتعرف الفوري – اختبر الرحلة الحسية القصوى.',
+  welcomeText: 'حول كل اهتزاز إلى تحفة فنية توليدية. مدعوم بذكاء Gemini للتعرف الفوري، معيدًا تعريف التجربة الحسية.',
   unsupportedTitle: 'المتصفح غير مدعوم',
   unsupportedText: 'يتطلب Aura Flux ميزات Web Audio حديثة. يرجى استخدام أحدث إصدار من Chrome أو Safari.',
   hideOptions: 'طي اللوحة',
-  showOptions: 'خيارات',
+  showOptions: 'توسيع الخيارات',
   reset: 'إعادة تعيين النظام',
   resetVisual: 'إعادة تعيين الجماليات',
   resetText: 'إعادة تعيين النص',
@@ -124,18 +124,18 @@ export const ar = {
   randomize: 'عشوائي ذكي',
   help: 'المساعدة',
   close: 'إغلاق',
-  betaDisclaimer: 'ميزة تمييز المسار في مرحلة تجريبية.',
+  betaDisclaimer: 'ميزة التعرف بالذكاء الاصطناعي في مرحلة تجريبية.',
   wrongSong: 'أغنية خاطئة؟',
   hideCursor: 'إخفاء المؤشر',
-  customColor: 'لون النص',
-  randomizeTooltip: 'عشوائية جميع الإعدادات (R)',
+  customColor: 'مخصص',
+  randomizeTooltip: 'عشوائية جميع الإعدادات البصرية',
   smoothing: 'التنعيم',
   fftSize: 'الدقة (FFT)',
   appInfo: 'عن التطبيق',
-  appDescription: 'مجموعة تصور غامرة تعتمد على تحليل الطيف وذكاء Gemini.',
+  appDescription: 'مجموعة تصور غامرة تعتمد على تحليل الطيف في الوقت الفعلي وتمييز Gemini AI.',
   version: 'الإصدار',
   defaultMic: 'الميكروفون الافتراضي',
-  customText: 'نص مخصص',
+  customText: 'محتوى نصي مخصص',
   textProperties: 'الطباعة والتخطيط',
   customTextPlaceholder: 'أدخل النص',
   showText: 'إظهار التراكب',
@@ -147,30 +147,22 @@ export const ar = {
   textOpacity: 'الشفافية',
   textPosition: 'موضع النص',
   quality: 'جودة الرندرة',
-  qualities: {
-    low: 'سلس', med: 'متوازن', high: 'فائق'
-  },
-  visualPanel: {
-    effects: 'تأثيرات', automation: 'أتمتة', display: 'عرض'
-  },
-  audioPanel: {
-    info: 'اضبط الحساسية والتنعيم. الدقة العالية توفر تفاصيل أكثر لكنها تزيد الحمل.'
-  },
-  systemPanel: {
-    interface: 'الواجهة', behavior: 'السلوك', maintenance: 'الصيانة', engine: 'المحرك', audio: 'الصوت', ai: 'الذكاء الاصطناعي'
-  },
+  qualities: { low: 'سلس', med: 'متوازن', high: 'فائق' },
+  visualPanel: { effects: 'تأثيرات', automation: 'أتمتة', display: 'عرض' },
+  audioPanel: { info: 'اضبط الحساسية والتنعيم. الدقة العالية توفر تفاصيل أكثر لكنها تزيد الحمل.' },
+  systemPanel: { interface: 'الواجهة', behavior: 'السلوك', maintenance: 'الصيانة', engine: 'المحرك', audio: 'الصوت', ai: 'الذكاء الاصطناعي' },
   config: {
     title: 'البيانات والسحابة',
-    export: 'تصدير',
-    import: 'استيراد',
+    export: 'تصدير ملف',
+    import: 'استيراد ملف',
     library: 'المكتبة المحلية',
     save: 'حفظ',
     load: 'تحميل',
     delete: 'حذف',
-    placeholder: 'الاسم...',
+    placeholder: 'اسم الإعداد المسبق...',
     confirmImport: 'استبدال الإعدادات الحالية؟',
     invalidFile: 'تنسيق الملف غير صالح',
-    importSuccess: 'تم تحميل التكوين',
+    importSuccess: 'تم تحميل التكوين.',
     copy: 'نسخ',
     copied: 'تم النسخ!',
     limitReached: 'الحد الأقصى 5 إعدادات مسبقة.'
@@ -178,34 +170,113 @@ export const ar = {
   showFps: 'عرض FPS',
   showTooltips: 'عرض تلميحات',
   doubleClickFullscreen: 'ملء الشاشة بالنقر المزدوج',
-  autoHideUi: 'إخفاء لوحة التحكم تلقائيًا.',
+  autoHideUi: 'إخفاء الواجهة تلقائيًا',
   mirrorDisplay: 'عكس العرض',
   presets: {
-    title: 'إعدادات مسبقة ذكية', hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.', select: 'اختر مزاجاً...', custom: 'معدل', calm: 'شكل موجي رقمي', party: 'حفلة نشطة', ambient: 'سديم عميق', cyberpunk: 'ليزر حفلات', retrowave: 'غروب ريترو', vocal: 'تركيز صوتي'
+    title: 'إعدادات مسبقة ذكية', hint: 'تطبيق مزيج جمالي منسق بنقرة واحدة.', select: 'اختر مزاجاً...', custom: 'معدل', calm: 'شكل موجي رقمي', party: 'حفلة نشطة', ambient: 'سديم عميق', cyberpunk: 'مدينة سايبر', retrowave: 'غروب ريترو', vocal: 'نواة بلورية'
   },
-  recognitionSource: 'مزود الذكاء الاصطناعي',
+  recognitionSource: 'مصدر الذكاء الاصطناعي',
   lyricsPosition: 'موضع الكلمات',
   lyricsFont: 'نوع الخط',
   lyricsFontSize: 'الحجم',
-  simulatedDemo: 'محاكاة (عرض)',
+  simulatedDemo: 'محاكاة (غير متصل)',
   positions: {
       top: 'أعلى', center: 'وسط', bottom: 'أسفل', tl: 'أعلى يسار', tc: 'أعلى وسط', tr: 'أعلى يمين', ml: 'وسط يسار', mc: 'مركز', mr: 'وسط يمين', bl: 'أسفل يسار', bc: 'أسفل وسط', br: 'أسفل يمين'
   },
-  wakeLock: 'الشاشة دائماً مشتعلة',
-  system: {
-    shortcuts: { mic: 'ميكروفون', ui: 'واجهة', mode: 'وضع', random: 'عشوائي' }
+  wakeLock: 'الشاشة دائمًا مشتعلة',
+  system: { shortcuts: { mic: 'ميكروفون', ui: 'واجهة', mode: 'وضع', random: 'عشوائي' } },
+  errors: { title: 'خطأ صوتي', accessDenied: 'تم رفض الوصول.', noDevice: 'لم يتم العثور على جهاز.', deviceBusy: 'الجهاز مشغول.', general: 'تعذر الوصول للصوت.', tryDemo: 'وضع العرض' },
+  modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'تدفق عصبي (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'حقل كمومي (WebGL)',
+    [VisualizerMode.PLASMA]: 'تدفق البلازما',
+    [VisualizerMode.BARS]: 'أشرطة التردد',
+    [VisualizerMode.PARTICLES]: 'حقل النجوم',
+    [VisualizerMode.TUNNEL]: 'نفق هندسي',
+    [VisualizerMode.RINGS]: 'حلقات النيون',
+    [VisualizerMode.NEBULA]: 'سديم عميق',
+    [VisualizerMode.LASERS]: 'ليزر الحفلات',
+    [VisualizerMode.FLUID_CURVES]: 'أمواج الهالة',
+    [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو',
+    [VisualizerMode.KINETIC_WALL]: 'جدار حركي (WebGL)',
+    [VisualizerMode.LIQUID]: 'كرة سائلة (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي'
   },
-  errors: {
-    title: 'خطأ صوتي', accessDenied: 'تم رفض الوصول.', noDevice: 'لم يتم العثور على جهاز.', deviceBusy: 'الجهاز مشغول.', general: 'تعذر الوصول للصوت.', tryDemo: 'وضع العرض'
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: 'محاكاة سوائل عضوية مدعومة بجزيئات WebGL.',
+    [VisualizerMode.CUBE_FIELD]: 'حقل لا نهائي من الكتل الهندسية التي تستجيب للتردد.',
+    [VisualizerMode.PLASMA]: 'مزج ألوان سلس شبيه بالسوائل.',
+    [VisualizerMode.BARS]: 'محلل طيف التردد الكلاسيكي مع القمم.',
+    [VisualizerMode.PARTICLES]: 'اجتياز حقل نجوم في الفضاء السحيق يتفاعل مع الشدة.',
+    [VisualizerMode.TUNNEL]: 'ممر هندسي متكرر يجذبك للداخل.',
+    [VisualizerMode.RINGS]: 'أنماط رنين نيون متحدة المركز.',
+    [VisualizerMode.NEBULA]: 'محاكاة جزيئات الفضاء السحيق بفيزياء غازية.',
+    [VisualizerMode.LASERS]: 'أشعة ضوئية حادة عالية الطاقة تجتاح الشاشة.',
+    [VisualizerMode.FLUID_CURVES]: 'أمواج ضوئية جوية سلسة.',
+    [VisualizerMode.MACRO_BUBBLES]: 'مرئيات ميكرو-خلوية ذات تركيز ناعم.',
+    [VisualizerMode.KINETIC_WALL]: 'جدار مسرح LED ضخم مع بروزات ثلاثية الأبعاد حركية.',
+    [VisualizerMode.LIQUID]: 'كرة مجردة متحولة تتفاعل مع الترددات المنخفضة.',
+    [VisualizerMode.WAVEFORM]: 'شرائط سائلة لتاريخ التردد الطيفي.'
+  },
+  lyricsStyles: {
+    [LyricsStyle.STANDARD]: 'قياسي', [LyricsStyle.KARAOKE]: 'ديناميكي', [LyricsStyle.MINIMAL]: 'بسيط'
+  },
+  helpModal: {
+    title: 'دليل Aura Flux',
+    tabs: { guide: 'دليل', shortcuts: 'اختصارات', about: 'حول' },
+    intro: 'يحول Aura Flux الصوت إلى فن رقمي توليدي باستخدام تحليل الطيف وذكاء Gemini 3.',
+    shortcutsTitle: 'اختصارات لوحة المفاتيح',
+    gesturesTitle: 'إيماءات اللمس',
+    shortcutItems: {
+      toggleMic: 'تبديل إدخال الصوت',
+      fullscreen: 'ملء الشاشة',
+      randomize: 'عشوائية الجماليات',
+      lyrics: 'تبديل معلومات الذكاء الاصطناعي',
+      hideUi: 'تبديل لوحة التحكم',
+      glow: 'تبديل التوهج',
+      trails: 'تبديل ضبابية الحركة',
+      changeMode: 'تبديل الأوضاع',
+      changeTheme: 'تبديل السمات'
+    },
+    gestureItems: {
+        swipeMode: 'التمرير الأفقي: تغيير الوضع',
+        swipeSens: 'التمرير العمودي: ضبط الحساسية',
+        longPress: 'الضغط المطول: تحديد الهوية بالذكاء الاصطناعي'
+    },
+    howItWorksTitle: 'كيفية الاستخدام',
+    howItWorksSteps: [
+      '1. الاتصال: انقر على "ابدأ" واسمح بالوصول إلى الميكروفون.',
+      '2. التصور: قم بتشغيل الموسيقى. استخدم "الإعدادات المسبقة الذكية" لضبط الأجواء.',
+      '3. التخصيص: استخدم "الوضع المتقدم" للحساسية والنص المخصص.',
+      '4. التفاعل: اسحب لتغيير الأوضاع أو اضغط مطولاً للذكاء الاصطناعي.',
+      '5. الاستكشاف: اضغط H للخيارات، F لملء الشاشة، R للعشوائية.'
+    ],
+    settingsTitle: 'دليل المعلمات',
+    settingsDesc: {
+      sensitivity: 'التحكم في كسب تفاعل الصوت.',
+      speed: 'التردد الزمني للأنماط.',
+      glow: 'شدة التوهج للعمق الجوي.',
+      trails: 'استمرار البكسل للحركة السلسة.',
+      smoothing: 'التخميد الزمني للبيانات الطيفية.',
+      fftSize: 'دقة التردد.'
+    },
+    projectInfoTitle: 'معلومات المشروع',
+    aboutDescription: 'تجربة حسية من الجيل التالي. مصممة لـ VJs والمذيعين والبيئات الغامرة.',
+    privacyTitle: 'الخصوصية',
+    privacyText: 'التحليل الصوتي محلي. يتم إرسال لقطات إلى Gemini فقط للتعريف.',
+    version: 'إصدار', coreTech: 'تقنية', repository: 'مصدر', support: 'دعم', reportBug: 'خطأ'
   },
   onboarding: {
-    welcome: 'مرحباً بك في Aura Flux', subtitle: 'محرك الحس المرافق بالذكاء الاصطناعي', selectLanguage: 'يرجى اختيار اللغة', next: 'التالي', back: 'العودة', skip: 'تخطي', finish: 'بدء التجربة',
+    welcome: 'مرحباً بك في Aura Flux',
+    subtitle: 'محرك الحس المرافق بالذكاء الاصطناعي من الجيل التالي',
+    selectLanguage: 'اختر لغتك المفضلة',
+    next: 'التالي', back: 'السابق', skip: 'تخطي', finish: 'بدء التجربة',
     features: {
-      title: 'الميزات الرئيسية',
-      visuals: { title: 'فنون توليدية', desc: '12+ محركاً تعتمد على WebGL لتجسيد الصوت.' },
-      ai: { title: 'ذكاء Gemini AI', desc: 'تحليل فوري للمسارات والمزاج عبر Google Gemini 3.' },
-      privacy: { title: 'آمن وخاص', desc: 'المعالجة محلية. لا يتم تسجيل بياناتك الصوتية أبداً.' }
+      title: 'الميزات الحسية',
+      visuals: { title: 'منحوتات توليدية', desc: 'أكثر من 15 محركًا تفاعليًا مدعومًا بـ WebGL والرياضيات المتقدمة.' },
+      ai: { title: 'ذكاء Gemini', desc: 'بيانات وصفية فورية للمسار والتعرف على الحالة المزاجية بواسطة Google Gemini 3.' },
+      privacy: { title: 'ذكاء الحافة', desc: 'تظل المعالجة محلية. لا نقوم أبدًا بتسجيل أو تخزين بياناتك الصوتية الخاصة.' }
     },
-    shortcuts: { title: 'تحكم ديناميكي', desc: 'كن مايسترو الضوء عبر لوحة المفاتيح.' }
+    shortcuts: { title: 'التحكم الديناميكي', desc: 'تحكم في بيئتك كمايسترو باستخدام أوامر لوحة المفاتيح هذه.' }
   }
 };

@@ -1,9 +1,10 @@
 /**
  * File: components/ui/controls/SettingsToggle.tsx
- * Version: 1.0.8
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 10:00
+ * Updated: 2025-02-26 21:00
+ * Description: Fixed a visual bug where the slider thumb was not translating to the correct end position.
  */
 
 import React, { memo } from 'react';
@@ -27,31 +28,31 @@ export const SettingsToggle = memo(({ label, value, onChange, activeColor = 'blu
     : '';
   
   const containerClasses = variant === 'clean' 
-    ? 'py-3 flex flex-col group'
-    : 'bg-white/[0.03] p-3 rounded-xl border border-white/5 hover:border-white/10 transition-colors';
+    ? 'py-2 flex flex-col group'
+    : 'bg-white/[0.03] p-2.5 rounded-xl border border-white/5 hover:border-white/10 transition-colors';
     
   const headerClasses = variant === 'clean'
     ? 'flex items-center justify-between w-full' 
-    : 'flex items-center justify-between min-h-[24px] w-full';
+    : 'flex items-center justify-between min-h-[22px] w-full';
 
   return (
     <div className={containerClasses}> 
       <div className={headerClasses}>
         <TooltipArea text={hintText}>
-          <span className={`text-xs font-bold leading-none transition-colors ${variant === 'clean' ? 'text-white/60 group-hover:text-white' : 'text-white/70'}`}>{label}</span>
+          <span className={`text-sm font-bold leading-none transition-colors ${variant === 'clean' ? 'text-white/70 group-hover:text-white' : 'text-white/80'}`}>{label}</span>
         </TooltipArea>
         <button 
           onClick={onChange} 
-          className={`relative w-9 h-5 rounded-full transition-all duration-300 ease-in-out focus:outline-none flex items-center shrink-0 ${value ? activeBg : 'bg-white/10'} ${neonShadow}`}
+          className={`relative w-10 h-5 rounded-full transition-all duration-300 ease-in-out focus:outline-none flex items-center shrink-0 ${value ? activeBg : 'bg-white/10'} ${neonShadow}`}
           role="switch" 
           aria-checked={value}
           aria-label={label}
         >
-          <span className={`inline-block w-3 h-3 transform transition-transform duration-200 ease-in-out bg-white rounded-full shadow-sm ${value ? 'translate-x-5' : 'translate-x-1'}`} />
+          <span className={`inline-block w-4 h-4 transform transition-transform duration-200 ease-in-out bg-white rounded-full shadow-sm ${value ? 'translate-x-[22px]' : 'translate-x-[2px]'}`} />
         </button>
       </div>
       {statusText && <div className="text-[11px] font-mono text-white/30 uppercase tracking-widest text-right mt-1">{statusText}</div>}
-      {value && children && <div className="mt-3 pt-3 border-t border-white/5 animate-fade-in-up w-full">{children}</div>}
+      {value && children && <div className="mt-2 pt-2 border-t border-white/5 animate-fade-in-up w-full">{children}</div>}
     </div>
   );
 });
