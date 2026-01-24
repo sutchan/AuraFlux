@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -202,9 +202,7 @@ export const ru = {
     [VisualizerMode.MACRO_BUBBLES]: 'Макро-пузыри',
     [VisualizerMode.KINETIC_WALL]: 'Кинетическая стена (WebGL)',
     [VisualizerMode.LIQUID]: 'Жидкая сфера (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Цифровая волна',
-    [VisualizerMode.CYBER_CITY]: 'Кибер-город (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: 'Кристальное ядро (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Цифровая волна'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Органическая симуляция жидкости на основе частиц WebGL.',
@@ -220,9 +218,7 @@ export const ru = {
     [VisualizerMode.MACRO_BUBBLES]: 'Микроклеточные визуальные эффекты с мягким фокусом.',
     [VisualizerMode.KINETIC_WALL]: 'Массивная светодиодная сценическая стена с кинетическими 3D-выступами.',
     [VisualizerMode.LIQUID]: 'Абстрактная изменяющаяся сфера, реагирующая на низкие частоты.',
-    [VisualizerMode.WAVEFORM]: 'Жидкие ленты истории спектральных частот.',
-    [VisualizerMode.CYBER_CITY]: 'Бесконечное шоссе через неоновый мегаполис, пульсирующий в такт.',
-    [VisualizerMode.CRYSTAL_CORE]: 'Центральное многогранное кристаллическое сердце, преломляющее свет и пульсирующее со звуковой энергией.'
+    [VisualizerMode.WAVEFORM]: 'Жидкие ленты истории спектральных частот.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Стандартный', [LyricsStyle.KARAOKE]: 'Динамический', [LyricsStyle.MINIMAL]: 'Минималистичный'

@@ -13,8 +13,6 @@ export enum VisualizerMode {
   // WebGL Modes (High Fidelity)
   NEURAL_FLOW = 'NEURAL_FLOW',
   KINETIC_WALL = 'KINETIC_WALL', 
-  CYBER_CITY = 'CYBER_CITY',
-  CRYSTAL_CORE = 'CRYSTAL_CORE',
   LIQUID = 'LIQUID',
   CUBE_FIELD = 'CUBE_FIELD',
 

@@ -8,7 +8,8 @@
 
 import React, { useRef, useMemo, useCallback } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+// @fixtsx(10) - import THREE members directly
+import { MeshPhysicalMaterial, PointLight, SpotLight, Mesh, PlaneGeometry, DoubleSide, Color } from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
 import { useAI } from '../../AppContext';
@@ -20,11 +21,11 @@ interface SceneProps {
 }
 
 export const SilkWavesScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
-  const materialRef = useRef<THREE.MeshPhysicalMaterial>(null);
-  const meshRef = useRef<THREE.Mesh>(null);
-  const light1Ref = useRef<THREE.PointLight>(null);
-  const light2Ref = useRef<THREE.PointLight>(null);
-  const light3Ref = useRef<THREE.SpotLight>(null);
+  const materialRef = useRef<MeshPhysicalMaterial>(null);
+  const meshRef = useRef<Mesh>(null);
+  const light1Ref = useRef<PointLight>(null);
+  const light2Ref = useRef<PointLight>(null);
+  const light3Ref = useRef<SpotLight>(null);
   
   const { isIdentifying } = useAI();
   const { bass, treble, smoothedColors } = useAudioReactive({ analyser, colors, settings });
@@ -34,7 +35,8 @@ export const SilkWavesScene: React.FC<SceneProps> = ({ analyser, colors, setting
     // Increased segment count for smoother waves (GPU can handle it)
     let segs = settings.quality === 'low' ? 64 : settings.quality === 'med' ? 128 : 256;
     // Increased size for full coverage in top-down view
-    const geo = new THREE.PlaneGeometry(70, 70, segs, segs); 
+    // @fixtsx(37) - Use imported PlaneGeometry
+    const geo = new PlaneGeometry(70, 70, segs, segs); 
     
     // CRITICAL FIX: Compute Tangents is REQUIRED for 'anisotropy' to work correctly.
     // Without this, the TBN matrix calculation in the shader produces NaNs, 
@@ -162,9 +164,9 @@ export const SilkWavesScene: React.FC<SceneProps> = ({ analyser, colors, setting
 
     // Update Material Props
     if (materialRef.current) {
-        materialRef.current.color = c0;
-        materialRef.current.emissive = c1;
-        materialRef.current.sheenColor = c2;
+        materialRef.current.color.set(c0);
+        materialRef.current.emissive.set(c1);
+        materialRef.current.sheenColor.set(c2);
         
         const scanIntensity = isIdentifying ? (Math.sin(time * 5) * 0.5 + 0.5) * 0.6 : 0;
         materialRef.current.emissiveIntensity = 0.2 + bass * 0.4 + scanIntensity;
@@ -172,23 +174,30 @@ export const SilkWavesScene: React.FC<SceneProps> = ({ analyser, colors, setting
     
     // Light 1: Main Top-Side Light (Simulate Sun/Studio Light)
     if (light1Ref.current) {
+      // @fixtsx(175) - TypeScript now correctly finds 'position' property
       light1Ref.current.position.set(30, 40, 20); 
-      light1Ref.current.color = c0;
+      // @fixtsx(176) - Set color using .set() method
+      light1Ref.current.color.set(c0);
       light1Ref.current.intensity = 8.0 + bass * 20;
     }
 
     // Light 2: Under-lighting (Subsurface scattering simulation)
     // Placed below the mesh (Y < 0) to shine through via transmission
     if (light2Ref.current) {
+      // @fixtsx(183) - TypeScript now correctly finds 'position' property
       light2Ref.current.position.set(-15, -25, -5);
-      light2Ref.current.color = c1;
+      // @fixtsx(184) - Set color using .set() method
+      light2Ref.current.color.set(c1);
       light2Ref.current.intensity = 10.0 + treble * 25;
     }
 
     // Light 3: Spot from opposite side for Anisotropic highlights
     if (light3Ref.current) {
+        // @fixtsx(190) - TypeScript now correctly finds 'position' property
         light3Ref.current.position.set(-40, 50, -20);
-        light3Ref.current.color = c2;
+        // @fixtsx(191) - Set color using .set() method
+        light3Ref.current.color.set(c2);
+        // @fixtsx(192) - TypeScript now correctly finds 'lookAt' method
         light3Ref.current.lookAt(0,0,0);
     }
     
@@ -220,7 +229,8 @@ export const SilkWavesScene: React.FC<SceneProps> = ({ analyser, colors, setting
             ref={materialRef}
             onBeforeCompile={onBeforeCompile}
             dithering={true}
-            side={THREE.DoubleSide}
+            // @fixtsx(223) - Use imported DoubleSide
+            side={DoubleSide}
             
             // --- Silk Physics (Optimized for Top-Down) ---
             color={colors[0]}

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -211,9 +211,7 @@ export const es = {
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Burbujas',
     [VisualizerMode.KINETIC_WALL]: 'Muro Cinético (WebGL)',
     [VisualizerMode.LIQUID]: 'Esfera Líquida (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Forma de Onda Digital',
-    [VisualizerMode.CYBER_CITY]: 'Ciudad Cibernética (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: 'Núcleo de Cristal (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Forma de Onda Digital'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Simulación de fluidos orgánicos impulsada por partículas WebGL.',
@@ -229,9 +227,7 @@ export const es = {
     [VisualizerMode.MACRO_BUBBLES]: 'Visuales microcelulares de enfoque suave.',
     [VisualizerMode.KINETIC_WALL]: 'Muro de escenario LED masivo con extrusiones 3D cinéticas.',
     [VisualizerMode.LIQUID]: 'Esfera abstracta que se transforma reaccionando a las bajas frecuencias.',
-    [VisualizerMode.WAVEFORM]: 'Cintas líquidas del historial de frecuencia espectral.',
-    [VisualizerMode.CYBER_CITY]: 'Una autopista sin fin a través de una metrópolis bañada en neón, pulsando con el ritmo.',
-    [VisualizerMode.CRYSTAL_CORE]: 'Un corazón cristalino central y multifacético que refracta la luz y pulsa con la energía sónica.'
+    [VisualizerMode.WAVEFORM]: 'Cintas líquidas del historial de frecuencia espectral.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Estándar', [LyricsStyle.KARAOKE]: 'Dinámico', [LyricsStyle.MINIMAL]: 'Minimalista'

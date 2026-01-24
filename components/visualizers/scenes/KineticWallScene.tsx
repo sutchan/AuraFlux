@@ -10,7 +10,8 @@
 import React, { useRef, useMemo, useLayoutEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
-import * as THREE from 'three';
+// @fixtsx(11) - import THREE members directly
+import { InstancedMesh, MeshStandardMaterial, DataTexture, RedFormat, UnsignedByteType, LinearFilter, InstancedBufferAttribute, Color, Object3D } from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
 
@@ -21,8 +22,8 @@ interface SceneProps {
 }
 
 export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const meshRef = useRef<InstancedMesh>(null);
+  const materialRef = useRef<MeshStandardMaterial>(null);
   
   const { bass, volume, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1] = smoothedColors;
@@ -54,22 +55,24 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
 
   useLayoutEffect(() => {
     if (geometry) {
-      geometry.setAttribute('aLayout', new THREE.InstancedBufferAttribute(aLayoutData, 2));
+      // @fixtsx(57) - Use imported InstancedBufferAttribute
+      geometry.setAttribute('aLayout', new InstancedBufferAttribute(aLayoutData, 2));
     }
   }, [geometry, aLayoutData]);
 
   const dataArray = useMemo(() => new Uint8Array(analyser.frequencyBinCount), [analyser]);
   const audioTexture = useMemo(() => {
-    const tex = new THREE.DataTexture(dataArray, dataArray.length, 1, THREE.RedFormat, THREE.UnsignedByteType);
-    tex.magFilter = THREE.LinearFilter;
+    // @fixtsx(63-64) - Use imported constants for DataTexture
+    const tex = new DataTexture(dataArray, dataArray.length, 1, RedFormat, UnsignedByteType);
+    tex.magFilter = LinearFilter;
     return tex;
   }, [dataArray.length]);
 
   const uniforms = useMemo(() => ({
     uAudioTexture: { value: audioTexture },
     uTime: { value: 0 },
-    uColor1: { value: new THREE.Color() },
-    uColor2: { value: new THREE.Color() },
+    uColor1: { value: new Color() },
+    uColor2: { value: new Color() },
     uBeat: { value: 0.0 },
     uSensitivity: { value: 1.0 }
   }), [audioTexture]);
@@ -151,7 +154,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
   }, [uniforms]);
 
   const beatRef = useRef(0);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const dummy = useMemo(() => new Object3D(), []);
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
@@ -203,6 +206,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
     <>
       <color attach="background" args={['#010103']} />
       <ambientLight intensity={0.2} />
+      {/* @fixtsx(206-208) - JSX props are now correctly typed with named imports */}
       <directionalLight position={[15, 15, 25]} intensity={1.8} color={c0} />
       <pointLight position={[50, 50, 60]} intensity={45} color={c0} />
       <pointLight position={[-50, -50, 30]} intensity={30} color={c1} />

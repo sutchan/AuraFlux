@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -36,7 +36,7 @@ export const tw = {
     resetVisual: '僅重置視覺參數（速度、光暈、殘影）至預設值。',
     resetText: '清除自訂文字內容、字體及排版設定。',
     resetAudio: '恢復靈敏度、平滑度及 FFT 解析度為預設值。',
-    resetAi: '重置 AI 角色、辨識區域及歌詞排版。',
+    resetAi: '重置辨識設定。',
     randomize: '隨機生成一套意想不到的模式與配色組合。',
     fullscreen: '進入沉浸式全螢幕互動模式。',
     help: '查看快捷鍵操作指南與專案詳細文件。',
@@ -65,9 +65,9 @@ export const tw = {
     textOpacity: '自訂文字的透明度。',
     cycleSpeed: '完成一次色彩循環所需的時間（秒）。',
     lyricsFont: 'AI 歌詞的字體樣式。',
-    lyricsFontSize: '縮放 AI 辨識文字的大小。',
+    lyricsFontSize: '字體大小',
     textFont: '自訂文字圖層的字體系列。',
-    recognitionSource: '選擇 AI 角色或供應商。',
+    recognitionSource: 'AI 角色偏好',
     exportConfig: '將當前所有設定導出為 JSON 配置檔。',
     importConfig: '從 JSON 檔案載入配置。',
     savePreset: '將當前狀態保存到瀏覽器本地存儲。',
@@ -224,9 +224,7 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
     [VisualizerMode.KINETIC_WALL]: '動感光牆 (WebGL)', 
     [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '數位波形',
-    [VisualizerMode.CYBER_CITY]: '賽博都市 (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: '晶體核心 (WebGL)'
+    [VisualizerMode.WAVEFORM]: '數位波形'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基於 WebGL 粒子系統的有機流體模擬。',
@@ -242,9 +240,7 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微觀液泡。',
     [VisualizerMode.KINETIC_WALL]: '帶有 3D 動力學擠出的巨型 LED 舞台背景牆。',
     [VisualizerMode.LIQUID]: '對低頻做出反應的抽象球體。',
-    [VisualizerMode.WAVEFORM]: '展現頻譜歷史的液體絲帶。',
-    [VisualizerMode.CYBER_CITY]: '穿梭在隨節拍脈動的霓虹都市無盡高速公路上。',
-    [VisualizerMode.CRYSTAL_CORE]: '一個中央多面晶體心臟，隨著聲能脈動並折射光線。'
+    [VisualizerMode.WAVEFORM]: '展現頻譜歷史的液體絲帶。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準排版', [LyricsStyle.KARAOKE]: '動態律動', [LyricsStyle.MINIMAL]: '極簡主義'
@@ -290,6 +286,6 @@ export const tw = {
       ai: { title: 'Gemini 智能核心', desc: '實時感知曲目元數據與視覺情緒，由 Google Gemini 3 提供支持。' },
       privacy: { title: '邊緣計算保護', desc: '所有分析均在本地執行，我們絕不記錄或存儲您的私人聲音數據。' }
     },
-    shortcuts: { title: '指揮官快捷鍵', desc: '像指揮家一樣掌控全場，通過鍵盤即時調遣光影。' }
+    shortcuts: { title: '指揮官快捷鍵', desc: '像指揮家一樣掌控全場，通过键盘即時調遣光影。' }
   }
 };

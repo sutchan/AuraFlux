@@ -17,8 +17,6 @@ const styles: Partial<Record<VisualizerMode, React.CSSProperties>> = {
     [VisualizerMode.KINETIC_WALL]: { background: 'radial-gradient(ellipse at bottom, #1e3a8a 20%, #020617 80%), repeating-conic-gradient(from 45deg, #020617 0% 2.5%, #1e3a8a22 2.5% 5%)' }, 
     [VisualizerMode.LIQUID]: { background: 'radial-gradient(circle, #4c1d95, #1e1b4b)' },
     [VisualizerMode.CUBE_FIELD]: { background: 'linear-gradient(to top, #0c4a6e, #020617 70%), linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' },
-    [VisualizerMode.CYBER_CITY]: { background: 'linear-gradient(to top, #000 0%, #1a0033 60%), radial-gradient(ellipse at 50% 10%, #ff00ff 0%, transparent 50%)' }, 
-    [VisualizerMode.CRYSTAL_CORE]: { background: 'radial-gradient(circle, #fff 5%, #00ffff 25%, #050505 60%)' }, 
     
     // Modern 2D
     [VisualizerMode.WAVEFORM]: { background: 'radial-gradient(ellipse 50% 10% at 50% 40%, #8b5cf6, transparent), radial-gradient(ellipse 50% 10% at 50% 60%, #ec4899, transparent), #050508' },

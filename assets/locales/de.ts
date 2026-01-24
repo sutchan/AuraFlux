@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -211,9 +211,7 @@ export const de = {
     [VisualizerMode.MACRO_BUBBLES]: 'Makro-Blasen',
     [VisualizerMode.KINETIC_WALL]: 'Kinetische Wand (WebGL)',
     [VisualizerMode.LIQUID]: 'Flüssige Sphäre (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Digitale Wellenform',
-    [VisualizerMode.CYBER_CITY]: 'Cyber-Stadt (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: 'Kristallkern (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Digitale Wellenform'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organische Flüssigkeitssimulation mit WebGL-Partikeln.',
@@ -229,9 +227,7 @@ export const de = {
     [VisualizerMode.MACRO_BUBBLES]: 'Weichgezeichnete mikrozelluläre Visuals.',
     [VisualizerMode.KINETIC_WALL]: 'Massive LED-Bühnenwand mit kinetischen 3D-Extrusionen.',
     [VisualizerMode.LIQUID]: 'Abstrakte, sich verformende Kugel, die auf niedrige Frequenzen reagiert.',
-    [VisualizerMode.WAVEFORM]: 'Flüssige Bänder des spektralen Frequenzverlaufs.',
-    [VisualizerMode.CYBER_CITY]: 'Eine endlose Autobahn durch eine neon-getränkte Metropole, die im Takt pulsiert.',
-    [VisualizerMode.CRYSTAL_CORE]: 'Ein zentrales, facettenreiches Kristallherz, das Licht bricht und mit Schallenergie pulsiert.'
+    [VisualizerMode.WAVEFORM]: 'Flüssige Bänder des spektralen Frequenzverlaufs.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamisch', [LyricsStyle.MINIMAL]: 'Minimalistisch'

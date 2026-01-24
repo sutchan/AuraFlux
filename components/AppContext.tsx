@@ -200,8 +200,6 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
 
   const isThreeMode = useMemo(() => 
     mode === VisualizerMode.KINETIC_WALL || 
-    mode === VisualizerMode.CYBER_CITY || 
-    mode === VisualizerMode.CRYSTAL_CORE || 
     mode === VisualizerMode.LIQUID || 
     mode === VisualizerMode.CUBE_FIELD ||
     mode === VisualizerMode.NEURAL_FLOW

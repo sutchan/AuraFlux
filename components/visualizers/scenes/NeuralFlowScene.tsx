@@ -10,7 +10,8 @@
 
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+// @fixtsx(11) - import THREE members directly
+import { Points, Color, AdditiveBlending, ShaderMaterial } from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
 
@@ -21,7 +22,7 @@ interface SceneProps {
 }
 
 export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
-  const pointsRef = useRef<THREE.Points>(null);
+  const pointsRef = useRef<Points>(null);
   const { bass, mids, treble, volume, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1] = smoothedColors;
 
@@ -58,8 +59,9 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
     uTreble: { value: 0 },
     uBeat: { value: 0 }, 
     uVolume: { value: 0 },
-    uColor1: { value: new THREE.Color(c0) },
-    uColor2: { value: new THREE.Color(c1) }
+    // @fixtsx(71,72) - Use imported Color
+    uColor1: { value: new Color(c0) },
+    uColor2: { value: new Color(c1) }
   }), []);
 
   const beatTimerRef = useRef(0);
@@ -68,7 +70,7 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
   useFrame((state, delta) => {
     if (!pointsRef.current) return;
     
-    const mat = pointsRef.current.material as THREE.ShaderMaterial;
+    const mat = pointsRef.current.material as ShaderMaterial;
     const sysTime = state.clock.getElapsedTime();
     
     // Fluid time integration: speed varies with volume for "time dilation" effect
@@ -93,8 +95,9 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
     const beatPhase = Math.max(0, Math.exp(-beatElapsed * 4.0));
     mat.uniforms.uBeat.value = beatPhase;
 
-    mat.uniforms.uColor1.value.lerp(new THREE.Color(c0), 0.05);
-    mat.uniforms.uColor2.value.lerp(new THREE.Color(c1), 0.05);
+    // @fixtsx(111,112) - Use imported Color
+    mat.uniforms.uColor1.value.lerp(new Color(c0), 0.05);
+    mat.uniforms.uColor2.value.lerp(new Color(c1), 0.05);
     
     // Slow organic rotation
     pointsRef.current.rotation.y = accumulatedTimeRef.current * 0.05;
@@ -112,7 +115,8 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
         <shaderMaterial
           transparent
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          // @fixtsx(134) - Use imported AdditiveBlending
+          blending={AdditiveBlending}
           uniforms={uniforms}
           vertexShader={`
             uniform float uTime;

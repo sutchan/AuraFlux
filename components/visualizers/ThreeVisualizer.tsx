@@ -15,9 +15,7 @@ import {
     KineticWallScene, 
     LiquidSphereScene, 
     CubeFieldScene,
-    NeuralFlowScene,
-    CyberCityScene,
-    CrystalCoreScene
+    NeuralFlowScene
 } from './ThreeScenes';
 
 interface ThreeVisualizerProps {
@@ -61,8 +59,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
           case VisualizerMode.LIQUID: return base * 1.5;
           case VisualizerMode.CUBE_FIELD: return base * 1.2;
           case VisualizerMode.NEURAL_FLOW: return base * 1.5;
-          case VisualizerMode.CYBER_CITY: return base * 1.8;
-          case VisualizerMode.CRYSTAL_CORE: return base * 2.2;
           default: return base;
       }
   }, [mode]);
@@ -107,10 +103,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             return <CubeFieldScene {...sceneProps} />;
         case VisualizerMode.NEURAL_FLOW:
             return <NeuralFlowScene {...sceneProps} />;
-        case VisualizerMode.CYBER_CITY:
-            return <CyberCityScene {...sceneProps} />;
-        case VisualizerMode.CRYSTAL_CORE:
-            return <CrystalCoreScene {...sceneProps} />;
         default:
             return <NeuralFlowScene {...sceneProps} />;
     }

@@ -8,7 +8,9 @@
 
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+// @fixtsx(10) - import THREE members directly
+// Fix: Import MeshStandardMaterial to resolve namespace error
+import { InstancedMesh, PointLight, Color, Vector3, Euler, Object3D, MeshStandardMaterial } from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
 
@@ -19,15 +21,15 @@ interface SceneProps {
 }
 
 export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const coreLightRef = useRef<THREE.PointLight>(null);
+  const meshRef = useRef<InstancedMesh>(null);
+  const coreLightRef = useRef<PointLight>(null);
   
   const { bass, mids, treble, volume, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1, c2] = smoothedColors;
 
   // Optimization: Reduced counts to prevent JS thread blocking during matrix updates
   const count = settings.quality === 'high' ? 1200 : settings.quality === 'med' ? 800 : 400;
-  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const dummy = useMemo(() => new Object3D(), []);
   
   const dataArray = useMemo(() => new Uint8Array(analyser.frequencyBinCount), [analyser]);
 
@@ -45,13 +47,14 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
         const scaleBase = isStructure ? (1.5 + Math.random() * 3.0) : (0.1 + Math.random() * 0.4);
 
         // 分配随机旋转轴
-        const rotAxis = new THREE.Vector3(
+        // @fixtsx(48) - Use imported Vector3
+        const rotAxis = new Vector3(
             (Math.random() - 0.5) * 2.0, 
             (Math.random() - 0.5) * 2.0, 
             (Math.random() - 0.5) * 2.0
         ).normalize();
         
-        const initialRotation = new THREE.Euler(
+        const initialRotation = new Euler(
             Math.random() * Math.PI,
             Math.random() * Math.PI,
             Math.random() * Math.PI
@@ -119,15 +122,18 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
     state.camera.lookAt(centerX * 0.1, centerY * 0.1, -100);
 
     if (coreLightRef.current) {
+        // @fixtsx(122) - TypeScript now correctly finds 'position' property
         coreLightRef.current.position.set(centerX, centerY, -80);
-        coreLightRef.current.color = c1;
+        // @fixtsx(123) - Set color using .set() method
+        coreLightRef.current.color.set(c1);
         coreLightRef.current.intensity = 15 + bass * 35 + (isBeat ? 50 : 0); // Increased light intensity
     }
 
     if (meshRef.current) {
-        const mat = meshRef.current.material as THREE.MeshStandardMaterial;
-        mat.color = c0;
-        mat.emissive = c1;
+        // Fix: Remove `THREE.` namespace prefix
+        const mat = meshRef.current.material as MeshStandardMaterial;
+        mat.color.set(c0);
+        mat.emissive.set(c1);
         // 亮度优化：大幅提升基础自发光和高音响应
         mat.emissiveIntensity = 0.4 + treble * 4.0 + (isBeat ? 3.5 : 0);
 
@@ -231,6 +237,7 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
       <fog attach="fog" args={['#000000', 30, 220]} /> 
       
       <ambientLight intensity={0.2} />
+      {/* @fixtsx(234-236) - JSX props are now correctly typed with named imports */}
       <pointLight ref={coreLightRef} distance={350} decay={2.0} />
       <pointLight position={[0, 0, 20]} intensity={3} color={c2} distance={150} />
       <directionalLight position={[40, 40, 20]} intensity={1.2} color={c0} />

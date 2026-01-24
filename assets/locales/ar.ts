@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -202,9 +202,7 @@ export const ar = {
     [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو',
     [VisualizerMode.KINETIC_WALL]: 'جدار حركي (WebGL)',
     [VisualizerMode.LIQUID]: 'كرة سائلة (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي',
-    [VisualizerMode.CYBER_CITY]: 'مدينة سايبر (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: 'نواة بلورية (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'محاكاة سوائل عضوية مدعومة بجزيئات WebGL.',
@@ -220,9 +218,7 @@ export const ar = {
     [VisualizerMode.MACRO_BUBBLES]: 'مرئيات ميكرو-خلوية ذات تركيز ناعم.',
     [VisualizerMode.KINETIC_WALL]: 'جدار مسرح LED ضخم مع بروزات ثلاثية الأبعاد حركية.',
     [VisualizerMode.LIQUID]: 'كرة مجردة متحولة تتفاعل مع الترددات المنخفضة.',
-    [VisualizerMode.WAVEFORM]: 'شرائط سائلة لتاريخ التردد الطيفي.',
-    [VisualizerMode.CYBER_CITY]: 'طريق سريع لا نهاية له عبر مدينة غارقة في النيون، ينبض مع الإيقاع.',
-    [VisualizerMode.CRYSTAL_CORE]: 'قلب بلوري مركزي متعدد الأوجه يكسر الضوء وينبض بالطاقة الصوتية.'
+    [VisualizerMode.WAVEFORM]: 'شرائط سائلة لتاريخ التردد الطيفي.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'قياسي', [LyricsStyle.KARAOKE]: 'ديناميكي', [LyricsStyle.MINIMAL]: 'بسيط'

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -228,9 +228,7 @@ export const en = {
     [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles',
     [VisualizerMode.KINETIC_WALL]: 'Kinetic Wall (WebGL)', 
     [VisualizerMode.LIQUID]: 'Liquid Sphere (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Digital Waveform',
-    [VisualizerMode.CYBER_CITY]: 'Cyber City (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: 'Crystal Core (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Digital Waveform'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particles.',
@@ -246,9 +244,7 @@ export const en = {
     [VisualizerMode.MACRO_BUBBLES]: 'Soft focus micro-cellular visuals.',
     [VisualizerMode.KINETIC_WALL]: 'Massive LED stage wall with kinetic 3D extrusions.',
     [VisualizerMode.LIQUID]: 'Abstract morphing sphere reacting to low frequencies.',
-    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency history.',
-    [VisualizerMode.CYBER_CITY]: 'An endless highway through a neon-drenched metropolis, pulsating with the beat.',
-    [VisualizerMode.CRYSTAL_CORE]: 'A central, multifaceted crystalline heart that refracts light and pulses with sonic energy.'
+    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency history.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamic', [LyricsStyle.MINIMAL]: 'Minimalist'

@@ -126,8 +126,6 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
         VisualizerMode.KINETIC_WALL,
         VisualizerMode.LIQUID,
         VisualizerMode.CUBE_FIELD,
-        VisualizerMode.CYBER_CITY,
-        VisualizerMode.CRYSTAL_CORE,
         VisualizerMode.NEBULA,
         VisualizerMode.MACRO_BUBBLES
     ];

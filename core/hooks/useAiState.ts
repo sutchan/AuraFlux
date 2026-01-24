@@ -60,7 +60,10 @@ export const useAiState = ({
   useEffect(() => {
       const encoded: Record<string, string> = {};
       Object.entries(apiKeys).forEach(([k, v]) => {
-          if (v) encoded[k] = encodeKey(v);
+          // FIX: Add type guard for `v` to satisfy TypeScript. `Object.entries` can return `unknown` for values.
+          if (v && typeof v === 'string') {
+            encoded[k] = encodeKey(v);
+          }
       });
       setStorage('api_keys_v1', encoded);
   }, [apiKeys, setStorage]);

@@ -7,7 +7,8 @@
 
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+// @fixtsx(9) - import THREE members directly
+import { Mesh, Group, Points, MeshStandardMaterial, MeshBasicMaterial, Fog, PlaneGeometry, Color, MathUtils, BufferAttribute, AdditiveBlending, PointsMaterial, CircleGeometry } from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
 import { DynamicStarfield } from './DynamicStarfield';
@@ -19,14 +20,15 @@ interface SceneProps {
 }
 
 export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const sunGroupRef = useRef<THREE.Group>(null);
-  const coronaRef = useRef<THREE.Mesh>(null);
-  const particlesRef = useRef<THREE.Points>(null);
+  const meshRef = useRef<Mesh>(null);
+  const sunGroupRef = useRef<Group>(null);
+  const coronaRef = useRef<Mesh>(null);
+  const particlesRef = useRef<Points>(null);
   
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const gridMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
-  const fogRef = useRef<THREE.Fog>(null);
+  const materialRef = useRef<MeshStandardMaterial>(null);
+  // @fixtsx(28) - Use imported MeshBasicMaterial
+  const gridMaterialRef = useRef<MeshBasicMaterial>(null);
+  const fogRef = useRef<Fog>(null);
 
   const { bass, mids, treble, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1, c2] = smoothedColors;
@@ -35,7 +37,8 @@ export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, se
   const { geometry } = useMemo(() => {
     const segmentsW = settings.quality === 'high' ? 80 : settings.quality === 'med' ? 50 : 30;
     const segmentsH = settings.quality === 'high' ? 60 : settings.quality === 'med' ? 40 : 24;
-    return { geometry: new THREE.PlaneGeometry(180, 160, segmentsW, segmentsH) };
+    // @fixtsx(38) - Use imported PlaneGeometry
+    return { geometry: new PlaneGeometry(180, 160, segmentsW, segmentsH) };
   }, [settings.quality]);
 
   // 2. 能量粒子配置
@@ -60,9 +63,10 @@ export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, se
     const swerve = Math.sin(time * 0.4) * 2.0 * (1 + mids);
     const shake = isBeat ? (Math.random() - 0.5) * 0.8 : 0;
     
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, swerve, 0.05);
+    // @fixtsx(65) - Use imported MathUtils
+    camera.position.x = MathUtils.lerp(camera.position.x, swerve, 0.05);
     camera.position.y = 2 + Math.cos(time * 0.2) * 0.5 + (isBeat ? 0.3 : 0);
-    camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, -swerve * 0.02 + shake * 0.1, 0.1);
+    camera.rotation.z = MathUtils.lerp(camera.rotation.z, -swerve * 0.02 + shake * 0.1, 0.1);
     camera.lookAt(swerve * 0.5, 0, -80);
 
     // --- 太阳与日冕增强 ---
@@ -73,30 +77,33 @@ export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, se
         
         if (coronaRef.current) {
             coronaRef.current.scale.setScalar(1.2 + Math.sin(time * 2) * 0.1 + bass * 0.5);
-            (coronaRef.current.material as THREE.MeshBasicMaterial).opacity = 0.1 + bass * 0.4;
-            (coronaRef.current.material as THREE.MeshBasicMaterial).color = c0;
+            // @fixtsx(76,77) - Use imported MeshBasicMaterial
+            (coronaRef.current.material as MeshBasicMaterial).opacity = 0.1 + bass * 0.4;
+            (coronaRef.current.material as MeshBasicMaterial).color.set(c0);
         }
     }
 
     // --- 材质与雾气响应 ---
     if (materialRef.current) {
-        materialRef.current.color = c1;
-        materialRef.current.emissive = c2;
+        materialRef.current.color.set(c1);
+        materialRef.current.emissive.set(c2);
         materialRef.current.emissiveIntensity = 0.05 + treble * 0.8;
     }
     
     if (gridMaterialRef.current) {
-        gridMaterialRef.current.color = c0;
+        gridMaterialRef.current.color.set(c0);
         gridMaterialRef.current.opacity = 0.1 + treble * 0.5 + (isBeat ? 0.3 : 0);
     }
 
     if (fogRef.current) {
-        fogRef.current.color = new THREE.Color(c2).multiplyScalar(0.05);
+        // @fixtsx(95) - Use imported Color
+        fogRef.current.color.set(new Color(c2).multiplyScalar(0.05));
     }
 
     // --- 地形合成逻辑 ---
     if (!meshRef.current) return;
-    const positions = meshRef.current.geometry.attributes.position as THREE.BufferAttribute;
+    // @fixtsx(99) - Use imported BufferAttribute
+    const positions = meshRef.current.geometry.attributes.position as BufferAttribute;
     const count = positions.count;
     const moveSpeed = time * 12.0;
     const valleyWidth = 18 + bass * 12.0;
@@ -139,8 +146,8 @@ export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, se
             }
         }
         particlesRef.current.geometry.attributes.position.needsUpdate = true;
-        (particlesRef.current.material as THREE.PointsMaterial).color = c0;
-        (particlesRef.current.material as THREE.PointsMaterial).opacity = 0.2 + bass * 0.6;
+        (particlesRef.current.material as PointsMaterial).color.set(c0);
+        (particlesRef.current.material as PointsMaterial).opacity = 0.2 + bass * 0.6;
     }
   });
 
@@ -165,7 +172,8 @@ export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, se
                     color={c0} 
                     transparent 
                     opacity={0.3} 
-                    blending={THREE.AdditiveBlending} 
+                    // @fixtsx(168) - Use imported AdditiveBlending
+                    blending={AdditiveBlending} 
                     fog={false} 
                 />
             </mesh>
@@ -184,7 +192,8 @@ export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, se
             <pointsMaterial 
                 size={0.6} 
                 transparent 
-                blending={THREE.AdditiveBlending} 
+                // @fixtsx(187) - Use imported AdditiveBlending
+                blending={AdditiveBlending} 
                 depthWrite={false}
             />
         </points>
@@ -220,6 +229,7 @@ export const LowPolyTerrainScene: React.FC<SceneProps> = ({ analyser, colors, se
         </mesh>
         
         <ambientLight intensity={0.1} />
+        {/* @fixtsx(223, 224) - JSX props are now correctly typed with named imports */}
         <pointLight position={[0, 40, -100]} intensity={3} color={c0} distance={200} />
         <directionalLight position={[0, 10, 50]} intensity={0.8} color={c1} />
       </>

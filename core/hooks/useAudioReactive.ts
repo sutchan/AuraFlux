@@ -1,10 +1,10 @@
 /**
  * File: core/hooks/useAudioReactive.ts
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 23:00
- * Description: Enhanced audio processing with dynamic limiting and non-linear scaling for WebGL scenes.
+ * Updated: 2025-03-01 16:00
+ * Description: Exposed 'mids' value for advanced shader reactivity.
  */
 
 import { useRef, useMemo } from 'react';

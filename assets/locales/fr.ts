@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -211,9 +211,7 @@ export const fr = {
     [VisualizerMode.MACRO_BUBBLES]: 'Macro-bulles',
     [VisualizerMode.KINETIC_WALL]: 'Mur Cinétique (WebGL)',
     [VisualizerMode.LIQUID]: 'Sphère Liquide (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Forme d\'Onde Numérique',
-    [VisualizerMode.CYBER_CITY]: 'Ville Cyber (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: 'Noyau de Cristal (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'Forme d\'Onde Numérique'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Simulation de fluide organique propulsée par des particules WebGL.',
@@ -229,9 +227,7 @@ export const fr = {
     [VisualizerMode.MACRO_BUBBLES]: 'Visuels microcellulaires à mise au point douce.',
     [VisualizerMode.KINETIC_WALL]: 'Mur de scène LED massif avec des extrusions 3D cinétiques.',
     [VisualizerMode.LIQUID]: 'Sphère abstraite en métamorphose réagissant aux basses fréquences.',
-    [VisualizerMode.WAVEFORM]: 'Rubans liquides de l\'historique des fréquences spectrales.',
-    [VisualizerMode.CYBER_CITY]: 'Une autoroute sans fin à travers une métropole baignée de néons, pulsant au rythme.',
-    [VisualizerMode.CRYSTAL_CORE]: 'Un cœur cristallin central et multifacette qui réfracte la lumière et pulse avec l\'énergie sonore.'
+    [VisualizerMode.WAVEFORM]: 'Rubans liquides de l\'historique des fréquences spectrales.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamique', [LyricsStyle.MINIMAL]: 'Minimaliste'

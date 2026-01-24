@@ -9,5 +9,3 @@ export { KineticWallScene } from './scenes/KineticWallScene';
 export { LiquidSphereScene } from './scenes/LiquidSphereScene';
 export { CubeFieldScene } from './scenes/CubeFieldScene';
 export { NeuralFlowScene } from './scenes/NeuralFlowScene';
-export { CyberCityScene } from './scenes/CyberCityScene';
-export { CrystalCoreScene } from './scenes/CrystalCoreScene';

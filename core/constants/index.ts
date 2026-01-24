@@ -1,14 +1,14 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.7.25';
+export const APP_VERSION = '1.7.31';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
@@ -90,8 +90,6 @@ export const VISUALIZER_PRESETS: Record<string, { description: string }> = {
   [VisualizerMode.CUBE_FIELD]: { description: 'Infinite field of geometric blocks.' },
   [VisualizerMode.KINETIC_WALL]: { description: 'Massive LED stage wall with kinetic extrusions.' },
   [VisualizerMode.LIQUID]: { description: 'Abstract morphing sphere reacting to rhythm.' },
-  [VisualizerMode.CYBER_CITY]: { description: 'Endless highway through a neon city.' },
-  [VisualizerMode.CRYSTAL_CORE]: { description: 'A pulsating crystalline heart reacting to sound.' },
 };
 
 export const SMART_PRESETS: Record<string, SmartPreset> = {
@@ -144,7 +142,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
       glow: true,
       trails: true,
       smoothing: 0.7,
-      includedModes: [VisualizerMode.LASERS, VisualizerMode.TUNNEL, VisualizerMode.RINGS, VisualizerMode.CYBER_CITY]
+      includedModes: [VisualizerMode.LASERS, VisualizerMode.TUNNEL, VisualizerMode.RINGS]
     }
   },
   retrowave: {
@@ -170,7 +168,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
       glow: false,
       trails: true,
       smoothing: 0.85,
-      includedModes: [VisualizerMode.BARS, VisualizerMode.RINGS, VisualizerMode.WAVEFORM, VisualizerMode.CRYSTAL_CORE]
+      includedModes: [VisualizerMode.BARS, VisualizerMode.RINGS, VisualizerMode.WAVEFORM]
     }
   }
 };

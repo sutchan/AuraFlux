@@ -1,14 +1,15 @@
-
 /**
  * File: components/visualizers/scenes/DynamicStarfield.tsx
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-02-29 14:00
  */
 
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+// @fixtsx(10) - import THREE members directly
+import { Points, Color, AdditiveBlending, ShaderMaterial } from 'three';
 
 interface DynamicStarfieldProps { 
   treble: number; 
@@ -16,7 +17,7 @@ interface DynamicStarfieldProps {
 }
 
 export const DynamicStarfield = ({ treble, speed }: DynamicStarfieldProps) => {
-  const pointsRef = useRef<THREE.Points>(null);
+  const pointsRef = useRef<Points>(null);
   
   const count = 6000;
   const [positions, seeds] = useMemo(() => {
@@ -39,7 +40,8 @@ export const DynamicStarfield = ({ treble, speed }: DynamicStarfieldProps) => {
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
     uTreble: { value: 0 },
-    uColor: { value: new THREE.Color('#ffffff') }
+    // @fixtsx(43) - Use imported Color
+    uColor: { value: new Color('#ffffff') }
   }), []);
 
   useFrame((state) => {
@@ -47,8 +49,8 @@ export const DynamicStarfield = ({ treble, speed }: DynamicStarfieldProps) => {
     if (pointsRef.current) {
       pointsRef.current.rotation.y = t * 0.02 * speed;
       pointsRef.current.rotation.x = Math.sin(t * 0.1) * 0.05;
-      (pointsRef.current.material as THREE.ShaderMaterial).uniforms.uTime.value = t;
-      (pointsRef.current.material as THREE.ShaderMaterial).uniforms.uTreble.value = treble;
+      (pointsRef.current.material as ShaderMaterial).uniforms.uTime.value = t;
+      (pointsRef.current.material as ShaderMaterial).uniforms.uTreble.value = treble;
     }
   });
 
@@ -61,7 +63,8 @@ export const DynamicStarfield = ({ treble, speed }: DynamicStarfieldProps) => {
       <shaderMaterial
         transparent
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        // @fixtsx(64) - Use imported AdditiveBlending
+        blending={AdditiveBlending}
         uniforms={uniforms}
         vertexShader={`
           attribute float seed;

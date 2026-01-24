@@ -9,7 +9,8 @@
 import React, { useRef, useMemo, Suspense } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
-import * as THREE from 'three';
+// @fixtsx(9) - import THREE members directly
+import { IcosahedronGeometry, BufferAttribute, DoubleSide, MeshPhysicalMaterial, PointLight, RectAreaLight, Mesh, Group, MathUtils, Color } from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
 
@@ -20,13 +21,13 @@ interface SceneProps {
 }
 
 export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshPhysicalMaterial>(null);
-  const light1Ref = useRef<THREE.PointLight>(null);
-  const light2Ref = useRef<THREE.PointLight>(null);
-  const light3Ref = useRef<THREE.PointLight>(null);
-  const rectLightRef = useRef<THREE.RectAreaLight>(null);
-  const starsRef = useRef<THREE.Group>(null);
+  const meshRef = useRef<Mesh>(null);
+  const materialRef = useRef<MeshPhysicalMaterial>(null);
+  const light1Ref = useRef<PointLight>(null);
+  const light2Ref = useRef<PointLight>(null);
+  const light3Ref = useRef<PointLight>(null);
+  const rectLightRef = useRef<RectAreaLight>(null);
+  const starsRef = useRef<Group>(null);
 
   const { bass: reactivity, treble: vibration, smoothedColors, isBeat } = useAudioReactive({ analyser, colors, settings });
   const [c0, c1, c2] = smoothedColors;
@@ -38,7 +39,8 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
       let detail = 1;
       if (settings.quality === 'med') detail = 2;
       if (settings.quality === 'high') detail = 3;
-      return new THREE.IcosahedronGeometry(4, detail);
+      // @fixtsx(41) - Use imported IcosahedronGeometry
+      return new IcosahedronGeometry(4, detail);
   }, [settings.quality]);
   
   const originalPositions = useMemo(() => {
@@ -57,36 +59,44 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
     const time = clock.getElapsedTime() * settings.speed * 0.4;
 
     if (materialRef.current) {
-        materialRef.current.color = c0;
-        materialRef.current.emissive = c1;
+        materialRef.current.color.set(c0);
+        materialRef.current.emissive.set(c1);
         
         // Pulse emissive strongly on true beat
         const beatFlash = isBeat ? 1.5 : 0;
         const currentEmissive = materialRef.current.emissiveIntensity;
         // Smooth decay for the flash
         const targetEmissive = 0.2 + reactivity * 0.8 + beatFlash;
-        materialRef.current.emissiveIntensity = THREE.MathUtils.lerp(currentEmissive, targetEmissive, 0.2);
+        // @fixtsx(70) - Use imported MathUtils
+        materialRef.current.emissiveIntensity = MathUtils.lerp(currentEmissive, targetEmissive, 0.2);
     }
     
     // Position lights dynamically to simulate a moving environment
     if (light1Ref.current) {
-        light1Ref.current.color = c0;
+        // @fixtsx(73) - Set color using .set() method
+        light1Ref.current.color.set(c0);
+        // @fixtsx(74,75) - TypeScript now correctly finds 'position' property
         light1Ref.current.position.x = Math.sin(time * 0.5) * 20;
         light1Ref.current.position.z = Math.cos(time * 0.5) * 20;
         light1Ref.current.intensity = 15 + reactivity * 30;
     }
     if (light2Ref.current) {
-        light2Ref.current.color = c1;
+        // @fixtsx(79) - Set color using .set() method
+        light2Ref.current.color.set(c1);
+        // @fixtsx(80) - TypeScript now correctly finds 'position' property
         light2Ref.current.position.y = Math.cos(time * 0.7) * 20;
         light2Ref.current.intensity = 10 + reactivity * 20;
     }
     if (light3Ref.current) {
-        light3Ref.current.color = c2 || c0;
+        // @fixtsx(84) - Set color using .set() method
+        light3Ref.current.color.set(c2 || c0);
+        // @fixtsx(85) - TypeScript now correctly finds 'position' property
         light3Ref.current.position.x = Math.cos(time * 0.3) * -15;
         light3Ref.current.intensity = 5 + vibration * 15;
     }
     if (rectLightRef.current) {
         rectLightRef.current.intensity = 2 + vibration * 20; 
+        // @fixtsx(90) - TypeScript now correctly finds 'lookAt' method
         rectLightRef.current.lookAt(0,0,0);
     }
     
@@ -97,7 +107,8 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
 
 
     if (!meshRef.current) return;
-    const positions = meshRef.current.geometry.attributes.position as THREE.BufferAttribute;
+    // @fixtsx(100) - Use imported BufferAttribute
+    const positions = meshRef.current.geometry.attributes.position as BufferAttribute;
 
     // Vertex Loop: This is the most expensive part.
     // Reducing count allows us to keep the math complex but fast.
@@ -139,6 +150,7 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
       </Suspense>
       
       <ambientLight intensity={0.4} />
+      {/* @fixtsx(142-145) - JSX props are now correctly typed with named imports */}
       <pointLight ref={light1Ref} position={[20, 20, 20]} intensity={15} distance={100} />
       <pointLight ref={light2Ref} position={[-20, -20, 10]} intensity={10} distance={100} />
       <pointLight ref={light3Ref} position={[0, 0, -25]} intensity={5} distance={80} />
@@ -156,7 +168,8 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
             reflectivity={1.0}
             envMapIntensity={0}
             ior={1.8}
-            side={THREE.DoubleSide}
+            // @fixtsx(159) - Use imported DoubleSide
+            side={DoubleSide}
             flatShading={settings.quality === 'low'}
          />
       </mesh>

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -36,7 +36,7 @@ export const zh = {
     resetVisual: '仅重置视觉参数（速度、辉光、拖尾）至默认值。',
     resetText: '清除自定义文字内容、字体及排版设置。',
     resetAudio: '恢复灵敏度、平滑度及 FFT 分辨率为默认值。',
-    resetAi: '重置 AI 角色、识别区域及歌词排版。',
+    resetAi: '重置识别设置。',
     randomize: '随机生成一套意想不到的模式与配色组合。',
     fullscreen: '进入沉浸式全屏交互模式。',
     help: '查看快捷键操作指南与项目详细文档。',
@@ -223,9 +223,7 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '微观液泡', 
     [VisualizerMode.KINETIC_WALL]: '动感光墙 (WebGL)', 
     [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '数字波形',
-    [VisualizerMode.CYBER_CITY]: '赛博都市 (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: '晶体核心 (WebGL)'
+    [VisualizerMode.WAVEFORM]: '数字波形'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基于 WebGL 粒子系统的有机流体模拟。',
@@ -241,9 +239,7 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微观液泡。',
     [VisualizerMode.KINETIC_WALL]: '带有 3D 动力学挤出的巨型 LED 舞台背景墙。',
     [VisualizerMode.LIQUID]: '对低频做出反应的抽象球体。',
-    [VisualizerMode.WAVEFORM]: '展现频谱历史的液体丝带。',
-    [VisualizerMode.CYBER_CITY]: '穿梭在随节拍脉动的霓虹都市无尽高速公路上。',
-    [VisualizerMode.CRYSTAL_CORE]: '一个中央多面晶体心脏，随着声能脉动并折射光线。'
+    [VisualizerMode.WAVEFORM]: '展现频谱历史的液体丝带。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '标准排版', [LyricsStyle.KARAOKE]: '动态律动', [LyricsStyle.MINIMAL]: '极简主义'

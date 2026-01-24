@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -223,9 +223,7 @@ export const ko = {
     [VisualizerMode.MACRO_BUBBLES]: '매크로 버블',
     [VisualizerMode.KINETIC_WALL]: '키네틱 월 (WebGL)',
     [VisualizerMode.LIQUID]: '액체 구체 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '디지털 파형',
-    [VisualizerMode.CYBER_CITY]: '사이버 도시 (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: '크리스탈 코어 (WebGL)'
+    [VisualizerMode.WAVEFORM]: '디지털 파형'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'WebGL 파티클로 구동되는 유기적 유체 시뮬레이션。',
@@ -241,9 +239,7 @@ export const ko = {
     [VisualizerMode.MACRO_BUBBLES]: '부드러운 초점의 미세 세포 비주얼。',
     [VisualizerMode.KINETIC_WALL]: '운동성 3D 돌출부가 있는 거대한 LED 무대 벽。',
     [VisualizerMode.LIQUID]: '저주파에 반응하여 변형되는 추상 구체。',
-    [VisualizerMode.WAVEFORM]: '스펙트럼 주파수 히스토리의 액체 리본。',
-    [VisualizerMode.CYBER_CITY]: '비트에 맞춰 맥동하는 네온 도시의 끝없는 고속도로를 질주합니다。',
-    [VisualizerMode.CRYSTAL_CORE]: '소리 에너지에 반응하여 맥동하고 빛을 굴절시키는 중앙의 다면체 크리스탈 심장。'
+    [VisualizerMode.WAVEFORM]: '스펙트럼 주파수 히스토리의 액체 리본。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '표준', [LyricsStyle.KARAOKE]: '다이내믹', [LyricsStyle.MINIMAL]: '미니멀'

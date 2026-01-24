@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.7.25
+ * Version: 1.7.31
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-03 10:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -223,9 +223,7 @@ export const ja = {
     [VisualizerMode.MACRO_BUBBLES]: 'マクロバブル',
     [VisualizerMode.KINETIC_WALL]: 'キネティックウォール (WebGL)',
     [VisualizerMode.LIQUID]: '液体球体 (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'デジタル波形',
-    [VisualizerMode.CYBER_CITY]: 'サイバーシティ (WebGL)',
-    [VisualizerMode.CRYSTAL_CORE]: 'クリスタルコア (WebGL)'
+    [VisualizerMode.WAVEFORM]: 'デジタル波形'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'WebGLパーティクルによる有機的な流体シミュレーション。',
@@ -241,9 +239,7 @@ export const ja = {
     [VisualizerMode.MACRO_BUBBLES]: 'ソフトフォーカスの微細細胞ビジュアル。',
     [VisualizerMode.KINETIC_WALL]: 'キネティックな3D押し出しを持つ巨大なLEDステージウォール。',
     [VisualizerMode.LIQUID]: '低周波に反応して変形する抽象的な球体。',
-    [VisualizerMode.WAVEFORM]: 'スペクトル周波数履歴の液体リボン。',
-    [VisualizerMode.CYBER_CITY]: 'ビートに合わせて脈動するネオン街の無限のハイウェイを駆け抜ける。',
-    [VisualizerMode.CRYSTAL_CORE]: '音のエネルギーに反応して脈動し、光を屈折させる中央の多面的な結晶の心臓。'
+    [VisualizerMode.WAVEFORM]: 'スペクトル周波数履歴の液体リボン。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準', [LyricsStyle.KARAOKE]: 'ダイナミック', [LyricsStyle.MINIMAL]: 'ミニマル'
