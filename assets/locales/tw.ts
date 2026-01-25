@@ -123,7 +123,7 @@ export const tw = {
   resetVisual: '重置視覺參數',
   resetText: '重置文字設定',
   resetAudio: '重置音訊設定',
-  resetAi: '重置辨識設定',
+  resetAi: '重置辨識設定。',
   randomize: '隨機美學組合',
   help: '說明與協助',
   close: '關閉',

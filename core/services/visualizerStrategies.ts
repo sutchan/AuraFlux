@@ -1,10 +1,9 @@
-
 /**
  * File: core/services/visualizerStrategies.ts
- * Version: 1.6.10
+ * Version: 1.7.32
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2024-05-15 14:25
+ * Updated: 2025-03-05 12:00
  */
 
 import { VisualizerMode, IVisualizerRenderer } from '../types/index';

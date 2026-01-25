@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.1.4
+ * Version: 1.7.32
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-03 10:00
+ * Updated: 2025-03-05 12:00
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';

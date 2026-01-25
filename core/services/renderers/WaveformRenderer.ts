@@ -1,10 +1,9 @@
 /**
  * File: core/services/renderers/WaveformRenderer.ts
- * Version: 3.2.0
+ * Version: 1.7.32
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-27 19:30
- * Description: Increased thickness of main bass line by 3x for visual emphasis.
+ * Updated: 2025-03-05 12:00
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -116,13 +115,4 @@ export class WaveformRenderer implements IVisualizerRenderer {
             const xc = (currentX + nextX) / 2;
             const yc = (currentY + nextY) / 2;
             ctx.quadraticCurveTo(currentX, currentY, xc, yc);
-            currentX = nextX;
-            currentY = nextY;
-        }
-        
-        ctx.stroke();
-    }
-
-    ctx.restore();
-  }
-}
+            currentX = nextX

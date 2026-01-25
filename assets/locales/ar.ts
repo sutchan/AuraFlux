@@ -122,7 +122,7 @@ export const ar = {
   resetVisual: 'إعادة تعيين الجماليات',
   resetText: 'إعادة تعيين النص',
   resetAudio: 'إعادة تعيين الصوت',
-  resetAi: 'إعادة تعيين الذكاء الاصطناعي',
+  resetAi: 'إعادة تعيين الذكاء الاصطناعي.',
   randomize: 'عشوائي ذكي',
   help: 'المساعدة',
   close: 'إغلاق',

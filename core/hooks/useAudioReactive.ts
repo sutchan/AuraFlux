@@ -1,10 +1,9 @@
 /**
  * File: core/hooks/useAudioReactive.ts
- * Version: 1.1.1
+ * Version: 1.7.32
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-01 16:00
- * Description: Exposed 'mids' value for advanced shader reactivity.
+ * Updated: 2025-03-05 12:00
  */
 
 import { useRef, useMemo } from 'react';
@@ -20,19 +19,21 @@ interface UseAudioReactiveProps {
   settings: VisualizerSettings;
 }
 
+const getSafeColors = (inputColors: string[]) => {
+  const base = inputColors.length > 0 ? inputColors : ['#ffffff'];
+  const safe = [...base];
+  while (safe.length < 3) {
+    safe.push(base[0]);
+  }
+  return safe;
+};
+
 export const useAudioReactive = ({ analyser, colors, settings }: UseAudioReactiveProps) => {
   const dataArray = useRef(new Uint8Array(analyser.frequencyBinCount)).current;
   
-  const getSafeColors = (inputColors: string[]) => {
-    const base = inputColors.length > 0 ? inputColors : ['#ffffff'];
-    const safe = [...base];
-    while (safe.length < 3) {
-      safe.push(base[0]);
-    }
-    return safe;
-  };
+  const safeInputColors = useMemo(() => getSafeColors(colors), [colors]);
 
-  const smoothedColorsRef = useRef(getSafeColors(colors).map(c => new THREE.Color(c)));
+  const smoothedColorsRef = useRef(safeInputColors.map(c => new THREE.Color(c)));
   const targetColorRef = useRef(new THREE.Color());
   const beatDetectorRef = useRef(new BeatDetector());
   const noiseFilterRef = useRef(new AdaptiveNoiseFilter());
@@ -44,7 +45,6 @@ export const useAudioReactive = ({ analyser, colors, settings }: UseAudioReactiv
 
   useFrame(() => {
     const smoothedColors = smoothedColorsRef.current;
-    const safeInputColors = getSafeColors(colors);
     const lerpSpeed = 0.05;
     
     if (smoothedColors.length !== safeInputColors.length) {

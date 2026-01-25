@@ -122,7 +122,7 @@ export const ko = {
   resetVisual: '미학 설정 초기화',
   resetText: '텍스트 설정 초기화',
   resetAudio: '오디오 설정 초기화',
-  resetAi: 'AI 설정 초기화',
+  resetAi: 'AI 설정 초기화。',
   randomize: '스마트 무작위 조합',
   help: '도움말 및 가이드',
   close: '닫기',

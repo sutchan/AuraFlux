@@ -1,9 +1,9 @@
 /**
  * File: core/services/audioUtils.ts
- * Version: 1.8.0
+ * Version: 1.7.32
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 23:00
+ * Updated: 2025-03-05 12:00
  */
 
 export function getAverage(data: Uint8Array, start: number, end: number) {

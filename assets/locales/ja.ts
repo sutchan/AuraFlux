@@ -122,7 +122,7 @@ export const ja = {
   resetVisual: '外観をリセット',
   resetText: 'テキストをリセット',
   resetAudio: '音響をリセット',
-  resetAi: 'AI設定をリセット',
+  resetAi: 'AI設定をリセット。',
   randomize: 'インテリジェント・ランダム',
   help: 'ヘルプとガイド',
   close: '閉じる',

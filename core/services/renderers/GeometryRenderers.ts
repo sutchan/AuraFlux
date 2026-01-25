@@ -1,10 +1,9 @@
 /**
  * File: core/services/renderers/GeometryRenderers.ts
- * Version: 2.3.0
+ * Version: 1.7.32
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-02-27 19:30
- * Description: Enlarged the tunnel's base radius to make it feel fuller.
+ * Updated: 2025-03-05 12:00
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';

@@ -7,7 +7,7 @@
  * Description: Standardized font styles for improved readability and consistency.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LyricsStyle, Region, Position, AIProvider } from '../../../core/types';
 import { REGION_NAMES, getPositionOptions, AVAILABLE_FONTS } from '../../../core/constants';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
@@ -32,6 +32,7 @@ export const AiSettingsPanel: React.FC = () => {
   const [inputKey, setInputKey] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [showKey, setShowKey] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   
   useEffect(() => {
       const currentProvider = settings.recognitionProvider || 'GEMINI';
@@ -58,6 +59,7 @@ export const AiSettingsPanel: React.FC = () => {
           showToast(t?.aiPanel?.keySaved || "Key Verified & Saved", 'success');
       } else {
           showToast(t?.aiPanel?.keyInvalid || "Invalid Key", 'error');
+          inputRef.current?.select();
       }
   };
 
@@ -119,7 +121,8 @@ export const AiSettingsPanel: React.FC = () => {
                            </div>
                            <div className="flex gap-1.5">
                                <div className="relative flex-1">
-                                   <input 
+                                   <input
+                                       ref={inputRef}
                                        type={showKey ? "text" : "password"} 
                                        value={inputKey}
                                        onChange={(e) => setInputKey(e.target.value)}

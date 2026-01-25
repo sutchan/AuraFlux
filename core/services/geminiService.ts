@@ -1,9 +1,9 @@
 /**
  * File: core/services/geminiService.ts
- * Version: 1.3.4
+ * Version: 1.7.32
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-02-25 10:00
+ * Updated: 2025-03-05 12:00
  */
 
 import { GoogleGenAI, Type } from "@google/genai";

@@ -1,9 +1,9 @@
-
 /**
  * File: core/workers/visualizer.worker.ts
- * Version: 1.6.5
+ * Version: 1.7.32
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-03-05 12:00
  *
  * This worker script is responsible for offloading 2D visualizer rendering
  * from the main thread using OffscreenCanvas.

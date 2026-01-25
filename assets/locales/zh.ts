@@ -122,7 +122,7 @@ export const zh = {
   resetVisual: '重置视觉参数',
   resetText: '重置文字设置',
   resetAudio: '重置音频设置',
-  resetAi: '重置识别设置',
+  resetAi: '重置识别设置。',
   randomize: '随机美学组合',
   help: '帮助与说明',
   close: '关闭',

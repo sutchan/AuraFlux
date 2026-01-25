@@ -122,7 +122,7 @@ export const ru = {
   resetVisual: 'Сброс эстетики',
   resetText: 'Сброс текста',
   resetAudio: 'Сброс аудио',
-  resetAi: 'Сброс ИИ',
+  resetAi: 'Сброс ИИ.',
   randomize: 'Умный рандом',
   help: 'Поддержка',
   close: 'Закрыть',

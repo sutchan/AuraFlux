@@ -1,10 +1,9 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.3.5
+ * Version: 1.7.32
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 19:30
- * Description: Standardized font styles for improved readability and consistency.
+ * Updated: 2025-03-05 12:00
  */
 
 import React from 'react';

@@ -11,4 +11,4 @@
 - **WebGL 恢复**: 模拟上下文丢失自动恢复。
 
 ---
-*Aura Flux Testing & Validation - Version 1.6.75*
+*Aura Flux Testing & Validation - Version 1.7.32*

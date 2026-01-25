@@ -1,10 +1,9 @@
 /**
  * File: core/services/renderers/NebulaRenderer.ts
- * Version: 2.1.0
+ * Version: 1.7.32
  * Author: Sut
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-02-25 19:30
- * Description: Optimized for performance. Reduced count, adjusted gas density.
+ * Updated: 2025-03-05 12:00
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';

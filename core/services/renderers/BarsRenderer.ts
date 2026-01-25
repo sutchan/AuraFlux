@@ -1,10 +1,9 @@
 /**
  * File: core/services/renderers/BarsRenderer.ts
- * Version: 1.2.0
+ * Version: 1.7.32
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 23:00
- * Description: Optimized height calculation with soft-clipping for better high-volume dynamics.
+ * Updated: 2025-03-05 12:00
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';

@@ -1,9 +1,9 @@
-
 /**
  * File: core/hooks/useAudio.ts
- * Version: 1.6.4
+ * Version: 1.7.32
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-03-05 12:00
  */
 
 import { useState, useRef, useEffect, useCallback } from 'react';

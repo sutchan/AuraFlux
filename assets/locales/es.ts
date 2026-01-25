@@ -122,7 +122,7 @@ export const es = {
   resetVisual: 'Reiniciar Estética',
   resetText: 'Reiniciar Texto',
   resetAudio: 'Reiniciar Audio',
-  resetAi: 'Reiniciar IA',
+  resetAi: 'Reiniciar IA.',
   randomize: 'Aleatorio Inteligente',
   help: 'Soporte',
   close: 'Descartar',

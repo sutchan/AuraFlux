@@ -122,7 +122,7 @@ export const de = {
   resetVisual: 'Ästhetik zurücksetzen',
   resetText: 'Text zurücksetzen',
   resetAudio: 'Audio zurücksetzen',
-  resetAi: 'KI zurücksetzen',
+  resetAi: 'KI zurücksetzen.',
   randomize: 'Intelligenter Zufall',
   help: 'Unterstützung',
   close: 'Schließen',

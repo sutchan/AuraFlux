@@ -29,7 +29,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
   const [c0, c1] = smoothedColors;
 
   // --- 1. Overscan Grid Logic ---
-  const { count, cols, rows, aLayoutData } = useMemo(() => {
+  const { count, cols, rows, aLayoutData, gridRadius } = useMemo(() => {
     const aspect = window.innerWidth / window.innerHeight;
     const baseDensity = settings.quality === 'high' ? 22 : 15; // Halved density for larger bricks
     
@@ -37,6 +37,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
     const c = Math.ceil(baseDensity * Math.max(aspect, 1.0) * 1.5);
     const r = Math.ceil(baseDensity / Math.min(aspect, 1.0));
     const total = c * r;
+    const radius = Math.sqrt(Math.pow(c / 2, 2) + Math.pow(r / 2, 2));
 
     const data = new Float32Array(total * 2); 
     for (let i = 0; i < total; i++) {
@@ -48,7 +49,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
         data[i * 2 + 1] = Math.random(); 
     }
 
-    return { count: total, cols: c, rows: r, aLayoutData: data };
+    return { count: total, cols: c, rows: r, aLayoutData: data, gridRadius: radius };
   }, [settings.quality]);
 
   const geometry = useMemo(() => new RoundedBoxGeometry(3.68, 3.68, 4.0, 3, 0.4), []); // Increased size by 2x again
@@ -74,8 +75,9 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
     uColor1: { value: new Color() },
     uColor2: { value: new Color() },
     uBeat: { value: 0.0 },
-    uSensitivity: { value: 1.0 }
-  }), [audioTexture]);
+    uSensitivity: { value: 1.0 },
+    uGridRadius: { value: gridRadius }
+  }), [audioTexture, gridRadius]);
 
   const onBeforeCompile = useMemo(() => (shader: any) => {
     Object.assign(shader.uniforms, uniforms);
@@ -89,13 +91,14 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
       uniform float uTime;
       uniform float uBeat;
       uniform float uSensitivity;
+      uniform float uGridRadius;
       ${shader.vertexShader}
     `.replace(
       '#include <begin_vertex>',
       `
       #include <begin_vertex>
       
-      float flux_freqIdx = clamp(aLayout.x / 37.5, 0.0, 0.85); // Divisor halved to match new density
+      float flux_freqIdx = clamp(aLayout.x / uGridRadius, 0.0, 0.85);
       float flux_rawAudio = texture2D(uAudioTexture, vec2(flux_freqIdx, 0.5)).r;
 
       float flux_levels = 16.0; 
