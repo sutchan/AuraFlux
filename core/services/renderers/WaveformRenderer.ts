@@ -115,4 +115,11 @@ export class WaveformRenderer implements IVisualizerRenderer {
             const xc = (currentX + nextX) / 2;
             const yc = (currentY + nextY) / 2;
             ctx.quadraticCurveTo(currentX, currentY, xc, yc);
-            currentX = nextX
+            currentX = nextX;
+            currentY = nextY;
+        }
+        ctx.stroke();
+    }
+    ctx.restore();
+  }
+}
