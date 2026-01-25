@@ -1,7 +1,7 @@
 {
   "name": "aura-flux",
   "private": true,
-  "version": "1.7.31",
+  "version": "1.7.32",
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {
@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "*",
+    "@google/genai": "1.38.0",
     "@react-three/drei": "^10.0.0",
     "@react-three/fiber": "^9.0.0",
     "@react-three/postprocessing": "^3.0.4",

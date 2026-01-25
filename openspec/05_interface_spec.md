@@ -25,4 +25,4 @@
 - `H`: `toggleExpanded`
 
 ---
-*Aura Flux Interface - Version 1.7.31*
+*Aura Flux Interface - Version 1.7.32*

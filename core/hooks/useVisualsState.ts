@@ -1,15 +1,15 @@
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 02:00
+ * Updated: 2025-03-03 10:00
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { VisualizerMode, VisualizerSettings, SmartPreset } from '../types';
-import { COLOR_THEMES } from '../constants';
+import { COLOR_THEMES, VISUALIZER_PRESETS } from '../constants';
 
 const DEFAULT_MODE = VisualizerMode.PLASMA;
 const DEFAULT_THEME_INDEX = 1;
@@ -112,11 +112,13 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
     setColorThemeInternal(COLOR_THEMES[Math.floor(Math.random() * COLOR_THEMES.length)]);
     
     // 2. Pick a mode from the whitelist or global list
+    // BUG FIX: Source available modes from VISUALIZER_PRESETS keys to ensure it's always in sync with what the UI can render.
+    // This prevents a bug where randomization could select a mode from the enum that isn't implemented yet.
     const availableModes = (settings.includedModes && settings.includedModes.length > 0)
         ? settings.includedModes
-        : Object.values(VisualizerMode);
+        : Object.keys(VISUALIZER_PRESETS);
     
-    const nextMode = availableModes[Math.floor(Math.random() * availableModes.length)];
+    const nextMode = availableModes[Math.floor(Math.random() * availableModes.length)] as VisualizerMode;
     setModeInternal(nextMode);
     
     // 3. Performance-Aware Setting Randomization

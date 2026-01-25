@@ -1,10 +1,10 @@
 /**
  * File: components/visualizers/scenes/KineticWallScene.tsx
- * Version: 3.8.1
+ * Version: 3.8.2
  * Author: Sut
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-02-26 22:15
- * Description: Increased brick size by 2x for a bolder visual impact.
+ * Updated: 2025-03-03 10:00
+ * Description: Further increased brick size by 2x for an even bolder visual impact. Adjusted density, spacing, and shader logic accordingly.
  */
 
 import React, { useRef, useMemo, useLayoutEffect } from 'react';
@@ -31,7 +31,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
   // --- 1. Overscan Grid Logic ---
   const { count, cols, rows, aLayoutData } = useMemo(() => {
     const aspect = window.innerWidth / window.innerHeight;
-    const baseDensity = settings.quality === 'high' ? 45 : 30; // Reduced density for larger bricks
+    const baseDensity = settings.quality === 'high' ? 22 : 15; // Halved density for larger bricks
     
     // Width Buffer (Overscan) to prevent black background leakage
     const c = Math.ceil(baseDensity * Math.max(aspect, 1.0) * 1.5);
@@ -51,7 +51,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
     return { count: total, cols: c, rows: r, aLayoutData: data };
   }, [settings.quality]);
 
-  const geometry = useMemo(() => new RoundedBoxGeometry(1.84, 1.84, 2.0, 3, 0.2), []); // Increased size by 2x
+  const geometry = useMemo(() => new RoundedBoxGeometry(3.68, 3.68, 4.0, 3, 0.4), []); // Increased size by 2x again
 
   useLayoutEffect(() => {
     if (geometry) {
@@ -95,7 +95,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
       `
       #include <begin_vertex>
       
-      float flux_freqIdx = clamp(aLayout.x / 75.0, 0.0, 0.85);
+      float flux_freqIdx = clamp(aLayout.x / 37.5, 0.0, 0.85); // Divisor halved to match new density
       float flux_rawAudio = texture2D(uAudioTexture, vec2(flux_freqIdx, 0.5)).r;
 
       float flux_levels = 16.0; 
@@ -172,7 +172,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
 
     // Update Matrix
     if (meshRef.current) {
-        const spacing = 2.12; // Increased spacing by 2x
+        const spacing = 4.24; // Increased spacing by 2x again
         for (let i = 0; i < count; i++) {
             const r = Math.floor(i / cols);
             const c = i % cols;
@@ -189,7 +189,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
     }
 
     // --- Overscan Camera Bound ---
-    const gridHalfWidth = (cols * 2.12) / 2; // Use new spacing for bounds calculation
+    const gridHalfWidth = (cols * 4.24) / 2; // Use new spacing for bounds calculation
     const maxPanX = gridHalfWidth * 0.35; 
     
     const camX = Math.sin(time * 0.2) * maxPanX;

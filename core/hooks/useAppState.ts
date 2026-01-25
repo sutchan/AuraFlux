@@ -1,9 +1,9 @@
-
 /**
  * File: core/hooks/useAppState.ts
- * Version: 1.0.5
- * Author: Aura Vision Team
+ * Version: 1.7.32
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-03-04 11:00
  */
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
@@ -14,13 +14,15 @@ import { TRANSLATIONS } from '../i18n';
 const ONBOARDING_KEY = 'has_onboarded';
 const DEFAULT_LANGUAGE: Language = 'en';
 
+const SUPPORTED_LANGUAGES: Language[] = ['en', 'zh', 'tw', 'ja', 'es', 'ko', 'de', 'fr', 'ar', 'ru'];
+const SUPPORTED_REGIONS: Region[] = ['global', 'US', 'CN', 'JP', 'KR', 'EU', 'LATAM'];
+
 const detectBrowserLanguage = (): Language => {
   if (typeof navigator === 'undefined') return DEFAULT_LANGUAGE;
   
   // Use navigator.languages if available for prioritized list, otherwise fallback to navigator.language
   const browserLangs = navigator.languages ? Array.from(navigator.languages) : [navigator.language];
-  const supported: Language[] = ['en', 'zh', 'tw', 'ja', 'es', 'ko', 'de', 'fr', 'ar', 'ru'];
-
+  
   for (const lang of browserLangs) {
     const code = lang.toLowerCase();
     
@@ -34,7 +36,7 @@ const detectBrowserLanguage = (): Language => {
 
     const primary = code.split('-')[0] as Language;
     
-    if (supported.includes(primary)) {
+    if (SUPPORTED_LANGUAGES.includes(primary)) {
       return primary;
     }
   }
@@ -61,19 +63,25 @@ export const useAppState = () => {
   const [isUnsupported, setIsUnsupported] = useState(false);
   
   const [language, setLanguage] = useState<Language>(() => {
-    // If user hasn't completed onboarding, always re-detect browser language
-    // to ensure the welcome screen matches their current environment.
     const hasOnboarded = getStorage(ONBOARDING_KEY, false);
     if (!hasOnboarded) {
       return detectBrowserLanguage();
     }
     const saved = getStorage<Language | null>('language', null);
-    return saved || detectBrowserLanguage();
+    // Robustness: Validate saved language against the supported list.
+    if (saved && SUPPORTED_LANGUAGES.includes(saved)) {
+      return saved;
+    }
+    return detectBrowserLanguage();
   });
 
   const [region, setRegion] = useState<Region>(() => {
     const saved = getStorage<Region | null>('region', null);
-    return saved || detectDefaultRegion(language);
+    // Robustness: Validate saved region against the supported list.
+    if (saved && SUPPORTED_REGIONS.includes(saved)) {
+      return saved;
+    }
+    return detectDefaultRegion(language);
   });
 
   // 同步 HTML 属性以支持 i18n 和 RTL

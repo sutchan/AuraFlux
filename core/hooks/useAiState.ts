@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useAiState.ts
- * Version: 1.2.0
- * Author: Aura Vision Team
+ * Version: 1.7.32
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 22:45
+ * Updated: 2025-03-04 11:00
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -41,7 +41,11 @@ export const useAiState = ({
 }: AiStateProps) => {
   const { getStorage, setStorage } = useLocalStorage();
 
-  const [lyricsStyle, setLyricsStyle] = useState<LyricsStyle>(() => getStorage('lyricsStyle', DEFAULT_LYRICS_STYLE));
+  const [lyricsStyle, setLyricsStyle] = useState<LyricsStyle>(() => {
+    const saved = getStorage('lyricsStyle', DEFAULT_LYRICS_STYLE);
+    // Robustness: Validate enum from storage. If invalid, fallback to default.
+    return Object.values(LyricsStyle).includes(saved) ? saved : DEFAULT_LYRICS_STYLE;
+  });
   const [showLyrics, setShowLyrics] = useState<boolean>(() => getStorage('showLyrics', DEFAULT_SHOW_LYRICS));
   
   // Store API Keys per provider with obfuscation
