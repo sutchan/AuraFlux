@@ -1,6 +1,6 @@
 /**
  * File: core/services/renderers/GeometryRenderers.ts
- * Version: 1.7.32
+ * Version: 1.7.33
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
@@ -39,8 +39,6 @@ export class TunnelRenderer implements IVisualizerRenderer {
     const cx = w / 2;
     const cy = h / 2;
     
-    // Performance Optimization: Scaled down ring/side counts
-    // High: 24/16, Med: 16/10, Low: 10/6
     const rings = settings.quality === 'high' ? 24 : (settings.quality === 'med' ? 16 : 10);
     const sides = settings.quality === 'high' ? 16 : (settings.quality === 'med' ? 10 : 6);
     
@@ -52,11 +50,10 @@ export class TunnelRenderer implements IVisualizerRenderer {
     const fov = Math.max(w, h) * 0.75; 
     const zSpacing = 160;
     const maxDepth = rings * zSpacing;
-    const virtualTime = rotation * 800; // Slightly slower movement for better motion clarity
+    const virtualTime = rotation * 800;
     
     ctx.save();
     
-    // Optimization: Draw background once
     ctx.fillStyle = '#000000';
     ctx.globalCompositeOperation = 'lighter';
     
@@ -69,7 +66,7 @@ export class TunnelRenderer implements IVisualizerRenderer {
     ctx.translate(cx + shakeX, cy + shakeY);
     ctx.rotate(rotation * 0.15); 
 
-    // --- 2. Singularity Burst (Cached-like behavior) ---
+    // --- 2. Singularity Burst ---
     const coreSize = (40 + bass * 140);
     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, coreSize);
     grad.addColorStop(0, colors[2] || colors[0]);
@@ -81,8 +78,7 @@ export class TunnelRenderer implements IVisualizerRenderer {
     ctx.arc(0, 0, coreSize, 0, Math.PI * 2);
     ctx.fill();
 
-    // --- 3. Grid Projection ---
-    // Buffer to store projected vertices for connection drawing
+    // --- 3. Grid Projection (Calculation & Optimized Drawing) ---
     const allProjectedPoints: {x: number, y: number, alpha: number, scale: number}[] = [];
     
     for (let i = 0; i < rings; i++) {
@@ -98,19 +94,19 @@ export class TunnelRenderer implements IVisualizerRenderer {
         const cosTwist = Math.cos(twistAngle);
         const sinTwist = Math.sin(twistAngle);
 
-        const baseR = 500; // Increased from 380 for a fuller tunnel
+        const baseR = 500;
         const audioAmp = 280 * settings.sensitivity;
+        
+        const baseWidth = Math.max(0.5, 1.5 * scale * (1 + bass));
+        const baseAlpha = depthAlpha * (0.35 + bass * 0.4);
+        const color = colors[i % colors.length];
 
-        ctx.beginPath();
-        ctx.strokeStyle = colors[i % colors.length];
-        ctx.lineWidth = Math.max(0.5, 1.5 * scale * (1 + bass));
-        ctx.globalAlpha = depthAlpha * (0.35 + bass * 0.4);
-
+        // Create Path2D for each ring to enable multi-pass drawing for glow
+        const ringPath = new Path2D();
         for (let j = 0; j <= sides; j++) {
             const binIndex = Math.floor(((j % sides) / sides) * 40);
             const r = (baseR + (data[binIndex] / 255) * audioAmp) * scale;
             
-            // Apply rotation matrix for twist to pre-cached unit circle
             const ux = this.cosCache[j];
             const uy = this.sinCache[j];
             const x = (ux * cosTwist - uy * sinTwist) * r;
@@ -120,56 +116,96 @@ export class TunnelRenderer implements IVisualizerRenderer {
                 allProjectedPoints.push({ x, y, alpha: depthAlpha, scale });
             }
             
-            if (j === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
+            if (j === 0) ringPath.moveTo(x, y);
+            else ringPath.lineTo(x, y);
         }
-        ctx.stroke();
+        
+        // Optimized Glow Drawing
+        if (settings.glow) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = baseWidth * 7;
+            ctx.globalAlpha = baseAlpha * 0.1;
+            ctx.stroke(ringPath);
+            ctx.lineWidth = baseWidth * 3.5;
+            ctx.globalAlpha = baseAlpha * 0.2;
+            ctx.stroke(ringPath);
+        }
+
+        // Core line
+        ctx.lineWidth = baseWidth;
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = baseAlpha;
+        ctx.stroke(ringPath);
     }
 
-    // --- 4. Longitudinal Path Batching ---
-    // Instead of drawing every ring-to-ring line individually, 
-    // we batch lines per side index to reduce canvas state changes.
+    // --- 4. Longitudinal Path Batching (Optimized) ---
     const activeRingCount = allProjectedPoints.length / sides;
     if (activeRingCount > 1) {
-        ctx.globalAlpha = 0.12; 
-        ctx.lineWidth = 0.8;
-        
-        // Quality optimization: Only draw every 2nd connection on lower settings
+        const pathsByColor: Record<string, Path2D> = {};
         const sideStep = settings.quality === 'low' ? 2 : 1;
-        
+
         for (let s = 0; s < sides; s += sideStep) {
-            ctx.beginPath();
-            ctx.strokeStyle = colors[s % colors.length];
+            const color = colors[s % colors.length];
+            if (!pathsByColor[color]) {
+                pathsByColor[color] = new Path2D();
+            }
+            const path = pathsByColor[color];
+
             for (let r = 0; r < activeRingCount - 1; r++) {
                 const p1 = allProjectedPoints[r * sides + s];
                 const p2 = allProjectedPoints[(r + 1) * sides + s];
                 
-                // Distance check to avoid lines jumping across wrap-around
                 const dx = p1.x - p2.x;
                 const dy = p1.y - p2.y;
                 if (dx*dx + dy*dy < (w * 0.4) ** 2) {
-                    ctx.moveTo(p1.x, p1.y);
-                    ctx.lineTo(p2.x, p2.y);
+                    path.moveTo(p1.x, p1.y);
+                    path.lineTo(p2.x, p2.y);
                 }
             }
-            ctx.stroke();
+        }
+        
+        const baseLineWidth = 0.8;
+        const baseLineAlpha = 0.12;
+        for (const color in pathsByColor) {
+            const path = pathsByColor[color];
+            ctx.strokeStyle = color;
+            if (settings.glow) {
+                ctx.lineWidth = baseLineWidth * 5;
+                ctx.globalAlpha = baseLineAlpha * 0.5;
+                ctx.stroke(path);
+            }
+            ctx.lineWidth = baseLineWidth;
+            ctx.globalAlpha = baseLineAlpha;
+            ctx.stroke(path);
         }
     }
 
-    // --- 5. Cyber Nodes (Batch Drawing) ---
-    if (settings.quality !== 'low') {
-        ctx.fillStyle = '#ffffff';
-        for (let i = 0; i < allProjectedPoints.length; i += 2) {
+    // --- 5. Cyber Nodes (Optimized Glow) ---
+    if (settings.quality !== 'low' && treble > 0.2) {
+        const baseAlpha = 0.4 + treble * 0.6;
+        const step = settings.quality === 'high' ? 2 : 4;
+        const corePath = new Path2D();
+        const glowPath = settings.glow ? new Path2D() : null;
+
+        for (let i = 0; i < allProjectedPoints.length; i += step) {
             const p = allProjectedPoints[i];
-            const nodeAlpha = p.alpha * (0.4 + treble * 0.6);
-            if (nodeAlpha < 0.1) continue;
+            if (p.alpha < 0.1) continue;
             
-            ctx.globalAlpha = nodeAlpha;
-            const dotSize = Math.max(1, 3 * p.scale * (1 + treble));
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, dotSize, 0, Math.PI * 2);
-            ctx.fill();
+            const dotSize = Math.max(0.5, 2 * p.scale * (1 + treble));
+            corePath.rect(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize);
+            if (glowPath) {
+                const glowSize = dotSize * 4;
+                glowPath.rect(p.x - glowSize / 2, p.y - glowSize / 2, glowSize, glowSize);
+            }
         }
+        
+        ctx.fillStyle = '#ffffff';
+        if (glowPath) {
+            ctx.globalAlpha = baseAlpha * 0.15;
+            ctx.fill(glowPath);
+        }
+        ctx.globalAlpha = baseAlpha;
+        ctx.fill(corePath);
     }
 
     ctx.restore();

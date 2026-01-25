@@ -74,10 +74,12 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
       }
 
       // --- Performance Optimization ---
-      // Sprite-based renderers (Nebula, Bubbles) generate their own glow/gradients.
-      // Applying Canvas `shadowBlur` to hundreds of semi-transparent sprites kills GPU fill-rate.
-      // We disable the global shadow context for these specific modes to restore 60FPS.
-      const isSelfGlowingMode = currentMode === VisualizerMode.NEBULA || currentMode === VisualizerMode.MACRO_BUBBLES;
+      // Sprite-based or self-glowing renderers generate their own glow/gradients.
+      // Applying Canvas `shadowBlur` can kill performance. We disable it for these modes.
+      const isSelfGlowingMode = 
+        currentMode === VisualizerMode.NEBULA || 
+        currentMode === VisualizerMode.MACRO_BUBBLES ||
+        currentMode === VisualizerMode.TUNNEL;
 
       if (currentSettings.glow && !isSelfGlowingMode) {
         // 使用第一个主题色作为发光底色
