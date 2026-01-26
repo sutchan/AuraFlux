@@ -24,4 +24,4 @@
 - **Edge Intelligence** -> 边缘计算 / 边缘智能。
 
 ---
-*Aura Flux Storage & i18n - Version 1.7.36*
+*Aura Flux Storage & i18n - Version 1.7.45*

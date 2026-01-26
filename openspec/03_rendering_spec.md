@@ -22,4 +22,4 @@
   - **软膝盖压缩:** 在传递给着色器前，通过 $v^{0.7}$ 压缩曲线调整，确保在极高音量下 3D 位移依然保持线性动态。
 
 ---
-*Aura Flux Rendering - Version 1.7.36*
+*Aura Flux Rendering - Version 1.7.45*

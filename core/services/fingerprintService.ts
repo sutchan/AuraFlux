@@ -1,16 +1,24 @@
 /**
  * File: core/services/fingerprintService.ts
- * Version: 1.7.32
- * Author: Aura Vision Team
+ * Version: 1.7.43
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
  */
 
 import { SongInfo } from '../types';
 
-const STORAGE_KEY = 'av_fingerprints_v1';
+const STORAGE_KEY = 'av_fingerprints_v2'; // Bumped version for new format
 const MAX_CACHE_SIZE = 50;
 const SIMILARITY_THRESHOLD = 0.25;
+
+// v1.7.43: Define frequency bands for more robust fingerprinting
+const PEAK_BANDS = [
+  [2, 10],   // Sub-bass (approx 86-430Hz)
+  [10, 30],  // Bass (approx 430-1290Hz)
+  [30, 60],  // Low Mids (approx 1290-2580Hz)
+  [60, 100]  // Mids (approx 2580-4300Hz)
+];
 
 interface FingerprintEntry {
   features: number[]; 
@@ -18,47 +26,34 @@ interface FingerprintEntry {
   timestamp: number;
 }
 
-/**
- * 核心修复：重构 generateFingerprint 以正确使用 OfflineAudioContext 捕获 FFT 数据。
- * 之前的方法通过 suspend 和 then 尝试获取 FFT 数据是错误的，FFT 数据必须在音频处理过程中捕获。
- * 
- * 此版本使用 ScriptProcessorNode 在 OfflineAudioContext 渲染时捕获 FFT 数据。
- * (ScriptProcessorNode 在主线程已弃用，但在 OfflineAudioContext 中仍是常见且有效的方式)。
- */
 export const generateFingerprint = async (base64Audio: string): Promise<number[]> => {
   let audioCtx: AudioContext | null = null;
   let offlineCtx: OfflineAudioContext | null = null;
 
   try {
-    // Robustness: Handle invalid base64 strings gracefully
     const binaryString = window.atob(base64Audio);
     const len = binaryString.length;
     const bytes = new Uint8Array(len);
     for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
     const arrayBuffer = bytes.buffer;
 
-    // 使用标准 AudioContext 解码音频，因为 OfflineAudioContext 的 decodeAudioData 可能会有问题或被弃用
     audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
     const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
     
-    // 创建 OfflineAudioContext 用于离线处理
-    // 使用与原始音频相同的采样率和声道数
     offlineCtx = new OfflineAudioContext(audioBuffer.numberOfChannels, audioBuffer.length, audioBuffer.sampleRate);
     const source = offlineCtx.createBufferSource();
     source.buffer = audioBuffer;
 
     const analyser = offlineCtx.createAnalyser();
-    analyser.fftSize = 1024; // 与 spec/audio_engine_spec.md 中的 FFT size 保持一致
-    analyser.smoothingTimeConstant = 0; // 关闭平滑，获取原始频率数据
+    analyser.fftSize = 1024;
+    analyser.smoothingTimeConstant = 0;
 
-    // ScriptProcessorNode 用于在离线渲染过程中捕获数据
-    // bufferSize 必须是 256, 512, 1024, 2048, 4096, 8192, 16384 中的一个
     const bufferSize = 2048; 
     const scriptProcessor = offlineCtx.createScriptProcessor(bufferSize, 1, 1);
 
     source.connect(analyser);
-    analyser.connect(scriptProcessor); // 连接到 ScriptProcessorNode
-    scriptProcessor.connect(offlineCtx.destination); // 必须连接到目的地
+    analyser.connect(scriptProcessor);
+    scriptProcessor.connect(offlineCtx.destination);
     source.start(0);
 
     const features: Set<number> = new Set();
@@ -66,27 +61,32 @@ export const generateFingerprint = async (base64Audio: string): Promise<number[]
 
     scriptProcessor.onaudioprocess = (audioProcessingEvent) => {
       analyser.getByteFrequencyData(freqData);
-      let maxVal = 0;
-      let maxIndex = -1;
-      // 只扫描低频段（0-4300Hz 范围内的优势峰值索引），对应 FFT bin 0-100 左右
-      // analyser.frequencyBinCount / (sampleRate / 2) * 4300Hz
-      // 512 bins, 44100Hz -> bin corresponds to ~43Hz. 100 bins = 4300Hz
-      const scanLimit = Math.min(freqData.length, 100); 
-
-      for (let i = 2; i < scanLimit; i++) { // 忽略最低频段，避免直流分量干扰
-        if (freqData[i] > maxVal) {
-          maxVal = freqData[i];
-          maxIndex = i;
-        }
-      }
-      if (maxVal > 50 && maxIndex !== -1) { // 阈值避免噪音
-        features.add(maxIndex);
+      
+      // --- v1.7.43: Constellation Fingerprinting ---
+      // Instead of one peak, find the strongest peak in each defined band.
+      // This creates a much more unique "constellation" of features per timeslice.
+      for (let bandIdx = 0; bandIdx < PEAK_BANDS.length; bandIdx++) {
+          const [start, end] = PEAK_BANDS[bandIdx];
+          let maxVal = 0;
+          let maxIndex = -1;
+          for (let i = start; i < end; i++) {
+              if (freqData[i] > maxVal) {
+                  maxVal = freqData[i];
+                  maxIndex = i;
+              }
+          }
+          // Add feature only if it's significant, creating a sparse but robust fingerprint
+          if (maxVal > 50 && maxIndex !== -1) {
+              // Create a unique key for the peak: (Band Index * 1000) + Frequency Bin Index
+              // This ensures that a peak at index 50 in Band 1 (1050) is different from
+              // a peak at index 50 in Band 2 (2050).
+              features.add(bandIdx * 1000 + maxIndex);
+          }
       }
     };
 
     await offlineCtx.startRendering();
     
-    // 清理 ScriptProcessorNode
     scriptProcessor.onaudioprocess = null;
     scriptProcessor.disconnect();
 
@@ -96,7 +96,6 @@ export const generateFingerprint = async (base64Audio: string): Promise<number[]
     console.error("[Fingerprint] generation failed:", e);
     return [];
   } finally {
-    // 修复：确保关闭 AudioContext，但 OfflineAudioContext 在渲染完成后会自动关闭
     if (audioCtx) {
       try { await audioCtx.close(); } catch (e) { console.warn("[Fingerprint] Error closing AudioContext:", e); }
     }

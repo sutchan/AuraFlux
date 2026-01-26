@@ -2,6 +2,28 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.7.45] - 2025-03-05
+
+### Features
+*   **🧠 AI:** Expanded the available AI providers for music identification, adding **Claude 3**, **DeepSeek**, and **Qwen** to the existing options. Each new provider has a unique "persona" prompt, offering stylistically different analyses of the audio.
+*   **🧠 AI:** Refined the system prompts for all AI providers (Gemini, OpenAI, Groq, etc.) to produce more distinct and stylistically appropriate responses, enhancing the "personality" of each selection.
+
+## [v1.7.44] - 2025-03-05
+
+### Fix
+*   **🧠 AI:** Increased the AI identification request timeout from 15s to 25s. This provides the Gemini API with a more generous window to process complex audio analysis, significantly reducing the occurrence of `AI_TIMEOUT` errors and improving the reliability of the recognition feature.
+
+## [v1.7.43] - 2025-03-05
+
+### Refactor
+*   **🧠 AI:** Overhauled the AI identification logic for significantly improved accuracy and reliability. The system prompt sent to Gemini is now much stricter, prioritizing precise commercial track identification and only falling back to creative descriptions if a match is impossible (explicitly setting `identified: false`).
+*   **⚡️ Cache:** Massively improved the local acoustic fingerprinting algorithm. It now captures a "constellation" of peaks across multiple frequency bands instead of a single point, creating a far more robust and unique signature. This drastically increases the hit rate and accuracy of the local cache, reducing unnecessary API calls.
+
+## [v1.7.42] - 2025-03-05
+
+### Fix
+*   **⚙️ Build:** Resolved the "Multiple instances of Three.js being imported" warning by configuring Vite to exclude all `importmap` packages (like `three`, `react-three/fiber`, etc.) from its dependency pre-bundling process. This ensures that both the dev server and the final build consistently rely on the single instance provided by the CDN via `importmap`, eliminating conflicts.
+
 ## [v1.7.41] - 2025-03-05
 
 ### Style

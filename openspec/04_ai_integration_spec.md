@@ -6,7 +6,7 @@
 - **参数精调:** 
   - `temperature: 0.7` (提升描述的丰富性与创造性)。
   - `topP: 0.95`, `topK: 40`。
-  - `timeout: 15000ms` (从 30 秒缩短以提升响应性)。
+  - `timeout: 25000ms` (从 15 秒增加以提升稳定性)。
 
 ## 2. 结构化输出 (Response Schema)
 AI 必须返回严格的 JSON 格式，Schema 更新以支持更丰富的描述和跨语言的鲁棒性：
@@ -38,4 +38,4 @@ AI 必须返回严格的 JSON 格式，Schema 更新以支持更丰富的描述�
 4. **Mock 模式:** 若 API Key 无效或未提供，返回模拟数据。
 
 ---
-*Aura Flux AI Integration - Version 1.7.37*
+*Aura Flux AI Integration - Version 1.7.45*

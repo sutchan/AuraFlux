@@ -1,14 +1,14 @@
 /**
  * File: core/hooks/useAudioReactive.ts
- * Version: 1.7.32
- * Author: Aura Vision Team
+ * Version: 1.7.42
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
  */
 
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import { Color } from 'three';
 import { VisualizerSettings } from '../types';
 import { getAverage, AdaptiveNoiseFilter, DynamicPeakLimiter, applySoftCompression } from '../services/audioUtils';
 import { BeatDetector } from '../services/beatDetector';
@@ -33,8 +33,8 @@ export const useAudioReactive = ({ analyser, colors, settings }: UseAudioReactiv
   
   const safeInputColors = useMemo(() => getSafeColors(colors), [colors]);
 
-  const smoothedColorsRef = useRef(safeInputColors.map(c => new THREE.Color(c)));
-  const targetColorRef = useRef(new THREE.Color());
+  const smoothedColorsRef = useRef(safeInputColors.map(c => new Color(c)));
+  const targetColorRef = useRef(new Color());
   const beatDetectorRef = useRef(new BeatDetector());
   const noiseFilterRef = useRef(new AdaptiveNoiseFilter());
   
@@ -52,7 +52,7 @@ export const useAudioReactive = ({ analyser, colors, settings }: UseAudioReactiv
       const targetLength = safeInputColors.length;
       if (currentLength < targetLength) {
         for (let i = currentLength; i < targetLength; i++) {
-          smoothedColors.push(new THREE.Color(safeInputColors[i] || safeInputColors[0] || '#ffffff'));
+          smoothedColors.push(new Color(safeInputColors[i] || safeInputColors[0] || '#ffffff'));
         }
       } else {
         smoothedColors.length = targetLength;

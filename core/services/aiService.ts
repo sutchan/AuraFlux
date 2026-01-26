@@ -1,12 +1,10 @@
 /**
  * File: core/services/aiService.ts
- * Version: 3.0.1
+ * Version: 3.0.3
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
  * Updated: 2025-03-05 12:00
- * Description: Merged superior logic from geminiService.ts, adding provider personas,
- * detailed prompts, and robust error handling. This resolves redundancy and fixes bugs
- * related to unhandled AI providers.
+ * Description: Added provider personas for Claude, DeepSeek, and Qwen.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -14,12 +12,15 @@ import { GEMINI_MODEL, REGION_NAMES } from '../constants';
 import { SongInfo, Language, Region, AIProvider } from '../types';
 import { generateFingerprint, saveToLocalCache, findLocalMatch } from './fingerprintService';
 
-const REQUEST_TIMEOUT_MS = 15000; // Reduced from 30s
+const REQUEST_TIMEOUT_MS = 25000; // Increased from 15s to improve reliability
 
 const PROVIDER_PROFILES: Record<string, string> = {
     GEMINI: "Role: Google Gemini. Style: Balanced, high-fidelity analysis. Focus on accurate metadata and holistic emotional context. Use rich, evocative language for moods.",
     GROQ: "Role: Grok (xAI). Style: Witty, rebellious, and raw. Use punchy, creative language. In the 'mood' field, feel free to use unconventional or high-energy descriptors like 'Aggressive Glitchcore' or 'Sarcastic Synthpop'. If the track is unknown, describe its 'vibe' with an edgy twist.",
     OPENAI: "Role: GPT-4o. Style: Encyclopedic, precise, and professional. Prioritize technical genre accuracy and historical context. Moods should be descriptive and formal, e.g., 'Pensive Neoclassical Composition'.",
+    CLAUDE: "Role: Anthropic Claude 3. Style: Analytical, verbose, and nuanced. Focus on music theory, instrumentation, and complex emotional undertones. Describe moods with literary and precise language.",
+    DEEPSEEK: "Role: DeepSeek. Style: Technical, code-aware, and concise. Excel at identifying electronic subgenres and structural patterns. Moods should be direct and based on sonic texture, e.g., 'Syncopated, Glitchy, Minimal'.",
+    QWEN: "Role: Alibaba Qwen. Style: Globally-focused, multilingual, and culturally aware. Strong at identifying non-western and eclectic genres. Moods should reflect a broad cultural context.",
 };
 
 const RESPONSE_SCHEMA = {
@@ -82,21 +83,24 @@ export const identifySongFromAudio = async (
 
   const personaInstruction = PROVIDER_PROFILES[provider] || PROVIDER_PROFILES['GEMINI'];
 
+  // --- v1.7.43: Stricter Prompt Engineering for Accuracy ---
   const systemInstruction = `
     You are the "Aura Flux Synesthesia Intelligence".
     ${personaInstruction}
     
-    TASK: Analyze the 6-second audio snapshot provided. Identify commercial tracks OR provide a poetic synesthetic description of the soundscape.
+    PRIMARY GOAL: Your main task is to identify the commercial song title and artist from the provided 6-second audio snippet. Use your tools for this.
+
+    SECONDARY GOAL (FALLBACK): ONLY IF you are absolutely certain no commercial track matches, then you must provide a poetic, synesthetic description of the soundscape.
     
-    SPECIFIC RULES:
-    1. Commercial Match: If identified, set "identified": true and provide exact metadata.
-    2. Generative Description: If NO song is identified (identified: false), fill "title" and "artist" with a creative, evocative description of the audio texture (e.g., Title: "Velvet Static", Artist: "Lofi Ambient").
-    3. Mood & Lyrics: Always translate the "mood" and "lyricsSnippet" into ${targetLang}.
-        - MOOD: Provide a vivid 3-5 word summary combining emotion and genre (e.g., "Melancholic Cyberpunk Rain", "High-Energy Industrial Techno", "Soothing Ambient Drone"). Avoid generic single words.
-        - MOOD KEYWORDS: The "mood_en_keywords" field MUST contain 3-5 comma-separated, lowercase English keywords that capture the essence for styling (e.g., 'sad, futuristic, calm' or 'energetic, electronic, aggressive').
-        - LYRICS/TEXTURE: If lyrics are audible, quote key lines. If instrumental, describe the visual texture, instrumentation, or genre elements (e.g., "Distorted synth arpeggios over a heavy bassline.").
-    4. Style: Mirror the characteristic speech patterns of your assigned persona.
-    5. Response Format: Return RAW JSON only. No markdown.
+    STRICT RULES:
+    1.  **Identification vs. Description**: 
+        *   If you successfully identify a commercial song, you MUST set \`"identified": true\`.
+        *   If you are describing the audio instead of identifying a specific track, you MUST set \`"identified": false\`. In this case, the "title" and "artist" fields should contain a CREATIVE DESCRIPTION (e.g., Title: "Velvet Static", Artist: "Lofi Ambient"), not a guess at a real song.
+    2.  **Translation**: The "mood" and "lyricsSnippet" fields MUST be translated into ${targetLang}.
+    3.  **Mood Field**: Provide a vivid 3-5 word summary combining emotion and genre (e.g., "Melancholic Cyberpunk Rain", "High-Energy Industrial Techno"). Avoid generic single words.
+    4.  **Mood Keywords Field**: The "mood_en_keywords" MUST contain 3-5 comma-separated, lowercase English keywords for styling (e.g., 'sad, futuristic, calm' or 'energetic, electronic, aggressive').
+    5.  **Lyrics/Texture Field**: If lyrics are audible, quote key lines. If instrumental, describe the visual texture, instrumentation, or genre elements (e.g., "Distorted synth arpeggios over a heavy bassline.").
+    6.  **Response Format**: You MUST return RAW JSON only. Do not wrap it in markdown.
   `;
 
   try {

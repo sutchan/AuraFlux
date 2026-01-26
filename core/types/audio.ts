@@ -1,6 +1,6 @@
 /**
  * File: core/types/audio.ts
- * Version: 1.7.37
+ * Version: 1.7.38
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
@@ -20,7 +20,7 @@ export interface SongInfo {
   mood_en_keywords?: string; // Canonical English keywords for styling
   identified: boolean;
   searchUrl?: string;
-  matchSource?: 'AI' | 'LOCAL' | 'MOCK' | 'GEMINI' | 'OPENAI' | 'CLAUDE' | 'GROQ' | 'DEEPSEEK' | 'QWEN' | 'PREVIEW';
+  matchSource?: 'AI' | 'LOCAL' | 'MOCK' | 'GEMINI' | 'OPENAI' | 'GROQ' | 'CLAUDE' | 'DEEPSEEK' | 'QWEN' | 'PREVIEW';
 }
 
 export interface AudioDevice {

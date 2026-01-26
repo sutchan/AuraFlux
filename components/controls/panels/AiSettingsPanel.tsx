@@ -1,10 +1,10 @@
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.7.3
+ * Version: 1.7.4
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 19:30
- * Description: Standardized font styles for improved readability and consistency.
+ * Updated: 2025-03-05 12:00
+ * Description: Added Claude, DeepSeek, and Qwen as selectable AI providers.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -81,8 +81,8 @@ export const AiSettingsPanel: React.FC = () => {
 
   const getKeyHint = () => {
       if (currentProvider === 'GEMINI') return aiPanel.geminiHint || "Optional. Uses default free quota.";
-      if (currentProvider === 'GROQ') return aiPanel.groqHint || "Required. Enables fast inference.";
-      return aiPanel.customHint || "Required. Key is stored locally.";
+      if (['GROQ', 'OPENAI', 'CLAUDE', 'DEEPSEEK', 'QWEN'].includes(currentProvider)) return aiPanel.customHint || "Required. Key is stored locally.";
+      return '';
   };
 
   return (
@@ -106,6 +106,9 @@ export const AiSettingsPanel: React.FC = () => {
                        { value: 'GEMINI', label: '🟢 Gemini 3.0' }, 
                        { value: 'OPENAI', label: '🔵 GPT-4o' },
                        { value: 'GROQ', label: '🟠 Groq' },
+                       { value: 'CLAUDE', label: '🟪 Claude 3' },
+                       { value: 'DEEPSEEK', label: '🤖 DeepSeek' },
+                       { value: 'QWEN', label: '🌏 Qwen' },
                        { value: 'MOCK', label: `⚪ ${t?.simulatedDemo || 'Simulated'}` }
                      ]} 
                      onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
