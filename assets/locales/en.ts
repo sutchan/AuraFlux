@@ -73,7 +73,17 @@ export const en = {
     savePreset: 'Save current state to browser storage.',
     loadPreset: 'Restore this preset state.',
     copyConfig: 'Copy configuration string to clipboard for quick sharing.',
-    wakeLock: 'Prevent screen from sleeping while visualizer is active.'
+    wakeLock: 'Prevent screen from sleeping while visualizer is active.',
+    simulateCrash: 'Intentionally crash the app to test the error recovery screen.'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: 'Simulated'
   },
   aiPanel: {
       keySaved: 'API Key Verified & Saved',
@@ -85,7 +95,7 @@ export const en = {
       update: 'Update',
       geminiHint: 'Optional. Uses default free quota if empty.',
       customHint: 'Required. Key is stored locally in your browser.',
-      groqHint: 'Required. Enables fast Whisper+Llama inference.'
+      notImplemented: 'AI processing for {provider} is not yet implemented. Please select Gemini to use AI features.'
   },
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',
@@ -162,7 +172,8 @@ export const en = {
     info: 'Adjust input sensitivity and smoothing to customize reaction. Higher FFT sizes provide more detail.'
   },
   systemPanel: {
-    interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI'
+    interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI',
+    simulateCrash: 'Simulate Crash'
   },
   config: {
     title: 'Cloud & Data',

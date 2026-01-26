@@ -73,7 +73,17 @@ export const ru = {
     importConfig: 'Импорт настроек из файла JSON.',
     savePreset: 'Сохранить текущие настройки локально.',
     loadPreset: 'Загрузить этот пресет.',
-    copyConfig: 'Копировать код конфигурации в буфер обмена.'
+    copyConfig: 'Копировать код конфигурации в буфер обмена.',
+    simulateCrash: 'Преднамеренно вызвать сбой приложения для проверки экрана восстановления ошибок.'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: 'Демо'
   },
   aiPanel: {
       keySaved: 'API-ключ проверен и сохранен',
@@ -85,7 +95,7 @@ export const ru = {
       update: 'Обновить',
       geminiHint: 'Необязательно. Использует бесплатную квоту по умолчанию, если пусто.',
       customHint: 'Обязательно. Ключ хранится локально в вашем браузере.',
-      groqHint: 'Обязательно. Включает быструю обработку Whisper+Llama.'
+      notImplemented: 'Обработка ИИ для {provider} еще не реализована. Пожалуйста, выберите Gemini для использования функций ИИ.'
   },
   visualizerMode: 'Визуальный движок',
   styleTheme: 'Цветовая тема',
@@ -123,7 +133,7 @@ export const ru = {
   resetVisual: 'Сброс эстетики',
   resetText: 'Сброс текста',
   resetAudio: 'Сброс аудио',
-  resetAi: 'Сброс ИИ.',
+  resetAi: 'Сброс ИИ',
   randomize: 'Умный рандом',
   help: 'Поддержка',
   close: 'Закрыть',
@@ -154,7 +164,9 @@ export const ru = {
   qualities: { low: 'Скорость', med: 'Баланс', high: 'Ультима' },
   visualPanel: { effects: 'Эффекты', automation: 'Автоматизация', display: 'Экран' },
   audioPanel: { info: 'Настройте чувствительность и сглаживание. Высокий FFT дает детали, но нагружает ЦП.' },
-  systemPanel: { interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ' },
+  systemPanel: { interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ',
+    simulateCrash: 'Симулировать сбой'
+  },
   config: {
     title: 'Облако и Данные',
     export: 'Экспорт файла',

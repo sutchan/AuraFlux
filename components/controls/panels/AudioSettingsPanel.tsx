@@ -1,14 +1,15 @@
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 19:30
- * Description: Standardized font styles for improved readability.
+ * Updated: 2025-03-05 12:00
+ * Description: Replaced SteppedSlider with Slider for continuous values to fix visual bugs.
  */
 
 import React from 'react';
 import { SteppedSlider } from '../../ui/controls/SteppedSlider';
+import { Slider } from '../../ui/controls/Slider';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { useVisuals, useAudioContext, useUI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
@@ -63,11 +64,11 @@ export const AudioSettingsPanel: React.FC = () => {
       {/* Col 2: Core Processing Parameters */}
       <div className="p-3 pt-4 h-full flex flex-col border-b lg:border-b-0 lg:border-e border-white/5">
         <div className="space-y-4 flex-grow overflow-y-auto custom-scrollbar pe-1.5">
-          <SteppedSlider label={t?.sensitivity || "Sensitivity"} hintText={hints?.sensitivity} options={[{value:settings.sensitivity, label:settings.sensitivity.toFixed(1)}]} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v: number) => handleAudioSettingChange('sensitivity', v)} />
+          <Slider label={t?.sensitivity || "Sensitivity"} hintText={hints?.sensitivity} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v: number) => handleAudioSettingChange('sensitivity', v)} />
           
           {isAdvanced && (
               <div className="space-y-4 animate-fade-in-up">
-                  <SteppedSlider label={t?.smoothing || "Smoothing"} hintText={hints?.smoothing} options={[{value:settings.smoothing, label:settings.smoothing.toFixed(2)}]} value={settings.smoothing} min={0} max={0.95} step={0.01} onChange={(v: number) => handleAudioSettingChange('smoothing', v)} />
+                  <Slider label={t?.smoothing || "Smoothing"} hintText={hints?.smoothing} value={settings.smoothing} min={0} max={0.95} step={0.01} onChange={(v: number) => handleAudioSettingChange('smoothing', v)} />
                   <div className="pt-3 border-t border-white/5">
                     <SteppedSlider
                         label={t?.fftSize || "Resolution"}

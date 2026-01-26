@@ -73,7 +73,17 @@ export const tw = {
     importConfig: '從 JSON 檔案載入配置。',
     savePreset: '將當前狀態保存到瀏覽器本地存儲。',
     loadPreset: '載入此預設。',
-    copyConfig: '將配置代碼複製到剪貼簿以便分享。'
+    copyConfig: '將配置代碼複製到剪貼簿以便分享。',
+    simulateCrash: '故意使應用程式崩潰以測試錯誤恢復畫面。'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: '模擬 (離線)'
   },
   aiPanel: {
       keySaved: 'API Key 已驗證並保存',
@@ -85,7 +95,7 @@ export const tw = {
       update: '更新',
       geminiHint: '可選。留空則使用預設免費配額。',
       customHint: '必填。Key 僅保存在本地瀏覽器中。',
-      groqHint: '必填。用於極速 Whisper+Llama 推理。'
+      notImplemented: '尚未實現對 {provider} 的 AI 處理。請選擇 Gemini 以使用 AI 功能。'
   },
   visualizerMode: '視覺化模式',
   styleTheme: '視覺風格',
@@ -124,7 +134,7 @@ export const tw = {
   resetVisual: '重置視覺參數',
   resetText: '重置文字設定',
   resetAudio: '重置音訊設定',
-  resetAi: '重置辨識設定。',
+  resetAi: '重置辨識設定',
   randomize: '隨機美學組合',
   help: '說明與協助',
   close: '關閉',
@@ -162,7 +172,8 @@ export const tw = {
     info: '調節「靈敏度」以改變反應強度。更高的 FFT 解析度能提供更精細的細節。'
   },
   systemPanel: {
-    interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染架構', audio: '音訊架構', ai: 'AI'
+    interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染架構', audio: '音訊架構', ai: 'AI',
+    simulateCrash: '模擬崩潰'
   },
   config: {
     title: '雲端與資料',

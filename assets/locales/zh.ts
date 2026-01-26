@@ -73,7 +73,17 @@ export const zh = {
     savePreset: '将当前状态保存到浏览器。',
     loadPreset: '加载此预设。',
     copyConfig: '将配置代码复制到剪贴板。',
-    wakeLock: '屏幕常亮，防止设备休眠。'
+    wakeLock: '屏幕常亮，防止设备休眠。',
+    simulateCrash: '故意使应用崩溃以测试错误恢复界面。'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: '模拟 (离线)'
   },
   aiPanel: {
       keySaved: 'API 密钥已验证并保存',
@@ -85,7 +95,7 @@ export const zh = {
       update: '更新',
       geminiHint: '可选。若留空，将使用默认免费配额。',
       customHint: '必填项。密钥将存储在您的本地浏览器中。',
-      groqHint: '必填项。启用高速 Whisper+Llama 推理。'
+      notImplemented: '尚未实现对 {provider} 的 AI 处理。请选择 Gemini 以使用 AI 功能。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -124,7 +134,7 @@ export const zh = {
   resetVisual: '重置视觉参数',
   resetText: '重置文字设置',
   resetAudio: '重置音频设置',
-  resetAi: '重置识别设置。',
+  resetAi: '重置识别设置',
   randomize: '随机美学组合',
   help: '帮助与说明',
   close: '关闭',
@@ -162,7 +172,8 @@ export const zh = {
     info: '调节“灵敏度”以改变反应强度。更高的 FFT 能提供更精细的细节。'
   },
   systemPanel: {
-    interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI'
+    interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI',
+    simulateCrash: '模拟崩溃'
   },
   config: {
     title: '云端与数据',

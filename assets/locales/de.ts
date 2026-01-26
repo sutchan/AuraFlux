@@ -73,7 +73,17 @@ export const de = {
     importConfig: 'Einstellungen aus einer JSON-Datei laden.',
     savePreset: 'Aktuellen Zustand im Browser speichern.',
     loadPreset: 'Diesen Preset-Zustand wiederherstellen.',
-    copyConfig: 'Konfigurationszeichenfolge zum schnellen Teilen in die Zwischenablage kopieren.'
+    copyConfig: 'Konfigurationszeichenfolge zum schnellen Teilen in die Zwischenablage kopieren.',
+    simulateCrash: 'Absichtlicher Absturz der App, um den Fehlerbehebungsbildschirm zu testen.'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: 'Simuliert'
   },
   aiPanel: {
     keySaved: 'API-Schlüssel verifiziert & gespeichert',
@@ -85,7 +95,7 @@ export const de = {
     update: 'Aktualisieren',
     geminiHint: 'Optional. Verwendet standardmäßig kostenloses Kontingent, wenn leer.',
     customHint: 'Erforderlich. Der Schlüssel wird lokal in Ihrem Browser gespeichert.',
-    groqHint: 'Erforderlich. Ermöglicht schnelle Whisper+Llama-Inferenz.'
+    notImplemented: 'Die KI-Verarbeitung für {provider} ist noch nicht implementiert. Bitte wählen Sie Gemini, um KI-Funktionen zu nutzen.'
   },
   visualizerMode: 'Visueller Motor',
   styleTheme: 'Farbthema',
@@ -123,7 +133,7 @@ export const de = {
   resetVisual: 'Ästhetik zurücksetzen',
   resetText: 'Text zurücksetzen',
   resetAudio: 'Audio zurücksetzen',
-  resetAi: 'KI zurücksetzen.',
+  resetAi: 'KI zurücksetzen',
   randomize: 'Intelligenter Zufall',
   help: 'Unterstützung',
   close: 'Schließen',
@@ -154,7 +164,9 @@ export const de = {
   qualities: { low: 'Glatt', med: 'Ausgewogen', high: 'Ultimativ' },
   visualPanel: { effects: 'Effekte', automation: 'Automatisierung', display: 'Anzeige' },
   audioPanel: { info: 'Passen Sie Empfindlichkeit und Glättung an, um die Reaktion anzupassen. Höhere FFT-Größen bieten mehr Details.' },
-  systemPanel: { interface: 'Oberfläche', behavior: 'Verhalten', maintenance: 'Wartung', engine: 'Motor', audio: 'Audio', ai: 'KI' },
+  systemPanel: { interface: 'Oberfläche', behavior: 'Verhalten', maintenance: 'Wartung', engine: 'Motor', audio: 'Audio', ai: 'KI',
+    simulateCrash: 'Absturz simulieren'
+  },
   config: {
     title: 'Cloud & Daten',
     export: 'Datei exportieren',

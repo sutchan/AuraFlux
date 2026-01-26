@@ -73,7 +73,17 @@ export const ar = {
     savePreset: 'حفظ الحالة الحالية في تخزين المتصفح.',
     loadPreset: 'استعادة هذه الحالة المعدة مسبقًا.',
     copyConfig: 'نسخ سلسلة التكوين إلى الحافظة للمشاركة السريعة.',
-    wakeLock: 'منع الشاشة من النوم أثناء نشاط المتخيل.'
+    wakeLock: 'منع الشاشة من النوم أثناء نشاط المتخيل.',
+    simulateCrash: 'تعطيل التطبيق عمدًا لاختبار شاشة استرداد الأخطاء.'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: 'محاكاة'
   },
   aiPanel: {
       keySaved: 'تم التحقق من مفتاح API وحفظه',
@@ -85,7 +95,7 @@ export const ar = {
       update: 'تحديث',
       geminiHint: 'اختياري. يستخدم الحصة المجانية الافتراضية إذا كان فارغًا.',
       customHint: 'مطلوب. يتم تخزين المفتاح محليًا في متصفحك.',
-      groqHint: 'مطلوب. يُمكّن استدلال Whisper+Llama السريع.'
+      notImplemented: 'معالجة الذكاء الاصطناعي لـ {provider} لم يتم تنفيذها بعد. يرجى تحديد Gemini لاستخدام ميزات الذكاء الاصطناعي.'
   },
   visualizerMode: 'محرك العرض البصري',
   styleTheme: 'سمة اللون',
@@ -162,7 +172,8 @@ export const ar = {
     info: 'اضبط حساسية الإدخال والتنعيم لتخصيص التفاعل. أحجام FFT الأعلى توفر تفاصيل أكثر.'
   },
   systemPanel: {
-    interface: 'الواجهة', behavior: 'السلوك', maintenance: 'الصيانة', engine: 'المحرك', audio: 'الصوت', ai: 'الذكاء الاصطناعي'
+    interface: 'الواجهة', behavior: 'السلوك', maintenance: 'الصيانة', engine: 'المحرك', audio: 'الصوت', ai: 'الذكاء الاصطناعي',
+    simulateCrash: 'محاكاة الانهيار'
   },
   config: {
     title: 'السحابة والبيانات',

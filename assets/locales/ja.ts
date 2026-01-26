@@ -57,7 +57,7 @@ export const ja = {
     hideCursor: '一定時間操作がない場合、マウスカーソルを非表示にします。',
     uiModeSimple: '技術的なパラメータを隠し、美学的な調整に集中します。',
     uiModeAdvanced: 'すべての調整パラメータを表示して正確に制御します。',
-    quality: 'レンダリング解像度とパーティクル密度を調整します。',
+    quality: '描画品質とパーティクル密度を調整します。',
     textSize: 'カスタムテキストレイヤーのスケールを調整します。',
     textRotation: 'テキストオーバーレイを回転させます。',
     textPosition: 'カスタムテキストのアンカーポイント。',
@@ -73,7 +73,17 @@ export const ja = {
     importConfig: 'JSONファイルから設定を読み込みます。',
     savePreset: '現在の設定をローカル保存します。',
     loadPreset: 'このプリセットを適用します。',
-    copyConfig: '設定コードをクリップボードにコピーします。'
+    copyConfig: '設定コードをクリップボードにコピーします。',
+    simulateCrash: '意図的にアプリをクラッシュさせて、エラー回復画面をテストします。'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: 'シミュレーション'
   },
   aiPanel: {
       keySaved: 'API Key 保存完了',
@@ -85,7 +95,7 @@ export const ja = {
       update: '更新',
       geminiHint: '任意。空の場合はデフォルトの無料枠を使用します。',
       customHint: '必須。Keyはブラウザにローカル保存されます。',
-      groqHint: '必須。高速Whisper+Llama推論を有効にします。'
+      notImplemented: '{provider} のAI処理はまだ実装されていません。AI機能を使用するにはGeminiを選択してください。'
   },
   visualizerMode: 'ビジュアルモード',
   styleTheme: '視覚スタイル',
@@ -123,7 +133,7 @@ export const ja = {
   resetVisual: '外観をリセット',
   resetText: 'テキストをリセット',
   resetAudio: '音響をリセット',
-  resetAi: 'AI設定をリセット。',
+  resetAi: 'AI設定をリセット',
   randomize: 'インテリジェント・ランダム',
   help: 'ヘルプとガイド',
   close: '閉じる',
@@ -161,7 +171,8 @@ export const ja = {
     info: '感度とスムージングを調整して、オーディオのダイナミクスに対する反応をカスタマイズします。FFT解像度を上げると精細になりますが、CPU負荷が増大します。'
   },
   systemPanel: {
-    interface: 'インターフェース', behavior: 'システム挙動', maintenance: 'メンテナンス', engine: 'エンジン', audio: 'オーディオ', ai: '人工知能'
+    interface: 'インターフェース', behavior: 'システム挙動', maintenance: 'メンテナンス', engine: 'エンジン', audio: 'オーディオ', ai: '人工知能',
+    simulateCrash: 'クラッシュをシミュレート'
   },
   config: {
     title: 'クラウド & データ',

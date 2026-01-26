@@ -2,6 +2,15 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.7.46] - 2025-03-05
+
+### Features
+*   **🌍 i18n:** Completed localization for all UI strings across all 10 supported languages, including new AI provider names and status messages, ensuring a fully translated experience for global users.
+*   **🛠️ Robustness:** Added a "Simulate Crash" button in the advanced System panel. This allows for manual testing of the application's `ErrorBoundary` component, verifying the crash recovery screen as specified in the testing validation spec.
+
+### Fix
+*   **🎨 UI:** Refactored the AI Settings Panel to use the new i18n keys for AI provider names and messages, removing all hardcoded strings.
+
 ## [v1.7.45] - 2025-03-05
 
 ### Features
@@ -53,7 +62,7 @@ All notable changes to the **Aura Flux** project will be documented in this file
 ### Refactor
 *   **🧠 AI:** Refined the AI identification service for improved accuracy, latency, and error handling. The system prompt now requests more descriptive mood analysis and canonical English keywords for robust styling. API request timeouts have been reduced, and specific error messages are now displayed for invalid API keys, significantly improving user feedback.
 
-## [v1.7.36] - 2025-03-05
+## [v.1.7.36] - 2025-03-05
 
 ### Features
 *   **🎨 Visuals:** Overhauled the "Deep Nebula" visualizer with a more colorful and dynamic engine. Gas clouds are now rendered with two-tone gradients based on the selected color theme, the background is a subtle radial gradient, and beat reactions are significantly more pronounced, creating a richer, more vibrant cosmic scene.

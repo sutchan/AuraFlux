@@ -73,7 +73,17 @@ export const ko = {
     importConfig: 'JSON 파일에서 설정을 가져옵니다。',
     savePreset: '현재 설정을 로컬에 저장합니다。',
     loadPreset: '이 프리셋을 불러옵니다。',
-    copyConfig: '설정 코드를 클립보드에 복사합니다。'
+    copyConfig: '설정 코드를 클립보드에 복사합니다。',
+    simulateCrash: '오류 복구 화면을 테스트하기 위해 의도적으로 앱을 충돌시킵니다.'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: '시뮬레이션'
   },
   aiPanel: {
       keySaved: 'API Key 저장 완료',
@@ -85,7 +95,7 @@ export const ko = {
       update: '업데이트',
       geminiHint: '선택. 비워두면 무료 할당량이 사용됩니다。',
       customHint: '필수. 키는 브라우저에 로컬 저장됩니다。',
-      groqHint: '필수. 고속 Whisper+Llama 추론을 활성화합니다。'
+      notImplemented: '{provider}에 대한 AI 처리는 아직 구현되지 않았습니다. AI 기능을 사용하려면 Gemini를 선택하세요.'
   },
   visualizerMode: '시각화 모드',
   styleTheme: '비주얼 테마',
@@ -123,7 +133,7 @@ export const ko = {
   resetVisual: '미학 설정 초기화',
   resetText: '텍스트 설정 초기화',
   resetAudio: '오디오 설정 초기화',
-  resetAi: 'AI 설정 초기화。',
+  resetAi: 'AI 설정 초기화',
   randomize: '스마트 무작위 조합',
   help: '도움말 및 가이드',
   close: '닫기',
@@ -161,7 +171,8 @@ export const ko = {
     info: '감도와 평활도를 조절하여 시각화의 반응성을 최적화하세요. 높은 FFT 해상도는 정밀한 디테일을 제공하지만 CPU 사용량이 증가합니다。'
   },
   systemPanel: {
-    interface: '인터페이스', behavior: '동작', maintenance: '유지 관리', engine: '엔진', audio: '오디오', ai: 'AI'
+    interface: '인터페이스', behavior: '동작', maintenance: '유지 관리', engine: '엔진', audio: '오디오', ai: 'AI',
+    simulateCrash: '충돌 시뮬레이션'
   },
   config: {
     title: '클라우드 & 데이터',

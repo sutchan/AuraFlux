@@ -1,10 +1,10 @@
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.7.5
+ * Version: 1.7.6
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
- * Description: Prevent API key input for non-Gemini providers to fix "Invalid API Key" errors.
+ * Description: Refactored to use i18n strings for provider names and messages.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -68,6 +68,7 @@ export const AiSettingsPanel: React.FC = () => {
   const lyricsStyles = t?.lyricsStyles || {};
   const hints = t?.hints || {};
   const aiPanel = t?.aiPanel || {};
+  const aiProviders = t?.aiProviders || {};
   
   const isAdvanced = settings.uiMode === 'advanced';
   const positionOptions = getPositionOptions(t);
@@ -78,17 +79,7 @@ export const AiSettingsPanel: React.FC = () => {
 
   const currentProvider = settings.recognitionProvider || 'GEMINI';
   const hasKey = !!apiKeys[currentProvider];
-
-  const providerLabels: Record<string, string> = {
-      GEMINI: 'Gemini 3.0',
-      OPENAI: 'GPT-4o',
-      GROQ: 'Groq',
-      CLAUDE: 'Claude 3',
-      DEEPSEEK: 'DeepSeek',
-      QWEN: 'Qwen',
-      MOCK: 'Simulated'
-  };
-  const currentProviderLabel = providerLabels[currentProvider] || currentProvider;
+  const currentProviderLabel = aiProviders[currentProvider] || currentProvider;
 
   return (
     <>
@@ -108,12 +99,12 @@ export const AiSettingsPanel: React.FC = () => {
                      value={currentProvider} 
                      hintText={hints?.recognitionSource}
                      options={[
-                       { value: 'GEMINI', label: '🟢 Gemini 3.0' }, 
-                       { value: 'OPENAI', label: '🔵 GPT-4o' },
-                       { value: 'GROQ', label: '🟠 Groq' },
-                       { value: 'CLAUDE', label: '🟪 Claude 3' },
-                       { value: 'DEEPSEEK', label: '🤖 DeepSeek' },
-                       { value: 'QWEN', label: '🌏 Qwen' },
+                       { value: 'GEMINI', label: `🟢 ${aiProviders.GEMINI || 'Gemini 3.0'}` }, 
+                       { value: 'OPENAI', label: `🔵 ${aiProviders.OPENAI || 'GPT-4o'}` },
+                       { value: 'GROQ', label: `🟠 ${aiProviders.GROQ || 'Groq'}` },
+                       { value: 'CLAUDE', label: `🟪 ${aiProviders.CLAUDE || 'Claude 3'}` },
+                       { value: 'DEEPSEEK', label: `🤖 ${aiProviders.DEEPSEEK || 'DeepSeek'}` },
+                       { value: 'QWEN', label: `🌏 ${aiProviders.QWEN || 'Qwen'}` },
                        { value: 'MOCK', label: `⚪ ${t?.simulatedDemo || 'Simulated'}` }
                      ]} 
                      onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
@@ -145,14 +136,14 @@ export const AiSettingsPanel: React.FC = () => {
                                    {isValidating ? '...' : (hasKey ? (aiPanel.update || 'Update') : (aiPanel.save || 'Save'))}
                                </button>
                            </div>
-                           <p className="text-[11px] text-white/30 leading-tight">A custom key is optional. The app will use a default free-tier key if this is empty.</p>
+                           <p className="text-[11px] text-white/30 leading-tight">{aiPanel.geminiHint || 'A custom key is optional. The app will use a default free-tier key if this is empty.'}</p>
                        </div>
                    )}
 
                    {currentProvider !== 'GEMINI' && currentProvider !== 'MOCK' && (
                         <div className="bg-yellow-900/20 border border-yellow-500/30 p-3 rounded-xl animate-fade-in-up text-center">
                             <p className="text-xs text-yellow-200/80 leading-relaxed">
-                                {`AI processing for ${currentProviderLabel} is not yet implemented. Please select Gemini to use AI features.`}
+                                { (aiPanel.notImplemented || 'AI processing for {provider} is not yet implemented. Please select Gemini to use AI features.').replace('{provider}', currentProviderLabel) }
                             </p>
                         </div>
                    )}

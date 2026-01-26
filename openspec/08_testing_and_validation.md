@@ -7,8 +7,8 @@
 
 ## 2. 鲁棒性验证
 - **存储防御测试**: 模拟旧版本数据自动补全。
-- **异常恢复测试**: Simulate Crash 按钮功能验证。
+- **异常恢复测试**: "Simulate Crash" 按钮功能验证，确保 ErrorBoundary 正常工作。
 - **WebGL 恢复**: 模拟上下文丢失自动恢复。
 
 ---
-*Aura Flux Testing & Validation - Version 1.7.45*
+*Aura Flux Testing & Validation - Version 1.7.46*

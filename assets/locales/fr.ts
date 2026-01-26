@@ -73,7 +73,17 @@ export const fr = {
     importConfig: 'Charger les paramètres à partir d\'un fichier JSON.',
     savePreset: 'Enregistrer l\'état actuel dans le stockage du navigateur.',
     loadPreset: 'Restaurer cet état prédéfini.',
-    copyConfig: 'Copier la chaîne de configuration dans le presse-papiers pour un partage rapide.'
+    copyConfig: 'Copier la chaîne de configuration dans le presse-papiers pour un partage rapide.',
+    simulateCrash: 'Faire planter intentionnellement l\'application pour tester l\'écran de récupération d\'erreur.'
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: 'Simulé'
   },
   aiPanel: {
       keySaved: 'Clé API Vérifiée et Enregistrée',
@@ -85,7 +95,7 @@ export const fr = {
       update: 'MaJ',
       geminiHint: 'Optionnel. Utilise le quota gratuit par défaut si vide.',
       customHint: 'Requis. La clé est stockée localement dans votre navigateur.',
-      groqHint: 'Requis. Active l\'inférence rapide Whisper+Llama.'
+      notImplemented: 'Le traitement IA pour {provider} n\'est pas encore implémenté. Veuillez sélectionner Gemini pour utiliser les fonctionnalités IA.'
   },
   visualizerMode: 'Moteur Visuel',
   styleTheme: 'Thème de Couleur',
@@ -123,7 +133,7 @@ export const fr = {
   resetVisual: 'Réinit. Esthétique',
   resetText: 'Réinit. Texte',
   resetAudio: 'Réinit. Audio',
-  resetAi: 'Réinit. IA.',
+  resetAi: 'Réinit. IA',
   randomize: 'Aléatoire Intelligent',
   help: 'Support',
   close: 'Fermer',
@@ -154,7 +164,9 @@ export const fr = {
   qualities: { low: 'Fluide', med: 'Équilibré', high: 'Ultime' },
   visualPanel: { effects: 'Effets', automation: 'Automatisation', display: 'Affichage' },
   audioPanel: { info: 'Ajustez la sensibilité et le lissage pour personnaliser la réaction. Des tailles de FFT plus élevées offrent plus de détails.' },
-  systemPanel: { interface: 'Interface', behavior: 'Comportement', maintenance: 'Maintenance', engine: 'Moteur', audio: 'Audio', ai: 'IA' },
+  systemPanel: { interface: 'Interface', behavior: 'Comportement', maintenance: 'Maintenance', engine: 'Moteur', audio: 'Audio', ai: 'IA',
+    simulateCrash: 'Simuler un Plantage'
+  },
   config: {
     title: 'Cloud & Données',
     export: 'Exporter Fichier',
