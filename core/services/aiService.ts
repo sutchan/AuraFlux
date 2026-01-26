@@ -1,6 +1,6 @@
 /**
  * File: core/services/aiService.ts
- * Version: 3.0.0
+ * Version: 3.0.1
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
  * Updated: 2025-03-05 12:00
@@ -14,13 +14,12 @@ import { GEMINI_MODEL, REGION_NAMES } from '../constants';
 import { SongInfo, Language, Region, AIProvider } from '../types';
 import { generateFingerprint, saveToLocalCache, findLocalMatch } from './fingerprintService';
 
-const REQUEST_TIMEOUT_MS = 30000;
+const REQUEST_TIMEOUT_MS = 15000; // Reduced from 30s
 
-// Merged from geminiService.ts for richer AI interactions
 const PROVIDER_PROFILES: Record<string, string> = {
-    GEMINI: "Role: Google Gemini. Style: Balanced, high-fidelity analysis. Focus on accurate metadata and holistic emotional context.",
-    GROQ: "Role: Grok (xAI). Style: Witty, rebellious, and raw. Use punchy, creative language. In the 'mood' field, feel free to use unconventional or high-energy descriptors. If the track is unknown, describe its 'vibe' with an edgy twist.",
-    OPENAI: "Role: GPT-4o. Style: Encyclopedic, precise, and professional. Prioritize technical genre accuracy and historical context.",
+    GEMINI: "Role: Google Gemini. Style: Balanced, high-fidelity analysis. Focus on accurate metadata and holistic emotional context. Use rich, evocative language for moods.",
+    GROQ: "Role: Grok (xAI). Style: Witty, rebellious, and raw. Use punchy, creative language. In the 'mood' field, feel free to use unconventional or high-energy descriptors like 'Aggressive Glitchcore' or 'Sarcastic Synthpop'. If the track is unknown, describe its 'vibe' with an edgy twist.",
+    OPENAI: "Role: GPT-4o. Style: Encyclopedic, precise, and professional. Prioritize technical genre accuracy and historical context. Moods should be descriptive and formal, e.g., 'Pensive Neoclassical Composition'.",
 };
 
 const RESPONSE_SCHEMA = {
@@ -30,9 +29,10 @@ const RESPONSE_SCHEMA = {
     artist: { type: Type.STRING, description: "Artist name or audio category/genre." },
     lyricsSnippet: { type: Type.STRING, description: "Key lyrics, lyrical themes, or sensory description of the music's texture." },
     mood: { type: Type.STRING, description: "Descriptive aesthetic mood summary (3-5 words) including genre hints." },
+    mood_en_keywords: { type: Type.STRING, description: "Canonical, comma-separated English keywords for styling (e.g., 'dark, industrial, driving')." },
     identified: { type: Type.BOOLEAN, description: "True if it is a known commercial track." },
   },
-  required: ['title', 'artist', 'mood', 'identified']
+  required: ['title', 'artist', 'mood', 'mood_en_keywords', 'identified']
 };
 
 export const validateApiKey = async (provider: AIProvider, key: string): Promise<boolean> => {
@@ -43,7 +43,6 @@ export const validateApiKey = async (provider: AIProvider, key: string): Promise
             await client.models.generateContent({ model: GEMINI_MODEL, contents: 'ping' });
             return true;
         }
-        // Basic validation for other providers for now.
         return true; 
     } catch (e) {
         return false;
@@ -60,7 +59,7 @@ export const identifySongFromAudio = async (
 ): Promise<SongInfo | null> => {
   if (provider === 'MOCK') {
       await new Promise(r => setTimeout(r, 1000));
-      return { title: "Echoes of Eternity", artist: "Aura Synth", lyricsSnippet: "Floating in a digital dream...", mood: "Hypnotic Cyber", identified: true, matchSource: 'MOCK' };
+      return { title: "Echoes of Eternity", artist: "Aura Synth", lyricsSnippet: "Floating in a digital dream...", mood: "Hypnotic Cyber", mood_en_keywords: 'hypnotic, cyber, ambient', identified: true, matchSource: 'MOCK' };
   }
 
   let features: number[] = [];
@@ -74,17 +73,15 @@ export const identifySongFromAudio = async (
 
   const apiKey = customKey || process.env.API_KEY;
   if (!apiKey || apiKey.includes('YOUR_API_KEY')) {
-      return { title: "API Config Missing", artist: "System Alert", lyricsSnippet: "Please configure your API Key in the settings to enable AI recognition.", mood: "Configuration Required", identified: false, matchSource: 'MOCK' };
+      return { title: "API Config Missing", artist: "System Alert", lyricsSnippet: "Please configure your API Key in the settings to enable AI recognition.", mood: "Configuration Required", mood_en_keywords: 'error, alert', identified: false, matchSource: 'MOCK' };
   }
 
   const regionName = region === 'global' ? 'Global' : (REGION_NAMES[region] || region);
   const langMap: Record<string, string> = { en: 'English', zh: 'Simplified Chinese', tw: 'Traditional Chinese', ja: 'Japanese', es: 'Spanish', ko: 'Korean', de: 'German', fr: 'French', ru: 'Russian', ar: 'Arabic' };
   const targetLang = langMap[language] || 'English';
 
-  // Although only Gemini is called, the persona changes the prompt style.
   const personaInstruction = PROVIDER_PROFILES[provider] || PROVIDER_PROFILES['GEMINI'];
 
-  // Enhanced system prompt from geminiService.ts
   const systemInstruction = `
     You are the "Aura Flux Synesthesia Intelligence".
     ${personaInstruction}
@@ -95,15 +92,14 @@ export const identifySongFromAudio = async (
     1. Commercial Match: If identified, set "identified": true and provide exact metadata.
     2. Generative Description: If NO song is identified (identified: false), fill "title" and "artist" with a creative, evocative description of the audio texture (e.g., Title: "Velvet Static", Artist: "Lofi Ambient").
     3. Mood & Lyrics: Always translate the "mood" and "lyricsSnippet" into ${targetLang}.
-        - MOOD: Provide a vivid 3-5 word summary combining emotion and genre (e.g., "Melancholic Cyberpunk Rain", "High-Energy Industrial Techno"). Avoid generic single words.
-        - LYRICS/TEXTURE: If lyrics are audible, quote key lines. If instrumental, describe the visual texture or genre elements.
+        - MOOD: Provide a vivid 3-5 word summary combining emotion and genre (e.g., "Melancholic Cyberpunk Rain", "High-Energy Industrial Techno", "Soothing Ambient Drone"). Avoid generic single words.
+        - MOOD KEYWORDS: The "mood_en_keywords" field MUST contain 3-5 comma-separated, lowercase English keywords that capture the essence for styling (e.g., 'sad, futuristic, calm' or 'energetic, electronic, aggressive').
+        - LYRICS/TEXTURE: If lyrics are audible, quote key lines. If instrumental, describe the visual texture, instrumentation, or genre elements (e.g., "Distorted synth arpeggios over a heavy bassline.").
     4. Style: Mirror the characteristic speech patterns of your assigned persona.
     5. Response Format: Return RAW JSON only. No markdown.
   `;
 
   try {
-      // NOTE: Currently, only Gemini provider is implemented for API calls.
-      // The `provider` variable primarily influences the prompt's persona.
       const client = new GoogleGenAI({ apiKey });
 
       const generatePromise = client.models.generateContent({
@@ -145,6 +141,32 @@ export const identifySongFromAudio = async (
 
   } catch (error: any) {
       console.error(`[AI] Identification failed:`, error.message);
+      
+      const errorMessage = error.toString().toLowerCase();
+      if (errorMessage.includes('api key not valid') || errorMessage.includes('permission denied') || (error.httpStatus === 403 || error.httpStatus === 400)) {
+        return { 
+          title: "Invalid API Key", 
+          artist: "System Alert", 
+          lyricsSnippet: `Your ${provider} API key appears to be invalid or lacks permissions. Please verify it in the AI settings panel.`, 
+          mood: "Configuration Error", 
+          mood_en_keywords: 'error, alert, invalid',
+          identified: false, 
+          matchSource: 'MOCK' 
+        };
+      }
+      
+      if (error.message === 'AI_TIMEOUT') {
+        return { 
+          title: "Request Timed Out", 
+          artist: "System Alert", 
+          lyricsSnippet: "The AI service is taking too long to respond. This might be due to network issues or high server load. Please try again in a moment.", 
+          mood: "Network Issue", 
+          mood_en_keywords: 'error, alert, network',
+          identified: false, 
+          matchSource: 'MOCK' 
+        };
+      }
+      
       return null;
   }
 };

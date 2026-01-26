@@ -1,9 +1,9 @@
 /**
  * File: components/ui/LyricsOverlay.tsx
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-24 18:00
+ * Updated: 2025-03-05 12:00
  */
 
 import React, { useRef } from 'react';
@@ -24,8 +24,7 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   const isPreview = song?.matchSource === 'PREVIEW';
   
   // Filter out system error messages from the main lyrics display
-  // We want these errors to only appear in the SongOverlay (badge), not as giant floating text
-  const isSystemError = song?.title === "Quota Exceeded" || song?.title === "Server Error" || song?.artist === "System Alert";
+  const isSystemError = song?.artist === "System Alert" || song?.title === "Quota Exceeded" || song?.title === "Server Error" || song?.title === "Invalid API Key" || song?.title === "Request Timed Out";
 
   // Allow showing text if we have a snippet, even if identified is false (generic description case)
   const isEnabled = !isSystemError && (isPreview || (showLyrics && !!song && (!!song.lyricsSnippet || song.identified || !!song.title)));
@@ -42,11 +41,10 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
 
   if (!isEnabled) return null;
   
-  // Fallback to title/artist if no snippet is available (e.g. for instrumental tracks or partial matches)
   let rawText = song?.lyricsSnippet;
   if (!rawText && song) {
       if (song.identified) rawText = `${song.title} - ${song.artist}`;
-      else rawText = song.title; // Show the sound description
+      else rawText = song.title;
   }
   
   const text = (rawText || "").replace(/\[\d{2}:\d{2}(\.\d{1,3})?\]/g, '').trim();
@@ -64,7 +62,6 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   if (lyricsStyle === LyricsStyle.KARAOKE) {
      textClass = "font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-white to-purple-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]";
      const sizeVw = baseSizeVw;
-     // Add px fallback for very small screens
      fontStyle = { ...fontStyle, fontSize: `max(24px, min(${sizeVw}vw, ${sizeVw * 12}px))`, lineHeight: 1.3 };
   } else if (lyricsStyle === LyricsStyle.MINIMAL) {
      textClass = "font-mono text-white/80 tracking-[0.2em]";
@@ -93,7 +90,6 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   };
 
   return (
-    // Added pb-safe and extra padding for mobile bottom area
     <div className={`pointer-events-none fixed inset-0 z-10 flex flex-col px-6 pt-24 pb-48 md:pb-32 pb-safe ${getPositionClasses()}`}>
       <div 
         ref={containerRef} 

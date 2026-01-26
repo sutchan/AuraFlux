@@ -1,9 +1,9 @@
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.1.6
+ * Version: 1.1.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 20:00
+ * Updated: 2025-03-05 12:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -30,6 +30,14 @@ const getMoodStyle = (keywords: string | undefined | null) => {
       };
   }
   const m = keywords.toLowerCase();
+  
+  if (m.includes('error') || m.includes('alert')) {
+    return {
+      textColor: 'text-red-300', borderColor: 'border-red-500',
+      gradient: 'from-red-500/10 to-orange-500/10', badgeGradient: 'from-red-500/20 to-orange-500/20',
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.031-1.742 3.031H4.42c-1.532 0-2.492-1.697-1.742-3.031l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+    };
+  }
   if (m.match(/happy|upbeat|energetic|dance|party|fun|joy|pop|bright/)) {
     return {
       textColor: 'text-yellow-300', borderColor: 'border-yellow-400',
@@ -63,7 +71,7 @@ const getProviderLabel = (source: string | undefined) => {
 
 const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, onRetry, onClose, analyser, sensitivity = 1.0 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const moodStyle = useMemo(() => song ? getMoodStyle(song.mood_en_keywords) : getMoodStyle('default'), [song]);
+  const moodStyle = useMemo(() => song ? getMoodStyle(song.mood_en_keywords || song.mood) : getMoodStyle('default'), [song]);
   
   const isEnabled = showLyrics && !!song && (song.identified || !!song.mood || !!song.title) && song.matchSource !== 'PREVIEW';
 
@@ -78,9 +86,10 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
   if (!isEnabled || !song) return null;
   const t = TRANSLATIONS[language] || TRANSLATIONS['en'];
 
-  const displayTitle = song.identified ? song.title : (song.title || "Signal Detected");
-  const displayArtist = song.identified ? song.artist : (song.artist || "Analyzing...");
-  const isConfidenceLow = !song.identified;
+  const isApiError = song.artist === "System Alert";
+  const displayTitle = song.title;
+  const displayArtist = isApiError ? null : (song.identified ? song.artist : (song.artist || "Analyzing..."));
+  const isConfidenceLow = !song.identified && !isApiError;
   const sourceLabel = getProviderLabel(song.matchSource);
 
   return (
@@ -111,9 +120,11 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
             <h2 className={`${isConfidenceLow ? 'text-white/90 text-lg' : 'text-white text-lg md:text-2xl'} font-bold tracking-tight pe-6 break-words line-clamp-2 md:line-clamp-none`}>
               {displayTitle}
             </h2>
-            <p className={`${isConfidenceLow ? 'text-white/60 text-xs' : 'text-blue-300 text-sm md:text-base'} font-medium pe-6 break-words`}>
-              {displayArtist}
-            </p>
+            {displayArtist && (
+              <p className={`${isConfidenceLow ? 'text-white/60 text-xs' : 'text-blue-300 text-sm md:text-base'} font-medium pe-6 break-words`}>
+                {displayArtist}
+              </p>
+            )}
             
             <div className="flex items-center gap-2 mt-2 flex-wrap">
                 {song.mood && (
@@ -127,6 +138,12 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
                     <span className="text-[9px] font-mono text-white/40 uppercase tracking-widest">via {sourceLabel}</span>
                 </div>
             </div>
+            
+            {isApiError && song.lyricsSnippet && (
+                <div className="mt-3 pt-3 border-t border-white/10">
+                    <p className="text-xs text-red-200/70">{song.lyricsSnippet}</p>
+                </div>
+            )}
 
             <div className="flex items-center gap-4 mt-3 pt-2 border-t border-white/10 opacity-80 md:opacity-60 group-hover:opacity-100 transition-opacity">
                 {song.searchUrl && song.identified && (
@@ -138,9 +155,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
                 <button 
                     onClick={(e) => {
                         e.stopPropagation();
-                        // Close current overlay immediately to show state change
                         onClose();
-                        // Trigger retry logic
                         setTimeout(onRetry, 100);
                     }} 
                     className="flex items-center gap-1 text-[10px] text-white/70 hover:text-orange-400 transition-colors"

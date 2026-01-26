@@ -91,7 +91,7 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
 
   const rotation = settings.customTextRotation || 0;
   const textShadow = settings.customText3D 
-    ? '-1px -1px 2px rgba(255,255,255,0.07), 1px 1px 3px rgba(0,0,0,0.8)' 
+    ? '4px 4px 8px rgba(0,0,0,0.9), -2px -2px 2px rgba(255,255,255,0.25)' 
     : 'none';
 
   return (

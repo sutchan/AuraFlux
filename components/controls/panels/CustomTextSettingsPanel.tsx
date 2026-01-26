@@ -143,7 +143,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
          <div className="flex-grow space-y-4 overflow-y-auto custom-scrollbar pr-1.5">
             {isAdvanced ? (
                 <div className="animate-fade-in-up space-y-4">
-                    <div className="flex items-center gap-2">
+                    <div className="grid grid-cols-2 gap-2">
                         <SettingsToggle
                             label={t?.textAudioReactive || "Audio Reactive"}
                             value={settings.textPulse}

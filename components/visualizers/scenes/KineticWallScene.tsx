@@ -1,10 +1,10 @@
 /**
  * File: components/visualizers/scenes/KineticWallScene.tsx
- * Version: 3.8.2
+ * Version: 3.9.2
  * Author: Sut
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-03 10:00
- * Description: Further increased brick size by 2x for an even bolder visual impact. Adjusted density, spacing, and shader logic accordingly.
+ * Updated: 2025-03-05 12:00
+ * Description: Further reduced brick spacing for a near-seamless appearance.
  */
 
 import React, { useRef, useMemo, useLayoutEffect } from 'react';
@@ -101,20 +101,21 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
       float flux_freqIdx = clamp(aLayout.x / uGridRadius, 0.0, 0.85);
       float flux_rawAudio = texture2D(uAudioTexture, vec2(flux_freqIdx, 0.5)).r;
 
-      float flux_levels = 16.0; 
-      float flux_quantized = floor(flux_rawAudio * flux_levels) / flux_levels;
+      // Increased breathing amplitude for more pronounced push-pull movement.
+      float flux_breathe = sin(uTime * 0.5 + aLayout.y * 6.28) * 0.5;
 
-      float flux_breathe = sin(uTime * 0.5 + aLayout.y * 6.28) * 0.12;
+      // Beat-driven ripple effect.
       float flux_wave = sin(aLayout.x * 0.35 - uTime * 5.0) * 0.5 + 0.5;
-      float flux_ripple = flux_wave * uBeat * 5.0;
+      float flux_ripple = flux_wave * uBeat * 6.0;
       
-      // SENSITIVITY CALIBRATION: Multiplier reduced from 9.0 to 4.5 (Final 50% Reduction)
-      float flux_ext = (flux_quantized * 4.5 * uSensitivity) + flux_ripple + flux_breathe;
-      transformed.z += max(0.0, flux_ext);
+      // Total displacement now uses smooth audio data and allows negative values.
+      float flux_ext = (flux_rawAudio * 5.0 * uSensitivity) + flux_ripple + flux_breathe;
+      transformed.z += flux_ext;
       
-      // Normalize height for AO/Fragment logic (Divisor adjusted to maintain gradient)
+      // Pass normalized height and heat to fragment shader.
+      // We still clamp the height at 0 for color/AO calculations.
       vFluxHeight = clamp(flux_ext / 8.0, 0.0, 1.0);
-      vFluxHeat = flux_quantized;
+      vFluxHeat = flux_rawAudio; // Use smooth audio value for heat.
       vFluxViewDir = (modelViewMatrix * vec4(transformed, 1.0)).xyz;
       `
     );
@@ -175,7 +176,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
 
     // Update Matrix
     if (meshRef.current) {
-        const spacing = 4.24; // Increased spacing by 2x again
+        const spacing = 3.80; // Further reduced spacing for a near-seamless wall effect
         for (let i = 0; i < count; i++) {
             const r = Math.floor(i / cols);
             const c = i % cols;
@@ -192,7 +193,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
     }
 
     // --- Overscan Camera Bound ---
-    const gridHalfWidth = (cols * 4.24) / 2; // Use new spacing for bounds calculation
+    const gridHalfWidth = (cols * 3.80) / 2; // Use new spacing for bounds calculation
     const maxPanX = gridHalfWidth * 0.35; 
     
     const camX = Math.sin(time * 0.2) * maxPanX;
