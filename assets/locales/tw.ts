@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-04 11:00
+ * Updated: 2025-03-05 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -54,6 +54,7 @@ export const tw = {
     textPulse: '文字大小隨音樂節奏動態縮放。',
     textAudioReactive: '文字的透明度和大小將響應即時音量。',
     customTextCycleColor: '自動在光譜色中循環切換文字顏色。',
+    text3D: '為自訂文字應用偽 3D 浮雕效果。',
     uiModeSimple: '隱藏技術參數，專注於核心美學調整。',
     uiModeAdvanced: '展示所有調優參數以獲得精確控制。',
     quality: '調節渲染解析度與粒子密度。',
@@ -140,6 +141,7 @@ export const tw = {
   defaultMic: '系統預設麥克風',
   customText: '自訂文字內容',
   textProperties: '排版與佈局',
+  text3D: '3D 立體效果',
   customTextPlaceholder: '輸入文字',
   showText: '顯示文字圖層',
   pulseBeat: '隨節奏律動',
@@ -188,6 +190,7 @@ export const tw = {
     hint: '一鍵應用由專家精心調校的參數組合。',
     select: '選擇一種心境...',
     custom: '自定義 / 已修改',
+    all_modes: '所有模式',
     calm: '數位波形',
     party: '動感光牆派對',
     ambient: '深空星雲',

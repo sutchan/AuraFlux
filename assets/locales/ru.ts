@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-04 11:00
+ * Updated: 2025-03-05 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -53,6 +53,7 @@ export const ru = {
     textPulse: 'Текст масштабируется в такт музыке.',
     textAudioReactive: 'Прозрачность и размер текста реагируют на громкость.',
     customTextCycleColor: 'Циклически менять цвет текста.',
+    text3D: 'Применяет псевдо-3D-эффект тиснения к пользовательскому тексту.',
     hideCursor: 'Скрывать курсор мыши при бездействии.',
     uiModeSimple: 'Скрыть технические параметры.',
     uiModeAdvanced: 'Показать все настройки для точного контроля.',
@@ -139,6 +140,7 @@ export const ru = {
   defaultMic: 'Микрофон по умолчанию',
   customText: 'Пользовательский текст',
   textProperties: 'Типографика и макет',
+  text3D: '3D-эффект',
   customTextPlaceholder: 'ВВЕДИТЕ ТЕКСТ',
   showText: 'Показать оверлей',
   pulseBeat: 'Пульсация под бит',
@@ -175,7 +177,9 @@ export const ru = {
   autoHideUi: 'Авто-скрытие UI',
   mirrorDisplay: 'Отражение',
   presets: {
-    title: 'Смарт-пресеты', hint: 'Применить эстетику в один клик.', select: 'Выберите настроение...', custom: 'Изменено', calm: 'Цифровая волна', party: 'Кинетическая вечеринка', ambient: 'Глубокая туманность', cyberpunk: 'Кибер-лазеры', retrowave: 'Ретро-поле', vocal: 'Вокальные столбы'
+    title: 'Смарт-пресеты', hint: 'Применить эстетику в один клик.', select: 'Выберите настроение...', custom: 'Изменено',
+    all_modes: 'Все режимы',
+    calm: 'Цифровая волна', party: 'Кинетическая вечеринка', ambient: 'Глубокая туманность', cyberpunk: 'Кибер-лазеры', retrowave: 'Ретро-поле', vocal: 'Вокальные столбы'
   },
   recognitionSource: 'Источник ИИ',
   lyricsPosition: 'Позиция текста',

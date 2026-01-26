@@ -1,8 +1,8 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.7.32
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Version: 1.7.35
+ * Author: Aura Flux Team
+ * Copyright (c) 2024 Aura Flux. All rights reserved.
  * Updated: 2025-03-05 12:00
  */
 
@@ -24,6 +24,7 @@ const DEFAULT_SETTINGS: VisualizerSettings = {
   quality: 'high', monitor: false, wakeLock: false, customText: 'AURA', showCustomText: false,
   textPulse: true, customTextRotation: 0, customTextSize: 12, customTextFont: 'Inter, sans-serif',
   customTextOpacity: 0.35, customTextColor: '#ffffff', customTextPosition: 'mc', customTextCycleColor: false, customTextCycleInterval: 5,
+  customText3D: false, // Default for new 3D text effect
   lyricsPosition: 'mc', recognitionProvider: 'GEMINI', lyricsFont: 'Inter, sans-serif', lyricsFontSize: 4,
   showFps: false, showTooltips: true, doubleClickFullscreen: true, autoHideUi: true, mirrorDisplay: false
 };
@@ -193,7 +194,8 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     customTextColor: DEFAULT_SETTINGS.customTextColor, 
     customTextPosition: DEFAULT_SETTINGS.customTextPosition, 
     customTextCycleColor: DEFAULT_SETTINGS.customTextCycleColor, 
-    customTextCycleInterval: DEFAULT_SETTINGS.customTextCycleInterval 
+    customTextCycleInterval: DEFAULT_SETTINGS.customTextCycleInterval,
+    customText3D: DEFAULT_SETTINGS.customText3D
   })), [setSettings]);
   
   const resetAudioSettings = useCallback(() => setSettings(p => ({ ...p, sensitivity: DEFAULT_SETTINGS.sensitivity, smoothing: DEFAULT_SETTINGS.smoothing, fftSize: DEFAULT_SETTINGS.fftSize })), [setSettings]);

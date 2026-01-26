@@ -1,6 +1,6 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
@@ -52,6 +52,7 @@ export const en = {
     textPulse: 'Text scales dynamically with the rhythm of the music.',
     textAudioReactive: 'Text opacity and size react to live audio amplitude.',
     customTextCycleColor: 'Automatically cycle through the color spectrum for the text.',
+    text3D: 'Applies a pseudo-3D embossed effect to the custom text.',
     hideCursor: 'Automatically hide the mouse cursor after inactivity.',
     uiModeSimple: 'Hide technical parameters and focus on core aesthetics.',
     uiModeAdvanced: 'Show all tuning parameters for precise control.',
@@ -71,7 +72,8 @@ export const en = {
     importConfig: 'Load settings from a JSON file.',
     savePreset: 'Save current state to browser storage.',
     loadPreset: 'Restore this preset state.',
-    copyConfig: 'Copy configuration string to clipboard for quick sharing.'
+    copyConfig: 'Copy configuration string to clipboard for quick sharing.',
+    wakeLock: 'Prevent screen from sleeping while visualizer is active.'
   },
   aiPanel: {
       keySaved: 'API Key Verified & Saved',
@@ -139,6 +141,7 @@ export const en = {
   defaultMic: 'Default Microphone',
   customText: 'Custom Text Content',
   textProperties: 'Typography & Layout',
+  text3D: '3D Effect',
   customTextPlaceholder: 'ENTER TEXT',
   showText: 'Show Overlay',
   pulseBeat: 'Pulse with Beat',
@@ -187,6 +190,7 @@ export const en = {
     hint: 'Apply a curated aesthetic combination with one click.',
     select: 'Select a mood...',
     custom: 'Custom / Modified',
+    all_modes: 'All Modes',
     calm: 'Digital Waveform',
     party: 'Kinetic Wall Party',
     ambient: 'Deep Nebula',

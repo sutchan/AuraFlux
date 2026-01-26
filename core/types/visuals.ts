@@ -1,6 +1,6 @@
 /**
  * File: core/types/visuals.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
@@ -64,6 +64,7 @@ export interface VisualizerSettings {
   customTextPosition: Position;
   customTextCycleColor: boolean;
   customTextCycleInterval: number;
+  customText3D?: boolean; // New 3D text effect toggle
   lyricsPosition: Position;
   recognitionProvider: 'GEMINI' | 'OPENAI' | 'GROQ' | 'MOCK';
   lyricsStyle?: LyricsStyle;

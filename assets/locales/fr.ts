@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-04 11:00
+ * Updated: 2025-03-05 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -29,7 +29,7 @@ export const fr = {
     region: 'Oriente le moteur de recherche IA vers la musique de ce marché spécifique.',
     autoRotate: 'Change automatiquement de moteur visuel.',
     rotateInterval: 'Temps avant de passer au moteur visuel suivant.',
-    cycleColors: 'Transitionne automatiquement entre les thèmes de couleur.',
+    cycleColors: 'Transitionne automatically entre les thèmes de couleur.',
     colorInterval: 'Temps avant de se fondre vers la palette suivante.',
     reset: 'Restaure tous les paramètres de l\'application aux valeurs d\'usine.',
     confirmReset: 'Confirmer la réinitialisation ? Cette action est irréversible.',
@@ -53,6 +53,7 @@ export const fr = {
     textPulse: 'Le texte change d\'échelle dynamiquement avec le rythme de la musique.',
     textAudioReactive: 'L\'opacité et la taille du texte réagissent à l\'amplitude audio.',
     customTextCycleColor: 'Fait défiler automatiquement le spectre des couleurs pour le texte.',
+    text3D: 'Applique un effet de relief pseudo-3D au texte personnalisé.',
     hideCursor: 'Masque automatically le curseur de la souris après inactivité.',
     uiModeSimple: 'Masquer les paramètres techniques et se concentrer sur l\'esthétique principale.',
     uiModeAdvanced: 'Afficher tous les paramètres de réglage pour un contrôle précis.',
@@ -126,7 +127,7 @@ export const fr = {
   randomize: 'Aléatoire Intelligent',
   help: 'Support',
   close: 'Fermer',
-  betaDisclaimer: 'L\'Identification IA est actuellement en Bêta.',
+  betaDisclaimer: 'L\'Identification IA est currently en Bêta.',
   wrongSong: 'Ce n\'est pas la bonne chanson ?',
   hideCursor: 'Masquer le curseur',
   customColor: 'Personnalisé',
@@ -139,6 +140,7 @@ export const fr = {
   defaultMic: 'Micro par défaut',
   customText: 'Contenu de Texte Personnalisé',
   textProperties: 'Typographie & Mise en page',
+  text3D: 'Effet 3D',
   customTextPlaceholder: 'ENTRER TEXTE',
   showText: 'Afficher Superposition',
   pulseBeat: 'Pulsation au Rythme',
@@ -179,6 +181,7 @@ export const fr = {
     hint: 'Appliquez une combinaison esthétique soignée en un clic.',
     select: 'Choisir une ambiance...',
     custom: 'Personnalisé / Modifié',
+    all_modes: 'Tous les Modes',
     calm: 'Forme d\'Onde Numérique',
     party: 'Fête Cinétique',
     ambient: 'Nébuleuse Profonde',

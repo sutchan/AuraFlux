@@ -1,9 +1,9 @@
-
 /**
  * File: components/ui/CustomTextOverlay.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-03-05 12:00
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -90,6 +90,9 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
   };
 
   const rotation = settings.customTextRotation || 0;
+  const textShadow = settings.customText3D 
+    ? '-1px -1px 2px rgba(255,255,255,0.07), 1px 1px 3px rgba(0,0,0,0.8)' 
+    : 'none';
 
   return (
     <div className={`pointer-events-none fixed z-[100] flex flex-col ${getPositionClasses()}`}>
@@ -102,6 +105,7 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
             whiteSpace: 'pre-wrap', 
             lineHeight: 1.1,
             fontFamily: settings.customTextFont || 'Inter, sans-serif',
+            textShadow,
             // FIX: Use fallback values when pulse is disabled to ensure settings are respected immediately
             transform: `rotate(${rotation}deg) ${pulseEnabled ? 'scale(var(--pulse-scale, 1))' : ''}`,
             opacity: pulseEnabled ? 'var(--pulse-opacity, 1)' : settings.customTextOpacity

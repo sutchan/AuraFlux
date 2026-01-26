@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-04 11:00
+ * Updated: 2025-03-05 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -53,6 +53,7 @@ export const ja = {
     textPulse: 'テキストサイズを音楽のリズムに合わせて動的に伸縮させます。',
     textAudioReactive: 'テキストの透明度とサイズを音量に反応させます。',
     customTextCycleColor: 'テキストの色をスペクトル全体で自動的に循環させます。',
+    text3D: 'カスタムテキストに擬似3Dエンボス効果を適用します。',
     hideCursor: '一定時間操作がない場合、マウスカーソルを非表示にします。',
     uiModeSimple: '技術的なパラメータを隠し、美学的な調整に集中します。',
     uiModeAdvanced: 'すべての調整パラメータを表示して正確に制御します。',
@@ -139,6 +140,7 @@ export const ja = {
   defaultMic: 'システム標準マイク',
   customText: 'カスタムテキスト',
   textProperties: 'タイポグラフィ',
+  text3D: '3D効果',
   customTextPlaceholder: 'テキストを入力',
   showText: 'オーバーレイを表示',
   pulseBeat: 'ビートに同調',
@@ -187,6 +189,7 @@ export const ja = {
     hint: '専門家が調整したビジュアル設定を一クリックで適用します。',
     select: 'ムードを選択...',
     custom: 'カスタム / 変更済み',
+    all_modes: '全モード',
     calm: 'デジタル波形',
     party: 'キネティックパーティー',
     ambient: '深宇宙星雲',

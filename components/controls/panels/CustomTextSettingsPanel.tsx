@@ -1,10 +1,9 @@
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.1.7
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-27 20:30
- * Description: Reduced color presets by 2 and added auto-contrasting text for color value display.
+ * Updated: 2025-03-05 12:00
  */
 
 import React from 'react';
@@ -144,13 +143,22 @@ export const CustomTextSettingsPanel: React.FC = () => {
          <div className="flex-grow space-y-4 overflow-y-auto custom-scrollbar pr-1.5">
             {isAdvanced ? (
                 <div className="animate-fade-in-up space-y-4">
-                    <SettingsToggle
-                        label={t?.textAudioReactive || "Audio Reactive"}
-                        value={settings.textPulse}
-                        onChange={() => setSettings({...settings, textPulse: !settings.textPulse})}
-                        variant="clean"
-                        hintText={hints?.textAudioReactive}
-                    />
+                    <div className="flex items-center gap-2">
+                        <SettingsToggle
+                            label={t?.textAudioReactive || "Audio Reactive"}
+                            value={settings.textPulse}
+                            onChange={() => setSettings({...settings, textPulse: !settings.textPulse})}
+                            variant="clean"
+                            hintText={hints?.textAudioReactive}
+                        />
+                        <SettingsToggle
+                            label={t?.text3D || "3D Effect"}
+                            value={!!settings.customText3D}
+                            onChange={() => setSettings({...settings, customText3D: !settings.customText3D})}
+                            variant="clean"
+                            hintText={hints?.text3D}
+                        />
+                    </div>
                     <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} hintText={hints?.textFont} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
                     <TooltipArea text={hints?.textPosition}>
                         <PositionSelector 

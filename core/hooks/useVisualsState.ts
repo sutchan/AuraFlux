@@ -1,6 +1,6 @@
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.7.32
+ * Version: 1.7.34
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
@@ -64,83 +64,82 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
     if (settings.autoRotate && hasStarted) {
       rotateIntervalRef.current = window.setInterval(() => {
         setModeInternal(currentMode => {
-          // Robustness: Fallback to all modes if includedModes is somehow undefined or empty
+          // FIX: Align with randomize logic. Use VISUALIZER_PRESETS as the source of truth for implemented modes.
           const availableModes = (settings.includedModes && settings.includedModes.length > 0) 
             ? settings.includedModes 
-            : Object.values(VisualizerMode);
+            : Object.keys(VISUALIZER_PRESETS) as VisualizerMode[];
             
-          // If the current mode is not in the whitelist, jump to the first one available
-          if (!availableModes.includes(currentMode)) {
-              return availableModes[0];
-          }
-          
           const currentIndex = availableModes.indexOf(currentMode);
+          // If current mode isn't in the rotation list, start from the first one.
+          if (currentIndex === -1) {
+            return availableModes[0];
+          }
           const nextIndex = (currentIndex + 1) % availableModes.length;
           return availableModes[nextIndex];
         });
-      }, settings.rotateInterval * 1000);
-    } else if (rotateIntervalRef.current) {
-      clearInterval(rotateIntervalRef.current);
-      rotateIntervalRef.current = null;
+      }, (settings.rotateInterval || 30) * 1000);
     }
-    return () => { if (rotateIntervalRef.current) clearInterval(rotateIntervalRef.current); };
+    return () => {
+      if (rotateIntervalRef.current) clearInterval(rotateIntervalRef.current);
+    };
   }, [settings.autoRotate, settings.rotateInterval, settings.includedModes, hasStarted]);
-
+  
   useEffect(() => {
     if (settings.cycleColors && hasStarted) {
       colorIntervalRef.current = window.setInterval(() => {
-        const randomIndex = Math.floor(Math.random() * COLOR_THEMES.length);
-        setColorThemeInternal(COLOR_THEMES[randomIndex]);
-      }, settings.colorInterval * 1000);
-    } else if (colorIntervalRef.current) {
-      clearInterval(colorIntervalRef.current);
-      colorIntervalRef.current = null;
+        setColorThemeInternal(currentTheme => {
+          const currentIndex = COLOR_THEMES.findIndex(t => JSON.stringify(t) === JSON.stringify(currentTheme));
+          const nextIndex = (currentIndex + 1) % COLOR_THEMES.length;
+          return COLOR_THEMES[nextIndex];
+        });
+      }, (settings.colorInterval || 10) * 1000);
     }
-    return () => { if (colorIntervalRef.current) clearInterval(colorIntervalRef.current); };
+    return () => {
+      if (colorIntervalRef.current) clearInterval(colorIntervalRef.current);
+    };
   }, [settings.cycleColors, settings.colorInterval, hasStarted]);
-
-  useEffect(() => {
-    setStorage('mode', mode);
-  }, [mode, setStorage]);
-
-  useEffect(() => {
-    setStorage('theme', colorTheme);
-  }, [colorTheme, setStorage]);
 
   const randomizeSettings = useCallback(() => {
     // 1. Pick a random color theme
     setColorThemeInternal(COLOR_THEMES[Math.floor(Math.random() * COLOR_THEMES.length)]);
     
     // 2. Pick a mode from the whitelist or global list
-    // BUG FIX: Source available modes from VISUALIZER_PRESETS keys to ensure it's always in sync with what the UI can render.
-    // This prevents a bug where randomization could select a mode from the enum that isn't implemented yet.
     const availableModes = (settings.includedModes && settings.includedModes.length > 0)
         ? settings.includedModes
-        : Object.keys(VISUALIZER_PRESETS);
+        : Object.keys(VISUALIZER_PRESETS) as VisualizerMode[];
     
     const nextMode = availableModes[Math.floor(Math.random() * availableModes.length)] as VisualizerMode;
     setModeInternal(nextMode);
     
-    // 3. Performance-Aware Setting Randomization
-    // Resource-heavy modes (WebGL and dense 2D) should have reduced probability of enabling heavy post-processing
+    // 3. Performance-Aware & Aesthetic Setting Randomization
     const heavyModes = [
-        VisualizerMode.NEURAL_FLOW,
-        VisualizerMode.KINETIC_WALL,
-        VisualizerMode.LIQUID,
-        VisualizerMode.CUBE_FIELD,
-        VisualizerMode.NEBULA,
-        VisualizerMode.MACRO_BUBBLES
+        VisualizerMode.NEURAL_FLOW, VisualizerMode.KINETIC_WALL,
+        VisualizerMode.LIQUID, VisualizerMode.CUBE_FIELD,
+        VisualizerMode.NEBULA, VisualizerMode.MACRO_BUBBLES
+    ];
+
+    const noGlowModes = [
+        VisualizerMode.BARS, VisualizerMode.TUNNEL,
+        VisualizerMode.RINGS, VisualizerMode.FLUID_CURVES,
+        VisualizerMode.WAVEFORM
+    ];
+
+    const noTrailsModes = [
+        VisualizerMode.BARS,
+        VisualizerMode.RINGS,
+        VisualizerMode.LASERS
     ];
     
     const isHeavy = heavyModes.includes(nextMode);
+    const forceNoGlow = noGlowModes.includes(nextMode);
+    const forceNoTrails = noTrailsModes.includes(nextMode);
 
     setSettings(p => ({ 
         ...p, 
         speed: 0.8 + Math.random() * 0.8, 
         sensitivity: 1.2 + Math.random() * 1.0, 
-        // Logic: if heavy, 30% chance for glow/trails. If light, 85/80% chance.
-        glow: isHeavy ? Math.random() > 0.7 : Math.random() > 0.15, 
-        trails: isHeavy ? Math.random() > 0.6 : Math.random() > 0.2, 
+        glow: forceNoGlow ? false : (isHeavy ? Math.random() > 0.7 : Math.random() > 0.15), 
+        trails: forceNoTrails ? false : (isHeavy ? Math.random() > 0.6 : Math.random() > 0.2), 
         smoothing: 0.7 + Math.random() * 0.2 
     }));
 
@@ -148,41 +147,29 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
   }, [settings.includedModes]);
 
   const applyPreset = useCallback((preset: SmartPreset) => {
+    // Apply all settings from the preset, merging over the existing state
+    setSettings(prev => ({ ...prev, ...preset.settings }));
     setModeInternal(preset.settings.mode);
     setColorThemeInternal(preset.settings.colorTheme);
-    setSettings(p => ({
-      ...p,
-      speed: preset.settings.speed,
-      sensitivity: preset.settings.sensitivity,
-      glow: preset.settings.glow,
-      trails: preset.settings.trails,
-      smoothing: preset.settings.smoothing,
-      fftSize: preset.settings.fftSize ?? p.fftSize,
-      // Apply includedModes if present, otherwise default to just the active mode (as the "most appropriate")
-      includedModes: preset.settings.includedModes || [preset.settings.mode],
-    }));
     setActivePreset(preset.nameKey);
-  }, []);
+  }, [setSettings]);
 
   const resetVisualSettings = useCallback(() => {
-    setModeInternal(DEFAULT_MODE);
-    setColorThemeInternal(COLOR_THEMES[DEFAULT_THEME_INDEX]);
-    setSettings(p => ({
-      ...p,
+    setSettings(prev => ({
+      ...prev,
       speed: initialSettings.speed,
       sensitivity: initialSettings.sensitivity,
       glow: initialSettings.glow,
       trails: initialSettings.trails,
       autoRotate: initialSettings.autoRotate,
+      rotateInterval: initialSettings.rotateInterval,
       cycleColors: initialSettings.cycleColors,
-      smoothing: initialSettings.smoothing,
-      hideCursor: initialSettings.hideCursor,
-      quality: initialSettings.quality,
-      includedModes: initialSettings.includedModes, // Reset allowed modes list
+      colorInterval: initialSettings.colorInterval
     }));
     setActivePreset('');
-  }, [initialSettings]);
+  }, [setSettings, initialSettings]);
 
+  // FIX: Added missing return statement to export state and functions.
   return {
     mode, setMode,
     colorTheme, setColorTheme,

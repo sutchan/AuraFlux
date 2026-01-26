@@ -1,6 +1,6 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
@@ -51,6 +51,8 @@ export const VisualSettingsPanel: React.FC = () => {
           } else {
               newList = [...currentList, mode];
           }
+          // Using "All Modes" preset should clear when a user manually edits the list
+          if (activePreset === 'all_modes') setActivePreset('');
           return { ...prev, includedModes: newList };
       });
   };
@@ -97,13 +99,17 @@ export const VisualSettingsPanel: React.FC = () => {
                 hintText={presets.hint || 'Apply a curated aesthetic'}
                 options={[
                   { value: '', label: activePreset ? (presets.custom || 'Custom / Modified') : (presets.select || 'Select a mood...') },
+                  { value: 'all_modes', label: `⚙️ ${presets.all_modes || 'All Modes'}` },
                   ...Object.keys(SMART_PRESETS).map(key => ({
                     value: key,
                     label: presets[key] || SMART_PRESETS[key].nameKey,
                   }))
                 ]}
                 onChange={(val) => {
-                  if (val && SMART_PRESETS[val]) {
+                  if (val === 'all_modes') {
+                    setSettings(prev => ({...prev, includedModes: Object.values(VisualizerMode)}));
+                    setActivePreset('all_modes');
+                  } else if (val && SMART_PRESETS[val]) {
                     applyPreset(SMART_PRESETS[val]);
                   } else {
                     setActivePreset('');
@@ -189,7 +195,7 @@ export const VisualSettingsPanel: React.FC = () => {
         </div>
         <div className="mt-auto pt-3">
           <TooltipArea text={hints?.resetVisual}>
-            <button onClick={resetVisualSettings} className="w-full py-2 bg-white/[0.04] rounded-lg text-xs font-bold uppercase tracking-wider text-white/50 hover:text-white transition-all flex items-center justify-center gap-1.5 border border-transparent hover:border-white/10"><svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>
+            <button onClick={resetVisualSettings} className="w-full py-2 bg-white/[0.04] rounded-lg text-xs font-bold uppercase tracking-wider text-white/50 hover:text-white transition-all flex items-center justify-center gap-1.5 border border-transparent hover:border-white/10"><svg xmlns="http://www.w.org/2000/svg" className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>
           </TooltipArea>
         </div>
       </div>

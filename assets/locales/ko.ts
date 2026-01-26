@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-04 11:00
+ * Updated: 2025-03-05 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -53,6 +53,7 @@ export const ko = {
     textPulse: '텍스트 크기가 음악 비트에 맞춰 동적으로 조절됩니다。',
     textAudioReactive: '텍스트의 투명도와 크기가 실시간 볼륨에 반응합니다。',
     customTextCycleColor: '텍스트 색상을 스펙트럼 전반에 걸쳐 자동으로 순환시킵니다。',
+    text3D: '사용자 정의 텍스트에 유사 3D 엠보싱 효과를 적용합니다.',
     hideCursor: '일정 시간 활동이 없으면 마우스 커서를 자동으로 숨깁니다。',
     uiModeSimple: '기술적 매개변수를 숨기고 핵심 미학에 집중합니다。',
     uiModeAdvanced: '정밀한 제어를 위해 모든 튜닝 매개변수를 표시합니다。',
@@ -139,6 +140,7 @@ export const ko = {
   defaultMic: '시스템 기본 마이크',
   customText: '사용자 정의 텍스트',
   textProperties: '타이포그래피 및 레이아웃',
+  text3D: '3D 효과',
   customTextPlaceholder: '텍스트 입력',
   showText: '오버레이 표시',
   pulseBeat: '비트에 맞춰 고동',
@@ -187,6 +189,7 @@ export const ko = {
     hint: '전문가가 튜닝한 시각적 조합을 한 번의 클릭으로 적용합니다。',
     select: '무드 선택...',
     custom: '사용자 지정 / 수정됨',
+    all_modes: '모든 모드',
     calm: '디지털 파형',
     party: '키네틱 월 파티',
     ambient: '심우주 성운',

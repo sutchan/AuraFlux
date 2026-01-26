@@ -14,4 +14,4 @@ API_KEY=你的_GEMINI_API_KEY npm run build
 ```
 
 ---
-*Aura Flux Deployment Guide - Version 1.7.32*
+*Aura Flux Deployment Guide - Version 1.7.36*

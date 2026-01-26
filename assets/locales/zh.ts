@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-04 11:00
+ * Updated: 2025-03-05 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -52,6 +52,7 @@ export const zh = {
     textPulse: '文字大小随音乐节拍动态缩放。',
     textAudioReactive: '文字的透明度和大小将响应实时音量。',
     customTextCycleColor: '自动在光谱色中循环切换文字颜色。',
+    text3D: '为自定义文字应用伪 3D 浮雕效果。',
     hideCursor: '自动隐藏鼠标指针以获得纯净视觉体验。',
     uiModeSimple: '隐藏技术参数，专注于核心美学调整。',
     uiModeAdvanced: '展示所有调优参数以获得精确控制。',
@@ -71,19 +72,20 @@ export const zh = {
     importConfig: '从文件加载配置。',
     savePreset: '将当前状态保存到浏览器。',
     loadPreset: '加载此预设。',
-    copyConfig: '将配置代码复制到剪贴板。'
+    copyConfig: '将配置代码复制到剪贴板。',
+    wakeLock: '屏幕常亮，防止设备休眠。'
   },
   aiPanel: {
-      keySaved: 'API Key 已验证并保存',
-      keyInvalid: 'API Key 无效',
-      keyCleared: 'API Key 已清除',
+      keySaved: 'API 密钥已验证并保存',
+      keyInvalid: '无效的 API 密钥',
+      keyCleared: 'API 密钥已清除',
       saved: '已保存',
       missing: '未配置',
       save: '保存',
       update: '更新',
-      geminiHint: '可选。留空则使用默认免费配额。',
-      customHint: '必填。Key 仅保存在本地浏览器中。',
-      groqHint: '必填。用于极速 Whisper+Llama 推理。'
+      geminiHint: '可选。若留空，将使用默认免费配额。',
+      customHint: '必填项。密钥将存储在您的本地浏览器中。',
+      groqHint: '必填项。启用高速 Whisper+Llama 推理。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -139,6 +141,7 @@ export const zh = {
   defaultMic: '系统默认麦克风',
   customText: '自定义文字内容',
   textProperties: '排版与布局',
+  text3D: '3D 立体效果',
   customTextPlaceholder: '输入文字...',
   showText: '显示文字图层',
   pulseBeat: '随节拍律动',
@@ -187,6 +190,7 @@ export const zh = {
     hint: '一键应用由专家精心调校的参数组合。',
     select: '选择一种心境...',
     custom: '自定义 / 已修改',
+    all_modes: '所有模式',
     calm: '数字波形',
     party: '动感光墙派对',
     ambient: '深空星云',

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.7.32
+ * Version: 1.7.35
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-04 11:00
+ * Updated: 2025-03-05 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -53,6 +53,7 @@ export const de = {
     textPulse: 'Der Text skaliert dynamisch im Rhythmus der Musik.',
     textAudioReactive: 'Textdeckkraft und -größe reagieren auf die Live-Audio-Amplitude.',
     customTextCycleColor: 'Automatischer Durchlauf durch das Farbspektrum für den Text.',
+    text3D: 'Wendet einen pseudo-3D-Prägeeffekt auf den benutzerdefinierten Text an.',
     hideCursor: 'Mauszeiger nach Inaktivität automatisch ausblenden.',
     uiModeSimple: 'Technische Parameter ausblenden und auf Kernästhetik konzentrieren.',
     uiModeAdvanced: 'Alle Einstellparameter für präzise Steuerung anzeigen.',
@@ -139,6 +140,7 @@ export const de = {
   defaultMic: 'Standardmikrofon',
   customText: 'Benutzerdefinierter Textinhalt',
   textProperties: 'Typografie & Layout',
+  text3D: '3D-Effekt',
   customTextPlaceholder: 'TEXT EINGEBEN',
   showText: 'Overlay anzeigen',
   pulseBeat: 'Pulsieren im Takt',
@@ -179,6 +181,7 @@ export const de = {
     hint: 'Wenden Sie mit einem Klick eine kuratierte ästhetische Kombination an.',
     select: 'Stimmung wählen...',
     custom: 'Benutzerdefiniert / Modifiziert',
+    all_modes: 'Alle Modi',
     calm: 'Digitale Wellenform',
     party: 'Kinetische Party',
     ambient: 'Tiefe Nebel',
