@@ -1,10 +1,10 @@
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.7.4
+ * Version: 1.7.5
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
- * Description: Added Claude, DeepSeek, and Qwen as selectable AI providers.
+ * Description: Prevent API key input for non-Gemini providers to fix "Invalid API Key" errors.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -79,11 +79,16 @@ export const AiSettingsPanel: React.FC = () => {
   const currentProvider = settings.recognitionProvider || 'GEMINI';
   const hasKey = !!apiKeys[currentProvider];
 
-  const getKeyHint = () => {
-      if (currentProvider === 'GEMINI') return aiPanel.geminiHint || "Optional. Uses default free quota.";
-      if (['GROQ', 'OPENAI', 'CLAUDE', 'DEEPSEEK', 'QWEN'].includes(currentProvider)) return aiPanel.customHint || "Required. Key is stored locally.";
-      return '';
+  const providerLabels: Record<string, string> = {
+      GEMINI: 'Gemini 3.0',
+      OPENAI: 'GPT-4o',
+      GROQ: 'Groq',
+      CLAUDE: 'Claude 3',
+      DEEPSEEK: 'DeepSeek',
+      QWEN: 'Qwen',
+      MOCK: 'Simulated'
   };
+  const currentProviderLabel = providerLabels[currentProvider] || currentProvider;
 
   return (
     <>
@@ -114,12 +119,12 @@ export const AiSettingsPanel: React.FC = () => {
                      onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
                    />
                    
-                   {currentProvider !== 'MOCK' && (
-                       <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 space-y-1.5">
+                   {currentProvider === 'GEMINI' && (
+                       <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 space-y-1.5 animate-fade-in-up">
                            <div className="flex justify-between items-center">
                                <span className="text-[11px] font-bold text-white/50 uppercase tracking-widest">{currentProvider} KEY</span>
-                               <span className={`text-[10px] font-mono px-1 rounded ${hasKey ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
-                                   {hasKey ? (aiPanel.saved || 'OK') : (aiPanel.missing || '!')}
+                               <span className={`text-[10px] font-mono px-1 rounded ${hasKey ? 'bg-green-500/20 text-green-300' : 'bg-yellow-500/20 text-yellow-300'}`}>
+                                   {hasKey ? (aiPanel.saved || 'OK') : (aiPanel.geminiHint || 'Optional')}
                                </span>
                            </div>
                            <div className="flex gap-1.5">
@@ -140,8 +145,16 @@ export const AiSettingsPanel: React.FC = () => {
                                    {isValidating ? '...' : (hasKey ? (aiPanel.update || 'Update') : (aiPanel.save || 'Save'))}
                                </button>
                            </div>
-                           <p className="text-[11px] text-white/30 leading-tight">{getKeyHint()}</p>
+                           <p className="text-[11px] text-white/30 leading-tight">A custom key is optional. The app will use a default free-tier key if this is empty.</p>
                        </div>
+                   )}
+
+                   {currentProvider !== 'GEMINI' && currentProvider !== 'MOCK' && (
+                        <div className="bg-yellow-900/20 border border-yellow-500/30 p-3 rounded-xl animate-fade-in-up text-center">
+                            <p className="text-xs text-yellow-200/80 leading-relaxed">
+                                {`AI processing for ${currentProviderLabel} is not yet implemented. Please select Gemini to use AI features.`}
+                            </p>
+                        </div>
                    )}
                 </div>
             )}

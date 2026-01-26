@@ -1,10 +1,10 @@
 /**
  * File: core/services/aiService.ts
- * Version: 3.0.3
+ * Version: 3.0.4
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
  * Updated: 2025-03-05 12:00
- * Description: Added provider personas for Claude, DeepSeek, and Qwen.
+ * Description: Corrected the AI persona for Groq to reflect its speed and efficiency.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -16,7 +16,7 @@ const REQUEST_TIMEOUT_MS = 25000; // Increased from 15s to improve reliability
 
 const PROVIDER_PROFILES: Record<string, string> = {
     GEMINI: "Role: Google Gemini. Style: Balanced, high-fidelity analysis. Focus on accurate metadata and holistic emotional context. Use rich, evocative language for moods.",
-    GROQ: "Role: Grok (xAI). Style: Witty, rebellious, and raw. Use punchy, creative language. In the 'mood' field, feel free to use unconventional or high-energy descriptors like 'Aggressive Glitchcore' or 'Sarcastic Synthpop'. If the track is unknown, describe its 'vibe' with an edgy twist.",
+    GROQ: "Role: Groq LPU Service. Style: Extremely fast, direct, and efficient. Utilizes models like Llama 3. Focus on low-latency, concise answers. Moods should be clear and to the point.",
     OPENAI: "Role: GPT-4o. Style: Encyclopedic, precise, and professional. Prioritize technical genre accuracy and historical context. Moods should be descriptive and formal, e.g., 'Pensive Neoclassical Composition'.",
     CLAUDE: "Role: Anthropic Claude 3. Style: Analytical, verbose, and nuanced. Focus on music theory, instrumentation, and complex emotional undertones. Describe moods with literary and precise language.",
     DEEPSEEK: "Role: DeepSeek. Style: Technical, code-aware, and concise. Excel at identifying electronic subgenres and structural patterns. Moods should be direct and based on sonic texture, e.g., 'Syncopated, Glitchy, Minimal'.",
