@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-06 21:40
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ar = {
   common: {
-    on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم'
+    on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم', new: 'جديد'
   },
   tabs: {
     visual: 'بصري', text: 'نص', audio: 'صوت', ai: 'تحسس الذكاء الاصطناعي', system: 'النظام', studio: 'ستوديو'
@@ -63,6 +63,12 @@ export const ar = {
         fadeOff: 'لا شيء',
         fade1s: '1 ثانية',
         fade2s: '2 ثانية'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - جودة عالية',
+        vp8: 'WebM (VP8) - متوافق',
+        mp4_h264: 'MP4 (H.264) - اجتماعي',
+        mp4_generic: 'MP4 - قياسي'
     },
     hints: {
         syncStart: 'ينتظر إشارة الصوت أو زر التشغيل قبل التسجيل.',
@@ -130,7 +136,9 @@ export const ar = {
     savePreset: 'حفظ الحالة الحالية في تخزين المتصفح.',
     loadPreset: 'استعادة هذه الحالة المعدة مسبقًا.',
     copyConfig: 'نسخ سلسلة التكوين إلى الحافظة للمشاركة السريعة.',
-    wakeLock: 'منع الشاشة من النوم أثناء نشاط المتخيل.'
+    wakeLock: 'منع الشاشة من النوم أثناء نشاط المتخيل.',
+    includeInAutoRotate: 'تضمين في التدوير التلقائي',
+    excludeFromAutoRotate: 'استبعاد من التدوير التلقائي'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -139,7 +147,8 @@ export const ar = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: 'محاكاة'
+    MOCK: 'محاكاة',
+    FILE: 'علامة ID3'
   },
   aiPanel: {
       keySaved: 'تم التحقق من مفتاح API وحفظه',

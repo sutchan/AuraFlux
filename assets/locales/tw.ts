@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-06 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const tw = {
   common: {
-    on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業'
+    on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業', new: '新'
   },
   tabs: {
     visual: '視覺', text: '文字', audio: '音訊', ai: 'AI 通感辨識', system: '系統', studio: '工作室'
@@ -63,6 +63,12 @@ export const tw = {
         fadeOff: '無',
         fade1s: '1 秒',
         fade2s: '2 秒'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - 高畫質',
+        vp8: 'WebM (VP8) - 相容性',
+        mp4_h264: 'MP4 (H.264) - 社群',
+        mp4_generic: 'MP4 - 通用'
     },
     hints: {
         syncStart: '等待音訊訊號或播放按鈕按下瞬間啟動錄製。',
@@ -130,7 +136,9 @@ export const tw = {
     importConfig: '從 JSON 檔案載入配置。',
     savePreset: '將當前狀態保存到瀏覽器本地存儲。',
     loadPreset: '載入此預設。',
-    copyConfig: '將配置代碼複製到剪貼簿以便分享。'
+    copyConfig: '將配置代碼複製到剪貼簿以便分享。',
+    includeInAutoRotate: '加入自動巡航',
+    excludeFromAutoRotate: '移出自動巡航'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -139,7 +147,8 @@ export const tw = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: '模擬 (離線)'
+    MOCK: '模擬 (離線)',
+    FILE: 'ID3 標籤'
   },
   aiPanel: {
       keySaved: 'API Key 已驗證並保存',

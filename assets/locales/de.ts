@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-06 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const de = {
   common: {
-    on: 'AN', off: 'AUS', visible: 'SICHTBAR', hidden: 'VERSTECKT', active: 'AKTIV', muted: 'STUMM', beta: 'BETA', simple: 'Einfach', advanced: 'Erweitert'
+    on: 'AN', off: 'AUS', visible: 'SICHTBAR', hidden: 'VERSTECKT', active: 'AKTIV', muted: 'STUMM', beta: 'BETA', simple: 'Einfach', advanced: 'Erweitert', new: 'NEU'
   },
   tabs: {
     visual: 'Visuell', text: 'Text', audio: 'Audio', ai: 'KI-Synästhesie', system: 'System', studio: 'Studio'
@@ -63,6 +63,12 @@ export const de = {
         fadeOff: 'Keine',
         fade1s: '1 Sekunde',
         fade2s: '2 Sekunden'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - Hohe Qualität',
+        vp8: 'WebM (VP8) - Kompatibel',
+        mp4_h264: 'MP4 (H.264) - Sozial',
+        mp4_generic: 'MP4 - Generisch'
     },
     hints: {
         syncStart: 'Wartet vor der Aufnahme auf Audiosignal oder Play-Taste.',
@@ -130,7 +136,9 @@ export const de = {
     importConfig: 'Einstellungen aus einer JSON-Datei laden.',
     savePreset: 'Aktuellen Zustand im Browser speichern.',
     loadPreset: 'Diesen Preset-Zustand wiederherstellen.',
-    copyConfig: 'Konfigurationszeichenfolge zum schnellen Teilen in die Zwischenablage kopieren.'
+    copyConfig: 'Konfigurationszeichenfolge zum schnellen Teilen in die Zwischenablage kopieren.',
+    includeInAutoRotate: 'In Auto-Rotation aufnehmen',
+    excludeFromAutoRotate: 'Aus Auto-Rotation ausschließen'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -139,7 +147,8 @@ export const de = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: 'Simuliert'
+    MOCK: 'Simuliert',
+    FILE: 'ID3-Tag'
   },
   aiPanel: {
     keySaved: 'API-Schlüssel verifiziert & gespeichert',

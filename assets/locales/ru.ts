@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-06 21:40
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ru = {
   common: {
-    on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ'
+    on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ', new: 'НОВЫЙ'
   },
   tabs: {
     visual: 'Визуал', text: 'Текст', audio: 'Аудио', ai: 'ИИ-Синестезия', system: 'Система', studio: 'Студия'
@@ -63,6 +63,12 @@ export const ru = {
         fadeOff: 'Нет',
         fade1s: '1 Секунда',
         fade2s: '2 Секунды'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - Выс. Качество',
+        vp8: 'WebM (VP8) - Совместимый',
+        mp4_h264: 'MP4 (H.264) - Соцсети',
+        mp4_generic: 'MP4 - Стандарт'
     },
     hints: {
         syncStart: 'Ждет аудиосигнал или кнопку воспроизведения перед записью.',
@@ -130,7 +136,9 @@ export const ru = {
     importConfig: 'Импорт настроек из файла JSON.',
     savePreset: 'Сохранить текущие настройки локально.',
     loadPreset: 'Загрузить этот пресет.',
-    copyConfig: 'Копировать код конфигурации в буфер обмена.'
+    copyConfig: 'Копировать код конфигурации в буфер обмена.',
+    includeInAutoRotate: 'Включить в авто-ротацию',
+    excludeFromAutoRotate: 'Исключить из авто-ротации'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -139,7 +147,8 @@ export const ru = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: 'Демо'
+    MOCK: 'Демо',
+    FILE: 'ID3 Тег'
   },
   aiPanel: {
       keySaved: 'API-ключ проверен и сохранен',

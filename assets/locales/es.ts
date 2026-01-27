@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-06 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const es = {
   common: {
-    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'OCULTO', active: 'ACTIVO', muted: 'SILENCIADO', beta: 'BETA', simple: 'Simple', advanced: 'Avanzado'
+    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'OCULTO', active: 'ACTIVO', muted: 'SILENCIADO', beta: 'BETA', simple: 'Simple', advanced: 'Avanzado', new: 'NUEVO'
   },
   tabs: {
     visual: 'Visual', text: 'Texto', audio: 'Audio', ai: 'Sinestesia IA', system: 'Sistema', studio: 'Estudio'
@@ -63,6 +63,12 @@ export const es = {
         fadeOff: 'Ninguno',
         fade1s: '1 Segundo',
         fade2s: '2 Segundos'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - Alta Calidad',
+        vp8: 'WebM (VP8) - Compatible',
+        mp4_h264: 'MP4 (H.264) - Social',
+        mp4_generic: 'MP4 - Genérico'
     },
     hints: {
         syncStart: 'Espera la señal de audio o el botón de reproducción antes de grabar.',
@@ -130,7 +136,9 @@ export const es = {
     importConfig: 'Cargar configuración desde un archivo JSON.',
     savePreset: 'Guardar el estado actual en el almacenamiento del navegador.',
     loadPreset: 'Restaurar este estado preestablecido.',
-    copyConfig: 'Copiar la cadena de configuración al portapapeles para compartirla rápidamente.'
+    copyConfig: 'Copiar la cadena de configuración al portapapeles para compartirla rápidamente.',
+    includeInAutoRotate: 'Incluir en Rotación Automática',
+    excludeFromAutoRotate: 'Excluir de Rotación Automática'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -139,7 +147,8 @@ export const es = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: 'Simulado'
+    MOCK: 'Simulado',
+    FILE: 'Etiqueta ID3'
   },
   aiPanel: {
       keySaved: 'Clave API Verificada y Guardada',

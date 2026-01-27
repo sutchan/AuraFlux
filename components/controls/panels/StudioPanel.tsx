@@ -1,12 +1,13 @@
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 2.5.0
+ * Version: 2.5.4
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 21:30
+ * Updated: 2025-03-06 18:00
  */
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useUI, useAudioContext, useVisuals } from '../../AppContext';
 import { useVideoRecorder, RecorderConfig } from '../../../core/hooks/useVideoRecorder';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
@@ -142,10 +143,11 @@ export const StudioPanel: React.FC = () => {
   }, [isArmed, sourceType, isPlaying]);
 
   const getFormatLabel = (mime: string) => {
-      if (mime.includes('vp9')) return 'WebM (VP9) - High Qual';
-      if (mime.includes('vp8')) return 'WebM (VP8) - Compatible';
-      if (mime.includes('avc1')) return 'MP4 (H.264) - Social';
-      if (mime.includes('mp4')) return 'MP4 - Generic';
+      const formats = t?.studioPanel?.formats || {};
+      if (mime.includes('vp9')) return formats.vp9 || 'WebM (VP9) - High Qual';
+      if (mime.includes('vp8')) return formats.vp8 || 'WebM (VP8) - Compatible';
+      if (mime.includes('avc1')) return formats.mp4_h264 || 'MP4 (H.264) - Social';
+      if (mime.includes('mp4')) return formats.mp4_generic || 'MP4 - Generic';
       return mime.split('/')[1].toUpperCase();
   };
 
@@ -208,39 +210,47 @@ export const StudioPanel: React.FC = () => {
       }
   };
 
-  // --- Render Preview Modal ---
+  // --- Render Preview Modal via Portal ---
+  // Using Portal allows the preview to overlay the entire screen, escaping the small panel container.
   if (recordedBlob) {
-      return (
-          <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center p-6 animate-fade-in-up">
-              <div className="w-full max-w-lg bg-[#0a0a0c] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-                  <div className="p-4 border-b border-white/5 flex justify-between items-center">
-                      <span className="text-sm font-bold text-white uppercase tracking-widest">{studio.previewTitle || "Recording Preview"}</span>
+      return createPortal(
+          <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center p-6 animate-fade-in-up">
+              <div className="w-full max-w-2xl bg-[#0a0a0c] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+                  <div className="p-4 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">{studio.previewTitle || "Recording Preview"}</span>
+                        <span className="text-[10px] text-white/30 uppercase tracking-wider border border-white/10 px-1.5 rounded">{getFormatLabel(recordedBlob.type || mimeType)}</span>
+                      </div>
                       <div className="px-2 py-0.5 bg-blue-900/30 text-blue-300 text-[10px] font-mono rounded border border-blue-500/20">
-                          {formatSize(recordedBlob.size)}
+                          {formatSize(recordedBlob.size)} • {formatDuration(duration)}
                       </div>
                   </div>
-                  <div className="aspect-video bg-black relative">
+                  <div className="flex-1 bg-black relative flex items-center justify-center overflow-hidden min-h-[300px]">
                       <video 
                           src={URL.createObjectURL(recordedBlob)} 
                           autoPlay 
                           loop 
                           controls 
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain max-h-[60vh]"
                       />
                   </div>
-                  <div className="p-4 flex gap-3">
-                      <button onClick={discardRecording} className="flex-1 py-3 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 font-bold text-xs uppercase tracking-wider transition-colors">
+                  <div className="p-4 flex flex-col sm:flex-row gap-3 bg-white/[0.02]">
+                      <button onClick={discardRecording} className="flex-1 py-3 rounded-xl border border-white/10 text-white/60 hover:text-red-300 hover:border-red-500/30 hover:bg-red-500/5 font-bold text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                           {studio.discard || "Discard"}
                       </button>
-                      <button onClick={handleShareVideo} className="flex-1 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/5 font-bold text-xs uppercase tracking-wider transition-colors">
+                      <button onClick={handleShareVideo} className="flex-1 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/5 font-bold text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                           {studio.share || "Share"}
                       </button>
-                      <button onClick={handleSaveVideo} className="flex-[2] py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-blue-900/20 transition-colors">
+                      <button onClick={handleSaveVideo} className="flex-[2] py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-blue-900/20 transition-colors flex items-center justify-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                           {studio.save || "Save Video"}
                       </button>
                   </div>
               </div>
-          </div>
+          </div>,
+          document.body
       );
   }
 
@@ -262,10 +272,12 @@ export const StudioPanel: React.FC = () => {
              {isArmed ? (
                  <button 
                     onClick={cancelArming}
-                    className="w-24 h-24 rounded-full flex flex-col items-center justify-center border-4 border-yellow-500 text-yellow-500 bg-yellow-900/20 animate-pulse hover:bg-yellow-900/40 transition-all"
+                    className="w-24 h-24 rounded-full flex flex-col items-center justify-center border-4 border-yellow-500 text-yellow-500 bg-yellow-900/20 animate-pulse hover:bg-yellow-900/40 transition-all group"
                  >
-                     <span className="text-2xl font-black mb-1">||</span>
-                     <span className="text-[9px] font-bold uppercase">{studio.cancel}</span>
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-1 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                     </svg>
+                     <span className="text-[9px] font-bold uppercase tracking-wider">{studio.cancel}</span>
                  </button>
              ) : (
                  <button 
@@ -374,7 +386,6 @@ export const StudioPanel: React.FC = () => {
       {/* Col 3: Resolution & Size */}
       <div className="p-3 pt-4 h-full flex flex-col">
           <div className="space-y-3 flex-grow">
-            <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">{settingsLabels.resolution || "Resolution"}</span>
             
             <CustomSelect
                 label={settingsLabels.resolution || "Vertical Res"}

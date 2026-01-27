@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 2.1.0
+ * Version: 2.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 17:00
+ * Updated: 2025-03-06 18:00
  */
 
 import React, { useRef, useState } from 'react';
@@ -202,7 +202,7 @@ export const AudioSettingsPanel: React.FC = () => {
                  <div className="p-3 bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl border border-white/10 animate-fade-in-up">
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-[10px] font-black uppercase tracking-widest text-blue-200">{audioPanel.aiDirector || "AI Auto-Director"}</span>
-                        <div className="px-1.5 py-0.5 bg-blue-500/20 rounded text-[9px] font-bold text-blue-300 border border-blue-500/30">NEW</div>
+                        <div className="px-1.5 py-0.5 bg-blue-500/20 rounded text-[9px] font-bold text-blue-300 border border-blue-500/30">{t?.common?.new || "NEW"}</div>
                     </div>
                     <button 
                         onClick={handleAiDirector}

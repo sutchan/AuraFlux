@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-06 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ja = {
   common: {
-    on: 'ON', off: 'OFF', visible: '表示', hidden: '非表示', active: '有効', muted: 'ミュート', beta: 'ベータ', simple: '簡易', advanced: '詳細'
+    on: 'ON', off: 'OFF', visible: '表示', hidden: '非表示', active: '有効', muted: 'ミュート', beta: 'ベータ', simple: '簡易', advanced: '詳細', new: 'NEW'
   },
   tabs: {
     visual: 'ビジュアル', text: 'テキスト', audio: 'オーディオ', ai: 'AI 曲識別', system: 'システム', studio: 'スタジオ'
@@ -63,6 +63,12 @@ export const ja = {
         fadeOff: 'なし',
         fade1s: '1秒',
         fade2s: '2秒'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - 高画質',
+        vp8: 'WebM (VP8) - 互換性',
+        mp4_h264: 'MP4 (H.264) - ソーシャル',
+        mp4_generic: 'MP4 - 一般'
     },
     hints: {
         syncStart: '音声信号または再生ボタンの押下を待ってから録画を開始します。',
@@ -130,7 +136,9 @@ export const ja = {
     importConfig: 'JSONファイルから設定を読み込みます。',
     savePreset: '現在の設定をローカル保存します。',
     loadPreset: 'このプリセットを適用します。',
-    copyConfig: '設定コードをクリップボードにコピーします。'
+    copyConfig: '設定コードをクリップボードにコピーします。',
+    includeInAutoRotate: '自動切替に含める',
+    excludeFromAutoRotate: '自動切替から除外'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -139,7 +147,8 @@ export const ja = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: 'シミュレーション'
+    MOCK: 'シミュレーション',
+    FILE: 'ID3 タグ'
   },
   aiPanel: {
       keySaved: 'API Key 保存完了',

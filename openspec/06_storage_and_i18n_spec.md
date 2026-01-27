@@ -15,13 +15,17 @@
   - **阿拉伯语 (ar)**: 支持 RTL 布局。
 - **本地化深度:** 
   - 核心术语 "Beta" 在日韩等亚洲语言中需使用本地化写法 (如 "ベータ", "베타") 以提升亲和力。
-  - **v1.8.3 更新:** 所有 UI 字符串（含 Studio、System 面板）已完成 100% 本地化覆盖，并移除了测试用的 `simulateCrash` 键值。
+  - **v1.8.4 更新:** 
+    - 录制工作室 (Studio Panel) 视频格式名称已完全本地化，包括 `vp9`, `mp4_h264` 等技术细节的友好描述。
+    - AI 提供商列表已扩展支持 "ID3 Tag" (本地元数据) 的多语言显示。
+    - 自动巡航 (Auto-Rotate) 工具提示文本已补充翻译。
 
 ## 3. 专业术语标准化
 - **AI Synesthesia** -> AI 通感识别 / AI Synesthesia。
 - **Visualizer Mode** -> 视觉引擎。
 - **Wake Lock** -> 屏幕常亮 / 防休眠。
 - **Edge Intelligence** -> 边缘计算 / 边缘智能。
+- **ID3 Tag** -> ID3 标签 / ID3 Tag / Étiquette ID3。
 
 ---
-*Aura Flux Storage & i18n - Version 1.8.3*
+*Aura Flux Storage & i18n - Version 1.8.4*

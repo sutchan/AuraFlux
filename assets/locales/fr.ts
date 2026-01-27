@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-06 21:40
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const fr = {
   common: {
-    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'MASQUÉ', active: 'ACTIF', muted: 'MUET', beta: 'BÊTA', simple: 'Simple', advanced: 'Avancé'
+    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'MASQUÉ', active: 'ACTIF', muted: 'MUET', beta: 'BÊTA', simple: 'Simple', advanced: 'Avancé', new: 'NOUVEAU'
   },
   tabs: {
     visual: 'Visuel', text: 'Texte', audio: 'Audio', ai: 'Synesthésie IA', system: 'Système', studio: 'Studio'
@@ -64,6 +64,12 @@ export const fr = {
         fade1s: '1 Seconde',
         fade2s: '2 Secondes'
     },
+    formats: {
+        vp9: 'WebM (VP9) - Haute Qualité',
+        vp8: 'WebM (VP8) - Compatible',
+        mp4_h264: 'MP4 (H.264) - Social',
+        mp4_generic: 'MP4 - Standard'
+    },
     hints: {
         syncStart: 'Attend le signal audio ou le bouton de lecture avant d\'enregistrer.',
         countdown: 'Ajoute un délai de 3 secondes avant le début de l\'enregistrement.',
@@ -86,7 +92,7 @@ export const fr = {
     region: 'Oriente le moteur de recherche IA vers la musique de ce marché spécifique.',
     autoRotate: 'Change automatiquement de moteur visuel.',
     rotateInterval: 'Temps avant de passer au moteur visuel suivant.',
-    cycleColors: 'Transitionne automatically entre les thèmes de couleur.',
+    cycleColors: 'Transitionne automatiquement entre les thèmes de couleur.',
     colorInterval: 'Temps avant de se fondre vers la palette suivante.',
     reset: 'Restaure tous les paramètres de l\'application aux valeurs d\'usine.',
     confirmReset: 'Confirmer la réinitialisation ? Cette action est irréversible.',
@@ -111,7 +117,7 @@ export const fr = {
     textAudioReactive: 'L\'opacité et la taille du texte réagissent à l\'amplitude audio.',
     customTextCycleColor: 'Fait défiler automatiquement le spectre des couleurs pour le texte.',
     text3D: 'Applique un effet de relief pseudo-3D au texte personnalisé.',
-    hideCursor: 'Masque automatically le curseur de la souris après inactivité.',
+    hideCursor: 'Masque automatiquement le curseur de la souris après inactivité.',
     uiModeSimple: 'Masquer les paramètres techniques et se concentrer sur l\'esthétique principale.',
     uiModeAdvanced: 'Afficher tous les paramètres de réglage pour un contrôle précis.',
     quality: 'Ajuster la résolution de rendu et la densité des particules.',
@@ -130,7 +136,9 @@ export const fr = {
     importConfig: 'Charger les paramètres à partir d\'un fichier JSON.',
     savePreset: 'Enregistrer l\'état actuel dans le stockage du navigateur.',
     loadPreset: 'Restaurer cet état prédéfini.',
-    copyConfig: 'Copier la chaîne de configuration dans le presse-papiers pour un partage rapide.'
+    copyConfig: 'Copier la chaîne de configuration dans le presse-papiers pour un partage rapide.',
+    includeInAutoRotate: 'Inclure dans la Rotation Auto',
+    excludeFromAutoRotate: 'Exclure de la Rotation Auto'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -139,28 +147,29 @@ export const fr = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: 'Simulé'
+    MOCK: 'Simulé',
+    FILE: 'Tag ID3'
   },
   aiPanel: {
       keySaved: 'Clé API Vérifiée et Enregistrée',
       keyInvalid: 'Clé API Invalide',
       keyCleared: 'Clé API Effacée',
-      saved: 'SAUVEGARDÉ',
+      saved: 'ENREGISTRÉ',
       missing: 'MANQUANT',
       save: 'Sauver',
-      update: 'MaJ',
+      update: 'Mettre à jour',
       geminiHint: 'Optionnel. Utilise le quota gratuit par défaut si vide.',
       customHint: 'Requis. La clé est stockée localement dans votre navigateur.',
       notImplemented: 'Le traitement IA pour {provider} n\'est pas encore implémenté. Veuillez sélectionner Gemini pour utiliser les fonctionnalités IA.'
   },
   visualizerMode: 'Moteur Visuel',
-  styleTheme: 'Thème de Couleur',
-  settings: 'Réglage',
-  sensitivity: 'Sensibilidad',
+  styleTheme: 'Thème Couleur',
+  settings: 'Réglages',
+  sensitivity: 'Sensibilité',
   speed: 'Vitesse d\'Évolution',
-  glow: 'Éclat Néon',
+  glow: 'Lueur Néon',
   trails: 'Traînées de Mouvement',
-  autoRotate: 'Cycle Auto des Moteurs',
+  autoRotate: 'Cycle Auto du Moteur',
   rotateInterval: 'Intervalle (s)',
   cycleColors: 'Cycle Auto des Couleurs',
   colorInterval: 'Intervalle (s)',
@@ -168,119 +177,134 @@ export const fr = {
   monitorAudio: 'Moniteur Audio',
   audioInput: 'Périphérique d\'Entrée',
   lyrics: 'Synesthésie IA',
-  showLyrics: 'Activer l\'Identification',
+  showLyrics: 'Activer la Reconnaissance',
   displaySettings: 'Paramètres d\'Affichage',
   language: 'Langue de l\'Interface',
   region: 'Marché Cible',
   startMic: 'Activer l\'Audio',
   stopMic: 'Désactiver l\'Audio',
   listening: 'Actif',
-  identifying: 'IA en cours d\'analyse...',
+  identifying: 'Analyse IA en cours...',
   startExperience: 'Entrer dans le Flux',
   welcomeTitle: 'Aura Flux | Le Son de la Lumière',
-  welcomeText: 'Transmutez chaque vibration en un chef-d\'œuvre génératif. Propulsé par Gemini IA pour une reconnaissance en temps réel, redéfinissant l\'expérience sensorielle.',
+  welcomeText: 'Transformez chaque vibration en un chef-d\'œuvre génératif. Propulsé par Gemini AI pour une reconnaissance en temps réel, redéfinissant l\'expérience sensorielle.',
   unsupportedTitle: 'Navigateur non supporté',
-  unsupportedText: 'Aura Flux nécessite des fonctionnalités Web Audio modernes. Veuillez utiliser une version recente de Chrome, Edge ou Safari.',
+  unsupportedText: 'Aura Flux nécessite des fonctionnalités audio Web modernes. Veuillez utiliser Chrome, Edge ou Safari.',
   hideOptions: 'Réduire',
-  showOptions: 'Étendre les Options',
-  reset: 'Réinitialisation Système',
-  resetEngine: 'RÉINIT. MOTEUR',
-  confirmResetAction: 'CONFIRMER RÉINIT.',
-  resetVisual: 'Réinit. Esthétique',
-  resetText: 'Réinit. Texte',
-  resetAudio: 'Réinit. Audio',
-  resetAi: 'Réinit. IA',
+  showOptions: 'Étendre',
+  reset: 'Réinitialiser le Système',
+  confirmReset: 'Confirmer la réinitialisation ?',
+  resetEngine: 'RÉINITIALISER MOTEUR',
+  confirmResetAction: 'CONFIRMER',
+  resetVisual: 'Réinitialiser l\'Esthétique',
+  resetText: 'Réinitialiser le Texte',
+  resetAudio: 'Réinitialiser l\'Audio',
+  resetAi: 'Réinitialiser l\'IA',
   randomize: 'Aléatoire Intelligent',
-  help: 'Support',
+  help: 'Aide',
   close: 'Fermer',
-  betaDisclaimer: 'L\'Identification IA est currently en Bêta.',
-  wrongSong: 'Ce n\'est pas la bonne chanson ?',
-  hideCursor: 'Masquer le curseur',
+  betaDisclaimer: 'La reconnaissance IA est actuellement en bêta.',
+  wrongSong: 'Mauvaise chanson ?',
+  hideCursor: 'Masquer le Curseur',
   customColor: 'Personnalisé',
-  randomizeTooltip: 'Aléatoriser tous les paramètres visuels',
+  randomizeTooltip: 'Aléatoiriser tous les paramètres visuels',
   smoothing: 'Lissage',
   fftSize: 'Résolution (FFT)',
-  appInfo: 'À propos de l\'App',
-  appDescription: 'Une suite de visualisation immersive propulsée par l\'analyse spectrale en temps réel et la reconnaissance IA de Gemini.',
+  appInfo: 'À propos',
+  appDescription: 'Une suite de visualisation immersive pilotée par l\'analyse spectrale en temps réel et la reconnaissance IA Gemini.',
   version: 'Build',
-  defaultMic: 'Micro par défaut',
-  customText: 'Contenu de Texte Personnalisé',
+  defaultMic: 'Microphone par Défaut',
+  customText: 'Contenu du Texte Personnalisé',
   textProperties: 'Typographie & Mise en page',
   text3D: 'Effet 3D',
-  customTextPlaceholder: 'ENTRER TEXTE',
-  showText: 'Afficher Superposition',
-  pulseBeat: 'Pulsation au Rythme',
-  textAudioReactive: 'Audio-Réactif',
-  textSize: 'Taille de Police',
+  customTextPlaceholder: 'ENTREZ DU TEXTE',
+  showText: 'Afficher la Superposition',
+  pulseBeat: 'Pulser avec le Rythme',
+  textAudioReactive: 'Réactif à l\'Audio',
+  textSize: 'Taille de la Police',
   textRotation: 'Rotation',
-  textFont: 'Famille de Polices',
+  textFont: 'Famille de Police',
   textOpacity: 'Opacité',
   textPosition: 'Position du Texte',
   quality: 'Qualité de Rendu',
-  qualities: { low: 'Fluide', med: 'Équilibré', high: 'Ultime' },
-  visualPanel: { effects: 'Effets', automation: 'Automatisation', display: 'Affichage' },
-  audioPanel: { 
-    info: 'Ajustez la sensibilité et le lissage pour personnaliser la réaction. Des tailles de FFT plus élevées offrent plus de détails.',
+  qualities: {
+    low: 'Fluide', med: 'Équilibré', high: 'Ultime'
+  },
+  visualPanel: {
+    effects: 'Effets', automation: 'Automatisation', display: 'Affichage'
+  },
+  audioPanel: {
+    info: 'Ajustez la sensibilité et le lissage pour personnaliser la réaction. Des tailles FFT plus élevées offrent plus de détails.',
     mic: 'Micro',
     file: 'Fichier',
-    upload: 'Téléverser',
+    upload: 'Charger un Fichier',
     aiDirector: 'Réalisateur IA',
     analyzing: 'Analyse...',
     analyze: 'Générer'
   },
-  systemPanel: { interface: 'Interface', behavior: 'Comportement', maintenance: 'Maintenance', engine: 'Moteur', audio: 'Audio', ai: 'IA'
+  systemPanel: {
+    interface: 'Interface', behavior: 'Comportement', maintenance: 'Maintenance', engine: 'Moteur', audio: 'Audio', ai: 'IA'
   },
   config: {
-    title: 'Cloud & Données',
+    title: 'Nuage et Données',
     export: 'Exporter Fichier',
     import: 'Importer Fichier',
     library: 'Bibliothèque Locale',
-    save: 'Sauvegarder',
+    save: 'Sauver',
     load: 'Charger',
-    delete: 'Supprimer',
+    delete: 'Suppr.',
     placeholder: 'Nom du préréglage...',
     confirmImport: 'Écraser les paramètres actuels ?',
     invalidFile: 'Format de fichier invalide',
     importSuccess: 'Configuration chargée.',
     copy: 'Copier',
     copied: 'Copié !',
-    limitReached: 'Maximum of 5 préréglages autorisés.'
+    limitReached: 'Maximum de 5 préréglages autorisés.'
   },
-  showFps: 'Afficher FPS',
-  showTooltips: 'Afficher Aide',
-  doubleClickFullscreen: 'Double-clic pour Plein Écran',
-  autoHideUi: 'Masquer l\'UI Auto.',
-  mirrorDisplay: 'Affichage Miroir',
+  showFps: 'Afficher IPS',
+  showTooltips: 'Afficher Infobulles',
+  doubleClickFullscreen: 'Double-clic Plein Écran',
+  autoHideUi: 'Masquer Auto UI',
+  mirrorDisplay: 'Miroir',
   presets: {
     title: 'Préréglages Intelligents',
     hint: 'Appliquez une combinaison esthétique soignée en un clic.',
-    select: 'Choisir une ambiance...',
+    select: 'Choisissez une ambiance...',
     custom: 'Personnalisé / Modifié',
     all_modes: 'Tous les Modes',
     calm: 'Forme d\'Onde Numérique',
     party: 'Fête Cinétique',
     ambient: 'Nébuleuse Profonde',
-    cyberpunk: 'Lasers Cyber',
+    cyberpunk: 'Cyber Lasers',
     retrowave: 'Champ Rétro',
     vocal: 'Barres Vocales'
   },
   recognitionSource: 'Source IA',
   lyricsPosition: 'Position des Paroles',
-  lyricsFont: 'Famille de Polices',
-  lyricsFontSize: 'Taille de Police',
+  lyricsFont: 'Police',
+  lyricsFontSize: 'Taille',
   simulatedDemo: 'Simulé (Hors ligne)',
   positions: {
-      top: 'Haut', center: 'Centre', bottom: 'Bas', tl: 'Haut Gauche', tc: 'Haut Milieu', tr: 'Haut Droite', ml: 'Milieu Gauche', mc: 'Centre', mr: 'Milieu Droite', bl: 'Bas Gauche', bc: 'Bas Milieu', br: 'Bas Droite'
+      top: 'Haut', center: 'Centre', bottom: 'Bas', tl: 'Haut Gauche', tc: 'Haut Centre', tr: 'Haut Droite', ml: 'Milieu Gauche', mc: 'Centre', mr: 'Milieu Droite', bl: 'Bas Gauche', bc: 'Bas Centre', br: 'Bas Droite'
   },
   wakeLock: 'Écran Toujours Allumé',
-  system: { shortcuts: { mic: 'Micro', ui: 'UI', mode: 'Mode', random: 'Aléatoire' } },
-  errors: { title: 'Erreur Audio', accessDenied: 'Accès refusé.', noDevice: 'Aucun appareil trouvé.', deviceBusy: 'Appareil occupé.', general: 'Erreur d\'accès.', tryDemo: 'Mode Démo' },
+  system: {
+    shortcuts: { mic: 'Micro', ui: 'UI', mode: 'Mode', random: 'Aléatoire' }
+  },
+  errors: {
+    title: 'Erreur Audio',
+    accessDenied: 'Accès refusé. Veuillez vérifier les permissions du micro.',
+    noDevice: 'Aucun appareil trouvé.',
+    deviceBusy: 'Appareil occupé.',
+    general: 'Erreur d\'accès.',
+    tryDemo: 'Mode Démo'
+  },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: 'Tempête Synaptique (WebGL)',
     [VisualizerMode.CUBE_FIELD]: 'Hypercubes (WebGL)',
     [VisualizerMode.PLASMA]: 'Fusion',
     [VisualizerMode.BARS]: 'Spectre',
-    [VisualizerMode.PARTICLES]: 'Vitesse Lumière',
+    [VisualizerMode.PARTICLES]: 'Propulsion Warp',
     [VisualizerMode.TUNNEL]: 'Trou de Ver',
     [VisualizerMode.RINGS]: 'Résonance',
     [VisualizerMode.NEBULA]: 'Poussière Cosmique',
@@ -295,15 +319,15 @@ export const fr = {
     [VisualizerMode.NEURAL_FLOW]: 'Simulation de fluide organique propulsée par des particules WebGL.',
     [VisualizerMode.CUBE_FIELD]: 'Champ infini de blocs géométriques réagissant à la fréquence.',
     [VisualizerMode.PLASMA]: 'Mélange de couleurs fluide et lisse.',
-    [VisualizerMode.BARS]: 'Analyseur de spectre de fréquence classique avec des pics.',
-    [VisualizerMode.PARTICLES]: 'Traversée d\'un champ d\'étoiles de l\'espace profond réagissant à l\'intensité.',
-    [VisualizerMode.TUNNEL]: 'Couloir géométrique récursif qui vous aspire.',
+    [VisualizerMode.BARS]: 'Analyseur de spectre de fréquence classique avec pics.',
+    [VisualizerMode.PARTICLES]: 'Traversée de champ d\'étoiles dans l\'espace profond réagissant à l\'intensité.',
+    [VisualizerMode.TUNNEL]: 'Couloir géométrique récursif qui vous attire.',
     [VisualizerMode.RINGS]: 'Motifs de résonance néon concentriques.',
     [VisualizerMode.NEBULA]: 'Simulation de particules de l\'espace profond avec physique gazeuse.',
-    [VisualizerMode.LASERS]: 'Faisceaux lumineux nets de haute énergie balayant l\'écran.',
+    [VisualizerMode.LASERS]: 'Faisceaux lumineux nets à haute énergie balayant l\'écran.',
     [VisualizerMode.FLUID_CURVES]: 'Ondes lumineuses atmosphériques lisses.',
-    [VisualizerMode.MACRO_BUBBLES]: 'Visuels microcellulaires à mise au point douce.',
-    [VisualizerMode.KINETIC_WALL]: 'Mur de scène LED massif avec des extrusions 3D cinétiques.',
+    [VisualizerMode.MACRO_BUBBLES]: 'Visuels micro-cellulaires à focus doux.',
+    [VisualizerMode.KINETIC_WALL]: 'Mur de scène LED massif avec extrusions cinétiques 3D.',
     [VisualizerMode.LIQUID]: 'Sphère abstraite en métamorphose réagissant aux basses fréquences.',
     [VisualizerMode.WAVEFORM]: 'Rubans liquides de l\'historique des fréquences spectrales.'
   },
@@ -311,34 +335,34 @@ export const fr = {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamique', [LyricsStyle.MINIMAL]: 'Minimaliste'
   },
   helpModal: {
-    title: 'Guide d\'Aura Flux',
+    title: 'Guide Aura Flux',
     tabs: { guide: 'Guide', shortcuts: 'Raccourcis', about: 'À propos' },
-    intro: 'Aura Flux transforme l\'audio en art numérique génératif en utilisant l\'analyse spectrale et l\'intelligence de Gemini 3.',
+    intro: 'Aura Flux transforme l\'audio en art numérique génératif à l\'aide de l\'analyse spectrale et de l\'intelligence Gemini 3.',
     shortcutsTitle: 'Raccourcis Clavier',
     gesturesTitle: 'Gestes Tactiles',
     shortcutItems: {
-      toggleMic: 'Activer/Désactiver l\'Audio',
+      toggleMic: 'Bascule Entrée Audio',
       fullscreen: 'Plein Écran',
       randomize: 'Esthétique Aléatoire',
-      lyrics: 'Info Piste IA',
-      hideUi: 'Afficher/Masquer le Panneau',
-      glow: 'Afficher/Masquer la Lueur',
-      trails: 'Afficher/Masquer le Flou de Mouvement',
-      changeMode: 'Changer de Modes',
-      changeTheme: 'Changer de Thèmes'
+      lyrics: 'Info IA',
+      hideUi: 'Bascule Interface',
+      glow: 'Bascule Lueur',
+      trails: 'Bascule Traînées',
+      changeMode: 'Cycle Modes',
+      changeTheme: 'Cycle Thèmes'
     },
     gestureItems: {
-        swipeMode: 'Balayage Horizontal : Changer de Mode',
-        swipeSens: 'Balayage Vertical : Ajuster la Sensibilité',
+        swipeMode: 'Balayage Horizontal : Changer Mode',
+        swipeSens: 'Balayage Vertical : Ajuster Sensibilité',
         longPress: 'Appui Long : Identification IA'
     },
     howItWorksTitle: 'Comment Utiliser',
     howItWorksSteps: [
-      '1. Connecter : Cliquez sur "Démarrer" et autorisez l\'accès au microphone.',
-      '2. Visualiser : Jouez de la musique. Utilisez les "Préréglages Intelligents" pour créer l\'ambiance.',
-      '3. Personnaliser : Utilisez le "Mode Avancé" pour la sensibilité et le texte personnalisé.',
+      '1. Connecter : Cliquez sur "Démarrer" et autorisez l\'accès au micro.',
+      '2. Visualiser : Jouez de la musique. Utilisez "Préréglages Intelligents" pour l\'ambiance.',
+      '3. Personnaliser : Utilisez le "Mode Avancé" pour la sensibilité et le texte.',
       '4. Interagir : Balayez pour changer de mode ou appuyez longuement pour l\'IA.',
-      '5. Explorer : Appuyez sur H pour les options, F pour le plein écran, R pour l\'aléatoire.'
+      '5. Explorer : Appuyez sur H pour options, F pour plein écran, R pour aléatoire.'
     ],
     settingsTitle: 'Guide des Paramètres',
     settingsDesc: {
@@ -349,23 +373,23 @@ export const fr = {
       smoothing: 'Amortissement temporel des données spectrales.',
       fftSize: 'Résolution de fréquence.'
     },
-    projectInfoTitle: 'Info du Projet',
-    aboutDescription: 'Une expérience synesthésique de nouvelle génération. Conçu pour les VJs, les Streamers et les environnements immersifs.',
+    projectInfoTitle: 'Info Projet',
+    aboutDescription: 'Une expérience synesthésique de nouvelle génération. Conçu pour les VJ, les streamers et les environnements immersifs.',
     privacyTitle: 'Confidentialité',
-    privacyText: 'L\'analyse audio est locale. Des instantanés sont envoyés à Gemini uniquement pour identification.',
-    version: 'Version', coreTech: 'Technologie', repository: 'Source', support: 'Support', reportBug: 'Bogue'
+    privacyText: 'L\'audio est analysé localement. Les instantanés ne sont envoyés à Gemini que pour identification.',
+    version: 'Version', coreTech: 'Tech', repository: 'Source', support: 'Support', reportBug: 'Bug'
   },
   onboarding: {
     welcome: 'Bienvenue sur Aura Flux',
     subtitle: 'Moteur de Synesthésie IA de Nouvelle Génération',
-    selectLanguage: 'Choisissez votre langue préférée',
-    next: 'Suivant', back: 'Précédent', skip: 'Passer', finish: 'Commencer l\'Expérience',
+    selectLanguage: 'Sélectionnez votre langue préférée',
+    next: 'Continuer', back: 'Précédent', skip: 'Passer', finish: 'Commencer',
     features: {
-      title: 'Caractéristiques Sensorielles',
-      visuals: { title: 'Sculptures Génératives', desc: 'Plus de 15 moteurs réactifs propulsés par WebGL et des mathématiques avancées.' },
-      ai: { title: 'Intelligence Gemini', desc: 'Métadonnées de pistes instantanées et reconnaissance de l\'humeur par Google Gemini 3.' },
-      privacy: { title: 'Intelligence en Périphérie', desc: 'Le traitement reste local. Nous n\'enregistrons ni ne stockons jamais vos données audio privées.' }
+      title: 'Fonctionnalités Sensorielles',
+      visuals: { title: 'Sculptures Génératives', desc: 'Plus de 15 moteurs réactifs propulsés par WebGL et mathématiques avancées.' },
+      ai: { title: 'Intelligence Gemini', desc: 'Métadonnées de piste instantanées et reconnaissance d\'humeur par Google Gemini 3.' },
+      privacy: { title: 'Intelligence en Bordure', desc: 'Le traitement reste local. Nous n\'enregistrons ni ne stockons jamais vos données audio privées.' }
     },
-    shortcuts: { title: 'Contrôles Dynamiques', desc: 'Maîtrisez votre environnement comme un chef d\'orchestre avec ces commandes au clavier.' }
+    shortcuts: { title: 'Contrôles Dynamiques', desc: 'Maîtrisez votre environnement comme un chef d\'orchestre avec ces commandes clavier.' }
   }
 };

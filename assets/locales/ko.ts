@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-06 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ko = {
   common: {
-    on: 'ON', off: 'OFF', visible: '표시', hidden: '숨김', active: '활성화', muted: '음소거', beta: '베타', simple: '간편', advanced: '고급'
+    on: 'ON', off: 'OFF', visible: '표시', hidden: '숨김', active: '활성화', muted: '음소거', beta: '베타', simple: '간편', advanced: '고급', new: 'NEW'
   },
   tabs: {
     visual: '시각 효과', text: '텍스트', audio: '오디오', ai: '트랙 인식', system: '시스템', studio: '스튜디오'
@@ -63,6 +63,12 @@ export const ko = {
         fadeOff: '없음',
         fade1s: '1초',
         fade2s: '2초'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - 고화질',
+        vp8: 'WebM (VP8) - 호환성',
+        mp4_h264: 'MP4 (H.264) - 소셜',
+        mp4_generic: 'MP4 - 일반'
     },
     hints: {
         syncStart: '오디오 신호나 재생 버튼을 기다렸다가 녹화를 시작합니다.',
@@ -130,7 +136,9 @@ export const ko = {
     importConfig: 'JSON 파일에서 설정을 가져옵니다。',
     savePreset: '현재 설정을 로컬에 저장합니다。',
     loadPreset: '이 프리셋을 불러옵니다。',
-    copyConfig: '설정 코드를 클립보드에 복사합니다。'
+    copyConfig: '설정 코드를 클립보드에 복사합니다。',
+    includeInAutoRotate: '자동 회전 포함',
+    excludeFromAutoRotate: '자동 회전 제외'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -139,7 +147,8 @@ export const ko = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: '시뮬레이션'
+    MOCK: '시뮬레이션',
+    FILE: 'ID3 태그'
   },
   aiPanel: {
       keySaved: 'API Key 저장 완료',

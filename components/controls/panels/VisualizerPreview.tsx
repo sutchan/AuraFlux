@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.7.25
+ * Version: 1.7.27
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
+ * Updated: 2025-03-06 18:00
  */
 
 import React, { memo } from 'react';
@@ -55,25 +55,27 @@ export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode,
           
           {/* Label Overlay - Left aligned to leave space for toggle */}
           <div className={`absolute inset-0 flex items-center justify-between px-3 py-2 transition-colors duration-300 ${isActive ? 'bg-black/40' : 'bg-black/60 group-hover:bg-black/50'}`}>
-            <span className={`text-[11px] font-bold uppercase tracking-widest leading-tight truncate pr-2 ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white'}`}>{name}</span>
+            <span className={`text-[11px] font-bold uppercase tracking-widest leading-tight truncate pr-8 ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white'}`}>{name}</span>
             
-            {/* Inline Checkbox Toggle */}
+            {/* Inline Checkbox Toggle - Increased Hit Area */}
             <div
                 onClick={(e) => {
                     e.stopPropagation();
                     onToggleInclude();
                 }}
-                className={`w-4 h-4 rounded-full flex items-center justify-center transition-all duration-200 border ${
+                className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center cursor-pointer group/toggle"
+                aria-label={isIncluded ? (t?.hints?.excludeFromAutoRotate || "Exclude from Auto-Rotate") : (t?.hints?.includeInAutoRotate || "Include in Auto-Rotate")}
+                title={isIncluded ? (t?.hints?.excludeFromAutoRotate || "Exclude from Auto-Rotate") : (t?.hints?.includeInAutoRotate || "Include in Auto-Rotate")}
+            >
+                <div className={`w-4 h-4 rounded-full flex items-center justify-center transition-all duration-200 border transform group-hover/toggle:scale-110 ${
                     isIncluded 
                     ? 'bg-green-500 border-green-500 text-black shadow-[0_0_8px_rgba(34,197,94,0.6)]' 
-                    : 'bg-black/30 border-white/20 text-transparent hover:border-white/50'
-                }`}
-                aria-label={isIncluded ? "Disable Auto-Rotate" : "Enable Auto-Rotate"}
-                title={isIncluded ? "Included in Auto-Rotate" : "Excluded from Auto-Rotate"}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                </svg>
+                    : 'bg-black/40 border-white/30 text-transparent hover:border-white/60'
+                }`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
             </div>
           </div>
         </button>

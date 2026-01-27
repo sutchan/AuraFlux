@@ -1,10 +1,10 @@
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.7.6
+ * Version: 1.8.0
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
- * Description: Refactored to use i18n strings for provider names and messages.
+ * Updated: 2025-03-06 14:00
+ * Description: Unblocked AI Personas allowing them to use Gemini Key.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -19,7 +19,7 @@ import { TooltipArea } from '../../ui/controls/Tooltip';
 import { validateApiKey } from '../../../core/services/aiService';
 
 const BetaBadge = ({ label }: { label?: string }) => (
-  <span className="ml-1.5 px-1 py-[0.5px] rounded-[3px] bg-blue-500/20 border border-blue-500/30 text-[10px] font-bold text-blue-300 tracking-wider">
+  <span className="ml-2 px-1.5 py-[1px] rounded text-[9px] font-black bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-blue-200 tracking-widest shadow-[0_0_8px_rgba(59,130,246,0.3)]">
     {label || 'BETA'}
   </span>
 );
@@ -51,14 +51,16 @@ export const AiSettingsPanel: React.FC = () => {
       }
 
       setIsValidating(true);
-      const isValid = await validateApiKey(provider, inputKey);
+      // FORCE VALIDATION using GEMINI logic, because all personas currently run on Gemini engine.
+      // This allows 'CLAUDE' or 'OPENAI' personas to accept a valid Gemini Key.
+      const isValid = await validateApiKey('GEMINI', inputKey);
       setIsValidating(false);
 
       if (isValid) {
           setApiKeys(prev => ({ ...prev, [provider]: inputKey }));
           showToast(t?.aiPanel?.keySaved || "Key Verified & Saved", 'success');
       } else {
-          showToast(t?.aiPanel?.keyInvalid || "Invalid Key", 'error');
+          showToast(t?.aiPanel?.keyInvalid || "Invalid Gemini API Key", 'error');
           inputRef.current?.select();
       }
   };
@@ -79,7 +81,7 @@ export const AiSettingsPanel: React.FC = () => {
 
   const currentProvider = settings.recognitionProvider || 'GEMINI';
   const hasKey = !!apiKeys[currentProvider];
-  const currentProviderLabel = aiProviders[currentProvider] || currentProvider;
+  const isMock = currentProvider === 'MOCK';
 
   return (
     <>
@@ -95,29 +97,33 @@ export const AiSettingsPanel: React.FC = () => {
             {isAdvanced && (
                 <div className="space-y-3 pt-1 animate-fade-in-up">
                    <CustomSelect 
-                     label={t?.recognitionSource || "AI Source"} 
+                     label={t?.recognitionSource || "AI Persona (Engine: Gemini 3)"} 
                      value={currentProvider} 
                      hintText={hints?.recognitionSource}
                      options={[
-                       { value: 'GEMINI', label: `🟢 ${aiProviders.GEMINI || 'Gemini 3.0'}` }, 
-                       { value: 'OPENAI', label: `🔵 ${aiProviders.OPENAI || 'GPT-4o'}` },
-                       { value: 'GROQ', label: `🟠 ${aiProviders.GROQ || 'Groq'}` },
-                       { value: 'CLAUDE', label: `🟪 ${aiProviders.CLAUDE || 'Claude 3'}` },
-                       { value: 'DEEPSEEK', label: `🤖 ${aiProviders.DEEPSEEK || 'DeepSeek'}` },
-                       { value: 'QWEN', label: `🌏 ${aiProviders.QWEN || 'Qwen'}` },
+                       { value: 'GEMINI', label: `🟢 ${aiProviders.GEMINI || 'Gemini 3.0 (Default)'}` }, 
+                       { value: 'OPENAI', label: `🔵 ${aiProviders.OPENAI || 'GPT-4o Style'}` },
+                       { value: 'GROQ', label: `🟠 ${aiProviders.GROQ || 'Groq Fast'}` },
+                       { value: 'CLAUDE', label: `🟪 ${aiProviders.CLAUDE || 'Claude 3 Poet'}` },
+                       { value: 'DEEPSEEK', label: `🤖 ${aiProviders.DEEPSEEK || 'DeepSeek Tech'}` },
+                       { value: 'QWEN', label: `🌏 ${aiProviders.QWEN || 'Qwen Global'}` },
                        { value: 'MOCK', label: `⚪ ${t?.simulatedDemo || 'Simulated'}` }
                      ]} 
                      onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
                    />
                    
-                   {currentProvider === 'GEMINI' && (
-                       <div className="bg-white/5 p-2.5 rounded-xl border border-white/10 space-y-1.5 animate-fade-in-up">
+                   {!isMock && (
+                       <div className="bg-gradient-to-b from-white/5 to-transparent p-2.5 rounded-xl border border-white/10 space-y-2 animate-fade-in-up">
                            <div className="flex justify-between items-center">
-                               <span className="text-[11px] font-bold text-white/50 uppercase tracking-widest">{currentProvider} KEY</span>
-                               <span className={`text-[10px] font-mono px-1 rounded ${hasKey ? 'bg-green-500/20 text-green-300' : 'bg-yellow-500/20 text-yellow-300'}`}>
-                                   {hasKey ? (aiPanel.saved || 'OK') : (aiPanel.geminiHint || 'Optional')}
+                               <span className="text-[10px] font-black text-blue-200/80 uppercase tracking-widest flex items-center gap-1.5">
+                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                                 GEMINI API KEY
+                               </span>
+                               <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${hasKey ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-yellow-500/10 text-yellow-500/80 border-yellow-500/20'}`}>
+                                   {hasKey ? (aiPanel.saved || 'READY') : (aiPanel.missing || 'OPTIONAL')}
                                </span>
                            </div>
+                           
                            <div className="flex gap-1.5">
                                <div className="relative flex-1">
                                    <input
@@ -125,27 +131,36 @@ export const AiSettingsPanel: React.FC = () => {
                                        type={showKey ? "text" : "password"} 
                                        value={inputKey}
                                        onChange={(e) => setInputKey(e.target.value)}
-                                       className="w-full bg-black/40 border border-white/10 rounded-lg pl-2 pr-6 py-1.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500 transition-colors font-mono"
+                                       className="w-full bg-black/60 border border-white/10 rounded-lg pl-2 pr-7 py-2 text-[11px] text-white placeholder-white/20 focus:outline-none focus:border-blue-500 focus:bg-black/80 transition-all font-mono tracking-tight"
                                        autoComplete="off"
+                                       placeholder="AIzaSy..."
                                    />
-                                   <button onClick={() => setShowKey(!showKey)} className="absolute right-1 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/80 p-1">
-                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                   <button onClick={() => setShowKey(!showKey)} className="absolute right-1 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/80 p-1.5 transition-colors">
+                                       {showKey ? (
+                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
+                                       ) : (
+                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" /><path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.742L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.064 7 9.542 7 .847 0 1.669-.105 2.454-.303z" /></svg>
+                                       )}
                                    </button>
                                </div>
-                               <button onClick={handleSaveKey} disabled={isValidating} className="px-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-lg text-[10px] font-black uppercase transition-colors shrink-0">
-                                   {isValidating ? '...' : (hasKey ? (aiPanel.update || 'Update') : (aiPanel.save || 'Save'))}
+                               <button 
+                                  onClick={handleSaveKey} 
+                                  disabled={isValidating} 
+                                  className={`px-3 rounded-lg text-[10px] font-black uppercase transition-all shrink-0 flex items-center justify-center min-w-[60px] ${hasKey ? 'bg-white/10 hover:bg-white/20 text-white border border-white/10' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/30'}`}
+                               >
+                                   {isValidating ? <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> : (hasKey ? (aiPanel.update || 'UPDATE') : (aiPanel.save || 'SAVE'))}
                                </button>
                            </div>
-                           <p className="text-[11px] text-white/30 leading-tight">{aiPanel.geminiHint || 'A custom key is optional. The app will use a default free-tier key if this is empty.'}</p>
+                           
+                           <div className="flex items-start gap-1.5 pt-1">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white/30 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                              <p className="text-[10px] text-white/40 leading-relaxed">
+                                {currentProvider === 'GEMINI' 
+                                  ? (aiPanel.geminiHint || 'Optional. Uses default free quota if empty.') 
+                                  : 'This persona runs on the Gemini engine. Please provide a Gemini API Key.'}
+                              </p>
+                           </div>
                        </div>
-                   )}
-
-                   {currentProvider !== 'GEMINI' && currentProvider !== 'MOCK' && (
-                        <div className="bg-yellow-900/20 border border-yellow-500/30 p-3 rounded-xl animate-fade-in-up text-center">
-                            <p className="text-xs text-yellow-200/80 leading-relaxed">
-                                { (aiPanel.notImplemented || 'AI processing for {provider} is not yet implemented. Please select Gemini to use AI features.').replace('{provider}', currentProviderLabel) }
-                            </p>
-                        </div>
                    )}
                 </div>
             )}

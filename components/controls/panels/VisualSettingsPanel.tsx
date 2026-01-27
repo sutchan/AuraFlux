@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.7.35
+ * Version: 1.7.37
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-06 16:00
  */
 
 import React from 'react';
@@ -89,9 +89,26 @@ export const VisualSettingsPanel: React.FC = () => {
         </div>
       </div>
       
-      {/* Col 2: Themes, Smart Presets & Quality */}
+      {/* Col 2: Quality, Themes & Smart Presets */}
       <div className="flex flex-col p-3 h-full border-b lg:border-b-0 lg:border-e border-white/5 pt-4 overflow-hidden">
         <div className="space-y-4 flex-grow overflow-y-auto custom-scrollbar pe-1.5">
+            {isAdvanced && (
+                <div className="pb-2 border-b border-white/5 animate-fade-in-up">
+                   <div className="py-1">
+                     <div className="flex items-center gap-1.5 justify-between">
+                          <TooltipArea text={hints?.quality}>
+                            <span className="text-xs font-bold uppercase text-white/60 tracking-wider whitespace-nowrap">{t?.quality || "Quality"}</span>
+                          </TooltipArea>
+                          <div className="flex w-full max-w-[180px] bg-white/[0.04] rounded-lg p-0.5">
+                          {(['low', 'med', 'high'] as const).map(q => (
+                              <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1 rounded text-xs font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
+                          ))}
+                          </div>
+                     </div>
+                   </div>
+                </div>
+            )}
+
             <div className="mb-1">
               <CustomSelect 
                 label={presets.title || 'Smart Presets'}
@@ -120,29 +137,14 @@ export const VisualSettingsPanel: React.FC = () => {
 
             <div>
                 <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1 mb-1.5 flex-shrink-0">{t?.styleTheme || "Visual Theme"}</span>
-                <div className="grid grid-cols-6 gap-1.5 p-0.5 content-start mb-1">
-                  {COLOR_THEMES.map((theme, i) => (
-                    <button key={i} onClick={() => setColorTheme(theme)} aria-label={`Theme ${i+1}`} className={`aspect-square rounded-full flex-shrink-0 transition-all duration-300 ${JSON.stringify(colorTheme) === JSON.stringify(theme) ? 'ring-2 ring-white/80 scale-110 shadow-[0_0_10px_rgba(255,255,255,0.25)]' : 'opacity-60 hover:opacity-100'}`} style={{background: `linear-gradient(135deg, ${theme[0]}, ${theme[1]})` }} />
-                  ))}
+                <div className="max-h-[140px] overflow-y-auto custom-scrollbar pr-1">
+                    <div className="grid grid-cols-6 gap-1.5 p-0.5 content-start">
+                      {COLOR_THEMES.map((theme, i) => (
+                        <button key={i} onClick={() => setColorTheme(theme)} aria-label={`Theme ${i+1}`} className={`aspect-square rounded-full flex-shrink-0 transition-all duration-300 ${JSON.stringify(colorTheme) === JSON.stringify(theme) ? 'ring-2 ring-white/80 scale-110 shadow-[0_0_10px_rgba(255,255,255,0.25)]' : 'opacity-60 hover:opacity-100'}`} style={{background: `linear-gradient(135deg, ${theme[0]}, ${theme[1]})` }} />
+                      ))}
+                    </div>
                 </div>
             </div>
-
-            {isAdvanced && (
-                <div className="pt-1.5 border-t border-white/5 animate-fade-in-up">
-                   <div className="py-1">
-                     <div className="flex items-center gap-1.5 justify-between">
-                          <TooltipArea text={hints?.quality}>
-                            <span className="text-xs font-bold uppercase text-white/60 tracking-wider whitespace-nowrap">{t?.quality || "Quality"}</span>
-                          </TooltipArea>
-                          <div className="flex w-full max-w-[180px] bg-white/[0.04] rounded-lg p-0.5">
-                          {(['low', 'med', 'high'] as const).map(q => (
-                              <button key={q} onClick={() => setSettings(prev => ({...prev, quality: q}))} aria-pressed={settings.quality === q} className={`flex-1 min-w-0 py-1 rounded text-xs font-bold uppercase tracking-widest transition-all ${settings.quality === q ? 'bg-white/20 text-white' : 'text-white/30 hover:text-white/70'}`}>{qualities[q] || q}</button>
-                          ))}
-                          </div>
-                     </div>
-                   </div>
-                </div>
-            )}
         </div>
       </div>
       
@@ -195,7 +197,7 @@ export const VisualSettingsPanel: React.FC = () => {
         </div>
         <div className="mt-auto pt-3">
           <TooltipArea text={hints?.resetVisual}>
-            <button onClick={resetVisualSettings} className="w-full py-2 bg-white/[0.04] rounded-lg text-xs font-bold uppercase tracking-wider text-white/50 hover:text-white transition-all flex items-center justify-center gap-1.5 border border-transparent hover:border-white/10"><svg xmlns="http://www.w.org/2000/svg" className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>
+            <button onClick={resetVisualSettings} className="w-full py-2 bg-white/[0.04] rounded-lg text-xs font-bold uppercase tracking-wider text-white/50 hover:text-white transition-all flex items-center justify-center gap-1.5 border border-transparent hover:border-white/10"><svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>{t?.resetVisual || "Reset Visuals"}</button>
           </TooltipArea>
         </div>
       </div>

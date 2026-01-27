@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.8
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:30
+ * Updated: 2025-03-06 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const en = {
   common: {
-    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED'
+    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED', new: 'NEW'
   },
   tabs: {
     visual: 'Visual', text: 'Text', audio: 'Audio', ai: 'AI Synesthesia', system: 'System', studio: 'Studio'
@@ -63,6 +63,12 @@ export const en = {
         fadeOff: 'None',
         fade1s: '1 Second',
         fade2s: '2 Seconds'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - High Qual',
+        vp8: 'WebM (VP8) - Compatible',
+        mp4_h264: 'MP4 (H.264) - Social',
+        mp4_generic: 'MP4 - Generic'
     },
     hints: {
         syncStart: 'Waits for audio signal or play button before recording.',
@@ -130,7 +136,9 @@ export const en = {
     savePreset: 'Save current state to browser storage.',
     loadPreset: 'Restore this preset state.',
     copyConfig: 'Copy configuration string to clipboard for quick sharing.',
-    wakeLock: 'Prevent screen from sleeping while visualizer is active.'
+    wakeLock: 'Prevent screen from sleeping while visualizer is active.',
+    includeInAutoRotate: 'Include in Auto-Rotate',
+    excludeFromAutoRotate: 'Exclude from Auto-Rotate'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',

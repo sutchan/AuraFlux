@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.8
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:30
+ * Updated: 2025-03-06 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const zh = {
   common: {
-    on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业'
+    on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业', new: '新'
   },
   tabs: {
     visual: '视觉', text: '文字', audio: '音频', ai: 'AI 通感', system: '系统', studio: '工作室'
@@ -63,6 +63,12 @@ export const zh = {
         fadeOff: '无',
         fade1s: '1 秒',
         fade2s: '2 秒'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - 高画质',
+        vp8: 'WebM (VP8) - 兼容性',
+        mp4_h264: 'MP4 (H.264) - 社交',
+        mp4_generic: 'MP4 - 通用'
     },
     hints: {
         syncStart: '等待音频信号或播放按钮按下瞬间启动录制。',
@@ -130,7 +136,9 @@ export const zh = {
     savePreset: '将当前状态保存到浏览器。',
     loadPreset: '加载此预设。',
     copyConfig: '将配置代码复制到剪贴板。',
-    wakeLock: '屏幕常亮，防止设备休眠。'
+    wakeLock: '屏幕常亮，防止设备休眠。',
+    includeInAutoRotate: '加入自动巡航',
+    excludeFromAutoRotate: '移出自动巡航'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
