@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.8.2
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:00
+ * Updated: 2025-03-05 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -130,8 +130,7 @@ export const ru = {
     importConfig: 'Импорт настроек из файла JSON.',
     savePreset: 'Сохранить текущие настройки локально.',
     loadPreset: 'Загрузить этот пресет.',
-    copyConfig: 'Копировать код конфигурации в буфер обмена.',
-    simulateCrash: 'Преднамеренно вызвать сбой приложения для проверки экрана восстановления ошибок.'
+    copyConfig: 'Копировать код конфигурации в буфер обмена.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -229,8 +228,7 @@ export const ru = {
     analyzing: 'Анализ...',
     analyze: 'Создать'
   },
-  systemPanel: { interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ',
-    simulateCrash: 'Симулировать сбой'
+  systemPanel: { interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ'
   },
   config: {
     title: 'Облако и Данные',

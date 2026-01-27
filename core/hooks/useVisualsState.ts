@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.7.34
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 23:00
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -16,6 +16,18 @@ const DEFAULT_THEME_INDEX = 1;
 
 // Regex for validating Hex colors
 const HEX_COLOR_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+
+const NO_GLOW_MODES = [
+    VisualizerMode.BARS, VisualizerMode.TUNNEL,
+    VisualizerMode.RINGS, VisualizerMode.FLUID_CURVES,
+    VisualizerMode.WAVEFORM
+];
+
+const NO_TRAILS_MODES = [
+    VisualizerMode.BARS,
+    VisualizerMode.RINGS,
+    VisualizerMode.LASERS
+];
 
 export const useVisualsState = (hasStarted: boolean, initialSettings: VisualizerSettings) => {
   const { getStorage, setStorage } = useLocalStorage();
@@ -64,18 +76,33 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
     if (settings.autoRotate && hasStarted) {
       rotateIntervalRef.current = window.setInterval(() => {
         setModeInternal(currentMode => {
-          // FIX: Align with randomize logic. Use VISUALIZER_PRESETS as the source of truth for implemented modes.
           const availableModes = (settings.includedModes && settings.includedModes.length > 0) 
             ? settings.includedModes 
             : Object.keys(VISUALIZER_PRESETS) as VisualizerMode[];
             
           const currentIndex = availableModes.indexOf(currentMode);
-          // If current mode isn't in the rotation list, start from the first one.
+          let nextMode: VisualizerMode;
+          
           if (currentIndex === -1) {
-            return availableModes[0];
+            nextMode = availableModes[0];
+          } else {
+            const nextIndex = (currentIndex + 1) % availableModes.length;
+            nextMode = availableModes[nextIndex];
           }
-          const nextIndex = (currentIndex + 1) % availableModes.length;
-          return availableModes[nextIndex];
+
+          // Enforce constraints for specific modes
+          const forceNoGlow = NO_GLOW_MODES.includes(nextMode);
+          const forceNoTrails = NO_TRAILS_MODES.includes(nextMode);
+
+          if (forceNoGlow || forceNoTrails) {
+              setSettings(prev => ({
+                  ...prev,
+                  glow: forceNoGlow ? false : prev.glow,
+                  trails: forceNoTrails ? false : prev.trails
+              }));
+          }
+
+          return nextMode;
         });
       }, (settings.rotateInterval || 30) * 1000);
     }
@@ -117,22 +144,10 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
         VisualizerMode.LIQUID, VisualizerMode.CUBE_FIELD,
         VisualizerMode.NEBULA, VisualizerMode.MACRO_BUBBLES
     ];
-
-    const noGlowModes = [
-        VisualizerMode.BARS, VisualizerMode.TUNNEL,
-        VisualizerMode.RINGS, VisualizerMode.FLUID_CURVES,
-        VisualizerMode.WAVEFORM
-    ];
-
-    const noTrailsModes = [
-        VisualizerMode.BARS,
-        VisualizerMode.RINGS,
-        VisualizerMode.LASERS
-    ];
     
     const isHeavy = heavyModes.includes(nextMode);
-    const forceNoGlow = noGlowModes.includes(nextMode);
-    const forceNoTrails = noTrailsModes.includes(nextMode);
+    const forceNoGlow = NO_GLOW_MODES.includes(nextMode);
+    const forceNoTrails = NO_TRAILS_MODES.includes(nextMode);
 
     setSettings(p => ({ 
         ...p, 
@@ -169,7 +184,6 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
     setActivePreset('');
   }, [setSettings, initialSettings]);
 
-  // FIX: Added missing return statement to export state and functions.
   return {
     mode, setMode,
     colorTheme, setColorTheme,

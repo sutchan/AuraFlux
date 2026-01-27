@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.7
+ * Version: 1.8.8
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 21:30
+ * Updated: 2025-03-05 22:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -130,8 +130,7 @@ export const en = {
     savePreset: 'Save current state to browser storage.',
     loadPreset: 'Restore this preset state.',
     copyConfig: 'Copy configuration string to clipboard for quick sharing.',
-    wakeLock: 'Prevent screen from sleeping while visualizer is active.',
-    simulateCrash: 'Intentionally crash the app to test the error recovery screen.'
+    wakeLock: 'Prevent screen from sleeping while visualizer is active.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -235,8 +234,7 @@ export const en = {
     analyze: 'Generate Visuals'
   },
   systemPanel: {
-    interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI',
-    simulateCrash: 'Simulate Crash'
+    interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI'
   },
   config: {
     title: 'Cloud & Data',

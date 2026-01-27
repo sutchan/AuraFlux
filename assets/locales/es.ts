@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.8.2
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:00
+ * Updated: 2025-03-05 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -130,8 +130,7 @@ export const es = {
     importConfig: 'Cargar configuración desde un archivo JSON.',
     savePreset: 'Guardar el estado actual en el almacenamiento del navegador.',
     loadPreset: 'Restaurar este estado preestablecido.',
-    copyConfig: 'Copiar la cadena de configuración al portapapeles para compartirla rápidamente.',
-    simulateCrash: 'Cierra la aplicación intencionadamente para probar la pantalla de recuperación de errores.'
+    copyConfig: 'Copiar la cadena de configuración al portapapeles para compartirla rápidamente.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -229,8 +228,7 @@ export const es = {
     analyzing: 'Analizando...',
     analyze: 'Generar Visuales'
   },
-  systemPanel: { interface: 'Interfaz', behavior: 'Comportamiento', maintenance: 'Mantenimiento', engine: 'Motor', audio: 'Audio', ai: 'IA',
-    simulateCrash: 'Simular Cierre'
+  systemPanel: { interface: 'Interfaz', behavior: 'Comportamiento', maintenance: 'Mantenimiento', engine: 'Motor', audio: 'Audio', ai: 'IA'
   },
   config: {
     title: 'Nube y Datos',

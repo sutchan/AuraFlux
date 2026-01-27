@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.8.2
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:00
+ * Updated: 2025-03-05 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -130,8 +130,7 @@ export const tw = {
     importConfig: '從 JSON 檔案載入配置。',
     savePreset: '將當前狀態保存到瀏覽器本地存儲。',
     loadPreset: '載入此預設。',
-    copyConfig: '將配置代碼複製到剪貼簿以便分享。',
-    simulateCrash: '故意使應用程式崩潰以測試錯誤恢復畫面。'
+    copyConfig: '將配置代碼複製到剪貼簿以便分享。'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -235,8 +234,7 @@ export const tw = {
     analyze: '生成視覺方案'
   },
   systemPanel: {
-    interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染架構', audio: '音訊架構', ai: 'AI',
-    simulateCrash: '模擬崩潰'
+    interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染架構', audio: '音訊架構', ai: 'AI'
   },
   config: {
     title: '雲端與資料',
@@ -266,7 +264,7 @@ export const tw = {
     custom: '自定義 / 已修改',
     all_modes: '所有模式',
     calm: '數位波形',
-    party: '動感光牆派對',
+    party: '動感光墙派對',
     ambient: '深空星雲',
     cyberpunk: '賽博雷射', 
     retrowave: '復古力場',
@@ -317,7 +315,7 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微觀液泡。',
     [VisualizerMode.KINETIC_WALL]: '帶有 3D 動力學擠出的巨型 LED 舞台背景牆。',
     [VisualizerMode.LIQUID]: '對低頻做出反應的抽象球體。',
-    [VisualizerMode.WAVEFORM]: '展現頻譜歷史的液體絲帶。'
+    [VisualizerMode.WAVEFORM]: '展現實時頻譜歷史的液體絲帶。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準排版', [LyricsStyle.KARAOKE]: '動態律動', [LyricsStyle.MINIMAL]: '極簡主義'

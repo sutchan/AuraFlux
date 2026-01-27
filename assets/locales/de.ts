@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.8.2
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:00
+ * Updated: 2025-03-05 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -130,8 +130,7 @@ export const de = {
     importConfig: 'Einstellungen aus einer JSON-Datei laden.',
     savePreset: 'Aktuellen Zustand im Browser speichern.',
     loadPreset: 'Diesen Preset-Zustand wiederherstellen.',
-    copyConfig: 'Konfigurationszeichenfolge zum schnellen Teilen in die Zwischenablage kopieren.',
-    simulateCrash: 'Absichtlicher Absturz der App, um den Fehlerbehebungsbildschirm zu testen.'
+    copyConfig: 'Konfigurationszeichenfolge zum schnellen Teilen in die Zwischenablage kopieren.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -229,8 +228,7 @@ export const de = {
     analyzing: 'Analysieren...',
     analyze: 'Generieren'
   },
-  systemPanel: { interface: 'Oberfläche', behavior: 'Verhalten', maintenance: 'Wartung', engine: 'Motor', audio: 'Audio', ai: 'KI',
-    simulateCrash: 'Absturz simulieren'
+  systemPanel: { interface: 'Oberfläche', behavior: 'Verhalten', maintenance: 'Wartung', engine: 'Motor', audio: 'Audio', ai: 'KI'
   },
   config: {
     title: 'Cloud & Daten',

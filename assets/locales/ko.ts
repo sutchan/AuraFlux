@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.8.2
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:00
+ * Updated: 2025-03-05 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -130,8 +130,7 @@ export const ko = {
     importConfig: 'JSON 파일에서 설정을 가져옵니다。',
     savePreset: '현재 설정을 로컬에 저장합니다。',
     loadPreset: '이 프리셋을 불러옵니다。',
-    copyConfig: '설정 코드를 클립보드에 복사합니다。',
-    simulateCrash: '오류 복구 화면을 테스트하기 위해 의도적으로 앱을 충돌시킵니다.'
+    copyConfig: '설정 코드를 클립보드에 복사합니다。'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -234,8 +233,7 @@ export const ko = {
     analyze: '생성'
   },
   systemPanel: {
-    interface: '인터페이스', behavior: '동작', maintenance: '유지 관리', engine: '엔진', audio: '오디오', ai: 'AI',
-    simulateCrash: '충돌 시뮬레이션'
+    interface: '인터페이스', behavior: '동작', maintenance: '유지 관리', engine: '엔진', audio: '오디오', ai: 'AI'
   },
   config: {
     title: '클라우드 & 데이터',

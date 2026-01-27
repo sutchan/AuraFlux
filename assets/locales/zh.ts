@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.7
+ * Version: 1.8.8
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 21:30
+ * Updated: 2025-03-05 22:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -130,8 +130,7 @@ export const zh = {
     savePreset: '将当前状态保存到浏览器。',
     loadPreset: '加载此预设。',
     copyConfig: '将配置代码复制到剪贴板。',
-    wakeLock: '屏幕常亮，防止设备休眠。',
-    simulateCrash: '故意使应用崩溃以测试错误恢复界面。'
+    wakeLock: '屏幕常亮，防止设备休眠。'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -235,8 +234,7 @@ export const zh = {
     analyze: '生成视觉方案'
   },
   systemPanel: {
-    interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI',
-    simulateCrash: '模拟崩溃'
+    interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI'
   },
   config: {
     title: '云端与数据',

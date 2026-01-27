@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.8.2
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:00
+ * Updated: 2025-03-05 23:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -130,8 +130,7 @@ export const fr = {
     importConfig: 'Charger les paramètres à partir d\'un fichier JSON.',
     savePreset: 'Enregistrer l\'état actuel dans le stockage du navigateur.',
     loadPreset: 'Restaurer cet état prédéfini.',
-    copyConfig: 'Copier la chaîne de configuration dans le presse-papiers pour un partage rapide.',
-    simulateCrash: 'Faire planter intentionnellement l\'application pour tester l\'écran de récupération d\'erreur.'
+    copyConfig: 'Copier la chaîne de configuration dans le presse-papiers pour un partage rapide.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -157,7 +156,7 @@ export const fr = {
   visualizerMode: 'Moteur Visuel',
   styleTheme: 'Thème de Couleur',
   settings: 'Réglage',
-  sensitivity: 'Sensibilité',
+  sensitivity: 'Sensibilidad',
   speed: 'Vitesse d\'Évolution',
   glow: 'Éclat Néon',
   trails: 'Traînées de Mouvement',
@@ -229,8 +228,7 @@ export const fr = {
     analyzing: 'Analyse...',
     analyze: 'Générer'
   },
-  systemPanel: { interface: 'Interface', behavior: 'Comportement', maintenance: 'Maintenance', engine: 'Moteur', audio: 'Audio', ai: 'IA',
-    simulateCrash: 'Simuler un Plantage'
+  systemPanel: { interface: 'Interface', behavior: 'Comportement', maintenance: 'Maintenance', engine: 'Moteur', audio: 'Audio', ai: 'IA'
   },
   config: {
     title: 'Cloud & Données',
