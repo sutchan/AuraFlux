@@ -15,7 +15,7 @@
   - **阿拉伯语 (ar)**: 支持 RTL 布局。
 - **本地化深度:** 
   - 核心术语 "Beta" 在日韩等亚洲语言中需使用本地化写法 (如 "ベータ", "베타") 以提升亲和力。
-  - **v1.7.33 更新:** 所有 UI 字符串、提示和流程均已在 10 种支持的语言中完成 100% 的键值对对齐，确保全球用户体验的一致性。
+  - **v1.8.3 更新:** 所有 UI 字符串（含 Studio、System 面板）已完成 100% 本地化覆盖，并移除了测试用的 `simulateCrash` 键值。
 
 ## 3. 专业术语标准化
 - **AI Synesthesia** -> AI 通感识别 / AI Synesthesia。
@@ -24,4 +24,4 @@
 - **Edge Intelligence** -> 边缘计算 / 边缘智能。
 
 ---
-*Aura Flux Storage & i18n - Version 1.7.46*
+*Aura Flux Storage & i18n - Version 1.8.3*

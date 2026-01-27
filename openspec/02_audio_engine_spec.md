@@ -35,4 +35,4 @@
 - **智能切片 (v1.8.0):** 在 AI 导演模式下，使用 `OfflineAudioContext` 快速渲染音频文件的 15 秒精华片段，转换为 WAV Blob 发送给 Gemini 进行深度分析。
 
 ---
-*Aura Flux Audio Engine - Version 1.8.0*
+*Aura Flux Audio Engine - Version 1.8.3*

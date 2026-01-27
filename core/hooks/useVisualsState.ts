@@ -1,6 +1,6 @@
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.8.4
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 23:00

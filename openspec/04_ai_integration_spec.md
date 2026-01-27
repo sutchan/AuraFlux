@@ -50,4 +50,4 @@ AI 必须返回严格的 JSON 格式。
 4. **Mock 模式:** 若 API Key 无效或未提供，返回模拟数据。
 
 ---
-*Aura Flux AI Integration - Version 1.8.0*
+*Aura Flux AI Integration - Version 1.8.3*

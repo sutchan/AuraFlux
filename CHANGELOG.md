@@ -2,6 +2,16 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.8.3] - 2025-03-05
+
+### Refactor
+*   **🎨 Visuals:** Implemented strict aesthetic constraints for `Auto-Rotate` and `Randomize` features. Specific modes (Spectrum, Tunnel, Resonance, etc.) now automatically disable **Glow** and/or **Trails** to prevent visual clutter and improve clarity.
+*   **🛠️ Robustness:** Removed the "Simulate Crash" debug feature and its associated UI controls from the production build to ensure stability and prevent accidental triggering.
+*   **🧹 Cleanup:** Purged unused localization strings (`simulateCrash`) from all language files to reduce bundle size.
+
+### Documentation
+*   **📚 OpenSpec:** Synchronized all architecture and testing specifications to version 1.8.3.
+
 ## [v1.7.46] - 2025-03-05
 
 ### Features
@@ -66,5 +76,3 @@ All notable changes to the **Aura Flux** project will be documented in this file
 
 ### Features
 *   **🎨 Visuals:** Overhauled the "Deep Nebula" visualizer with a more colorful and dynamic engine. Gas clouds are now rendered with two-tone gradients based on the selected color theme, the background is a subtle radial gradient, and beat reactions are significantly more pronounced, creating a richer, more vibrant cosmic scene.
-
-... (rest of the file unchanged)
