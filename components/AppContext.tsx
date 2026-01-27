@@ -1,13 +1,13 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.7.35
+ * Version: 1.7.47
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 14:30
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
-import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioFeatures, AIProvider } from '../core/types';
+import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioFeatures } from '../core/types';
 import { useAudio } from '../core/hooks/useAudio';
 import { useLocalStorage } from '../core/hooks/useLocalStorage';
 import { useAppState } from '../core/hooks/useAppState';
@@ -19,6 +19,8 @@ import { Toast } from './ui/Toast';
 const DEFAULT_SETTINGS: VisualizerSettings = {
   uiMode: 'advanced',
   sensitivity: 1.5, speed: 1.0, glow: false, trails: true, 
+  albumArtBackground: false,
+  albumArtDim: 0.5,
   autoRotate: false, rotateInterval: 30, includedModes: Object.values(VisualizerMode), 
   cycleColors: false, colorInterval: 10, hideCursor: false, smoothing: 0.8, fftSize: 512, 
   quality: 'high', monitor: false, wakeLock: false, customText: 'AURA', showCustomText: false,
@@ -72,6 +74,7 @@ export const useVisuals = () => {
 // --- 3. Audio Context ---
 interface AudioContextType {
   isListening: boolean; isSimulating: boolean; isPending: boolean;
+  audioContext: AudioContext | null;
   analyser: AnalyserNode | null; mediaStream: MediaStream | null; audioDevices: AudioDevice[];
   selectedDeviceId: string; onDeviceChange: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string | null; setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
@@ -79,7 +82,8 @@ interface AudioContextType {
   toggleMicrophone: (deviceId: string) => void;
   hasAudioPermission: () => Promise<boolean>;
   startDemoMode: () => Promise<void>;
-  audioFeaturesRef: React.MutableRefObject<AudioFeatures>;
+  currentSong: SongInfo | null;
+  setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
 }
 const AudioContext = createContext<AudioContextType | null>(null);
 export const useAudioContext = () => {
@@ -93,7 +97,6 @@ interface AIContextType {
   lyricsStyle: LyricsStyle; setLyricsStyle: React.Dispatch<React.SetStateAction<LyricsStyle>>;
   showLyrics: boolean; setShowLyrics: React.Dispatch<React.SetStateAction<boolean>>;
   isIdentifying: boolean;
-  currentSong: SongInfo | null; setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
   performIdentification: (stream: MediaStream) => Promise<void>;
   resetAiSettings: () => void;
   apiKeys: Record<string, string>; setApiKeys: React.Dispatch<React.SetStateAction<Record<string, string>>>;
@@ -222,11 +225,11 @@ const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const { language } = useUI();
   const { getStorage, setStorage } = useLocalStorage();
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() => getStorage('deviceId', ''));
+  const [currentSong, setCurrentSong] = useState<SongInfo | null>(null);
 
   const { 
-    isListening, isSimulating, isPending, analyser, mediaStream, audioDevices, 
-    errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone,
-    audioFeaturesRef
+    isListening, isSimulating, isPending, audioContext, analyser, mediaStream, audioDevices, 
+    errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone 
   } = useAudio({ settings, language });
 
   useEffect(() => {
@@ -242,10 +245,10 @@ const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
 
   return (
     <AudioContext.Provider value={{
-      isListening, isSimulating, isPending, analyser, mediaStream, audioDevices,
+      isListening, isSimulating, isPending, audioContext, analyser, mediaStream, audioDevices,
       selectedDeviceId, onDeviceChange: setSelectedDeviceId, errorMessage, setErrorMessage,
       startMicrophone, toggleMicrophone, hasAudioPermission, startDemoMode,
-      audioFeaturesRef
+      currentSong, setCurrentSong
     }}>
       {children}
     </AudioContext.Provider>
@@ -255,20 +258,21 @@ const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
 const AIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const { language, region } = useUI();
   const { settings, setSettings } = useVisuals();
-  const { isListening, isSimulating, mediaStream } = useAudioContext();
+  const { isListening, isSimulating, mediaStream, setCurrentSong } = useAudioContext();
 
   const {
     lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
-    currentSong, setCurrentSong, performIdentification, resetAiSettings, apiKeys, setApiKeys
+    performIdentification, resetAiSettings, apiKeys, setApiKeys
   } = useAiState({
       language, region, provider: settings.recognitionProvider,
-      isListening, isSimulating, mediaStream, initialSettings: DEFAULT_SETTINGS, setSettings
+      isListening, isSimulating, mediaStream, initialSettings: DEFAULT_SETTINGS, setSettings,
+      onSongIdentified: setCurrentSong,
   });
 
   return (
     <AIContext.Provider value={{
       lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
-      currentSong, setCurrentSong, performIdentification, resetAiSettings, apiKeys, setApiKeys
+      performIdentification, resetAiSettings, apiKeys, setApiKeys
     }}>
       {children}
     </AIContext.Provider>

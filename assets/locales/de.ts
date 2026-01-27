@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const de = {
     on: 'AN', off: 'AUS', visible: 'SICHTBAR', hidden: 'VERSTECKT', active: 'AKTIV', muted: 'STUMM', beta: 'BETA', simple: 'Einfach', advanced: 'Erweitert'
   },
   tabs: {
-    visual: 'Visuell', text: 'Text', audio: 'Audio', ai: 'KI-Synästhesie', system: 'System'
+    visual: 'Visuell', text: 'Text', audio: 'Audio', ai: 'KI-Synästhesie', system: 'System', studio: 'Studio'
+  },
+  studioPanel: {
+    title: 'Aufnahmestudio',
+    info: 'Erfassen Sie High-Fidelity-Clips Ihrer Visualisierung. Die Aufnahme erfasst sowohl die visuellen Elemente als auch die Systemaudioausgabe.',
+    start: 'Aufnahme starten',
+    stop: 'Aufnahme stoppen',
+    recording: 'LIVE-AUFNAHME',
+    processing: 'Verarbeitung...',
+    ready: 'Bereit zur Aufnahme',
+    format: 'Format',
+    quality: '8 Mbps (1080p)'
   },
   hints: {
     mode: 'Wählen Sie den mathematischen Kern für die Generation von Visuals.',
@@ -213,20 +224,20 @@ export const de = {
   system: { shortcuts: { mic: 'Mikro', ui: 'UI', mode: 'Modus', random: 'Zufall' } },
   errors: { title: 'Audio-Fehler', accessDenied: 'Zugriff verweigert.', noDevice: 'Kein Gerät gefunden.', deviceBusy: 'Gerät beschäftigt.', general: 'Zugriffsfehler.', tryDemo: 'Demo-Modus' },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'Neuronaler Fluss (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: 'Quantenfeld (WebGL)',
-    [VisualizerMode.PLASMA]: 'Fluid-Plasma',
-    [VisualizerMode.BARS]: 'Frequenzbalken',
-    [VisualizerMode.PARTICLES]: 'Sternenfeld',
-    [VisualizerMode.TUNNEL]: 'Geometrischer Tunnel',
-    [VisualizerMode.RINGS]: 'Neon-Ringe',
-    [VisualizerMode.NEBULA]: 'Tiefe Nebel',
-    [VisualizerMode.LASERS]: 'Konzertlaser',
-    [VisualizerMode.FLUID_CURVES]: 'Aura-Wellen',
-    [VisualizerMode.MACRO_BUBBLES]: 'Makro-Blasen',
-    [VisualizerMode.KINETIC_WALL]: 'Kinetische Wand (WebGL)',
-    [VisualizerMode.LIQUID]: 'Flüssige Sphäre (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Digitale Wellenform'
+    [VisualizerMode.NEURAL_FLOW]: 'Synaptischer Sturm (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Hyperwürfel (WebGL)',
+    [VisualizerMode.PLASMA]: 'Fusion',
+    [VisualizerMode.BARS]: 'Spektrum',
+    [VisualizerMode.PARTICLES]: 'Warp-Antrieb',
+    [VisualizerMode.TUNNEL]: 'Wurmloch',
+    [VisualizerMode.RINGS]: 'Resonanz',
+    [VisualizerMode.NEBULA]: 'Kosmischer Staub',
+    [VisualizerMode.LASERS]: 'Laser-Matrix',
+    [VisualizerMode.FLUID_CURVES]: 'Aurora',
+    [VisualizerMode.MACRO_BUBBLES]: 'Bokeh',
+    [VisualizerMode.KINETIC_WALL]: 'Puls-Matrix (WebGL)',
+    [VisualizerMode.LIQUID]: 'Geschmolzener Kern (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Seidenfluss'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organische Flüssigkeitssimulation mit WebGL-Partikeln.',

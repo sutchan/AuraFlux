@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const ru = {
     on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ'
   },
   tabs: {
-    visual: 'Визуал', text: 'Текст', audio: 'Аудио', ai: 'ИИ-Синестезия', system: 'Система'
+    visual: 'Визуал', text: 'Текст', audio: 'Аудио', ai: 'ИИ-Синестезия', system: 'Система', studio: 'Студия'
+  },
+  studioPanel: {
+    title: 'Студия записи',
+    info: 'Записывайте высококачественные клипы вашей визуализации. Запись захватывает как визуальные эффекты, так и системный аудиовыход.',
+    start: 'Начать запись',
+    stop: 'Остановить запись',
+    recording: 'ИДЕТ ЗАПИСЬ',
+    processing: 'Обработка...',
+    ready: 'Готов к записи',
+    format: 'Формат',
+    quality: '8 Мбит/с (1080p)'
   },
   hints: {
     mode: 'Выберите основной математический движок для генерации визуальных эффектов.',
@@ -205,20 +216,20 @@ export const ru = {
   system: { shortcuts: { mic: 'Мик', ui: 'UI', mode: 'Режим', random: 'Рандом' } },
   errors: { title: 'Ошибка аудио', accessDenied: 'Доступ запрещен.', noDevice: 'Устройство не найдено.', deviceBusy: 'Устройство занято.', general: 'Ошибка доступа.', tryDemo: 'Демо-режим' },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'Нейронный поток (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: 'Квантовое поле (WebGL)',
-    [VisualizerMode.PLASMA]: 'Поток плазмы',
-    [VisualizerMode.BARS]: 'Частотные столбцы',
-    [VisualizerMode.PARTICLES]: 'Звездное поле',
-    [VisualizerMode.TUNNEL]: 'Геометрический туннель',
-    [VisualizerMode.RINGS]: 'Неоновые кольца',
-    [VisualizerMode.NEBULA]: 'Глубокая туманность',
-    [VisualizerMode.LASERS]: 'Концертные лазеры',
-    [VisualizerMode.FLUID_CURVES]: 'Волны ауры',
-    [VisualizerMode.MACRO_BUBBLES]: 'Макро-пузыри',
-    [VisualizerMode.KINETIC_WALL]: 'Кинетическая стена (WebGL)',
-    [VisualizerMode.LIQUID]: 'Жидкая сфера (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Цифровая волна'
+    [VisualizerMode.NEURAL_FLOW]: 'Синаптический шторм (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Гиперкубы (WebGL)',
+    [VisualizerMode.PLASMA]: 'Слияние',
+    [VisualizerMode.BARS]: 'Спектр',
+    [VisualizerMode.PARTICLES]: 'Варп-двигатель',
+    [VisualizerMode.TUNNEL]: 'Червоточина',
+    [VisualizerMode.RINGS]: 'Резонанс',
+    [VisualizerMode.NEBULA]: 'Космическая пыль',
+    [VisualizerMode.LASERS]: 'Лазерная матрица',
+    [VisualizerMode.FLUID_CURVES]: 'Аврора',
+    [VisualizerMode.MACRO_BUBBLES]: 'Боке',
+    [VisualizerMode.KINETIC_WALL]: 'Импульсная матрица (WebGL)',
+    [VisualizerMode.LIQUID]: 'Расплавленное ядро (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Шелковый поток'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Органическая симуляция жидкости на основе частиц WebGL.',

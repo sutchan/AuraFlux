@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const ja = {
     on: 'ON', off: 'OFF', visible: '表示', hidden: '非表示', active: '有効', muted: 'ミュート', beta: 'ベータ', simple: '簡易', advanced: '詳細'
   },
   tabs: {
-    visual: 'ビジュアル', text: 'テキスト', audio: 'オーディオ', ai: 'AI 曲識別', system: 'システム'
+    visual: 'ビジュアル', text: 'テキスト', audio: 'オーディオ', ai: 'AI 曲識別', system: 'システム', studio: 'スタジオ'
+  },
+  studioPanel: {
+    title: 'レコーディングスタジオ',
+    info: 'ビジュアルの高画質クリップをキャプチャします。システム音声も同時に記録されます。',
+    start: '録画開始',
+    stop: '録画停止',
+    recording: '録画中',
+    processing: 'ビデオ生成中...',
+    ready: '準備完了',
+    format: 'フォーマット',
+    quality: '8 Mbps (1080p)'
   },
   hints: {
     mode: '視覚表現の核となる数理レンダリングエンジンを選択します。',
@@ -224,20 +235,20 @@ export const ja = {
     title: 'オーディオエラー', accessDenied: 'マイクへのアクセスが拒否されました。', noDevice: '入力デバイスが見つかりません。', deviceBusy: 'デバイスが使用中または無効です。', general: 'オーディオデバイスにアクセスできません。', tryDemo: 'デモモードを試す'
   },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'ニューラル・フロー (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: '量子フィールド (WebGL)',
-    [VisualizerMode.PLASMA]: 'プラズマ・フロー',
-    [VisualizerMode.BARS]: '周波数バー',
-    [VisualizerMode.PARTICLES]: 'スターフィールド',
-    [VisualizerMode.TUNNEL]: '幾何学トンネル',
-    [VisualizerMode.RINGS]: 'ネオンリング',
-    [VisualizerMode.NEBULA]: '深宇宙星雲',
-    [VisualizerMode.LASERS]: 'コンサートレーザー',
-    [VisualizerMode.FLUID_CURVES]: 'オーラウェーブ',
-    [VisualizerMode.MACRO_BUBBLES]: 'マクロバブル',
-    [VisualizerMode.KINETIC_WALL]: 'キネティックウォール (WebGL)',
-    [VisualizerMode.LIQUID]: '液体球体 (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'デジタル波形'
+    [VisualizerMode.NEURAL_FLOW]: 'シナプス・ストーム (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'ハイパーキューブ (WebGL)',
+    [VisualizerMode.PLASMA]: 'フュージョン',
+    [VisualizerMode.BARS]: 'スペクトラム',
+    [VisualizerMode.PARTICLES]: 'ワープ・ドライブ',
+    [VisualizerMode.TUNNEL]: 'ワームホール',
+    [VisualizerMode.RINGS]: 'レゾナンス',
+    [VisualizerMode.NEBULA]: 'コズミック・ダスト',
+    [VisualizerMode.LASERS]: 'レーザー・マトリクス',
+    [VisualizerMode.FLUID_CURVES]: 'オーロラ',
+    [VisualizerMode.MACRO_BUBBLES]: 'ボケ (Bokeh)',
+    [VisualizerMode.KINETIC_WALL]: 'パルス・マトリクス (WebGL)',
+    [VisualizerMode.LIQUID]: 'モルテン・コア (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'シルク・フロー'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'WebGLパーティクルによる有機的な流体シミュレーション。',

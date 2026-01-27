@@ -1,9 +1,9 @@
 /**
  * File: components/App.tsx
- * Version: 1.7.32
+ * Version: 1.7.33
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 14:00
  */
 
 import React from 'react';
@@ -24,9 +24,9 @@ import { useMobileGestures } from '../core/hooks/useMobileGestures';
 
 const AppContent: React.FC = () => {
   const { settings, isThreeMode, mode, colorTheme } = useVisuals();
-  const { errorMessage, setErrorMessage, isSimulating, analyser, mediaStream, startDemoMode } = useAudioContext();
+  const { errorMessage, setErrorMessage, isSimulating, analyser, mediaStream, startDemoMode, currentSong, setCurrentSong } = useAudioContext();
   const { hasStarted, isUnsupported, showOnboarding, language, setLanguage, handleOnboardingComplete, t, toggleFullscreen } = useUI();
-  const { currentSong, showLyrics, lyricsStyle, performIdentification, setCurrentSong } = useAI();
+  const { showLyrics, lyricsStyle, performIdentification } = useAI();
   
   // Mobile Gestures
   const gestureHandlers = useMobileGestures();

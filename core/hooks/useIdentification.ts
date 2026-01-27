@@ -1,6 +1,6 @@
 /**
  * File: core/hooks/useIdentification.ts
- * Version: 1.7.32
+ * Version: 1.7.33
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-05 12:00
@@ -16,9 +16,10 @@ interface UseIdentificationProps {
   provider: AIProvider;
   showLyrics: boolean;
   apiKey?: string; // Optional custom key
+  onSongUpdate?: (song: SongInfo | null) => void;
 }
 
-export const useIdentification = ({ language, region, provider, showLyrics, apiKey }: UseIdentificationProps) => {
+export const useIdentification = ({ language, region, provider, showLyrics, apiKey, onSongUpdate }: UseIdentificationProps) => {
   const [isIdentifying, setIsIdentifying] = useState(false);
   const [currentSong, setCurrentSong] = useState<SongInfo | null>(null);
   
@@ -71,6 +72,7 @@ export const useIdentification = ({ language, region, provider, showLyrics, apiK
     // Clear previous song if manual retry
     if (currentSong?.identified === false) {
         setCurrentSong(null);
+        if (onSongUpdate) onSongUpdate(null);
     }
     
     try {
@@ -108,6 +110,7 @@ export const useIdentification = ({ language, region, provider, showLyrics, apiK
               if (info) {
                 // Always update song info, even if identified=false, to show "AI Analysis" results
                 setCurrentSong(info);
+                if (onSongUpdate) onSongUpdate(info);
               }
               setIsIdentifying(false);
             }
@@ -132,7 +135,7 @@ export const useIdentification = ({ language, region, provider, showLyrics, apiK
       console.error("[AI] Recording Error:", e);
       setIsIdentifying(false);
     }
-  }, [showLyrics, language, region, provider, apiKey, getSupportedMimeType]); // removed currentSong dep to avoid loop
+  }, [showLyrics, language, region, provider, apiKey, getSupportedMimeType, onSongUpdate, currentSong?.identified]);
 
   return { isIdentifying, currentSong, setCurrentSong, performIdentification };
 };

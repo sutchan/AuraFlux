@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const tw = {
     on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業'
   },
   tabs: {
-    visual: '視覺', text: '文字', audio: '音訊', ai: 'AI 通感辨識', system: '系統'
+    visual: '視覺', text: '文字', audio: '音訊', ai: 'AI 通感辨識', system: '系統', studio: '工作室'
+  },
+  studioPanel: {
+    title: '錄製工作室',
+    info: '捕獲高保真的視覺效果片段。錄製將同時包含畫面與系統音訊輸出。',
+    start: '開始錄製',
+    stop: '停止錄製',
+    recording: '正在錄製',
+    processing: '生成影片中...',
+    ready: '就緒',
+    format: '輸出格式',
+    quality: '8 Mbps (1080p)'
   },
   hints: {
     mode: '選擇用於生成視覺效果的數學渲染引擎。',
@@ -225,20 +236,20 @@ export const tw = {
     title: '音訊錯誤', accessDenied: '權限被拒絕', noDevice: '未發現設備', deviceBusy: '設備忙', general: '無法訪問音訊', tryDemo: '演示模式'
   },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: '神經流體 (WebGL)',
+    [VisualizerMode.NEURAL_FLOW]: '突觸風暴 (WebGL)',
     [VisualizerMode.CUBE_FIELD]: '量子方陣 (WebGL)',
-    [VisualizerMode.PLASMA]: '流體電漿',
-    [VisualizerMode.BARS]: '頻譜分析',
-    [VisualizerMode.PARTICLES]: '星際穿越', 
-    [VisualizerMode.TUNNEL]: '幾何時空隧道',
-    [VisualizerMode.RINGS]: '霓虹共振環',
-    [VisualizerMode.NEBULA]: '深空星雲',
-    [VisualizerMode.LASERS]: '舞台雷射矩陣',
-    [VisualizerMode.FLUID_CURVES]: '極光之舞',
-    [VisualizerMode.MACRO_BUBBLES]: '微觀液泡', 
-    [VisualizerMode.KINETIC_WALL]: '動感光牆 (WebGL)', 
-    [VisualizerMode.LIQUID]: '液態星球 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '數位波形'
+    [VisualizerMode.PLASMA]: '核聚變',
+    [VisualizerMode.BARS]: '頻譜儀',
+    [VisualizerMode.PARTICLES]: '曲速引擎', 
+    [VisualizerMode.TUNNEL]: '時空隧道',
+    [VisualizerMode.RINGS]: '聲波共振',
+    [VisualizerMode.NEBULA]: '創生之柱',
+    [VisualizerMode.LASERS]: '雷射矩陣',
+    [VisualizerMode.FLUID_CURVES]: '極光',
+    [VisualizerMode.MACRO_BUBBLES]: '細胞漂移', 
+    [VisualizerMode.KINETIC_WALL]: '脈衝矩陣 (WebGL)', 
+    [VisualizerMode.LIQUID]: '熔核反應 (WebGL)',
+    [VisualizerMode.WAVEFORM]: '流光綢緞'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基於 WebGL 粒子系統的有機流體模擬。',

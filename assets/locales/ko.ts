@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const ko = {
     on: 'ON', off: 'OFF', visible: '표시', hidden: '숨김', active: '활성화', muted: '음소거', beta: '베타', simple: '간편', advanced: '고급'
   },
   tabs: {
-    visual: '시각 효과', text: '텍스트', audio: '오디오', ai: '트랙 인식', system: '시스템'
+    visual: '시각 효과', text: '텍스트', audio: '오디오', ai: '트랙 인식', system: '시스템', studio: '스튜디오'
+  },
+  studioPanel: {
+    title: '녹화 스튜디오',
+    info: '시각화의 고화질 클립을 캡처합니다. 캔버스 화면과 시스템 오디오 출력을 동시에 녹화합니다.',
+    start: '녹화 시작',
+    stop: '녹화 중지',
+    recording: '녹화 중',
+    processing: '처리 중...',
+    ready: '준비 완료',
+    format: '형식',
+    quality: '8 Mbps (1080p)'
   },
   hints: {
     mode: '시각 효과 생성을 위한 핵심 수리 렌더링 엔진을 선택합니다。',
@@ -224,20 +235,20 @@ export const ko = {
     title: '오디오 오류', accessDenied: '마이크 접근이 거부되었습니다。', noDevice: '입력 장치를 찾을 수 없습니다。', deviceBusy: '장치가 사용 중이거나 유효하지 않습니다。', general: '오디오 장치에 접근할 수 없습니다。', tryDemo: '데모 모드 시도'
   },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: '뉴럴 플로우 (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: '퀀텀 필드 (WebGL)',
-    [VisualizerMode.PLASMA]: '플라즈마 플로우',
-    [VisualizerMode.BARS]: '주파수 막대',
-    [VisualizerMode.PARTICLES]: '스타필드',
-    [VisualizerMode.TUNNEL]: '기하학 터널',
-    [VisualizerMode.RINGS]: '네온 링',
-    [VisualizerMode.NEBULA]: '심우주 성운',
-    [VisualizerMode.LASERS]: '콘서트 레이저',
-    [VisualizerMode.FLUID_CURVES]: '오라 웨이브',
-    [VisualizerMode.MACRO_BUBBLES]: '매크로 버블',
-    [VisualizerMode.KINETIC_WALL]: '키네틱 월 (WebGL)',
-    [VisualizerMode.LIQUID]: '액체 구체 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '디지털 파형'
+    [VisualizerMode.NEURAL_FLOW]: '시냅스 스톰 (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: '하이퍼 큐브 (WebGL)',
+    [VisualizerMode.PLASMA]: '퓨전',
+    [VisualizerMode.BARS]: '스펙트럼',
+    [VisualizerMode.PARTICLES]: '워프 드라이브',
+    [VisualizerMode.TUNNEL]: '웜홀',
+    [VisualizerMode.RINGS]: '레조넌스',
+    [VisualizerMode.NEBULA]: '코즈믹 더스트',
+    [VisualizerMode.LASERS]: '레이저 매트릭스',
+    [VisualizerMode.FLUID_CURVES]: '오로라',
+    [VisualizerMode.MACRO_BUBBLES]: '보케 (Bokeh)',
+    [VisualizerMode.KINETIC_WALL]: '펄스 매트릭스 (WebGL)',
+    [VisualizerMode.LIQUID]: '몰튼 코어 (WebGL)',
+    [VisualizerMode.WAVEFORM]: '실크 플로우'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'WebGL 파티클로 구동되는 유기적 유체 시뮬레이션。',

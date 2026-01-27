@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/NeuralFlowScene.tsx
- * Version: 2.0.0
+ * Version: 2.0.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 17:00
+ * Updated: 2025-03-05 15:30
  * Description: Major overhaul for "Neural Fluid" aesthetic.
  * Features: Filament clustering, synaptic pulsing, and biological luminescence.
  */
@@ -95,9 +95,10 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
     const beatPhase = Math.max(0, Math.exp(-beatElapsed * 4.0));
     mat.uniforms.uBeat.value = beatPhase;
 
-    // @fixtsx(111,112) - Use imported Color
-    mat.uniforms.uColor1.value.lerp(new Color(c0), 0.05);
-    mat.uniforms.uColor2.value.lerp(new Color(c1), 0.05);
+    // Optimization: Directly copy color values to avoid GC pressure from 'new Color()' every frame.
+    // Note: c0/c1 are already smoothed Color objects from useAudioReactive.
+    if (c0) mat.uniforms.uColor1.value.copy(c0);
+    if (c1) mat.uniforms.uColor2.value.copy(c1);
     
     // Slow organic rotation
     pointsRef.current.rotation.y = accumulatedTimeRef.current * 0.05;

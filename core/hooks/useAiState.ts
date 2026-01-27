@@ -1,6 +1,6 @@
 /**
  * File: core/hooks/useAiState.ts
- * Version: 1.7.32
+ * Version: 1.7.33
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-04 11:00
@@ -9,7 +9,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { useIdentification } from './useIdentification';
-import { LyricsStyle, Language, Region, VisualizerSettings, AIProvider } from '../types';
+import { LyricsStyle, Language, Region, VisualizerSettings, AIProvider, SongInfo } from '../types';
 
 const DEFAULT_LYRICS_STYLE = LyricsStyle.KARAOKE;
 const DEFAULT_SHOW_LYRICS = false;
@@ -33,11 +33,12 @@ interface AiStateProps {
   mediaStream: MediaStream | null;
   initialSettings: VisualizerSettings;
   setSettings: React.Dispatch<React.SetStateAction<VisualizerSettings>>;
+  onSongIdentified?: (song: SongInfo | null) => void;
 }
 
 export const useAiState = ({ 
   language, region, provider, isListening, 
-  isSimulating, mediaStream, initialSettings, setSettings 
+  isSimulating, mediaStream, initialSettings, setSettings, onSongIdentified
 }: AiStateProps) => {
   const { getStorage, setStorage } = useLocalStorage();
 
@@ -74,7 +75,8 @@ export const useAiState = ({
 
   const { isIdentifying, currentSong, setCurrentSong, performIdentification } = useIdentification({
     language, region, provider, showLyrics,
-    apiKey: apiKeys[provider] // Pass the custom key for current provider
+    apiKey: apiKeys[provider], // Pass the custom key for current provider
+    onSongUpdate: onSongIdentified
   });
 
   useEffect(() => {

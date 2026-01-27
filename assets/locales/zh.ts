@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const zh = {
     on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业'
   },
   tabs: {
-    visual: '视觉', text: '文字', audio: '音频', ai: 'AI 通感', system: '系统'
+    visual: '视觉', text: '文字', audio: '音频', ai: 'AI 通感', system: '系统', studio: '工作室'
+  },
+  studioPanel: {
+    title: '录制工作室',
+    info: '捕获高保真的视觉效果片段。录制将同时包含画面与系统音频输出。',
+    start: '开始录制',
+    stop: '停止录制',
+    recording: '正在录制',
+    processing: '生成视频中...',
+    ready: '就绪',
+    format: '输出格式',
+    quality: '8 Mbps (1080p)'
   },
   hints: {
     mode: '切换用于生成实时影像的核心数学引擎。',
@@ -31,7 +42,7 @@ export const zh = {
     rotateInterval: '切换到下一个视觉引擎前的停留时间（秒）。',
     cycleColors: '随时间推移自动平滑过渡色彩主题。',
     colorInterval: '平滑过渡到下一个色彩主题前的停留时间（秒）。',
-    reset: '将所有应用配置、语言及音频选项恢复至出厂状态。',
+    reset: '将所有应用配置、语言及音频选项恢复至出厂状态',
     confirmReset: '确认重置？此操作将清除所有自定义设置。',
     resetVisual: '仅重置视觉参数（速度、辉光、拖尾）至默认值。',
     resetText: '清除自定义文字内容、字体及排版设置。',
@@ -169,7 +180,7 @@ export const zh = {
     effects: '视觉特效', automation: '自动化', display: '显示'
   },
   audioPanel: {
-    info: '调节“灵敏度”以改变反应强度。更高的 FFT 能提供更精细的细节。'
+    info: '调节“灵敏度”以改变反应强度。更高的 FFT 能提供更精细的细节'
   },
   systemPanel: {
     interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI',
@@ -225,20 +236,20 @@ export const zh = {
     title: '音频错误', accessDenied: '权限被拒绝', noDevice: '未发现设备', deviceBusy: '设备忙', general: '无法访问音频', tryDemo: '演示模式'
   },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: '神经流体 (WebGL)',
+    [VisualizerMode.NEURAL_FLOW]: '突触风暴 (WebGL)',
     [VisualizerMode.CUBE_FIELD]: '量子方阵 (WebGL)',
-    [VisualizerMode.PLASMA]: '流体等离子',
-    [VisualizerMode.BARS]: '频谱分析',
-    [VisualizerMode.PARTICLES]: '星际穿越', 
-    [VisualizerMode.TUNNEL]: '几何时空隧道',
-    [VisualizerMode.RINGS]: '霓虹共振环',
-    [VisualizerMode.NEBULA]: '深空星云',
-    [VisualizerMode.LASERS]: '舞台激光矩阵',
-    [VisualizerMode.FLUID_CURVES]: '极光之舞',
-    [VisualizerMode.MACRO_BUBBLES]: '微观液泡', 
-    [VisualizerMode.KINETIC_WALL]: '动感光墙 (WebGL)', 
-    [VisualizerMode.LIQUID]: '液态星球 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '数字波形'
+    [VisualizerMode.PLASMA]: '核聚变',
+    [VisualizerMode.BARS]: '频谱仪',
+    [VisualizerMode.PARTICLES]: '曲速引擎', 
+    [VisualizerMode.TUNNEL]: '时空隧道',
+    [VisualizerMode.RINGS]: '声波共振',
+    [VisualizerMode.NEBULA]: '创生之柱',
+    [VisualizerMode.LASERS]: '激光矩阵',
+    [VisualizerMode.FLUID_CURVES]: '极光',
+    [VisualizerMode.MACRO_BUBBLES]: '细胞漂移', 
+    [VisualizerMode.KINETIC_WALL]: '脉冲矩阵 (WebGL)', 
+    [VisualizerMode.LIQUID]: '熔核反应 (WebGL)',
+    [VisualizerMode.WAVEFORM]: '流光绸缎'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基于 WebGL 粒子系统的有机流体模拟。',

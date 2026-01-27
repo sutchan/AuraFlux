@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const ar = {
     on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم'
   },
   tabs: {
-    visual: 'بصري', text: 'نص', audio: 'صوت', ai: 'تحسس الذكاء الاصطناعي', system: 'النظام'
+    visual: 'بصري', text: 'نص', audio: 'صوت', ai: 'تحسس الذكاء الاصطناعي', system: 'النظام', studio: 'ستوديو'
+  },
+  studioPanel: {
+    title: 'استوديو التسجيل',
+    info: 'التقط مقاطع عالية الدقة لتصورك. يلتقط التسجيل كل من المرئيات وإخراج صوت النظام.',
+    start: 'بدء التسجيل',
+    stop: 'إيقاف التسجيل',
+    recording: 'تسجيل مباشر',
+    processing: 'جاري المعالجة...',
+    ready: 'جاهز للالتقاط',
+    format: 'تنسيق',
+    quality: '8 ميجابت/ثانية (1080p)'
   },
   hints: {
     mode: 'اختر المحرك الرياضي الأساسي لتوليد المؤثرات البصرية.',
@@ -230,20 +241,20 @@ export const ar = {
     tryDemo: 'تجربة وضع العرض'
   },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'تدفق عصبي (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: 'حقل كمومي (WebGL)',
-    [VisualizerMode.PLASMA]: 'تدفق البلازما',
-    [VisualizerMode.BARS]: 'أشرطة التردد',
-    [VisualizerMode.PARTICLES]: 'حقل النجوم',
-    [VisualizerMode.TUNNEL]: 'نفق هندسي',
-    [VisualizerMode.RINGS]: 'حلقات النيون',
-    [VisualizerMode.NEBULA]: 'سديم عميق',
-    [VisualizerMode.LASERS]: 'ليزر الحفلات',
-    [VisualizerMode.FLUID_CURVES]: 'أمواج الهالة',
-    [VisualizerMode.MACRO_BUBBLES]: 'فقاعات ماكرو',
-    [VisualizerMode.KINETIC_WALL]: 'جدار حركي (WebGL)',
-    [VisualizerMode.LIQUID]: 'كرة سائلة (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'شكل موجي رقمي'
+    [VisualizerMode.NEURAL_FLOW]: 'عاصفة تشابكية (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'مكعبات فائقة (WebGL)',
+    [VisualizerMode.PLASMA]: 'اندماج',
+    [VisualizerMode.BARS]: 'طيف',
+    [VisualizerMode.PARTICLES]: 'محرك الاعوجاج',
+    [VisualizerMode.TUNNEL]: 'ثقب دودي',
+    [VisualizerMode.RINGS]: 'رنين',
+    [VisualizerMode.NEBULA]: 'غبار كوني',
+    [VisualizerMode.LASERS]: 'مصفوفة الليزر',
+    [VisualizerMode.FLUID_CURVES]: 'الشفق القطبي',
+    [VisualizerMode.MACRO_BUBBLES]: 'بوكيه',
+    [VisualizerMode.KINETIC_WALL]: 'مصفوفة النبض (WebGL)',
+    [VisualizerMode.LIQUID]: 'نواة منصهرة (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'تدفق الحرير'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'محاكاة سوائل عضوية مدعومة بجزيئات WebGL.',

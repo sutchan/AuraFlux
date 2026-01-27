@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const en = {
     on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED'
   },
   tabs: {
-    visual: 'Visual', text: 'Text', audio: 'Audio', ai: 'AI Synesthesia', system: 'System'
+    visual: 'Visual', text: 'Text', audio: 'Audio', ai: 'AI Synesthesia', system: 'System', studio: 'Studio'
+  },
+  studioPanel: {
+    title: 'Recording Studio',
+    info: 'Capture high-fidelity clips of your visualization. Recording captures both the canvas visuals and the system audio output.',
+    start: 'Start Recording',
+    stop: 'Stop Recording',
+    recording: 'RECORDING LIVE',
+    processing: 'Processing...',
+    ready: 'Ready to Capture',
+    format: 'Format',
+    quality: '8 Mbps (1080p)'
   },
   hints: {
     mode: 'Select the core mathematical engine for generating visuals.',
@@ -31,7 +42,7 @@ export const en = {
     rotateInterval: 'Time in seconds before switching to the next visual engine.',
     cycleColors: 'Automatically transition between color themes over time.',
     colorInterval: 'Time in seconds before smoothly blending to the next color palette.',
-    reset: 'Restore all application settings to factory defaults.',
+    reset: 'Restore all application settings to factory defaults',
     confirmReset: 'Confirm Reset? This action cannot be undone.',
     resetVisual: 'Reset aesthetics (Speed, Glow, Trails) to defaults.',
     resetText: 'Clear custom text, font, and positioning settings.',
@@ -169,7 +180,7 @@ export const en = {
     effects: 'Effects', automation: 'Automation', display: 'Display'
   },
   audioPanel: {
-    info: 'Adjust input sensitivity and smoothing to customize reaction. Higher FFT sizes provide more detail.'
+    info: 'Adjust input sensitivity and smoothing to customize reaction. Higher FFT sizes provide more detail'
   },
   systemPanel: {
     interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI',
@@ -194,7 +205,7 @@ export const en = {
   showFps: 'Show FPS',
   showTooltips: 'Show Tooltips',
   doubleClickFullscreen: 'Double-Click Fullscreen',
-  autoHideUi: 'Auto-Hide Controls',
+  autoHideUi: 'Automatically hide the control panel after a period of inactivity.',
   mirrorDisplay: 'Mirror Display',
   presets: {
     title: 'Smart Presets',
@@ -230,20 +241,20 @@ export const en = {
     tryDemo: 'Demo Mode'
   },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'Neural Flow (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: 'Quantum Field (WebGL)',
-    [VisualizerMode.PLASMA]: 'Plasma Flow',
-    [VisualizerMode.BARS]: 'Frequency Bars',
-    [VisualizerMode.PARTICLES]: 'Starfield',
-    [VisualizerMode.TUNNEL]: 'Geometric Tunnel',
-    [VisualizerMode.RINGS]: 'Neon Rings',
-    [VisualizerMode.NEBULA]: 'Deep Nebula',
-    [VisualizerMode.LASERS]: 'Concert Lasers',
-    [VisualizerMode.FLUID_CURVES]: 'Aura Waves',
-    [VisualizerMode.MACRO_BUBBLES]: 'Macro Bubbles',
-    [VisualizerMode.KINETIC_WALL]: 'Kinetic Wall (WebGL)', 
-    [VisualizerMode.LIQUID]: 'Liquid Sphere (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Digital Waveform'
+    [VisualizerMode.NEURAL_FLOW]: 'Synaptic Storm (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Hyper Cubes (WebGL)',
+    [VisualizerMode.PLASMA]: 'Fusion',
+    [VisualizerMode.BARS]: 'Spectrum',
+    [VisualizerMode.PARTICLES]: 'Warp Drive',
+    [VisualizerMode.TUNNEL]: 'Wormhole',
+    [VisualizerMode.RINGS]: 'Resonance',
+    [VisualizerMode.NEBULA]: 'Cosmic Dust',
+    [VisualizerMode.LASERS]: 'Laser Matrix',
+    [VisualizerMode.FLUID_CURVES]: 'Aurora',
+    [VisualizerMode.MACRO_BUBBLES]: 'Cellular Drift',
+    [VisualizerMode.KINETIC_WALL]: 'Pulse Matrix (WebGL)', 
+    [VisualizerMode.LIQUID]: 'Molten Core (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Silk Flow'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particles.',
@@ -257,9 +268,9 @@ export const en = {
     [VisualizerMode.LASERS]: 'Sharp high-energy light beams sweeping the screen.',
     [VisualizerMode.FLUID_CURVES]: 'Smooth atmospheric light waves.',
     [VisualizerMode.MACRO_BUBBLES]: 'Soft focus micro-cellular visuals.',
-    [VisualizerMode.KINETIC_WALL]: 'Massive LED stage wall with kinetic 3D extrusions.',
-    [VisualizerMode.LIQUID]: 'Abstract morphing sphere reacting to low frequencies.',
-    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency history.'
+    [VisualizerMode.KINETIC_WALL]: 'Massive LED stage wall with kinetic extrusions.',
+    [VisualizerMode.LIQUID]: 'Abstract morphing sphere reacting to rhythm.',
+    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency.'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamic', [LyricsStyle.MINIMAL]: 'Minimalist'

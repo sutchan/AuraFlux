@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 15:45
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -13,7 +13,18 @@ export const fr = {
     on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'MASQUÉ', active: 'ACTIF', muted: 'MUET', beta: 'BÊTA', simple: 'Simple', advanced: 'Avancé'
   },
   tabs: {
-    visual: 'Visuel', text: 'Texte', audio: 'Audio', ai: 'Synesthésie IA', system: 'Système'
+    visual: 'Visuel', text: 'Texte', audio: 'Audio', ai: 'Synesthésie IA', system: 'Système', studio: 'Studio'
+  },
+  studioPanel: {
+    title: 'Studio d\'Enregistrement',
+    info: 'Capturez des clips haute fidélité de votre visualisation. L\'enregistrement capture à la fois les visuels du canvas et la sortie audio du système.',
+    start: 'Démarrer l\'Enregistrement',
+    stop: 'Arrêter l\'Enregistrement',
+    recording: 'ENREGISTREMENT EN DIRECT',
+    processing: 'Traitement...',
+    ready: 'Prêt à Capturer',
+    format: 'Format',
+    quality: '8 Mbps (1080p)'
   },
   hints: {
     mode: 'Sélectionnez le moteur mathématique principal pour générer les visuels.',
@@ -181,7 +192,7 @@ export const fr = {
     importSuccess: 'Configuration chargée.',
     copy: 'Copier',
     copied: 'Copié !',
-    limitReached: 'Maximum de 5 préréglages autorisés.'
+    limitReached: 'Maximum of 5 préréglages autorisés.'
   },
   showFps: 'Afficher FPS',
   showTooltips: 'Afficher Aide',
@@ -213,20 +224,20 @@ export const fr = {
   system: { shortcuts: { mic: 'Micro', ui: 'UI', mode: 'Mode', random: 'Aléatoire' } },
   errors: { title: 'Erreur Audio', accessDenied: 'Accès refusé.', noDevice: 'Aucun appareil trouvé.', deviceBusy: 'Appareil occupé.', general: 'Erreur d\'accès.', tryDemo: 'Mode Démo' },
   modes: {
-    [VisualizerMode.NEURAL_FLOW]: 'Flux Neuronal (WebGL)',
-    [VisualizerMode.CUBE_FIELD]: 'Champ Quantique (WebGL)',
-    [VisualizerMode.PLASMA]: 'Flux de Plasma',
-    [VisualizerMode.BARS]: 'Barres de Fréquence',
-    [VisualizerMode.PARTICLES]: 'Champ d\'Étoiles',
-    [VisualizerMode.TUNNEL]: 'Tunnel Géométrique',
-    [VisualizerMode.RINGS]: 'Anneaux de Néon',
-    [VisualizerMode.NEBULA]: 'Nébuleuse Profonde',
-    [VisualizerMode.LASERS]: 'Lasers de Concert',
-    [VisualizerMode.FLUID_CURVES]: 'Ondes d\'Aura',
-    [VisualizerMode.MACRO_BUBBLES]: 'Macro-bulles',
-    [VisualizerMode.KINETIC_WALL]: 'Mur Cinétique (WebGL)',
-    [VisualizerMode.LIQUID]: 'Sphère Liquide (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Forme d\'Onde Numérique'
+    [VisualizerMode.NEURAL_FLOW]: 'Tempête Synaptique (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Hypercubes (WebGL)',
+    [VisualizerMode.PLASMA]: 'Fusion',
+    [VisualizerMode.BARS]: 'Spectre',
+    [VisualizerMode.PARTICLES]: 'Vitesse Lumière',
+    [VisualizerMode.TUNNEL]: 'Trou de Ver',
+    [VisualizerMode.RINGS]: 'Résonance',
+    [VisualizerMode.NEBULA]: 'Poussière Cosmique',
+    [VisualizerMode.LASERS]: 'Matrice Laser',
+    [VisualizerMode.FLUID_CURVES]: 'Aurore',
+    [VisualizerMode.MACRO_BUBBLES]: 'Bokeh',
+    [VisualizerMode.KINETIC_WALL]: 'Matrice d\'Impulsion (WebGL)',
+    [VisualizerMode.LIQUID]: 'Noyau en Fusion (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Flux de Soie'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Simulation de fluide organique propulsée par des particules WebGL.',
