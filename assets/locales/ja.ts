@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const ja = {
     quality: '8 Mbps (1080p)',
     autoStop: '終了時に自動停止',
     sourceMic: 'ソース：マイク',
-    sourceInt: 'ソース：内部音声 (ファイル)'
+    sourceInt: 'ソース：内部音声 (ファイル)',
+    arming: '待機中：信号待ち...',
+    cancel: 'キャンセル',
+    stopping: 'フェードアウト中...',
+    previewTitle: '録画プレビュー',
+    save: 'ビデオを保存',
+    discard: '破棄',
+    share: '共有',
+    stats: {
+        time: '時間',
+        size: 'サイズ'
+    },
+    settings: {
+        resolution: '解像度',
+        aspectRatio: 'アスペクト比',
+        fps: 'フレームレート',
+        bitrate: 'ビットレート',
+        codec: 'コーデック',
+        resNative: 'ウィンドウ (ネイティブ)',
+        arNative: 'ウィンドウ (ネイティブ)',
+        bpsLow: '低 (4 Mbps)',
+        bpsStd: '標準 (8 Mbps)',
+        bpsHigh: '高 (12 Mbps)',
+        bpsUltra: '最高 (25 Mbps)',
+        syncStart: '同期スタート',
+        countdown: 'カウントダウン',
+        duration: '時間指定録画',
+        unlimited: '無制限',
+        sec15: '15秒 (ストーリー)',
+        sec30: '30秒',
+        sec60: '60秒',
+        recGain: '録音ボリューム',
+        fade: 'フェードイン/アウト',
+        fadeOff: 'なし',
+        fade1s: '1秒',
+        fade2s: '2秒'
+    },
+    hints: {
+        syncStart: '音声信号または再生ボタンの押下を待ってから録画を開始します。',
+        countdown: '録画開始前に3秒間のカウントダウンを追加します。',
+        duration: '指定した時間が経過すると自動的に録画を停止します。',
+        recGain: '動画に記録される音量を調整します。モニター音量には影響しません。',
+        fade: '録画開始時にフェードイン、停止時に自動フェードアウトを適用します。'
+    }
   },
   hints: {
     mode: '視覚表現の核となる数理レンダリングエンジンを選択します。',

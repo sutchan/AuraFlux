@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const fr = {
     quality: '8 Mbps (1080p)',
     autoStop: 'Arrêt Auto à la Fin',
     sourceMic: 'Source : Micro',
-    sourceInt: 'Source : Audio Interne'
+    sourceInt: 'Source : Audio Interne',
+    arming: 'ARMEMENT : ATTENTE...',
+    cancel: 'Annuler',
+    stopping: 'FONDU DE SORTIE...',
+    previewTitle: 'Aperçu',
+    save: 'Sauvegarder Vidéo',
+    discard: 'Jeter',
+    share: 'Partager',
+    stats: {
+        time: 'TEMPS',
+        size: 'TAILLE'
+    },
+    settings: {
+        resolution: 'Résolution',
+        aspectRatio: 'Ratio d\'Aspect',
+        fps: 'IPS',
+        bitrate: 'Débit',
+        codec: 'Codec',
+        resNative: 'Fenêtre (Natif)',
+        arNative: 'Fenêtre (Natif)',
+        bpsLow: 'Bas (4 Mbps)',
+        bpsStd: 'Standard (8 Mbps)',
+        bpsHigh: 'Haut (12 Mbps)',
+        bpsUltra: 'Ultra (25 Mbps)',
+        syncStart: 'Démarrage Synchro',
+        countdown: 'Compte à Rebours',
+        duration: 'Durée',
+        unlimited: 'Illimité',
+        sec15: '15 Secondes (Story)',
+        sec30: '30 Secondes',
+        sec60: '60 Secondes',
+        recGain: 'Volume d\'Enregistrement',
+        fade: 'Fondu Entrée/Sortie',
+        fadeOff: 'Aucun',
+        fade1s: '1 Seconde',
+        fade2s: '2 Secondes'
+    },
+    hints: {
+        syncStart: 'Attend le signal audio ou le bouton de lecture avant d\'enregistrer.',
+        countdown: 'Ajoute un délai de 3 secondes avant le début de l\'enregistrement.',
+        duration: 'Arrête automatiquement l\'enregistrement après un temps fixe.',
+        recGain: 'Ajuste le volume de la vidéo enregistrée sans changer le volume de lecture.',
+        fade: 'Applique un fondu d\'entrée au début et un fondu de sortie à l\'arrêt.'
+    }
   },
   hints: {
     mode: 'Sélectionnez le moteur mathématique principal pour générer les visuels.',

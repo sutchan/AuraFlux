@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const de = {
     quality: '8 Mbps (1080p)',
     autoStop: 'Auto-Stopp am Ende',
     sourceMic: 'Quelle: Mikrofon',
-    sourceInt: 'Quelle: Internes Audio'
+    sourceInt: 'Quelle: Internes Audio',
+    arming: 'BEREIT: WARTE AUF SIGNAL...',
+    cancel: 'Abbrechen',
+    stopping: 'AUSBLENDEN...',
+    previewTitle: 'Aufnahmevorschau',
+    save: 'Video speichern',
+    discard: 'Verwerfen',
+    share: 'Teilen',
+    stats: {
+        time: 'ZEIT',
+        size: 'GRÖSSE'
+    },
+    settings: {
+        resolution: 'Auflösung',
+        aspectRatio: 'Seitenverhältnis',
+        fps: 'Bildrate (FPS)',
+        bitrate: 'Bitrate',
+        codec: 'Codec',
+        resNative: 'Fenster (Nativ)',
+        arNative: 'Fenster (Nativ)',
+        bpsLow: 'Niedrig (4 Mbps)',
+        bpsStd: 'Standard (8 Mbps)',
+        bpsHigh: 'Hoch (12 Mbps)',
+        bpsUltra: 'Ultra (25 Mbps)',
+        syncStart: 'Sync-Start',
+        countdown: 'Countdown',
+        duration: 'Dauer',
+        unlimited: 'Unbegrenzt',
+        sec15: '15 Sekunden (Story)',
+        sec30: '30 Sekunden',
+        sec60: '60 Sekunden',
+        recGain: 'Aufnahmevolumen',
+        fade: 'Ein-/Ausblenden',
+        fadeOff: 'Keine',
+        fade1s: '1 Sekunde',
+        fade2s: '2 Sekunden'
+    },
+    hints: {
+        syncStart: 'Wartet vor der Aufnahme auf Audiosignal oder Play-Taste.',
+        countdown: 'Fügt eine 3-sekündige Verzögerung vor Aufnahmebeginn hinzu.',
+        duration: 'Stoppt die Aufnahme automatisch nach einer festen Zeit.',
+        recGain: 'Passt die Lautstärke des aufgenommenen Videos an, ohne die Wiedergabelautstärke zu ändern.',
+        fade: 'Wendet Audio-Einblenden beim Start und Ausblenden beim Stopp an.'
+    }
   },
   hints: {
     mode: 'Wählen Sie den mathematischen Kern für die Generation von Visuals.',

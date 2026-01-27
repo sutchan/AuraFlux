@@ -1,14 +1,14 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.8.0';
+export const APP_VERSION = '1.8.2';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
@@ -40,7 +40,7 @@ export const COLOR_THEMES: string[][] = [
   ['#222f3e', '#576574', '#8395a7'], // 24: Storm Cloud
   ['#00d2d3', '#48dbfb', '#0abde3'], // 25: Glacier
   ['#ff6b6b', '#ee5253', '#c0392b'], // 26: Crimson
-  ['#feca57', '#ff9f43', '#f39c12'], // 27: Amber
+  ['#feca57', '#ff9f1a', '#f39c12'], // 27: Amber
   ['#9b59b6', '#8e44ad', '#2c3e50'], // 28: Nebula Dream
   ['#ffffff', '#8e8e93', '#c7c7cc'], // 29: Monochrome
   ['#7d5fff', '#4b4b4b', '#1e272e'], // 30: Phantom

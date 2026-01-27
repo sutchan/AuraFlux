@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const ru = {
     quality: '8 Мбит/с (1080p)',
     autoStop: 'Авто-стоп',
     sourceMic: 'Источник: Микрофон',
-    sourceInt: 'Источник: Аудио (Файл)'
+    sourceInt: 'Источник: Аудио (Файл)',
+    arming: 'НА СТАРТЕ: ЖДЕМ СИГНАЛ...',
+    cancel: 'Отмена',
+    stopping: 'ЗАТУХАНИЕ...',
+    previewTitle: 'Предпросмотр',
+    save: 'Сохранить видео',
+    discard: 'Сбросить',
+    share: 'Поделиться',
+    stats: {
+        time: 'ВРЕМЯ',
+        size: 'РАЗМЕР'
+    },
+    settings: {
+        resolution: 'Разрешение',
+        aspectRatio: 'Соотношение',
+        fps: 'FPS',
+        bitrate: 'Битрейт',
+        codec: 'Кодек',
+        resNative: 'Окно (Родное)',
+        arNative: 'Окно (Родное)',
+        bpsLow: 'Низкий (4 Mbps)',
+        bpsStd: 'Стандарт (8 Mbps)',
+        bpsHigh: 'Высокий (12 Mbps)',
+        bpsUltra: 'Ультра (25 Mbps)',
+        syncStart: 'Синхро-старт',
+        countdown: 'Обратный отсчет',
+        duration: 'Длительность',
+        unlimited: 'Безлимит',
+        sec15: '15 Сек (Сториз)',
+        sec30: '30 Сек',
+        sec60: '60 Сек',
+        recGain: 'Громкость записи',
+        fade: 'Фейд Вход/Выход',
+        fadeOff: 'Нет',
+        fade1s: '1 Секунда',
+        fade2s: '2 Секунды'
+    },
+    hints: {
+        syncStart: 'Ждет аудиосигнал или кнопку воспроизведения перед записью.',
+        countdown: 'Добавляет 3-секундную задержку перед стартом.',
+        duration: 'Автоматически останавливает запись через заданное время.',
+        recGain: 'Регулирует громкость записанного видео, не меняя громкость воспроизведения.',
+        fade: 'Применяет нарастание звука в начале и затухание в конце.'
+    }
   },
   hints: {
     mode: 'Выберите основной математический движок для генерации визуальных эффектов.',

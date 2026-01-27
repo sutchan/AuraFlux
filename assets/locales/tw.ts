@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const tw = {
     quality: '8 Mbps (1080p)',
     autoStop: '結束時自動停止',
     sourceMic: '音源：麥克風輸入',
-    sourceInt: '音源：內部音訊 (檔案)'
+    sourceInt: '音源：內部音訊 (檔案)',
+    arming: '待機：等待訊號...',
+    cancel: '取消',
+    stopping: '淡出中...',
+    previewTitle: '錄製預覽',
+    save: '保存影片',
+    discard: '丟棄',
+    share: '分享',
+    stats: {
+        time: '時長',
+        size: '大小'
+    },
+    settings: {
+        resolution: '畫面解析度',
+        aspectRatio: '長寬比',
+        fps: '幀率 (FPS)',
+        bitrate: '位元率 (Bitrate)',
+        codec: '編碼格式',
+        resNative: '視窗 (原生)',
+        arNative: '視窗 (原生)',
+        bpsLow: '低 (4 Mbps)',
+        bpsStd: '標準 (8 Mbps)',
+        bpsHigh: '高 (12 Mbps)',
+        bpsUltra: '超高 (25 Mbps)',
+        syncStart: '同步啟動',
+        countdown: '倒數計時',
+        duration: '定長錄製',
+        unlimited: '不限時',
+        sec15: '15 秒 (快拍)',
+        sec30: '30 秒',
+        sec60: '60 秒',
+        recGain: '錄製音量',
+        fade: '淡入淡出',
+        fadeOff: '無',
+        fade1s: '1 秒',
+        fade2s: '2 秒'
+    },
+    hints: {
+        syncStart: '等待音訊訊號或播放按鈕按下瞬間啟動錄製。',
+        countdown: '在錄製開始前增加 3 秒倒數計時。',
+        duration: '到達指定時長後自動停止錄製。',
+        recGain: '調整錄製到影片中的音量大小，不影響您的監聽音量。',
+        fade: '在錄製開始時音訊淡入，停止時自動淡出。'
+    }
   },
   hints: {
     mode: '選擇用於生成視覺效果的數學渲染引擎。',

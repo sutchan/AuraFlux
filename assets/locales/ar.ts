@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const ar = {
     quality: '8 ميجابت/ثانية (1080p)',
     autoStop: 'إيقاف تلقائي',
     sourceMic: 'المصدر: ميكروفون',
-    sourceInt: 'المصدر: صوت داخلي'
+    sourceInt: 'المصدر: صوت داخلي',
+    arming: 'الانتظار: في انتظار الإشارة...',
+    cancel: 'إلغاء',
+    stopping: 'تلاشي...',
+    previewTitle: 'معاينة التسجيل',
+    save: 'حفظ الفيديو',
+    discard: 'تجاهل',
+    share: 'مشاركة',
+    stats: {
+        time: 'الوقت',
+        size: 'الحجم'
+    },
+    settings: {
+        resolution: 'الدقة',
+        aspectRatio: 'نسبة العرض إلى الارتفاع',
+        fps: 'إطارات في الثانية',
+        bitrate: 'معدل البت',
+        codec: 'ترميز',
+        resNative: 'نافذة (أصلي)',
+        arNative: 'نافذة (أصلي)',
+        bpsLow: 'منخفض (4 ميجابت/ثانية)',
+        bpsStd: 'قياسي (8 ميجابت/ثانية)',
+        bpsHigh: 'عالي (12 ميجابت/ثانية)',
+        bpsUltra: 'فائق (25 ميجابت/ثانية)',
+        syncStart: 'بدء متزامن',
+        countdown: 'عد تنازلي',
+        duration: 'مدة',
+        unlimited: 'غير محدود',
+        sec15: '15 ثانية (قصة)',
+        sec30: '30 ثانية',
+        sec60: '60 ثانية',
+        recGain: 'حجم التسجيل',
+        fade: 'تلاشي الدخول/الخروج',
+        fadeOff: 'لا شيء',
+        fade1s: '1 ثانية',
+        fade2s: '2 ثانية'
+    },
+    hints: {
+        syncStart: 'ينتظر إشارة الصوت أو زر التشغيل قبل التسجيل.',
+        countdown: 'يضيف تأخير 3 ثوان قبل بدء التسجيل.',
+        duration: 'يوقف التسجيل تلقائيًا بعد وقت محدد.',
+        recGain: 'يضبط حجم الفيديو المسجل دون تغيير حجم التشغيل.',
+        fade: 'يطبق تلاشي الدخول عند البدء وتلاشي الخروج عند التوقف.'
+    }
   },
   hints: {
     mode: 'اختر المحرك الرياضي الأساسي لتوليد المؤثرات البصرية.',

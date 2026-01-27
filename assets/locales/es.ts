@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const es = {
     quality: '8 Mbps (1080p)',
     autoStop: 'Parada Automática',
     sourceMic: 'Fuente: Micrófono',
-    sourceInt: 'Fuente: Audio Interno'
+    sourceInt: 'Fuente: Audio Interno',
+    arming: 'ESPERANDO SEÑAL...',
+    cancel: 'Cancelar',
+    stopping: 'DESVANECIENDO...',
+    previewTitle: 'Vista Previa',
+    save: 'Guardar Video',
+    discard: 'Descartar',
+    share: 'Compartir',
+    stats: {
+        time: 'TIEMPO',
+        size: 'TAMAÑO'
+    },
+    settings: {
+        resolution: 'Resolución',
+        aspectRatio: 'Relación de Aspecto',
+        fps: 'FPS',
+        bitrate: 'Tasa de Bits',
+        codec: 'Códec',
+        resNative: 'Ventana (Nativa)',
+        arNative: 'Ventana (Nativa)',
+        bpsLow: 'Baja (4 Mbps)',
+        bpsStd: 'Estándar (8 Mbps)',
+        bpsHigh: 'Alta (12 Mbps)',
+        bpsUltra: 'Ultra (25 Mbps)',
+        syncStart: 'Inicio Sincronizado',
+        countdown: 'Cuenta Regresiva',
+        duration: 'Duración',
+        unlimited: 'Ilimitado',
+        sec15: '15 Segundos (Historia)',
+        sec30: '30 Segundos',
+        sec60: '60 Segundos',
+        recGain: 'Volumen de Grabación',
+        fade: 'Fundido Entrada/Salida',
+        fadeOff: 'Ninguno',
+        fade1s: '1 Segundo',
+        fade2s: '2 Segundos'
+    },
+    hints: {
+        syncStart: 'Espera la señal de audio o el botón de reproducción antes de grabar.',
+        countdown: 'Añade un retraso de 3 segundos antes de que comience la grabación.',
+        duration: 'Detiene automáticamente la grabación después de un tiempo fijo.',
+        recGain: 'Ajusta el volumen del video grabado sin cambiar el volumen de reproducción.',
+        fade: 'Aplica fundido de entrada al inicio y fundido de salida al detener.'
+    }
   },
   hints: {
     mode: 'Selecciona el motor matemático principal para la generación visual.',

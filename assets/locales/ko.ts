@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 18:00
+ * Updated: 2025-03-05 22:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const ko = {
     quality: '8 Mbps (1080p)',
     autoStop: '종료 시 자동 정지',
     sourceMic: '소스: 마이크',
-    sourceInt: '소스: 내부 오디오 (파일)'
+    sourceInt: '소스: 내부 오디오 (파일)',
+    arming: '대기 중: 신호 대기...',
+    cancel: '취소',
+    stopping: '페이드 아웃...',
+    previewTitle: '녹화 미리보기',
+    save: '비디오 저장',
+    discard: '삭제',
+    share: '공유',
+    stats: {
+        time: '시간',
+        size: '크기'
+    },
+    settings: {
+        resolution: '해상도',
+        aspectRatio: '종횡비',
+        fps: '프레임 속도',
+        bitrate: '비트레이트',
+        codec: '코덱',
+        resNative: '창 (기본)',
+        arNative: '창 (기본)',
+        bpsLow: '낮음 (4 Mbps)',
+        bpsStd: '표준 (8 Mbps)',
+        bpsHigh: '높음 (12 Mbps)',
+        bpsUltra: '최고 (25 Mbps)',
+        syncStart: '동기화 시작',
+        countdown: '카운트다운',
+        duration: '지정 시간 녹화',
+        unlimited: '무제한',
+        sec15: '15초 (스토리)',
+        sec30: '30초',
+        sec60: '60초',
+        recGain: '녹음 볼륨',
+        fade: '페이드 인/아웃',
+        fadeOff: '없음',
+        fade1s: '1초',
+        fade2s: '2초'
+    },
+    hints: {
+        syncStart: '오디오 신호나 재생 버튼을 기다렸다가 녹화를 시작합니다.',
+        countdown: '녹화 시작 전에 3초 카운트다운을 추가합니다.',
+        duration: '지정된 시간이 지나면 자동으로 녹화를 중지합니다.',
+        recGain: '재생 볼륨에 영향을 주지 않고 녹화된 비디오의 볼륨을 조절합니다.',
+        fade: '녹화 시작 시 페이드 인, 중지 시 자동 페이드 아웃을 적용합니다.'
+    }
   },
   hints: {
     mode: '시각 효과 생성을 위한 핵심 수리 렌더링 엔진을 선택합니다。',

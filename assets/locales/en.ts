@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.3
+ * Version: 1.8.7
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 17:00
+ * Updated: 2025-03-05 21:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const en = {
     quality: '8 Mbps (1080p)',
     autoStop: 'Auto-Stop on End',
     sourceMic: 'Source: Microphone Input',
-    sourceInt: 'Source: Internal Audio'
+    sourceInt: 'Source: Internal Audio',
+    arming: 'ARMED: WAITING...',
+    cancel: 'Cancel',
+    stopping: 'FADING OUT...',
+    previewTitle: 'Recording Preview',
+    save: 'Save Video',
+    discard: 'Discard',
+    share: 'Share',
+    stats: {
+        time: 'TIME',
+        size: 'SIZE'
+    },
+    settings: {
+        resolution: 'Resolution',
+        aspectRatio: 'Aspect Ratio',
+        fps: 'Frame Rate',
+        bitrate: 'Bitrate',
+        codec: 'Codec',
+        resNative: 'Window (Native)',
+        arNative: 'Window (Native)',
+        bpsLow: 'Low (4 Mbps)',
+        bpsStd: 'Standard (8 Mbps)',
+        bpsHigh: 'High (12 Mbps)',
+        bpsUltra: 'Ultra (25 Mbps)',
+        syncStart: 'Sync Start',
+        countdown: 'Countdown',
+        duration: 'Duration',
+        unlimited: 'Unlimited',
+        sec15: '15 Seconds (Story)',
+        sec30: '30 Seconds',
+        sec60: '60 Seconds',
+        recGain: 'Recording Volume',
+        fade: 'Fade In/Out',
+        fadeOff: 'None',
+        fade1s: '1 Second',
+        fade2s: '2 Seconds'
+    },
+    hints: {
+        syncStart: 'Waits for audio signal or play button before recording.',
+        countdown: 'Adds a 3-second delay before recording starts.',
+        duration: 'Automatically stops recording after a fixed time.',
+        recGain: 'Adjusts the volume of the recorded video without changing playback volume.',
+        fade: 'Applies audio fade-in at start and fade-out at stop.'
+    }
   },
   hints: {
     mode: 'Select the core mathematical engine for generating visuals.',

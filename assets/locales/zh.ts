@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.3
+ * Version: 1.8.7
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 17:00
+ * Updated: 2025-03-05 21:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -27,7 +27,50 @@ export const zh = {
     quality: '8 Mbps (1080p)',
     autoStop: '结束时自动停止',
     sourceMic: '音源：麦克风输入',
-    sourceInt: '音源：内部音频 (文件)'
+    sourceInt: '音源：内部音频 (文件)',
+    arming: '待机：等待信号...',
+    cancel: '取消',
+    stopping: '淡出中...',
+    previewTitle: '录制预览',
+    save: '保存视频',
+    discard: '丢弃',
+    share: '分享',
+    stats: {
+        time: '时长',
+        size: '大小'
+    },
+    settings: {
+        resolution: '画面分辨率',
+        aspectRatio: '长宽比',
+        fps: '帧率 (FPS)',
+        bitrate: '码率 (Bitrate)',
+        codec: '编码格式',
+        resNative: '窗口 (原生)',
+        arNative: '窗口 (原生)',
+        bpsLow: '低 (4 Mbps)',
+        bpsStd: '标准 (8 Mbps)',
+        bpsHigh: '高 (12 Mbps)',
+        bpsUltra: '超高 (25 Mbps)',
+        syncStart: '同步启动',
+        countdown: '倒计时',
+        duration: '定长录制',
+        unlimited: '不限时',
+        sec15: '15 秒 (快拍)',
+        sec30: '30 秒',
+        sec60: '60 秒',
+        recGain: '录制音量',
+        fade: '淡入淡出',
+        fadeOff: '无',
+        fade1s: '1 秒',
+        fade2s: '2 秒'
+    },
+    hints: {
+        syncStart: '等待音频信号或播放按钮按下瞬间启动录制。',
+        countdown: '在录制开始前增加 3 秒倒计时。',
+        duration: '到达指定时长后自动停止录制。',
+        recGain: '调整录制到视频中的音量大小，不影响您的监听音量。',
+        fade: '在录制开始时音频淡入，停止时自动淡出。'
+    }
   },
   hints: {
     mode: '切换用于生成实时影像的核心数学引擎。',
@@ -274,7 +317,7 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微观液泡。',
     [VisualizerMode.KINETIC_WALL]: '带有 3D 动力学挤出的巨型 LED 舞台背景墙。',
     [VisualizerMode.LIQUID]: '对低频做出反应的抽象球体。',
-    [VisualizerMode.WAVEFORM]: '展现频谱历史的液体丝带。'
+    [VisualizerMode.WAVEFORM]: '展现实时频谱历史的液体丝带。'
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '标准排版', [LyricsStyle.KARAOKE]: '动态律动', [LyricsStyle.MINIMAL]: '极简主义'
