@@ -1,15 +1,16 @@
 /**
  * File: components/App.tsx
- * Version: 1.7.33
+ * Version: 1.8.0
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 14:00
+ * Updated: 2025-03-05 16:00
  */
 
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import VisualizerCanvas from './visualizers/VisualizerCanvas';
 import ThreeVisualizer from './visualizers/ThreeVisualizer';
 import Controls from './controls/Controls';
+import { PlayerControls } from './controls/PlayerControls';
 import SongOverlay from './ui/SongOverlay';
 import CustomTextOverlay from './ui/CustomTextOverlay';
 import LyricsOverlay from './ui/LyricsOverlay';
@@ -24,15 +25,15 @@ import { useMobileGestures } from '../core/hooks/useMobileGestures';
 
 const AppContent: React.FC = () => {
   const { settings, isThreeMode, mode, colorTheme } = useVisuals();
-  const { errorMessage, setErrorMessage, isSimulating, analyser, mediaStream, startDemoMode, currentSong, setCurrentSong } = useAudioContext();
+  const { errorMessage, setErrorMessage, isSimulating, analyser, mediaStream, startDemoMode, currentSong, setCurrentSong, loadFile } = useAudioContext();
   const { hasStarted, isUnsupported, showOnboarding, language, setLanguage, handleOnboardingComplete, t, toggleFullscreen } = useUI();
   const { showLyrics, lyricsStyle, performIdentification } = useAI();
+  const [isDragOver, setIsDragOver] = useState(false);
   
   // Mobile Gestures
   const gestureHandlers = useMobileGestures();
 
   const handleDoubleClick = (e: React.MouseEvent) => {
-    // Prevent fullscreen trigger if clicking on controls
     const target = e.target as HTMLElement;
     if (target.tagName === 'BUTTON' || target.tagName === 'INPUT' || target.closest('button')) return;
     
@@ -40,6 +41,22 @@ const AppContent: React.FC = () => {
       toggleFullscreen();
     }
   };
+
+  const onDragOver = useCallback((e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragOver(true);
+  }, []);
+
+  const onDragLeave = useCallback(() => setIsDragOver(false), []);
+
+  const onDrop = useCallback((e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragOver(false);
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('audio/')) {
+          loadFile(file);
+      }
+  }, [loadFile]);
 
   if (showOnboarding) {
     return <OnboardingOverlay language={language} setLanguage={setLanguage} onComplete={handleOnboardingComplete} />;
@@ -56,11 +73,23 @@ const AppContent: React.FC = () => {
     <div 
       className="h-[100dvh] bg-black overflow-hidden relative touch-none" 
       onDoubleClick={handleDoubleClick}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
       {...gestureHandlers}
     >
       {settings.showFps && <FPSCounter />}
 
-      {/* 画布层：背景渲染 */}
+      {/* Drag Overlay */}
+      {isDragOver && (
+          <div className="absolute inset-0 z-[200] bg-blue-600/30 backdrop-blur-sm border-4 border-blue-400 border-dashed m-4 rounded-3xl flex items-center justify-center animate-pulse pointer-events-none">
+              <span className="text-3xl font-black text-white uppercase tracking-widest drop-shadow-lg">
+                  Drop Audio File
+              </span>
+          </div>
+      )}
+
+      {/* Background Layer */}
       <div className={`absolute inset-0 z-0 ${settings.hideCursor ? 'cursor-none' : ''}`} style={settings.mirrorDisplay ? { transform: 'scaleX(-1)' } : undefined}>
         {isThreeMode ? (
           <ThreeVisualizer analyser={analyser} mode={mode} colors={colorTheme} settings={settings} />
@@ -69,13 +98,13 @@ const AppContent: React.FC = () => {
         )}
       </div>
 
-      {/* 覆盖层：不拦截鼠标 */}
+      {/* Overlays */}
       <div className="absolute inset-0 z-10 pointer-events-none">
           <CustomTextOverlay settings={settings} analyser={analyser} />
           <LyricsOverlay settings={settings} song={currentSong} showLyrics={showLyrics} lyricsStyle={lyricsStyle} analyser={analyser} />
       </div>
 
-      {/* 交互 UI 层：控制面板 */}
+      {/* UI Layer */}
       <div className="absolute inset-0 z-20 pointer-events-none">
           <div className="pointer-events-auto cursor-default h-full w-full relative">
             {errorMessage && (
@@ -87,13 +116,8 @@ const AppContent: React.FC = () => {
                   </div>
               </div>
             )}
-            {isSimulating && (
-              <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[140] bg-blue-600/20 backdrop-blur-md border border-blue-500/30 px-4 py-1.5 rounded-full flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"/>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-blue-200">Demo Mode</span>
-              </div>
-            )}
             
+            <PlayerControls />
             <SongOverlay song={currentSong} showLyrics={showLyrics} language={language} onRetry={() => mediaStream && performIdentification(mediaStream)} onClose={() => setCurrentSong(null)} analyser={analyser} sensitivity={settings.sensitivity} />
             <Controls />
           </div>

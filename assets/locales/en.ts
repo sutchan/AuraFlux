@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.0
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const en = {
     processing: 'Processing...',
     ready: 'Ready to Capture',
     format: 'Format',
-    quality: '8 Mbps (1080p)'
+    quality: '8 Mbps (1080p)',
+    autoStop: 'Auto-Stop on End',
+    sourceMic: 'Source: Microphone Input',
+    sourceInt: 'Source: Internal Audio'
   },
   hints: {
     mode: 'Select the core mathematical engine for generating visuals.',
@@ -180,7 +183,13 @@ export const en = {
     effects: 'Effects', automation: 'Automation', display: 'Display'
   },
   audioPanel: {
-    info: 'Adjust input sensitivity and smoothing to customize reaction. Higher FFT sizes provide more detail'
+    info: 'Adjust input sensitivity and smoothing to customize reaction. Higher FFT sizes provide more detail',
+    mic: 'Mic',
+    file: 'File',
+    upload: 'Click to Upload',
+    aiDirector: 'AI Auto-Director',
+    analyzing: 'Listening & Designing...',
+    analyze: 'Generate Visuals'
   },
   systemPanel: {
     interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI',

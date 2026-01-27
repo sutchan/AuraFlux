@@ -1,13 +1,13 @@
 /**
  * File: components/controls/panels/SystemSettingsPanel.tsx
- * Version: 1.7.4
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2024-05-21 15:00
- * Description: Component for system-level settings like UI behavior, language, and maintenance.
+ * Updated: 2025-03-05 18:00
+ * Description: Component for system-level settings with added crash simulation for testing.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { useVisuals, useUI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
@@ -25,8 +25,15 @@ const LANGUAGES: { value: Language; label: string }[] = [
 export const SystemSettingsPanel: React.FC = () => {
   const { settings, setSettings } = useVisuals();
   const { t, resetSettings, language, setLanguage } = useUI();
+  const [shouldCrash, setShouldCrash] = useState(false);
+
   const hints = t?.hints || {};
   const systemPanel = t?.systemPanel || {};
+  const isAdvanced = settings.uiMode === 'advanced';
+
+  if (shouldCrash) {
+      throw new Error("Manual Crash Simulation triggered by user.");
+  }
 
   const handleSystemSettingChange = (key: keyof typeof settings, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }));
@@ -79,6 +86,21 @@ export const SystemSettingsPanel: React.FC = () => {
               {t?.hints?.reset || "Reset all application settings to factory defaults."}
             </span>
           </div>
+          
+          {isAdvanced && (
+              <div className="pt-2">
+                  <button 
+                    onClick={() => {
+                        if (window.confirm("This will intentionally crash the app to test the error boundary. Proceed?")) {
+                            setShouldCrash(true);
+                        }
+                    }}
+                    className="w-full py-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-200/60 hover:text-yellow-200 hover:bg-yellow-500/20 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors"
+                  >
+                      {systemPanel.simulateCrash || "Simulate Crash"}
+                  </button>
+              </div>
+          )}
         </div>
         <div className="mt-auto pt-3">
           <TooltipArea text={hints?.confirmReset}>

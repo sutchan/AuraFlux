@@ -3,7 +3,7 @@
  * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const fr = {
     processing: 'Traitement...',
     ready: 'Prêt à Capturer',
     format: 'Format',
-    quality: '8 Mbps (1080p)'
+    quality: '8 Mbps (1080p)',
+    autoStop: 'Arrêt Auto à la Fin',
+    sourceMic: 'Source : Micro',
+    sourceInt: 'Source : Audio Interne'
   },
   hints: {
     mode: 'Sélectionnez le moteur mathématique principal pour générer les visuels.',
@@ -174,7 +177,15 @@ export const fr = {
   quality: 'Qualité de Rendu',
   qualities: { low: 'Fluide', med: 'Équilibré', high: 'Ultime' },
   visualPanel: { effects: 'Effets', automation: 'Automatisation', display: 'Affichage' },
-  audioPanel: { info: 'Ajustez la sensibilité et le lissage pour personnaliser la réaction. Des tailles de FFT plus élevées offrent plus de détails.' },
+  audioPanel: { 
+    info: 'Ajustez la sensibilité et le lissage pour personnaliser la réaction. Des tailles de FFT plus élevées offrent plus de détails.',
+    mic: 'Micro',
+    file: 'Fichier',
+    upload: 'Téléverser',
+    aiDirector: 'Réalisateur IA',
+    analyzing: 'Analyse...',
+    analyze: 'Générer'
+  },
   systemPanel: { interface: 'Interface', behavior: 'Comportement', maintenance: 'Maintenance', engine: 'Moteur', audio: 'Audio', ai: 'IA',
     simulateCrash: 'Simuler un Plantage'
   },

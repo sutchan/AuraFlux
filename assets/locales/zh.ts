@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.0
+ * Version: 1.8.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 17:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const zh = {
     processing: '生成视频中...',
     ready: '就绪',
     format: '输出格式',
-    quality: '8 Mbps (1080p)'
+    quality: '8 Mbps (1080p)',
+    autoStop: '结束时自动停止',
+    sourceMic: '音源：麦克风输入',
+    sourceInt: '音源：内部音频 (文件)'
   },
   hints: {
     mode: '切换用于生成实时影像的核心数学引擎。',
@@ -180,7 +183,13 @@ export const zh = {
     effects: '视觉特效', automation: '自动化', display: '显示'
   },
   audioPanel: {
-    info: '调节“灵敏度”以改变反应强度。更高的 FFT 能提供更精细的细节'
+    info: '调节“灵敏度”以改变反应强度。更高的 FFT 能提供更精细的细节',
+    mic: '麦克风',
+    file: '文件',
+    upload: '点击上传音频',
+    aiDirector: 'AI 视觉导演',
+    analyzing: '正在聆听并设计...',
+    analyze: '生成视觉方案'
   },
   systemPanel: {
     interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI',
@@ -307,7 +316,7 @@ export const zh = {
     next: '继续', back: '返回', skip: '跳过', finish: '开启盛宴',
     features: {
       title: '感官特性',
-      visuals: { title: '数学生成艺术', desc: '内置 15+ 种基于 WebGL 的数学动力学引擎，将声波具象化。' },
+      visuals: { title: '数学生成艺术', desc: '内置 15+ 種基于 WebGL 的数学动力学引擎，将声波具象化。' },
       ai: { title: 'Gemini 智能核心', desc: '实时感知曲目元数据与视觉情绪，由 Google Gemini 3 提供支持。' },
       privacy: { title: '边缘计算保护', desc: '所有分析均在本地执行，我们绝不记录或存储您的私人声音数据。' }
     },

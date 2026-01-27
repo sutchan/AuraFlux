@@ -3,7 +3,7 @@
  * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const ja = {
     processing: 'ビデオ生成中...',
     ready: '準備完了',
     format: 'フォーマット',
-    quality: '8 Mbps (1080p)'
+    quality: '8 Mbps (1080p)',
+    autoStop: '終了時に自動停止',
+    sourceMic: 'ソース：マイク',
+    sourceInt: 'ソース：内部音声 (ファイル)'
   },
   hints: {
     mode: '視覚表現の核となる数理レンダリングエンジンを選択します。',
@@ -179,7 +182,13 @@ export const ja = {
     effects: 'エフェクト', automation: 'オートメーション', display: '表示'
   },
   audioPanel: {
-    info: '感度とスムージングを調整して、オーディオのダイナミクスに対する反応をカスタマイズします。FFT解像度を上げると精細になりますが、CPU負荷が増大します。'
+    info: '感度とスムージングを調整して、オーディオのダイナミクスに対する反応をカスタマイズします。FFT解像度を上げると精細になりますが、CPU負荷が増大します。',
+    mic: 'マイク',
+    file: 'ファイル',
+    upload: '音声ファイルをアップロード',
+    aiDirector: 'AIオートディレクター',
+    analyzing: '解析＆設計中...',
+    analyze: 'ビジュアル生成'
   },
   systemPanel: {
     interface: 'インターフェース', behavior: 'システム挙動', maintenance: 'メンテナンス', engine: 'エンジン', audio: 'オーディオ', ai: '人工知能',

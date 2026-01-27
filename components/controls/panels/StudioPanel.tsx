@@ -1,22 +1,31 @@
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 14:30
+ * Updated: 2025-03-05 16:30
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUI, useAudioContext } from '../../AppContext';
 import { useVideoRecorder } from '../../../core/hooks/useVideoRecorder';
+import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 
 export const StudioPanel: React.FC = () => {
   const { t, showToast } = useUI();
-  const { audioContext, analyser, mediaStream } = useAudioContext();
+  const { audioContext, analyser, mediaStream, sourceType, isPlaying } = useAudioContext();
+  const [autoStop, setAutoStop] = useState(false);
   
   const { isRecording, isProcessing, startRecording, stopRecording } = useVideoRecorder({
-      audioContext, analyser, mediaStream, showToast
+      audioContext, analyser, mediaStream, showToast, sourceType
   });
+
+  // Auto-Stop Logic: Trigger stop when playback ends if enabled
+  useEffect(() => {
+      if (isRecording && autoStop && sourceType === 'FILE' && !isPlaying) {
+          stopRecording();
+      }
+  }, [isRecording, autoStop, sourceType, isPlaying, stopRecording]);
 
   const studio = t?.studioPanel || {};
 
@@ -50,19 +59,31 @@ export const StudioPanel: React.FC = () => {
          <span className={`mt-4 text-xs font-black uppercase tracking-widest ${isRecording ? 'text-red-400 animate-pulse' : 'text-white/40'}`}>
              {isProcessing ? studio.processing : (isRecording ? studio.recording : studio.start)}
          </span>
+         
+         <div className="mt-3">
+             <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border ${sourceType === 'FILE' ? 'bg-blue-900/20 text-blue-300 border-blue-500/30' : 'bg-white/5 text-white/40 border-white/10'}`}>
+                 {sourceType === 'FILE' ? (studio.sourceInt || "Source: Internal") : (studio.sourceMic || "Source: Mic")}
+             </span>
+         </div>
       </div>
 
-      {/* Col 2: Info & Format */}
+      {/* Col 2: Settings & Format */}
       <div className="p-3 pt-4 h-full flex flex-col border-b lg:border-b-0 lg:border-e border-white/5">
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto custom-scrollbar pr-1.5">
             <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">{studio.title || "Studio"}</span>
-            <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-                <p className="text-xs text-white/60 leading-relaxed font-medium">
-                    {studio.info || "Recording captures high-fidelity video directly from the visual engine combined with system audio output."}
-                </p>
-            </div>
             
-            <div className="space-y-2">
+            {sourceType === 'FILE' && (
+                <div className="animate-fade-in-up">
+                    <SettingsToggle 
+                        label={studio.autoStop || "Auto-Stop on End"} 
+                        value={autoStop} 
+                        onChange={() => setAutoStop(!autoStop)} 
+                        activeColor="red"
+                    />
+                </div>
+            )}
+
+            <div className="space-y-2 pt-2">
                 <div className="flex justify-between items-center px-1">
                     <span className="text-[10px] font-bold uppercase text-white/40 tracking-wider">{studio.format || "Format"}</span>
                     <span className="text-[10px] font-mono text-white/80">WebM / MP4</span>
@@ -86,9 +107,12 @@ export const StudioPanel: React.FC = () => {
                   )}
               </svg>
           </div>
-          <span className="text-xs font-bold text-white/50 uppercase tracking-widest">
+          <span className="text-xs font-bold text-white/50 uppercase tracking-widest mb-2">
               {isRecording ? "Capture Active" : (studio.ready || "Ready")}
           </span>
+          <p className="text-[10px] text-white/30 leading-relaxed max-w-[150px]">
+              {studio.info || "Recording captures high-fidelity video directly from the visual engine."}
+          </p>
       </div>
     </>
   );

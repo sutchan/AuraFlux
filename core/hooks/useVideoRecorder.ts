@@ -1,21 +1,23 @@
 /**
  * File: core/hooks/useVideoRecorder.ts
- * Version: 1.8.0
- * Author: Sut
+ * Version: 2.0.0
+ * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 14:30
+ * Updated: 2025-03-05 16:30
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { AudioSourceType } from '../types';
 
 interface UseVideoRecorderProps {
     audioContext: AudioContext | null;
     analyser: AnalyserNode | null;
     mediaStream: MediaStream | null;
     showToast: (message: string, type?: 'success' | 'info' | 'error') => void;
+    sourceType: AudioSourceType;
 }
 
-export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToast }: UseVideoRecorderProps) => {
+export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToast, sourceType }: UseVideoRecorderProps) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -25,11 +27,11 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
 
   const getAudioStream = useCallback(() => {
     // 1. Microphone Mode: Use the active media stream directly
-    if (mediaStream && mediaStream.active) {
+    if (sourceType === 'MICROPHONE' && mediaStream && mediaStream.active) {
         return mediaStream;
     }
     
-    // 2. Demo/Internal Mode: Synthesize stream from AudioContext
+    // 2. File / Internal Mode: Synthesize stream from AudioContext
     // This connects the analyser (which receives all audio) to a MediaStreamDestination
     if (audioContext && analyser && audioContext.state === 'running') {
         // Reuse destination if exists to prevent graph fan-out issues
@@ -41,7 +43,7 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
     }
     
     return null;
-  }, [audioContext, analyser, mediaStream]);
+  }, [audioContext, analyser, mediaStream, sourceType]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {

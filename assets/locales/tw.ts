@@ -3,7 +3,7 @@
  * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const tw = {
     processing: '生成影片中...',
     ready: '就緒',
     format: '輸出格式',
-    quality: '8 Mbps (1080p)'
+    quality: '8 Mbps (1080p)',
+    autoStop: '結束時自動停止',
+    sourceMic: '音源：麥克風輸入',
+    sourceInt: '音源：內部音訊 (檔案)'
   },
   hints: {
     mode: '選擇用於生成視覺效果的數學渲染引擎。',
@@ -180,7 +183,13 @@ export const tw = {
     effects: '視覺特效', automation: '自動化', display: '顯示'
   },
   audioPanel: {
-    info: '調節「靈敏度」以改變反應強度。更高的 FFT 解析度能提供更精細的細節。'
+    info: '調節「靈敏度」以改變反應強度。更高的 FFT 解析度能提供更精細的細節。',
+    mic: '麥克風',
+    file: '檔案',
+    upload: '點擊上傳音訊',
+    aiDirector: 'AI 視覺導演',
+    analyzing: '正在聆聽並設計...',
+    analyze: '生成視覺方案'
   },
   systemPanel: {
     interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染架構', audio: '音訊架構', ai: 'AI',

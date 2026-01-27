@@ -3,7 +3,7 @@
  * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const ru = {
     processing: 'Обработка...',
     ready: 'Готов к записи',
     format: 'Формат',
-    quality: '8 Мбит/с (1080p)'
+    quality: '8 Мбит/с (1080p)',
+    autoStop: 'Авто-стоп',
+    sourceMic: 'Источник: Микрофон',
+    sourceInt: 'Источник: Аудио (Файл)'
   },
   hints: {
     mode: 'Выберите основной математический движок для генерации визуальных эффектов.',
@@ -174,7 +177,15 @@ export const ru = {
   quality: 'Качество рендера',
   qualities: { low: 'Скорость', med: 'Баланс', high: 'Ультима' },
   visualPanel: { effects: 'Эффекты', automation: 'Автоматизация', display: 'Экран' },
-  audioPanel: { info: 'Настройте чувствительность и сглаживание. Высокий FFT дает детали, но нагружает ЦП.' },
+  audioPanel: { 
+    info: 'Настройте чувствительность и сглаживание. Высокий FFT дает детали, но нагружает ЦП.',
+    mic: 'Микрофон',
+    file: 'Файл',
+    upload: 'Загрузить',
+    aiDirector: 'ИИ-Режиссер',
+    analyzing: 'Анализ...',
+    analyze: 'Создать'
+  },
   systemPanel: { interface: 'Интерфейс', behavior: 'Поведение', maintenance: 'Обслуживание', engine: 'Движок', audio: 'Аудио', ai: 'ИИ',
     simulateCrash: 'Симулировать сбой'
   },

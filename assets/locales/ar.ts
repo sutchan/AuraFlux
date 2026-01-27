@@ -3,7 +3,7 @@
  * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const ar = {
     processing: 'جاري المعالجة...',
     ready: 'جاهز للالتقاط',
     format: 'تنسيق',
-    quality: '8 ميجابت/ثانية (1080p)'
+    quality: '8 ميجابت/ثانية (1080p)',
+    autoStop: 'إيقاف تلقائي',
+    sourceMic: 'المصدر: ميكروفون',
+    sourceInt: 'المصدر: صوت داخلي'
   },
   hints: {
     mode: 'اختر المحرك الرياضي الأساسي لتوليد المؤثرات البصرية.',
@@ -180,7 +183,13 @@ export const ar = {
     effects: 'تأثيرات', automation: 'أتمتة', display: 'عرض'
   },
   audioPanel: {
-    info: 'اضبط حساسية الإدخال والتنعيم لتخصيص التفاعل. أحجام FFT الأعلى توفر تفاصيل أكثر.'
+    info: 'اضبط حساسية الإدخال والتنعيم لتخصيص التفاعل. أحجام FFT الأعلى توفر تفاصيل أكثر.',
+    mic: 'ميكروفون',
+    file: 'ملف',
+    upload: 'رفع ملف',
+    aiDirector: 'مخرج الذكاء الاصطناعي',
+    analyzing: 'جاري التحليل...',
+    analyze: 'توليد'
   },
   systemPanel: {
     interface: 'الواجهة', behavior: 'السلوك', maintenance: 'الصيانة', engine: 'المحرك', audio: 'الصوت', ai: 'الذكاء الاصطناعي',

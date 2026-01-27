@@ -3,7 +3,7 @@
  * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const ko = {
     processing: '처리 중...',
     ready: '준비 완료',
     format: '형식',
-    quality: '8 Mbps (1080p)'
+    quality: '8 Mbps (1080p)',
+    autoStop: '종료 시 자동 정지',
+    sourceMic: '소스: 마이크',
+    sourceInt: '소스: 내부 오디오 (파일)'
   },
   hints: {
     mode: '시각 효과 생성을 위한 핵심 수리 렌더링 엔진을 선택합니다。',
@@ -179,7 +182,13 @@ export const ko = {
     effects: '효과', automation: '자동화', display: '화면'
   },
   audioPanel: {
-    info: '감도와 평활도를 조절하여 시각화의 반응성을 최적화하세요. 높은 FFT 해상도는 정밀한 디테일을 제공하지만 CPU 사용량이 증가합니다。'
+    info: '감도와 평활도를 조절하여 시각화의 반응성을 최적화하세요. 높은 FFT 해상도는 정밀한 디테일을 제공하지만 CPU 사용량이 증가합니다。',
+    mic: '마이크',
+    file: '파일',
+    upload: '업로드',
+    aiDirector: 'AI 디렉터',
+    analyzing: '분석 중...',
+    analyze: '생성'
   },
   systemPanel: {
     interface: '인터페이스', behavior: '동작', maintenance: '유지 관리', engine: '엔진', audio: '오디오', ai: 'AI',

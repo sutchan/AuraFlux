@@ -9,7 +9,9 @@
   - `timeout: 25000ms` (从 15 秒增加以提升稳定性)。
 
 ## 2. 结构化输出 (Response Schema)
-AI 必须返回严格的 JSON 格式，Schema 更新以支持更丰富的描述和跨语言的鲁棒性：
+AI 必须返回严格的 JSON 格式。
+
+### 歌曲识别 (Identification)
 ```typescript
 {
   "title": "string",
@@ -21,11 +23,21 @@ AI 必须返回严格的 JSON 格式，Schema 更新以支持更丰富的描述�
 }
 ```
 
+### AI 导演 (Auto-Director v1.8.0)
+```typescript
+{
+  "mode": "string", // VisualizerMode Enum
+  "colors": ["string", "string", "string"], // Hex Codes
+  "speed": number,
+  "sensitivity": number,
+  "glow": boolean,
+  "explanation": "string" // 设计理由
+}
+```
+
 ## 3. 提示词工程 (Prompt Engineering)
-- **v1.7.37 Refactor:** 增强了提供商“人格”以获得更多样化的风格。提示词现在明确要求更丰富的心境描述和用于样式的规范化英文关键词。对于纯音乐，会要求描述音频的“视觉纹理”。
-- **v1.7.34 Refactor:** 引入“AI 人格”系统。根据用户在 UI 中选择的提供商（`GEMINI`, `GROQ`, `OPENAI`），动态调整系统提示词，以生成风格各异的描述性文本，增强用户体验。
-- **Mood 指令:** 要求 AI 提供生动的 3-5 词总结，结合情感与流派。
-- **Lyrics/Texture 指令:** 若无法识别具体歌词，要求描述音乐的视觉纹理、歌词主题或流派元素。
+- **v1.7.37 Refactor:** 增强了提供商“人格”以获得更多样化的风格。
+- **v1.8.0 Auto-Director:** 引入专门的 VJ/创意总监角色 Prompt，要求 AI 根据音频的 BPM、能量级和情感氛围，从可用的视觉引擎列表中选择最佳匹配，并设计三色调色板。
 
 ## 4. 语言与区域策略 (Linguistic Policy)
 - **用户语言感知:** 根据 UI 语言设置动态注入目标语言上下文。
@@ -38,4 +50,4 @@ AI 必须返回严格的 JSON 格式，Schema 更新以支持更丰富的描述�
 4. **Mock 模式:** 若 API Key 无效或未提供，返回模拟数据。
 
 ---
-*Aura Flux AI Integration - Version 1.7.46*
+*Aura Flux AI Integration - Version 1.8.0*

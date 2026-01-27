@@ -1,18 +1,18 @@
 /**
  * File: core/services/aiService.ts
- * Version: 3.0.4
+ * Version: 3.1.0
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 12:00
- * Description: Corrected the AI persona for Groq to reflect its speed and efficiency.
+ * Updated: 2025-03-05 17:00
+ * Description: Added generateVisualConfigFromAudio for Auto-Director feature.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { GEMINI_MODEL, REGION_NAMES } from '../constants';
-import { SongInfo, Language, Region, AIProvider } from '../types';
+import { GEMINI_MODEL, REGION_NAMES, VISUALIZER_PRESETS } from '../constants';
+import { SongInfo, Language, Region, AIProvider, VisualizerMode } from '../types';
 import { generateFingerprint, saveToLocalCache, findLocalMatch } from './fingerprintService';
 
-const REQUEST_TIMEOUT_MS = 25000; // Increased from 15s to improve reliability
+const REQUEST_TIMEOUT_MS = 25000;
 
 const PROVIDER_PROFILES: Record<string, string> = {
     GEMINI: "Role: Google Gemini. Style: Balanced, high-fidelity analysis. Focus on accurate metadata and holistic emotional context. Use rich, evocative language for moods.",
@@ -34,6 +34,23 @@ const RESPONSE_SCHEMA = {
     identified: { type: Type.BOOLEAN, description: "True if it is a known commercial track." },
   },
   required: ['title', 'artist', 'mood', 'mood_en_keywords', 'identified']
+};
+
+const VISUAL_CONFIG_SCHEMA = {
+    type: Type.OBJECT,
+    properties: {
+        mode: { type: Type.STRING, description: "The most suitable VisualizerMode enum value." },
+        colors: { 
+            type: Type.ARRAY, 
+            description: "An array of 3 hex color strings representing the mood.",
+            items: { type: Type.STRING } 
+        },
+        speed: { type: Type.NUMBER, description: "Recommended playback speed multiplier (0.5 to 2.0)." },
+        sensitivity: { type: Type.NUMBER, description: "Recommended audio sensitivity (1.0 to 3.0)." },
+        glow: { type: Type.BOOLEAN, description: "Whether to enable glow effect." },
+        explanation: { type: Type.STRING, description: "Short explanation of why this visual style was chosen." }
+    },
+    required: ['mode', 'colors', 'speed', 'sensitivity', 'glow', 'explanation']
 };
 
 export const validateApiKey = async (provider: AIProvider, key: string): Promise<boolean> => {
@@ -173,4 +190,54 @@ export const identifySongFromAudio = async (
       
       return null;
   }
+};
+
+export const generateVisualConfigFromAudio = async (
+    base64Audio: string, 
+    customKey?: string
+): Promise<any> => {
+    const apiKey = customKey || process.env.API_KEY;
+    if (!apiKey) throw new Error("Missing API Key");
+
+    const validModes = Object.keys(VISUALIZER_PRESETS).join(', ');
+
+    const systemInstruction = `
+        You are a world-class VJ (Visual Jockey) and Creative Director. 
+        Your task is to analyze the provided audio segment and design the perfect visualizer configuration.
+        
+        AVAILABLE MODES: [${validModes}]
+        
+        INSTRUCTIONS:
+        1. Analyze the audio for genre, tempo (BPM), energy level, and emotional atmosphere.
+        2. Select the single most appropriate 'mode' from the list above.
+           - Use 'NEURAL_FLOW' or 'LIQUID' for organic, ambient, or complex textures.
+           - Use 'KINETIC_WALL' or 'CUBE_FIELD' for high-energy, rhythmic, or industrial beats.
+           - Use 'LASERS' or 'TUNNEL' for fast-paced electronic or synthwave.
+           - Use 'BARS' or 'WAVEFORM' for vocals or classic rock.
+        3. Create a custom 3-color palette (hex codes) that matches the mood (e.g., Neon for Cyberpunk, Pastels for Lo-fi).
+        4. Adjust 'speed' (0.5 - 3.0) based on tempo.
+        5. Adjust 'sensitivity' (1.0 - 4.0) based on dynamic range.
+        6. Explain your creative choice in one short sentence.
+    `;
+
+    try {
+        const client = new GoogleGenAI({ apiKey });
+        const response = await client.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: [{ parts: [{ inlineData: { mimeType: 'audio/wav', data: base64Audio } }, { text: "Design visual experience." }] }],
+            config: {
+                systemInstruction: systemInstruction,
+                responseMimeType: "application/json",
+                responseSchema: VISUAL_CONFIG_SCHEMA,
+                temperature: 0.8
+            }
+        });
+        
+        const jsonStr = response.text?.replace(/```json/g, "").replace(/```/g, "").trim();
+        if (jsonStr) return JSON.parse(jsonStr);
+        throw new Error("Empty response");
+    } catch (e) {
+        console.error("AI Director failed:", e);
+        throw e;
+    }
 };

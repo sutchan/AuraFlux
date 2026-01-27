@@ -3,7 +3,7 @@
  * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const es = {
     processing: 'Procesando...',
     ready: 'Listo para Capturar',
     format: 'Formato',
-    quality: '8 Mbps (1080p)'
+    quality: '8 Mbps (1080p)',
+    autoStop: 'Parada Automática',
+    sourceMic: 'Fuente: Micrófono',
+    sourceInt: 'Fuente: Audio Interno'
   },
   hints: {
     mode: 'Selecciona el motor matemático principal para la generación visual.',
@@ -174,7 +177,15 @@ export const es = {
   quality: 'Calidad de Renderizado',
   qualities: { low: 'Fluido', med: 'Equilibrado', high: 'Supremo' },
   visualPanel: { effects: 'Efectos', automation: 'Automatización', display: 'Visualización' },
-  audioPanel: { info: 'Ajusta la sensibilidad y el suavizado para personalizar la reacción. Tamaños de FFT más altos proporcionan más detalle.' },
+  audioPanel: { 
+    info: 'Ajusta la sensibilidad y el suavizado para personalizar la reacción. Tamaños de FFT más altos proporcionan más detalle.',
+    mic: 'Micrófono',
+    file: 'Archivo',
+    upload: 'Cargar Archivo',
+    aiDirector: 'Auto-Director IA',
+    analyzing: 'Analizando...',
+    analyze: 'Generar Visuales'
+  },
   systemPanel: { interface: 'Interfaz', behavior: 'Comportamiento', maintenance: 'Mantenimiento', engine: 'Motor', audio: 'Audio', ai: 'IA',
     simulateCrash: 'Simular Cierre'
   },

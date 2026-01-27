@@ -3,7 +3,7 @@
  * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:45
+ * Updated: 2025-03-05 18:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -24,7 +24,10 @@ export const de = {
     processing: 'Verarbeitung...',
     ready: 'Bereit zur Aufnahme',
     format: 'Format',
-    quality: '8 Mbps (1080p)'
+    quality: '8 Mbps (1080p)',
+    autoStop: 'Auto-Stopp am Ende',
+    sourceMic: 'Quelle: Mikrofon',
+    sourceInt: 'Quelle: Internes Audio'
   },
   hints: {
     mode: 'Wählen Sie den mathematischen Kern für die Generation von Visuals.',
@@ -174,7 +177,15 @@ export const de = {
   quality: 'Renderqualität',
   qualities: { low: 'Glatt', med: 'Ausgewogen', high: 'Ultimativ' },
   visualPanel: { effects: 'Effekte', automation: 'Automatisierung', display: 'Anzeige' },
-  audioPanel: { info: 'Passen Sie Empfindlichkeit und Glättung an, um die Reaktion anzupassen. Höhere FFT-Größen bieten mehr Details.' },
+  audioPanel: { 
+    info: 'Passen Sie Empfindlichkeit und Glättung an, um die Reaktion anzupassen. Höhere FFT-Größen bieten mehr Details.',
+    mic: 'Mikro',
+    file: 'Datei',
+    upload: 'Hochladen',
+    aiDirector: 'KI-Regisseur',
+    analyzing: 'Analysieren...',
+    analyze: 'Generieren'
+  },
   systemPanel: { interface: 'Oberfläche', behavior: 'Verhalten', maintenance: 'Wartung', engine: 'Motor', audio: 'Audio', ai: 'KI',
     simulateCrash: 'Absturz simulieren'
   },

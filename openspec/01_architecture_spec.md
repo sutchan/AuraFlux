@@ -10,7 +10,7 @@
   - **3D:** Three.js (**^0.182.0**) / @react-three/fiber v9
     *   *CDN Strategy (Importmap):* 外部依赖通过 `importmap` 从 CDN 加载，构建配置中标记为 `external` 以优化加载速度。
 - **Intelligence:** Google Gemini 3 (Flash Preview)
-- **Audio:** Web Audio API (实时频域分析) + OfflineAudioContext (指纹提取) + AudioWorklet (特征提取 v1.6.4)
+- **Audio:** Web Audio API (实时频域分析) + OfflineAudioContext (指纹与切片提取) + AudioWorklet (特征提取 v1.6.4)
 
 ## 2. 模块解析与 Worker 策略
 - **Worker 导入:** 必须使用显式相对路径。
@@ -25,4 +25,4 @@
   - 为 ThreeVisualizer 引入核心组件记忆化策略，减少 R3F 协调开销。
 
 ---
-*Aura Flux Architecture - Version 1.7.46*
+*Aura Flux Architecture - Version 1.8.0*

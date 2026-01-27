@@ -1,9 +1,9 @@
 /**
  * File: core/types/audio.ts
- * Version: 1.7.39
+ * Version: 1.8.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 16:00
  */
 
 export enum LyricsStyle {
@@ -11,6 +11,8 @@ export enum LyricsStyle {
   KARAOKE = 'KARAOKE',
   MINIMAL = 'MINIMAL'
 }
+
+export type AudioSourceType = 'MICROPHONE' | 'FILE';
 
 export interface SongInfo {
   title: string;

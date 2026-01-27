@@ -1,13 +1,13 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.7.47
+ * Version: 1.7.49
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 14:30
+ * Updated: 2025-03-05 17:00
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
-import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioFeatures } from '../core/types';
+import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioSourceType } from '../core/types';
 import { useAudio } from '../core/hooks/useAudio';
 import { useLocalStorage } from '../core/hooks/useLocalStorage';
 import { useAppState } from '../core/hooks/useAppState';
@@ -26,7 +26,7 @@ const DEFAULT_SETTINGS: VisualizerSettings = {
   quality: 'high', monitor: false, wakeLock: false, customText: 'AURA', showCustomText: false,
   textPulse: true, customTextRotation: 0, customTextSize: 12, customTextFont: 'Inter, sans-serif',
   customTextOpacity: 0.35, customTextColor: '#ffffff', customTextPosition: 'mc', customTextCycleColor: false, customTextCycleInterval: 5,
-  customText3D: false, // Default for new 3D text effect
+  customText3D: false, 
   lyricsPosition: 'mc', recognitionProvider: 'GEMINI', lyricsFont: 'Inter, sans-serif', lyricsFontSize: 4,
   showFps: false, showTooltips: true, doubleClickFullscreen: true, autoHideUi: true, mirrorDisplay: false
 };
@@ -73,6 +73,8 @@ export const useVisuals = () => {
 
 // --- 3. Audio Context ---
 interface AudioContextType {
+  sourceType: AudioSourceType;
+  setSourceType: React.Dispatch<React.SetStateAction<AudioSourceType>>;
   isListening: boolean; isSimulating: boolean; isPending: boolean;
   audioContext: AudioContext | null;
   analyser: AnalyserNode | null; mediaStream: MediaStream | null; audioDevices: AudioDevice[];
@@ -84,6 +86,17 @@ interface AudioContextType {
   startDemoMode: () => Promise<void>;
   currentSong: SongInfo | null;
   setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
+  
+  // File Playback
+  fileStatus: 'idle' | 'loading' | 'ready' | 'error';
+  fileName: string | null;
+  isPlaying: boolean;
+  duration: number;
+  currentTime: number;
+  loadFile: (file: File) => Promise<void>;
+  togglePlayback: () => void;
+  seekFile: (time: number) => void;
+  getAudioSlice: (durationSeconds?: number) => Promise<Blob | null>;
 }
 const AudioContext = createContext<AudioContextType | null>(null);
 export const useAudioContext = () => {
@@ -227,10 +240,7 @@ const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() => getStorage('deviceId', ''));
   const [currentSong, setCurrentSong] = useState<SongInfo | null>(null);
 
-  const { 
-    isListening, isSimulating, isPending, audioContext, analyser, mediaStream, audioDevices, 
-    errorMessage, setErrorMessage, startMicrophone, startDemoMode, toggleMicrophone 
-  } = useAudio({ settings, language });
+  const audioState = useAudio({ settings, language });
 
   useEffect(() => {
     setStorage('deviceId', selectedDeviceId);
@@ -245,10 +255,9 @@ const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
 
   return (
     <AudioContext.Provider value={{
-      isListening, isSimulating, isPending, audioContext, analyser, mediaStream, audioDevices,
-      selectedDeviceId, onDeviceChange: setSelectedDeviceId, errorMessage, setErrorMessage,
-      startMicrophone, toggleMicrophone, hasAudioPermission, startDemoMode,
-      currentSong, setCurrentSong
+      ...audioState,
+      selectedDeviceId, onDeviceChange: setSelectedDeviceId, 
+      hasAudioPermission, currentSong, setCurrentSong
     }}>
       {children}
     </AudioContext.Provider>

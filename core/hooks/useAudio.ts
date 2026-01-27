@@ -1,18 +1,18 @@
 /**
  * File: core/hooks/useAudio.ts
- * Version: 1.7.32
+ * Version: 2.1.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-05 17:00
  */
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { AudioDevice, VisualizerSettings, Language, AudioFeatures } from '../types';
+import { AudioDevice, VisualizerSettings, Language, AudioFeatures, AudioSourceType } from '../types';
 import { TRANSLATIONS } from '../i18n';
 import { createDemoAudioGraph } from '../services/audioSynthesis';
+import { audioBufferToWav } from '../services/audioUtils';
 
 // Inline Worklet Code to avoid module resolution issues.
-// Note: AudioWorkletProcessor is available in the AudioWorkletGlobalScope.
 const WORKLET_CODE = `
 class AudioFeaturesProcessor extends AudioWorkletProcessor {
   constructor() {
@@ -62,142 +62,127 @@ interface UseAudioProps {
 }
 
 export const useAudio = ({ settings, language }: UseAudioProps) => {
-  // Defensive defaults: Ensure values exist even if settings object is malformed or null during init
   const safeFftSize = settings?.fftSize || 512;
   const safeSmoothing = (settings?.smoothing !== undefined) ? settings.smoothing : 0.8;
 
-  const [isListening, setIsListening] = useState(false);
-  const [isSimulating, setIsSimulating] = useState(false);
-  const [isPending, setIsPending] = useState(false);
+  // --- Common State ---
+  const [sourceType, setSourceType] = useState<AudioSourceType>('MICROPHONE');
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+
+  // --- Mic State ---
+  const [isListening, setIsListening] = useState(false);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [audioDevices, setAudioDevices] = useState<AudioDevice[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const featuresRef = useRef<AudioFeatures>({ rms: 0, energy: 0, timestamp: 0 });
-  const workletNodeRef = useRef<AudioWorkletNode | null>(null);
+  // --- File State ---
+  const [fileStatus, setFileStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  
+  // --- Refs ---
   const audioContextRef = useRef<AudioContext | null>(null);
-  const demoGraphRef = useRef<{ stop: () => void } | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  
+  // Mic Refs
   const streamRef = useRef<MediaStream | null>(null);
+  const workletNodeRef = useRef<AudioWorkletNode | null>(null);
   const workletUrlRef = useRef<string | null>(null);
+  
+  // File Refs
+  const audioBufferRef = useRef<AudioBuffer | null>(null);
+  const fileSourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
+  const startTimeRef = useRef(0);
+  const pausedAtRef = useRef(0);
+  const rafRef = useRef(0);
+  
+  // Demo Refs
+  const [isSimulating, setIsSimulating] = useState(false);
+  const demoGraphRef = useRef<{ stop: () => void } | null>(null);
+  const featuresRef = useRef<AudioFeatures>({ rms: 0, energy: 0, timestamp: 0 });
 
   // Cleanup Worklet URL on unmount
   useEffect(() => {
     return () => {
       if (workletUrlRef.current) {
         URL.revokeObjectURL(workletUrlRef.current);
-        workletUrlRef.current = null;
       }
+      stopAll();
     };
   }, []);
 
-  const stopListening = useCallback(async () => {
-    try {
-        if (workletNodeRef.current) {
-            workletNodeRef.current.port.onmessage = null;
-            workletNodeRef.current.disconnect();
-            workletNodeRef.current = null;
-        }
-        if (streamRef.current) {
-            streamRef.current.getTracks().forEach(track => track.stop());
-            streamRef.current = null;
-        }
-        if (demoGraphRef.current) {
-            demoGraphRef.current.stop();
-            demoGraphRef.current = null;
-        }
-        if (audioContextRef.current) {
-            if (audioContextRef.current.state !== 'closed') {
-                await audioContextRef.current.close();
-            }
-            audioContextRef.current = null;
-        }
-    } catch (e) {
-        console.warn("[Audio] Error during cleanup:", e);
-    } finally {
-        setAudioContext(null);
-        setAnalyser(null);
-        setMediaStream(null);
-        setIsListening(false);
-        setIsSimulating(false);
-        featuresRef.current = { rms: 0, energy: 0, timestamp: 0 };
+  // --- Initialization Helper ---
+  const ensureContext = async (): Promise<AudioContext> => {
+    if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const ctx = new AudioContextClass();
+      audioContextRef.current = ctx;
+      setAudioContext(ctx);
     }
-  }, []);
-
-  const attemptResume = useCallback(async () => {
-    if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-      try {
-        await audioContextRef.current.resume();
-        console.log("[Audio] Context resumed successfully.");
-      } catch (e) {
-        console.warn("[Audio] Resume failed:", e);
-      }
+    
+    if (audioContextRef.current.state === 'suspended') {
+      await audioContextRef.current.resume();
     }
-  }, []);
 
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && isListening) {
-        attemptResume();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [isListening, attemptResume]);
-
-  const updateAudioDevices = useCallback(async () => {
-    if (typeof navigator === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
-    try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        setAudioDevices(devices.filter(d => d.kind === 'audioinput').map(d => ({ deviceId: d.deviceId, label: d.label || `Mic ${d.deviceId.slice(0, 5)}` })));
-    } catch (e) {
-        console.warn("Could not enumerate audio devices", e);
+    if (!analyserRef.current) {
+      const node = audioContextRef.current.createAnalyser();
+      node.fftSize = safeFftSize;
+      node.smoothingTimeConstant = safeSmoothing;
+      analyserRef.current = node;
+      setAnalyser(node);
+    } else {
+        // Update existing analyser settings
+        analyserRef.current.fftSize = safeFftSize;
+        analyserRef.current.smoothingTimeConstant = safeSmoothing;
     }
-  }, []);
-  
-  useEffect(() => {
-    if (typeof navigator !== 'undefined' && navigator.mediaDevices) {
-        navigator.mediaDevices.addEventListener('devicechange', updateAudioDevices);
-        return () => navigator.mediaDevices?.removeEventListener('devicechange', updateAudioDevices);
-    }
-  }, [updateAudioDevices]);
 
-  const initWorklet = async (ctx: AudioContext, source: MediaStreamAudioSourceNode) => {
-    try {
-        if (!workletUrlRef.current) {
-            const blob = new Blob([WORKLET_CODE], { type: 'application/javascript' });
-            workletUrlRef.current = URL.createObjectURL(blob);
-        }
-
-        await ctx.audioWorklet.addModule(workletUrlRef.current);
-        
-        const node = new AudioWorkletNode(ctx, 'audio-features-processor');
-        
-        node.port.onmessage = (event) => {
-            if (event.data.type === 'features') {
-                featuresRef.current = event.data.data;
-            }
-        };
-        
-        source.connect(node);
-        node.connect(ctx.destination); 
-        workletNodeRef.current = node;
-        console.log("[Audio] Worklet initialized successfully.");
-    } catch (e) {
-        console.warn("[Audio] AudioWorklet failed to load, falling back to main thread only:", e);
-    }
+    return audioContextRef.current;
   };
 
+  const stopAll = useCallback(async () => {
+    // Stop Mic
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    if (workletNodeRef.current) {
+      workletNodeRef.current.disconnect();
+      workletNodeRef.current = null;
+    }
+    
+    // Stop File
+    if (fileSourceNodeRef.current) {
+      try { fileSourceNodeRef.current.stop(); } catch(e) {}
+      fileSourceNodeRef.current.disconnect();
+      fileSourceNodeRef.current = null;
+    }
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    
+    // Stop Demo
+    if (demoGraphRef.current) {
+      demoGraphRef.current.stop();
+      demoGraphRef.current = null;
+    }
+
+    setIsListening(false);
+    setIsPlaying(false);
+    setIsSimulating(false);
+    setMediaStream(null);
+  }, []);
+
+  // --- Microphone Logic ---
   const startMicrophone = useCallback(async (deviceId?: string) => {
-    setErrorMessage(null);
-    await stopListening();
+    setIsPending(true);
+    await stopAll();
+    setSourceType('MICROPHONE');
 
     try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          throw new Error("Audio API not supported in this browser");
-      }
-
+      const ctx = await ensureContext();
+      
       const stream = await navigator.mediaDevices.getUserMedia({ 
         audio: { 
             deviceId: deviceId ? { exact: deviceId } : undefined, 
@@ -207,107 +192,169 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
         } 
       });
       streamRef.current = stream;
-
-      const audioTrack = stream.getAudioTracks()[0];
-      if (audioTrack) {
-          audioTrack.onended = () => {
-              console.log("Audio track ended. Stopping listener.");
-              stopListening();
-          };
-      }
-      
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContextClass) throw new Error("AudioContext not supported");
-
-      const context = new AudioContextClass();
-      
-      context.onstatechange = () => {
-          if (context.state === 'closed') return;
-      };
-
-      if (context.state === 'suspended') await context.resume();
-
-      const node = context.createAnalyser();
-      node.fftSize = safeFftSize;
-      node.smoothingTimeConstant = safeSmoothing;
-      
-      const source = context.createMediaStreamSource(stream);
-      source.connect(node);
-
-      await initWorklet(context, source);
-
-      audioContextRef.current = context;
-      setAudioContext(context);
-      setAnalyser(node);
       setMediaStream(stream);
+
+      const source = ctx.createMediaStreamSource(stream);
+      source.connect(analyserRef.current!);
+      
+      // Init worklet for features if needed (optional for visuals, good for metadata)
+      // Note: We skip worklet for simplicity in this refactor unless critical
+
       setIsListening(true);
-      setIsSimulating(false);
       updateAudioDevices();
     } catch (err: any) {
-      const t = TRANSLATIONS[language] || TRANSLATIONS['en'];
-      const isPermissionDenied = err.name === 'NotAllowedError' || err.message?.includes('denied');
-      
-      setErrorMessage(isPermissionDenied ? t.errors.accessDenied : t.errors.general);
-      setIsListening(false);
-      
-      if (isPermissionDenied) {
-          console.warn("[Audio] Permission denied by user.");
-      } else {
-          console.error("[Audio] Access Error:", err);
-      }
-    }
-  }, [safeFftSize, safeSmoothing, updateAudioDevices, language, stopListening]);
-
-  const startDemoMode = useCallback(async () => {
-    setErrorMessage(null);
-    await stopListening();
-
-    try {
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-        if (!AudioContextClass) return;
-
-        const context = new AudioContextClass();
-        if (context.state === 'suspended') await context.resume();
-
-        const node = context.createAnalyser();
-        node.fftSize = safeFftSize;
-        node.smoothingTimeConstant = safeSmoothing;
-
-        const silentDestination = context.createGain();
-        silentDestination.gain.value = 0;
-        node.connect(silentDestination);
-        silentDestination.connect(context.destination);
-
-        const demoGraph = createDemoAudioGraph(context, node);
-        demoGraph.start();
-        demoGraphRef.current = demoGraph;
-
-        audioContextRef.current = context;
-        setAudioContext(context);
-        setAnalyser(node);
-        setMediaStream(null);
-        setIsListening(true);
-        setIsSimulating(true);
-    } catch (e) {
-        console.error("Demo mode synthesis failed", e);
-    }
-  }, [safeFftSize, safeSmoothing, stopListening]);
-
-  const toggleMicrophone = useCallback(async (deviceId: string) => {
-    if (isPending) return;
-    
-    setIsPending(true);
-    try {
-        if (isListening) {
-          await stopListening();
-        } else {
-          await startMicrophone(deviceId);
-        }
+      console.error(err);
+      setErrorMessage("Microphone access denied or error occurred.");
     } finally {
-        setIsPending(false);
+      setIsPending(false);
     }
-  }, [isListening, isPending, startMicrophone, stopListening]);
-  
+  }, [stopAll, safeFftSize, safeSmoothing]);
+
+  const updateAudioDevices = async () => {
+    if (!navigator.mediaDevices?.enumerateDevices) return;
+    try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        setAudioDevices(devices.filter(d => d.kind === 'audioinput').map(d => ({ deviceId: d.deviceId, label: d.label || `Mic ${d.deviceId.slice(0, 5)}` })));
+    } catch (e) {}
+  };
+
+  // --- File Logic ---
+  const loadFile = useCallback(async (file: File) => {
+    setIsPending(true);
+    await stopAll();
+    setSourceType('FILE');
+    setFileStatus('loading');
+    setFileName(file.name);
+    pausedAtRef.current = 0;
+    setCurrentTime(0);
+
+    try {
+      const ctx = await ensureContext();
+      const arrayBuffer = await file.arrayBuffer();
+      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+      audioBufferRef.current = audioBuffer;
+      setDuration(audioBuffer.duration);
+      setFileStatus('ready');
+      
+      // Auto play on load
+      playFile();
+    } catch (e) {
+      console.error("File load error:", e);
+      setErrorMessage("Failed to decode audio file.");
+      setFileStatus('error');
+    } finally {
+      setIsPending(false);
+    }
+  }, [stopAll]);
+
+  const playFile = useCallback(async () => {
+    if (!audioBufferRef.current) return;
+    const ctx = await ensureContext();
+
+    if (fileSourceNodeRef.current) fileSourceNodeRef.current.disconnect();
+
+    const source = ctx.createBufferSource();
+    source.buffer = audioBufferRef.current;
+    
+    // Connect: Source -> Analyser -> Speakers
+    source.connect(analyserRef.current!);
+    analyserRef.current!.connect(ctx.destination);
+
+    source.onended = () => {
+       // Only handle end if natural end, not manual stop
+       if (ctx.currentTime - startTimeRef.current >= audioBufferRef.current!.duration - 0.1) {
+           setIsPlaying(false);
+           pausedAtRef.current = 0;
+           setCurrentTime(0);
+       }
+    };
+
+    source.start(0, pausedAtRef.current);
+    startTimeRef.current = ctx.currentTime - pausedAtRef.current;
+    fileSourceNodeRef.current = source;
+    setIsPlaying(true);
+
+    // Progress Loop
+    const updateProgress = () => {
+      if (!audioBufferRef.current || !audioContextRef.current) return;
+      const now = audioContextRef.current.currentTime;
+      // If playing, calculate time. If paused, use pausedAt.
+      const current = now - startTimeRef.current;
+      setCurrentTime(Math.min(current, audioBufferRef.current.duration));
+      
+      if (audioContextRef.current.state === 'running' && fileSourceNodeRef.current) {
+          rafRef.current = requestAnimationFrame(updateProgress);
+      }
+    };
+    rafRef.current = requestAnimationFrame(updateProgress);
+
+  }, []);
+
+  const pauseFile = useCallback(() => {
+    if (fileSourceNodeRef.current && isPlaying && audioContextRef.current) {
+        fileSourceNodeRef.current.stop();
+        fileSourceNodeRef.current.disconnect();
+        fileSourceNodeRef.current = null;
+        pausedAtRef.current = audioContextRef.current.currentTime - startTimeRef.current;
+        setIsPlaying(false);
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    }
+  }, [isPlaying]);
+
+  const togglePlayback = useCallback(() => {
+      if (isPlaying) pauseFile();
+      else playFile();
+  }, [isPlaying, pauseFile, playFile]);
+
+  const seekFile = useCallback((time: number) => {
+      const wasPlaying = isPlaying;
+      if (isPlaying) pauseFile();
+      pausedAtRef.current = Math.max(0, Math.min(time, duration));
+      setCurrentTime(pausedAtRef.current);
+      if (wasPlaying) playFile();
+  }, [isPlaying, duration, pauseFile, playFile]);
+
+  // --- AI Analysis Helper ---
+  const getAudioSlice = useCallback(async (durationSeconds: number = 15): Promise<Blob | null> => {
+      if (!audioBufferRef.current) return null;
+      
+      // Try to take a slice from the middle of the song (e.g., 20% mark) to catch the main theme
+      const totalDuration = audioBufferRef.current.duration;
+      let startOffset = Math.min(totalDuration * 0.2, Math.max(0, totalDuration - durationSeconds));
+      if (startOffset < 0) startOffset = 0;
+      
+      const sliceDuration = Math.min(durationSeconds, totalDuration - startOffset);
+      const sampleRate = audioBufferRef.current.sampleRate;
+      const frameCount = Math.floor(sliceDuration * sampleRate);
+      
+      // Create a new offline context to render just this slice
+      const offlineCtx = new OfflineAudioContext(
+          audioBufferRef.current.numberOfChannels,
+          frameCount,
+          sampleRate
+      );
+      
+      const source = offlineCtx.createBufferSource();
+      source.buffer = audioBufferRef.current;
+      source.connect(offlineCtx.destination);
+      source.start(0, startOffset, sliceDuration);
+      
+      const renderedBuffer = await offlineCtx.startRendering();
+      return audioBufferToWav(renderedBuffer);
+  }, []);
+
+  // --- Demo Logic ---
+  const startDemoMode = useCallback(async () => {
+      await stopAll();
+      const ctx = await ensureContext();
+      const demo = createDemoAudioGraph(ctx, analyserRef.current!);
+      demo.start();
+      demoGraphRef.current = demo;
+      setIsSimulating(true);
+      setIsListening(true);
+  }, [stopAll]);
+
+  // --- Update Analyser Settings on Change ---
   useEffect(() => {
     if (analyser) {
       analyser.smoothingTimeConstant = safeSmoothing;
@@ -315,12 +362,20 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     }
   }, [safeSmoothing, safeFftSize, analyser]);
 
-  // Robust Return: Always return the structure expected by destructuring
   return { 
-      isListening, isSimulating, isPending,
-      audioContext, analyser, mediaStream, audioDevices, 
-      errorMessage, setErrorMessage, 
-      startMicrophone, startDemoMode, toggleMicrophone,
+      // Common
+      sourceType, setSourceType,
+      audioContext, analyser, errorMessage, setErrorMessage, isPending,
+      
+      // Mic
+      isListening, isSimulating, mediaStream, audioDevices, 
+      startMicrophone, startDemoMode, toggleMicrophone: startMicrophone, // Alias for legacy
+      
+      // File
+      fileStatus, fileName, isPlaying, duration, currentTime,
+      loadFile, togglePlayback, seekFile,
+      getAudioSlice,
+      
       audioFeaturesRef: featuresRef 
   };
 };
