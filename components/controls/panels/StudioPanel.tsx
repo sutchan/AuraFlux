@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 2.5.4
+ * Version: 2.6.2
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 18:00
+ * Updated: 2025-03-07 10:30
  */
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -313,11 +313,30 @@ export const StudioPanel: React.FC = () => {
              </span>
          )}
          
+         {/* Source Indicator / Metadata Card */}
          {!isRecording && (
-             <div className="mt-3">
-                 <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border ${sourceType === 'FILE' ? 'bg-blue-900/20 text-blue-300 border-blue-500/30' : 'bg-white/5 text-white/40 border-white/10'}`}>
+             <div className="mt-3 w-full flex flex-col items-center">
+                 <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border mb-2 ${sourceType === 'FILE' ? 'bg-blue-900/20 text-blue-300 border-blue-500/30' : 'bg-white/5 text-white/40 border-white/10'}`}>
                      {sourceType === 'FILE' ? (studio.sourceInt || "Source: Internal") : (studio.sourceMic || "Source: Mic")}
                  </span>
+                 
+                 {sourceType === 'FILE' && currentSong && (
+                    <div className="w-full bg-white/5 border border-white/10 rounded-xl p-2 flex items-center gap-3 max-w-[200px]">
+                        <div className="w-10 h-10 rounded-lg bg-black/50 overflow-hidden flex-shrink-0 border border-white/10">
+                            {currentSong.albumArtUrl ? (
+                                <img src={currentSong.albumArtUrl} alt="Cover" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-white/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex-1 min-w-0 flex flex-col justify-center text-left">
+                            <span className="text-[10px] font-bold text-white truncate leading-tight">{currentSong.title}</span>
+                            <span className="text-[9px] font-medium text-white/50 truncate leading-tight">{currentSong.artist}</span>
+                        </div>
+                    </div>
+                 )}
              </div>
          )}
       </div>

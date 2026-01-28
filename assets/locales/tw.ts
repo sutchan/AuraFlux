@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.8.4
+ * Version: 1.8.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 22:00
+ * Updated: 2025-03-07 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const tw = {
   common: {
-    on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業', new: '新'
+    on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業', new: '新', unknownTrack: '未知曲目'
   },
   tabs: {
     visual: '視覺', text: '文字', audio: '音訊', ai: 'AI 通感辨識', system: '系統', studio: '工作室'
@@ -187,7 +187,7 @@ export const tw = {
   identifying: '正在捕獲聲景特徵...',
   startExperience: '步入流光之境',
   welcomeTitle: 'Aura Flux | 靈動流光',
-  welcomeText: '讓每一縷振動凝結為視覺傑作。由 Gemini AI 驅動，將聲音重構為觸手可及的光影藝術。',
+  welcomeText: '讓每一縷振動凝結為視覺杰作。由 Gemini AI 驅動，將聲音重構為觸手可及的光影藝術。',
   unsupportedTitle: '瀏覽器不受支援',
   unsupportedText: 'Aura Flux 需要現代瀏覽器功能才能運作。請更新 Chrome, Edge 或 Safari。',
   hideOptions: '收起',

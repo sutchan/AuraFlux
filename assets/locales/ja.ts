@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.8.4
+ * Version: 1.8.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 22:00
+ * Updated: 2025-03-07 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ja = {
   common: {
-    on: 'ON', off: 'OFF', visible: '表示', hidden: '非表示', active: '有効', muted: 'ミュート', beta: 'ベータ', simple: '簡易', advanced: '詳細', new: 'NEW'
+    on: 'ON', off: 'OFF', visible: '表示', hidden: '非表示', active: '有効', muted: 'ミュート', beta: 'ベータ', simple: '簡易', advanced: '詳細', new: 'NEW', unknownTrack: '不明なトラック'
   },
   tabs: {
     visual: 'ビジュアル', text: 'テキスト', audio: 'オーディオ', ai: 'AI 曲識別', system: 'システム', studio: 'スタジオ'

@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.8.4
+ * Version: 1.8.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 22:00
+ * Updated: 2025-03-07 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ko = {
   common: {
-    on: 'ON', off: 'OFF', visible: '표시', hidden: '숨김', active: '활성화', muted: '음소거', beta: '베타', simple: '간편', advanced: '고급', new: 'NEW'
+    on: 'ON', off: 'OFF', visible: '표시', hidden: '숨김', active: '활성화', muted: '음소거', beta: '베타', simple: '간편', advanced: '고급', new: 'NEW', unknownTrack: '알 수 없는 트랙'
   },
   tabs: {
     visual: '시각 효과', text: '텍스트', audio: '오디오', ai: '트랙 인식', system: '시스템', studio: '스튜디오'

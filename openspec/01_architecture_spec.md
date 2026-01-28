@@ -8,7 +8,9 @@
 - **Engine:** 
   - **2D (Optimized):** OffscreenCanvas API + Web Workers (ESM 模块化加载)
   - **3D:** Three.js (**^0.182.0**) / @react-three/fiber v9
-    *   *CDN Strategy (Importmap):* 外部依赖通过 `importmap` 从 CDN 加载，构建配置中标记为 `external` 以优化加载速度。
+    *   *CDN Strategy (Importmap):* 外部依赖通过 `importmap` 从 CDN (`esm.sh`) 加载，构建配置中标记为 `external` 以优化加载速度。
+  - **Media Processing:** `jsmediatags` (v3.9.5)
+    *   *Hybrid Strategy:* 针对 ID3 标签解析库，为避免 `esm.sh` 的 Node.js 模块解析错误，采用传统的 `<script>` 标签直接从 CDNJS 加载，并通过全局 `window.jsmediatags` 对象访问。此库在 `vite.config.ts` 中被显式排除。
 - **Intelligence:** Google Gemini 3 (Flash Preview)
 - **Audio:** Web Audio API (实时频域分析) + OfflineAudioContext (指纹与切片提取) + AudioWorklet (特征提取 v1.6.4)
 
@@ -25,4 +27,4 @@
   - 为 ThreeVisualizer 引入核心组件记忆化策略，减少 R3F 协调开销。
 
 ---
-*Aura Flux Architecture - Version 1.8.3*
+*Aura Flux Architecture - Version 1.8.5*

@@ -2,6 +2,16 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.8.5] - 2025-03-07
+
+### Refactor
+*   **🌍 i18n:** Completed internationalization coverage for all 10 supported languages (EN, ZH, TW, JA, ES, KO, DE, FR, RU, AR). Added missing translation keys for player controls (`unknownTrack`) and audio error messages.
+*   **🔊 Audio:** Enhanced robustness of the audio engine error handling. Microphone permission errors and device failures now display localized, user-friendly messages instead of generic English alerts.
+*   **🎵 Player:** Polished the internal file player UI to correctly handle missing metadata states with localized fallbacks.
+
+### Fix
+*   **🛠️ Architecture:** Formalized the `jsmediatags` integration strategy in documentation. The library is now loaded via a global script tag (CDN) to bypass module resolution conflicts with `esm.sh`, ensuring stable ID3 tag reading without build errors.
+
 ## [v1.8.4] - 2025-03-06
 
 ### Features

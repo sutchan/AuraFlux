@@ -1,67 +1,24 @@
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.1.0
- * Author: Aura Vision Team
+ * Version: 2.2.5
+ * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 17:00
+ * Updated: 2025-03-07 12:45
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { AudioDevice, VisualizerSettings, Language, AudioFeatures, AudioSourceType } from '../types';
-import { TRANSLATIONS } from '../i18n';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { AudioDevice, VisualizerSettings, Language, AudioFeatures, AudioSourceType, SongInfo } from '../types';
 import { createDemoAudioGraph } from '../services/audioSynthesis';
 import { audioBufferToWav } from '../services/audioUtils';
-
-// Inline Worklet Code to avoid module resolution issues.
-const WORKLET_CODE = `
-class AudioFeaturesProcessor extends AudioWorkletProcessor {
-  constructor() {
-    super();
-    this._volume = 0;
-    this._lastUpdate = currentTime;
-    this._smoothingFactor = 0.8;
-  }
-
-  process(inputs, outputs, parameters) {
-    const input = inputs[0];
-    
-    if (input && input.length > 0) {
-      const samples = input[0];
-      let sum = 0;
-      
-      for (let i = 0; i < samples.length; ++i) {
-        sum += samples[i] * samples[i];
-      }
-      const rms = Math.sqrt(sum / samples.length);
-      
-      this._volume = (this._volume * this._smoothingFactor) + (rms * (1 - this._smoothingFactor));
-
-      if (currentTime - this._lastUpdate > 0.016) {
-        this.port.postMessage({
-          type: 'features',
-          data: {
-            rms: this._volume,
-            energy: rms,
-            timestamp: currentTime
-          }
-        });
-        this._lastUpdate = currentTime;
-      }
-    }
-
-    return true;
-  }
-}
-
-registerProcessor('audio-features-processor', AudioFeaturesProcessor);
-`;
 
 interface UseAudioProps {
   settings: VisualizerSettings;
   language: Language;
+  setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
+  t?: any; // Add translation object
 }
 
-export const useAudio = ({ settings, language }: UseAudioProps) => {
+export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProps) => {
   const safeFftSize = settings?.fftSize || 512;
   const safeSmoothing = (settings?.smoothing !== undefined) ? settings.smoothing : 0.8;
 
@@ -197,18 +154,15 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
       const source = ctx.createMediaStreamSource(stream);
       source.connect(analyserRef.current!);
       
-      // Init worklet for features if needed (optional for visuals, good for metadata)
-      // Note: We skip worklet for simplicity in this refactor unless critical
-
       setIsListening(true);
       updateAudioDevices();
     } catch (err: any) {
       console.error(err);
-      setErrorMessage("Microphone access denied or error occurred.");
+      setErrorMessage(t?.errors?.accessDenied || "Microphone access denied or error occurred.");
     } finally {
       setIsPending(false);
     }
-  }, [stopAll, safeFftSize, safeSmoothing]);
+  }, [stopAll, safeFftSize, safeSmoothing, t]);
 
   const updateAudioDevices = async () => {
     if (!navigator.mediaDevices?.enumerateDevices) return;
@@ -227,6 +181,73 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     setFileName(file.name);
     pausedAtRef.current = 0;
     setCurrentTime(0);
+    
+    // Reset Song Metadata immediately
+    setCurrentSong(null);
+
+    // Safely attempt to read ID3 tags using global window.jsmediatags
+    // Wrap in a promise to prevent blocking, but don't await the Audio decoding on it.
+    new Promise<void>((resolve) => {
+        try {
+            if (window.jsmediatags) {
+                window.jsmediatags.read(file, {
+                    onSuccess: (tag: any) => {
+                        const { title, artist, picture } = tag.tags;
+                        let albumArtUrl = undefined;
+                        if (picture) {
+                            try {
+                                const { data, format } = picture;
+                                let base64String = "";
+                                for (let i = 0; i < data.length; i++) {
+                                    base64String += String.fromCharCode(data[i]);
+                                }
+                                albumArtUrl = `data:${format};base64,${window.btoa(base64String)}`;
+                            } catch (imgErr) {
+                                console.warn("Failed to process album art", imgErr);
+                            }
+                        }
+                        
+                        setCurrentSong({
+                            title: title || file.name,
+                            artist: artist || 'Unknown Artist',
+                            albumArtUrl,
+                            identified: true,
+                            matchSource: 'FILE'
+                        });
+                        resolve();
+                    },
+                    onError: (error: any) => {
+                        console.warn("ID3 read failed", error);
+                        setCurrentSong({
+                            title: file.name,
+                            artist: 'Unknown Artist',
+                            identified: false,
+                            matchSource: 'FILE'
+                        });
+                        resolve();
+                    }
+                });
+            } else {
+                // Graceful fallback if library failed to load
+                setCurrentSong({
+                    title: file.name,
+                    artist: 'Unknown Artist',
+                    identified: false,
+                    matchSource: 'FILE'
+                });
+                resolve();
+            }
+        } catch (e) {
+            console.warn("jsmediatags invocation error:", e);
+            setCurrentSong({
+                title: file.name,
+                artist: 'Unknown Artist',
+                identified: false,
+                matchSource: 'FILE'
+            });
+            resolve();
+        }
+    });
 
     try {
       const ctx = await ensureContext();
@@ -245,7 +266,7 @@ export const useAudio = ({ settings, language }: UseAudioProps) => {
     } finally {
       setIsPending(false);
     }
-  }, [stopAll]);
+  }, [stopAll, setCurrentSong]);
 
   const playFile = useCallback(async () => {
     if (!audioBufferRef.current) return;

@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.4
+ * Version: 1.8.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 18:00
+ * Updated: 2025-03-07 11:30
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const zh = {
   common: {
-    on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业', new: '新'
+    on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业', new: '新', unknownTrack: '未知曲目'
   },
   tabs: {
     visual: '视觉', text: '文字', audio: '音频', ai: 'AI 通感', system: '系统', studio: '工作室'
@@ -147,7 +147,8 @@ export const zh = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: '模拟 (离线)'
+    MOCK: '模拟 (离线)',
+    FILE: 'ID3 标签'
   },
   aiPanel: {
       keySaved: 'API 密钥已验证并保存',

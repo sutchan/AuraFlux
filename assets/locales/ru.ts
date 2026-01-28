@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.8.4
+ * Version: 1.8.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 21:40
+ * Updated: 2025-03-07 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ru = {
   common: {
-    on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ', new: 'НОВЫЙ'
+    on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ', new: 'НОВЫЙ', unknownTrack: 'Неизвестный трек'
   },
   tabs: {
     visual: 'Визуал', text: 'Текст', audio: 'Аудио', ai: 'ИИ-Синестезия', system: 'Система', studio: 'Студия'

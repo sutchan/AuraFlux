@@ -1,9 +1,9 @@
 /**
  * File: core/types/react-augmentation.d.ts
- * Version: 1.7.32
+ * Version: 1.8.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-07 11:00
  */
 
 import React from 'react';
@@ -27,6 +27,8 @@ interface R3FElements {
   bufferGeometry: any;
   bufferAttribute: any;
   shaderMaterial: any;
+  instancedMesh: any;
+  boxGeometry: any;
   [elemName: string]: any;
 }
 
@@ -34,6 +36,16 @@ interface R3FElements {
 declare global {
   namespace JSX {
     interface IntrinsicElements extends R3FElements {}
+  }
+  
+  // Extend Window interface for jsmediatags loaded via script tag
+  interface Window {
+    jsmediatags: {
+      read: (file: File | Blob | string, callbacks: {
+        onSuccess: (tag: any) => void;
+        onError: (error: any) => void;
+      }) => void;
+    };
   }
 }
 

@@ -1,9 +1,9 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.7.49
+ * Version: 1.8.6
  * Author: Aura Flux Team
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 17:00
+ * Updated: 2025-03-07 11:30
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
@@ -235,12 +235,12 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
 
 const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const { settings } = useVisuals();
-  const { language } = useUI();
+  const { language, t } = useUI();
   const { getStorage, setStorage } = useLocalStorage();
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() => getStorage('deviceId', ''));
   const [currentSong, setCurrentSong] = useState<SongInfo | null>(null);
 
-  const audioState = useAudio({ settings, language });
+  const audioState = useAudio({ settings, language, setCurrentSong, t });
 
   useEffect(() => {
     setStorage('deviceId', selectedDeviceId);

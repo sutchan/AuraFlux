@@ -1,16 +1,16 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.8.4
+ * Version: 1.8.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 22:00
+ * Updated: 2025-03-07 12:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const de = {
   common: {
-    on: 'AN', off: 'AUS', visible: 'SICHTBAR', hidden: 'VERSTECKT', active: 'AKTIV', muted: 'STUMM', beta: 'BETA', simple: 'Einfach', advanced: 'Erweitert', new: 'NEU'
+    on: 'AN', off: 'AUS', visible: 'SICHTBAR', hidden: 'VERSTECKT', active: 'AKTIV', muted: 'STUMM', beta: 'BETA', simple: 'Einfach', advanced: 'Erweitert', new: 'NEU', unknownTrack: 'Unbekannter Titel'
   },
   tabs: {
     visual: 'Visuell', text: 'Text', audio: 'Audio', ai: 'KI-Synästhesie', system: 'System', studio: 'Studio'

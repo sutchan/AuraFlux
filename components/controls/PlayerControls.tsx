@@ -1,12 +1,13 @@
 /**
  * File: components/controls/PlayerControls.tsx
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: 2025-03-07 11:30
  */
 
-import React, { useRef, useState, useEffect } from 'react';
-import { useAudioContext } from '../AppContext';
+import React, { useState } from 'react';
+import { useAudioContext, useUI } from '../AppContext';
 
 const formatTime = (seconds: number) => {
   const m = Math.floor(seconds / 60);
@@ -16,6 +17,7 @@ const formatTime = (seconds: number) => {
 
 export const PlayerControls: React.FC = () => {
   const { sourceType, fileStatus, isPlaying, currentTime, duration, togglePlayback, seekFile, fileName } = useAudioContext();
+  const { t } = useUI();
   const [isDragging, setIsDragging] = useState(false);
   const [dragTime, setDragTime] = useState(0);
   
@@ -40,7 +42,7 @@ export const PlayerControls: React.FC = () => {
                     )}
                 </button>
                 <div className="flex-1 min-w-0">
-                    <h3 className="text-white text-xs font-bold truncate">{fileName || "Unknown Track"}</h3>
+                    <h3 className="text-white text-xs font-bold truncate">{fileName || t?.common?.unknownTrack || "Unknown Track"}</h3>
                     <div className="flex justify-between text-[10px] text-white/50 font-mono mt-0.5">
                         <span>{formatTime(displayTime)}</span>
                         <span>{formatTime(duration)}</span>
