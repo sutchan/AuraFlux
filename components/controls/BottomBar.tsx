@@ -1,10 +1,10 @@
 /**
  * File: components/controls/BottomBar.tsx
- * Version: 1.1.7
+ * Version: 1.1.8
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
  * Description: Unified bottom control bar combining player controls and system actions.
- * Updated: Added Lyrics toggle to Mic mode toolbar.
+ * Updated: Moved Loop Mode button to Playlist Popup header.
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -98,13 +98,26 @@ export const BottomBar: React.FC<BottomBarProps> = ({ isExpanded, setIsExpanded,
                 <div ref={playlistRef} className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-[90vw] md:max-w-xl z-[116] bg-[#050505]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col max-h-[50vh] pointer-events-auto animate-fade-in-up origin-bottom">
                     <div className="p-3 border-b border-white/10 bg-white/[0.02] flex justify-between items-center shrink-0">
                         <span className="text-[10px] font-black uppercase tracking-widest text-white/50 pl-2">{t?.common?.queue || "Queue"} ({playlist.length})</span>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
+                            {/* Loop Mode (Moved Here) */}
+                            <TooltipArea text={`Mode: ${playbackMode}`}>
+                                <button onClick={toggleMode} className={`w-6 h-6 rounded flex items-center justify-center transition-colors ${playbackMode === 'shuffle' ? 'text-blue-400 bg-blue-400/10' : (playbackMode === 'repeat-one' ? 'text-green-400 bg-green-400/10' : 'text-white/40 hover:text-white hover:bg-white/10')}`}>
+                                    {playbackMode === 'shuffle' ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                                    ) : playbackMode === 'repeat-one' ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /><text x="10" y="14" fontSize="8" fill="currentColor" fontWeight="bold">1</text></svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                    )}
+                                </button>
+                            </TooltipArea>
+
                             {playlist.length > 0 && (
                                 <button
                                     onClick={() => {
                                         if(confirm(t?.common?.confirmClear || 'Clear queue?')) clearPlaylist();
                                     }}
-                                    className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 text-white/40 hover:text-red-400 transition-colors mr-1"
+                                    className="w-6 h-6 flex items-center justify-center rounded hover:bg-white/10 text-white/40 hover:text-red-400 transition-colors"
                                     title={t?.common?.clearAll || "Clear All"}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -112,7 +125,7 @@ export const BottomBar: React.FC<BottomBarProps> = ({ isExpanded, setIsExpanded,
                                     </svg>
                                 </button>
                             )}
-                            <button onClick={() => setShowPlaylist(false)} className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 text-white/40 hover:text-white transition-colors">
+                            <button onClick={() => setShowPlaylist(false)} className="w-6 h-6 flex items-center justify-center rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors">
                                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
@@ -202,19 +215,6 @@ export const BottomBar: React.FC<BottomBarProps> = ({ isExpanded, setIsExpanded,
                             </button>
 
                             <div className="w-px h-4 bg-white/10 mx-1 sm:mx-2 hidden sm:block"></div>
-
-                            {/* Loop Mode */}
-                            <TooltipArea text={`Mode: ${playbackMode}`}>
-                                <button onClick={toggleMode} className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${playbackMode === 'shuffle' ? 'text-blue-400 bg-blue-400/10' : (playbackMode === 'repeat-one' ? 'text-green-400 bg-green-400/10' : 'text-white/50 hover:text-white hover:bg-white/5')}`}>
-                                    {playbackMode === 'shuffle' ? (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-                                    ) : playbackMode === 'repeat-one' ? (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /><text x="10" y="14" fontSize="8" fill="currentColor" fontWeight="bold">1</text></svg>
-                                    ) : (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                                    )}
-                                </button>
-                            </TooltipArea>
                             
                             {/* Playlist */}
                             <TooltipArea text={t?.common?.queue || "Queue"}>

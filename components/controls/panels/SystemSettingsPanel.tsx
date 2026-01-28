@@ -1,18 +1,19 @@
 /**
  * File: components/controls/panels/SystemSettingsPanel.tsx
- * Version: 1.8.3
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
- * Description: Component for system-level settings.
+ * Updated: 2025-03-09 17:00
+ * Description: Component for system-level settings with Data Management and Theme Toggle.
  */
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { useVisuals, useUI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
-import { Language } from '../../../core/types';
+import { Language, VisualizerSettings } from '../../../core/types';
+import { useLocalStorage } from '../../../core/hooks/useLocalStorage';
 
 // This list is also present in OnboardingOverlay.tsx
 const LANGUAGES: { value: Language; label: string }[] = [
@@ -22,12 +23,36 @@ const LANGUAGES: { value: Language; label: string }[] = [
   { value: 'ar', label: 'العربية' }
 ];
 
+interface SavedPreset {
+    id: number;
+    name: string;
+    data: VisualizerSettings;
+    timestamp: number;
+}
+
 export const SystemSettingsPanel: React.FC = () => {
   const { settings, setSettings } = useVisuals();
-  const { t, resetSettings, language, setLanguage } = useUI();
+  const { t, resetSettings, language, setLanguage, showToast } = useUI();
+  const { getStorage, setStorage } = useLocalStorage();
 
   const hints = t?.hints || {};
   const systemPanel = t?.systemPanel || {};
+  const config = t?.config || {};
+
+  // --- Data Management State ---
+  const [presets, setPresets] = useState<SavedPreset[]>([]);
+  const [presetName, setPresetName] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+      const saved = getStorage<SavedPreset[]>('user_presets', []);
+      if (Array.isArray(saved)) setPresets(saved);
+  }, [getStorage]);
+
+  const updatePresets = (newPresets: SavedPreset[]) => {
+      setPresets(newPresets);
+      setStorage('user_presets', newPresets);
+  };
 
   const handleSystemSettingChange = (key: keyof typeof settings, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }));
@@ -39,12 +64,87 @@ export const SystemSettingsPanel: React.FC = () => {
     }
   };
 
+  // --- Config Actions ---
+  const handleExport = () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings, null, 2));
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", `aura_flux_config_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+      showToast(t?.config?.copied || "Exported!", 'success');
+  };
+
+  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const fileObj = event.target.files && event.target.files[0];
+      if (!fileObj) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+          try {
+              const json = JSON.parse(e.target?.result as string);
+              if (json && typeof json === 'object') {
+                  if (window.confirm(config.confirmImport || 'Overwrite current settings?')) {
+                      // Merge to ensure no keys are lost
+                      setSettings(prev => ({ ...prev, ...json }));
+                      showToast(config.importSuccess || "Configuration loaded.", 'success');
+                  }
+              } else {
+                  throw new Error("Invalid structure");
+              }
+          } catch (err) {
+              console.error(err);
+              showToast(config.invalidFile || "Invalid file format", 'error');
+          }
+      };
+      reader.readAsText(fileObj);
+      event.target.value = ''; // Reset input
+  };
+
+  const handleSavePreset = () => {
+      if (presets.length >= 3) {
+          showToast(config.limitReached || "Maximum 3 presets allowed.", 'error');
+          return;
+      }
+      if (!presetName.trim()) return;
+
+      const newPreset: SavedPreset = {
+          id: Date.now(),
+          name: presetName.trim().slice(0, 20),
+          data: { ...settings },
+          timestamp: Date.now()
+      };
+      
+      updatePresets([...presets, newPreset]);
+      setPresetName('');
+      showToast(config.saved || "Preset Saved", 'success');
+  };
+
+  const handleLoadPreset = (preset: SavedPreset) => {
+      setSettings(prev => ({ ...prev, ...preset.data }));
+      showToast(`${config.load || "Loaded"}: ${preset.name}`, 'success');
+  };
+
+  const handleDeletePreset = (id: number) => {
+      if (window.confirm(config.deleteConfirm || "Delete this preset?")) {
+          updatePresets(presets.filter(p => p.id !== id));
+      }
+  };
+
   return (
     <>
       {/* Col 1: Interface Settings */}
       <div className="p-3 pt-4 h-full flex flex-col border-b lg:border-b-0 lg:border-e border-white/5">
         <div className="space-y-2.5 flex-grow overflow-y-auto custom-scrollbar pr-1.5">
           <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">{systemPanel.interface || "Interface"}</span>
+          <SettingsToggle 
+            label={settings.appTheme === 'light' ? (systemPanel.lightMode || "Light Theme") : (systemPanel.darkMode || "Dark Theme")} 
+            value={settings.appTheme === 'light'} 
+            onChange={() => handleSystemSettingChange('appTheme', settings.appTheme === 'light' ? 'dark' : 'light')} 
+            hintText={hints?.lightMode}
+            activeColor="green"
+          />
           <SettingsToggle label={t?.showTooltips || "Show Tooltips"} value={settings.showTooltips} onChange={() => handleSystemSettingChange('showTooltips', !settings.showTooltips)} hintText={hints?.showTooltips} />
           <SettingsToggle label={t?.autoHideUi || "Auto-Hide Controls"} value={settings.autoHideUi} onChange={() => handleSystemSettingChange('autoHideUi', !settings.autoHideUi)} hintText={hints?.autoHideUi} />
           <SettingsToggle label={t?.hideCursor || "Hide Cursor"} value={settings.hideCursor} onChange={() => handleSystemSettingChange('hideCursor', !settings.hideCursor)} hintText={hints?.hideCursor} />
@@ -76,17 +176,89 @@ export const SystemSettingsPanel: React.FC = () => {
         </div>
       </div>
 
-      {/* Col 3: Maintenance */}
+      {/* Col 3: Cloud & Data */}
       <div className="p-3 pt-4 h-full flex flex-col">
-        <div className="space-y-3 flex-grow">
-          <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">{systemPanel.maintenance || "Maintenance"}</span>
-          <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-            <span className="text-xs font-bold text-white/40 uppercase tracking-widest leading-relaxed block">
-              {t?.hints?.reset || "Reset all application settings to factory defaults."}
+        <div className="space-y-4 flex-grow overflow-y-auto custom-scrollbar pr-1.5">
+            <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">
+                {config.title || "Data Management"}
             </span>
-          </div>
+
+            {/* Import / Export Row */}
+            <div className="grid grid-cols-2 gap-2">
+                <TooltipArea text={hints?.exportConfig}>
+                    <button onClick={handleExport} className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        {config.export || "Export"}
+                    </button>
+                </TooltipArea>
+                <TooltipArea text={hints?.importConfig}>
+                    <button onClick={() => fileInputRef.current?.click()} className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m-4 4v12" /></svg>
+                        {config.import || "Import"}
+                    </button>
+                </TooltipArea>
+                <input type="file" ref={fileInputRef} onChange={handleImport} accept=".json" className="hidden" />
+            </div>
+
+            {/* Local Presets Library */}
+            <div className="space-y-2 pt-2 border-t border-white/5">
+                <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{config.library || "Local Library"} ({presets.length}/3)</span>
+                </div>
+                
+                {/* Save Input Row */}
+                <div className="flex gap-2">
+                    <input 
+                        type="text" 
+                        value={presetName}
+                        onChange={(e) => setPresetName(e.target.value)}
+                        placeholder={config.placeholder || "Preset Name..."}
+                        className="flex-1 bg-black/40 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500/50 transition-colors font-medium"
+                        maxLength={18}
+                        disabled={presets.length >= 3}
+                    />
+                    <TooltipArea text={presets.length >= 3 ? (config.limitReached || "Limit reached") : (hints?.savePreset || "Save Preset")}>
+                        <button 
+                            onClick={handleSavePreset}
+                            disabled={presets.length >= 3 || !presetName.trim()}
+                            className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all flex items-center justify-center min-w-[50px] ${presets.length >= 3 || !presetName.trim() ? 'bg-white/5 border-transparent text-white/20 cursor-not-allowed' : 'bg-blue-600 border-blue-500 text-white shadow-lg hover:bg-blue-500'}`}
+                        >
+                            {config.save || "Save"}
+                        </button>
+                    </TooltipArea>
+                </div>
+
+                {/* Preset List */}
+                <div className="space-y-1.5 min-h-[80px]">
+                    {presets.length === 0 && (
+                        <div className="flex flex-col items-center justify-center py-6 text-white/20 gap-2 border border-dashed border-white/5 rounded-lg bg-white/[0.01]">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" /></svg>
+                            <span className="text-[10px] uppercase tracking-widest">{t?.common?.empty || "Empty"}</span>
+                        </div>
+                    )}
+                    {presets.map(p => (
+                        <div key={p.id} className="group flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 hover:border-white/20 rounded-lg px-3 py-2 transition-all">
+                            <div className="flex flex-col flex-1 min-w-0 cursor-pointer" onClick={() => handleLoadPreset(p)} title={hints?.loadPreset}>
+                                <span className="text-xs font-bold text-white/80 group-hover:text-white truncate">{p.name}</span>
+                                <span className="text-[9px] text-white/30 font-mono">{new Date(p.timestamp).toLocaleDateString()}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <button onClick={() => handleLoadPreset(p)} className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-blue-400 transition-colors" title={config.load || "Load"}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m-4 4v12" /></svg>
+                                </button>
+                                <div className="w-px h-3 bg-white/10 mx-0.5"></div>
+                                <button onClick={() => handleDeletePreset(p.id)} className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-red-400 transition-colors" title={config.delete || "Delete"}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
-        <div className="mt-auto pt-3">
+        
+        {/* Factory Reset Footer */}
+        <div className="mt-auto pt-3 border-t border-white/5">
           <TooltipArea text={hints?.confirmReset}>
             <button onClick={handleConfirmReset} className="w-full py-2 bg-red-500/[0.15] rounded-lg text-xs font-bold uppercase tracking-wider text-red-400/80 hover:text-red-300 flex items-center justify-center gap-1.5 border border-red-500/20 hover:border-red-500/40 transition-all">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>

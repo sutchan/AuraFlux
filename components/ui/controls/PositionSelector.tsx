@@ -1,9 +1,10 @@
-
 /**
  * File: components/ui/controls/PositionSelector.tsx
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Updated: 2025-03-09 18:00
+ * Description: Standardized label styling.
  */
 
 import React, { memo } from 'react';
@@ -21,7 +22,8 @@ export const PositionSelector = memo(({ label, value, onChange, options, activeC
   const activeBgClass = activeColor === 'blue' ? 'bg-blue-600' : 'bg-green-600';
   return (
     <div className="space-y-3" role="radiogroup" aria-label={label}>
-      {label && <span className="text-xs font-bold uppercase text-white/50 tracking-[0.15em] block ml-1">{label}</span>}
+      {/* Unified label style: text-xs, bold, uppercase, tracking-wider, text-white/60 */}
+      {label && <span className="text-xs font-bold uppercase text-white/60 tracking-wider block ml-1">{label}</span>}
       <div className="grid grid-cols-3 gap-1 bg-white/[0.02] p-2 rounded-xl max-w-[160px]">
         {options.map(pos => (
           <button key={pos.value} onClick={() => onChange(pos.value as Position)} title={pos.label} aria-label={pos.label} role="radio" aria-checked={value === pos.value}

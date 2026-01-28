@@ -1,9 +1,9 @@
 /**
  * File: core/types/visuals.ts
- * Version: 1.7.38
+ * Version: 1.7.39
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 14:00
+ * Updated: 2025-03-09 17:00
  */
 
 import { Position, Region } from './common';
@@ -33,6 +33,7 @@ export enum VisualizerMode {
 
 export interface VisualizerSettings {
   uiMode: 'simple' | 'advanced';
+  appTheme: 'dark' | 'light'; // New Theme Setting
   sensitivity: number;
   speed: number;
   glow: boolean;
@@ -41,7 +42,7 @@ export interface VisualizerSettings {
   // Automation
   autoRotate: boolean;
   rotateInterval: number;
-  includedModes: VisualizerMode[]; // NEW: Whitelist for auto-rotate
+  includedModes: VisualizerMode[]; 
   
   cycleColors: boolean;
   colorInterval: number;
@@ -56,12 +57,12 @@ export interface VisualizerSettings {
   // Media Settings
   albumArtBackground?: boolean;
   albumArtDim?: number;
-  showAlbumArtOverlay: boolean; // Control cover in SongOverlay
+  showAlbumArtOverlay: boolean;
 
   // Overlay Settings
   customText: string;
   showCustomText: boolean;
-  textSource: 'AUTO' | 'CUSTOM' | 'SONG'; // NEW: Content source control
+  textSource: 'AUTO' | 'CUSTOM' | 'SONG';
   textPulse: boolean;
   customTextRotation: number;
   customTextSize: number;
@@ -71,7 +72,7 @@ export interface VisualizerSettings {
   customTextPosition: Position;
   customTextCycleColor: boolean;
   customTextCycleInterval: number;
-  customText3D?: boolean; // New 3D text effect toggle
+  customText3D?: boolean;
   lyricsPosition: Position;
   recognitionProvider: 'GEMINI' | 'OPENAI' | 'GROQ' | 'MOCK';
   lyricsStyle?: LyricsStyle;
@@ -103,7 +104,7 @@ export interface SmartPreset {
     trails: boolean;
     smoothing: number;
     fftSize?: number;
-    includedModes?: VisualizerMode[]; // Associated modes for this vibe
+    includedModes?: VisualizerMode[]; 
   };
 }
 

@@ -1,9 +1,9 @@
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.4.2
+ * Version: 1.4.3
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 02:00
+ * Updated: 2025-03-09 13:00
  */
 
 import React, { useState, useEffect } from 'react';
@@ -14,7 +14,6 @@ import { SystemSettingsPanel } from './panels/SystemSettingsPanel';
 import { CustomTextSettingsPanel } from './panels/CustomTextSettingsPanel';
 import { StudioPanel } from './panels/StudioPanel';
 import { HelpModal } from '../ui/HelpModal';
-import { useIdleTimer } from '../../core/hooks/useIdleTimer';
 import { useVisuals, useAI, useAudioContext, useUI } from '../AppContext';
 import { BottomBar } from './BottomBar';
 import { TooltipArea } from '../ui/controls/Tooltip';
@@ -32,17 +31,20 @@ const TAB_ICONS: Record<TabType, React.ReactNode> = {
   system: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
 };
 
-const Controls: React.FC = () => {
+interface ControlsProps {
+    isExpanded: boolean;
+    setIsExpanded: (val: boolean | ((prev: boolean) => boolean)) => void;
+    isIdle: boolean;
+}
+
+const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }) => {
   const { settings, setSettings, randomizeSettings, mode, setMode } = useVisuals();
   const { showLyrics, setShowLyrics } = useAI();
   const { toggleMicrophone, sourceType, togglePlayback, playNext, playPrev } = useAudioContext();
   const { t } = useUI();
 
-  const [isExpanded, setIsExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('visual');
   const [showHelpModal, setShowHelpModal] = useState(false);
-  
-  const { isIdle } = useIdleTimer(isExpanded, settings.autoHideUi);
   
   const toggleFullscreen = () => {
     const doc = window.document as any;
@@ -123,7 +125,7 @@ const Controls: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, isExpanded, showHelpModal]);
+  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, isExpanded, showHelpModal, setIsExpanded]);
 
   return (
     <>

@@ -1,10 +1,10 @@
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 1.8.0
+ * Version: 1.8.1
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 14:00
- * Description: Unblocked AI Personas allowing them to use Gemini Key.
+ * Updated: 2025-03-09 21:00
+ * Description: Unblocked AI Personas allowing them to use Gemini Key. Added local font support.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -82,6 +82,11 @@ export const AiSettingsPanel: React.FC = () => {
   const currentProvider = settings.recognitionProvider || 'GEMINI';
   const hasKey = !!apiKeys[currentProvider];
   const isMock = currentProvider === 'MOCK';
+
+  // Font Logic
+  const currentFont = settings.lyricsFont || 'Inter, sans-serif';
+  const isPresetFont = AVAILABLE_FONTS.some(f => f.value === currentFont);
+  const selectValue = isPresetFont ? currentFont : 'custom';
 
   return (
     <>
@@ -181,11 +186,34 @@ export const AiSettingsPanel: React.FC = () => {
                 <div className="space-y-3 animate-fade-in-up">
                     <CustomSelect 
                         label={t?.lyricsFont || "Font Family"} 
-                        value={settings.lyricsFont || 'Inter, sans-serif'} 
+                        value={selectValue} 
                         options={AVAILABLE_FONTS} 
                         hintText={hints?.lyricsFont}
-                        onChange={(val) => setSettings({...settings, lyricsFont: val})} 
+                        onChange={(val) => {
+                            if (val === 'custom') {
+                                setSettings({...settings, lyricsFont: 'Arial'});
+                            } else {
+                                setSettings({...settings, lyricsFont: val});
+                            }
+                        }} 
                     />
+                    
+                    {/* Conditional Input for Local Font */}
+                    {selectValue === 'custom' && (
+                        <div className="animate-fade-in-up">
+                            <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider ml-1 mb-1 block">
+                                {hints?.localFont || "Local Font Name"}
+                            </label>
+                            <input 
+                                type="text" 
+                                value={currentFont}
+                                onChange={(e) => setSettings({...settings, lyricsFont: e.target.value})}
+                                placeholder={hints?.enterLocalFont || "e.g. Arial"}
+                                className="w-full bg-white/[0.04] rounded-xl px-3 py-2 text-xs font-medium text-white focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors"
+                            />
+                        </div>
+                    )}
+
                     <Slider 
                         label={t?.lyricsFontSize || "Font Size"} 
                         hintText={hints?.lyricsFontSize}

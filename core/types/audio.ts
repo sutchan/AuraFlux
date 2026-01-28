@@ -1,9 +1,9 @@
 /**
  * File: core/types/audio.ts
- * Version: 1.9.0
+ * Version: 1.9.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 18:30
+ * Updated: 2025-03-09 15:00
  */
 
 export enum LyricsStyle {
@@ -19,7 +19,8 @@ export type PlaybackMode = 'repeat-all' | 'repeat-one' | 'shuffle';
 export interface SongInfo {
   title: string;
   artist: string;
-  lyricsSnippet?: string;
+  lyricsSnippet?: string; // AI generated short snippet
+  lyrics?: string; // Full lyrics from file (ID3)
   mood?: string;
   mood_en_keywords?: string; // Canonical English keywords for styling
   identified: boolean;

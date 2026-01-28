@@ -1,9 +1,9 @@
 /**
  * File: core/constants/index.ts
- * Version: 1.8.8
+ * Version: 1.9.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 10:00
+ * Updated: 2025-03-09 22:00
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
@@ -57,10 +57,17 @@ export const REGION_NAMES: Record<string, string> = {
 };
 
 export const AVAILABLE_FONTS = [
-  { value: 'Inter, sans-serif', label: 'Inter (Sans)' },
-  { value: '"JetBrains Mono", monospace', label: 'JetBrains (Mono)' },
-  { value: '"Playfair Display", serif', label: 'Playfair (Serif)' },
-  { value: 'system-ui, sans-serif', label: 'System' }
+  { value: 'Inter, sans-serif', label: 'Inter (Default)' },
+  { value: '"JetBrains Mono", monospace', label: 'JetBrains Mono' },
+  { value: '"Playfair Display", serif', label: 'Playfair Display' },
+  { value: '"Roboto", sans-serif', label: 'Roboto' },
+  { value: '"Montserrat", sans-serif', label: 'Montserrat' },
+  { value: '"Oswald", sans-serif', label: 'Oswald' },
+  { value: '"Courier New", monospace', label: 'Courier New' },
+  { value: '"Times New Roman", serif', label: 'Times New Roman' },
+  { value: '"Impact", sans-serif', label: 'Impact' },
+  { value: '"Comic Sans MS", "Chalkboard SE", sans-serif', label: 'Comic Sans' },
+  { value: 'custom', label: '📂 Local / Custom Font...' }
 ];
 
 export const getPositionOptions = (t: any) => [

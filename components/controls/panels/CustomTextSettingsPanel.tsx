@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.8.0
+ * Version: 1.8.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 20:00
+ * Updated: 2025-03-09 21:00
  */
 
 import React from 'react';
@@ -52,6 +52,13 @@ export const CustomTextSettingsPanel: React.FC = () => {
     '#facc15', '#84cc16', '#22c55e', '#00ff41', '#14b8a6', '#00e5ff',
     '#38bdf8', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#ff007f'
   ];
+
+  // Font Selection Logic
+  const currentFont = settings.customTextFont || 'Inter, sans-serif';
+  // Check if current font is in the preset list
+  const isPresetFont = AVAILABLE_FONTS.some(f => f.value === currentFont);
+  // If not preset, we assume it's a custom/local font
+  const selectValue = isPresetFont ? currentFont : 'custom';
 
   return (
     <>
@@ -175,7 +182,39 @@ export const CustomTextSettingsPanel: React.FC = () => {
                             hintText={hints?.text3D}
                         />
                     </div>
-                    <CustomSelect label={t?.textFont || "Font Style"} value={settings.customTextFont || 'Inter, sans-serif'} hintText={hints?.textFont} options={AVAILABLE_FONTS} onChange={(val) => setSettings({...settings, customTextFont: val})} />
+                    
+                    <div>
+                        <CustomSelect 
+                            label={t?.textFont || "Font Style"} 
+                            value={selectValue} 
+                            hintText={hints?.textFont} 
+                            options={AVAILABLE_FONTS} 
+                            onChange={(val) => {
+                                if (val === 'custom') {
+                                    // Set a default placeholder if switching to custom mode
+                                    setSettings({...settings, customTextFont: 'Arial'});
+                                } else {
+                                    setSettings({...settings, customTextFont: val});
+                                }
+                            }} 
+                        />
+                        {/* Conditional Input for Local Font */}
+                        {selectValue === 'custom' && (
+                            <div className="mt-2 animate-fade-in-up">
+                                <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider ml-1 mb-1 block">
+                                    {hints?.localFont || "Local Font Name"}
+                                </label>
+                                <input 
+                                    type="text" 
+                                    value={currentFont}
+                                    onChange={(e) => setSettings({...settings, customTextFont: e.target.value})}
+                                    placeholder={hints?.enterLocalFont || "e.g. Arial"}
+                                    className="w-full bg-white/[0.04] rounded-xl px-3 py-2 text-xs font-medium text-white focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors"
+                                />
+                            </div>
+                        )}
+                    </div>
+
                     <TooltipArea text={hints?.textPosition}>
                         <PositionSelector 
                             label={t?.textPosition || "Text Position"} 

@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.9.1
+ * Version: 1.9.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 19:00
+ * Updated: 2025-03-09 21:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -148,7 +148,10 @@ export const zh = {
     includeInAutoRotate: '加入自动巡航',
     excludeFromAutoRotate: '移出自动巡航',
     albumArtBackground: '将模糊的专辑封面显示为背景图层。',
-    overlayCover: '在歌曲信息悬浮窗中显示专辑封面缩略图。'
+    overlayCover: '在歌曲信息悬浮窗中显示专辑封面缩略图。',
+    lightMode: '切换浅色/深色主题。',
+    localFont: '本地字体名称',
+    enterLocalFont: '输入字体族名称 (如: Microsoft YaHei)'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -259,7 +262,8 @@ export const zh = {
     analyze: '生成视觉方案'
   },
   systemPanel: {
-    interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI'
+    interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI',
+    lightMode: '浅色主题', darkMode: '深色主题'
   },
   config: {
     title: '云端与数据',

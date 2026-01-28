@@ -1,9 +1,9 @@
 /**
  * File: components/App.tsx
- * Version: 1.8.7
+ * Version: 1.8.9
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-08 17:00
+ * Updated: 2025-03-09 20:00
  */
 
 import React, { useCallback, useState } from 'react';
@@ -20,6 +20,7 @@ import { UnsupportedScreen } from './ui/UnsupportedScreen';
 import { AppProvider, useVisuals, useUI, useAudioContext, useAI } from './AppContext';
 import { APP_VERSION } from '../core/constants';
 import { useMobileGestures } from '../core/hooks/useMobileGestures';
+import { useIdleTimer } from '../core/hooks/useIdleTimer';
 
 
 const AppContent: React.FC = () => {
@@ -28,6 +29,11 @@ const AppContent: React.FC = () => {
   const { hasStarted, isUnsupported, showOnboarding, language, setLanguage, handleOnboardingComplete, t, toggleFullscreen } = useUI();
   const { showLyrics, lyricsStyle, performIdentification } = useAI();
   const [isDragOver, setIsDragOver] = useState(false);
+  
+  // --- UI State Lifting ---
+  // Managed here to coordinate visibility between Controls (BottomBar) and SongOverlay (TopLeft)
+  const [isControlsOpen, setIsControlsOpen] = useState(false);
+  const { isIdle } = useIdleTimer(isControlsOpen, settings.autoHideUi);
   
   // Mobile Gestures
   const gestureHandlers = useMobileGestures();
@@ -73,7 +79,8 @@ const AppContent: React.FC = () => {
 
   return (
     <div 
-      className="h-[100dvh] bg-black overflow-hidden relative touch-none" 
+      // Use explicit hex color to prevent light-mode override in index.css (where .bg-black is forced to white)
+      className="h-[100dvh] bg-[#000000] overflow-hidden relative touch-none" 
       onDoubleClick={handleDoubleClick}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
@@ -143,8 +150,14 @@ const AppContent: React.FC = () => {
               analyser={analyser} 
               sensitivity={settings.sensitivity}
               showAlbumArt={settings.showAlbumArtOverlay}
+              isIdle={isIdle}
             />
-            <Controls />
+            
+            <Controls 
+              isExpanded={isControlsOpen}
+              setIsExpanded={setIsControlsOpen}
+              isIdle={isIdle}
+            />
           </div>
       </div>
 

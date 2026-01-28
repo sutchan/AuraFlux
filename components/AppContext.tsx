@@ -1,9 +1,9 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.9.5
+ * Version: 1.9.7
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-08 17:30
+ * Updated: 2025-03-09 18:30
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
@@ -18,10 +18,11 @@ import { Toast } from './ui/Toast';
 // --- Default Settings ---
 const DEFAULT_SETTINGS: VisualizerSettings = {
   uiMode: 'advanced',
+  appTheme: 'dark', // Default Theme
   sensitivity: 1.5, speed: 1.0, glow: false, trails: true, 
-  albumArtBackground: false,
-  albumArtDim: 0.8, // Default dimming increased to 0.8 for better contrast
-  showAlbumArtOverlay: true, 
+  albumArtBackground: true, // Default Enabled
+  albumArtDim: 0.8, 
+  showAlbumArtOverlay: false, // Default Disabled
   autoRotate: false, rotateInterval: 30, includedModes: Object.values(VisualizerMode), 
   cycleColors: true, colorInterval: 5, hideCursor: false, smoothing: 0.8, fftSize: 512, 
   quality: 'high', monitor: false, wakeLock: false, 
@@ -198,6 +199,15 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   useEffect(() => {
     setStorage('settings', settings);
   }, [settings, setStorage]);
+
+  // Apply Theme Effect
+  useEffect(() => {
+    if (settings.appTheme === 'light') {
+      document.documentElement.classList.add('light-theme');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+    }
+  }, [settings.appTheme]);
 
   useEffect(() => {
     let wakeLock: any = null;

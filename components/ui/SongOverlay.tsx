@@ -1,9 +1,9 @@
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 14:00
+ * Updated: 2025-03-09 13:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -20,6 +20,7 @@ interface SongOverlayProps {
   analyser?: AnalyserNode | null;
   sensitivity?: number;
   showAlbumArt?: boolean;
+  isIdle?: boolean; // New prop for auto-hide
 }
 
 const getMoodStyle = (keywords: string | undefined | null) => {
@@ -71,7 +72,7 @@ const getProviderLabel = (source: string | undefined) => {
     }
 };
 
-const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, onRetry, onClose, analyser, sensitivity = 1.0, showAlbumArt = true }) => {
+const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, onRetry, onClose, analyser, sensitivity = 1.0, showAlbumArt = true, isIdle = false }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const moodStyle = useMemo(() => song ? getMoodStyle(song.mood_en_keywords || song.mood) : getMoodStyle('default'), [song]);
   
@@ -82,7 +83,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
     analyser,
     settings: { sensitivity },
     isEnabled: !!isEnabled,
-    pulseStrength: 0.05, // Reduce pulse strength to avoid jitter with image
+    pulseStrength: 0.05, 
   });
 
   if (!isEnabled || !song) return null;
@@ -96,14 +97,13 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
   const albumArt = song.albumArtUrl;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-20 overflow-hidden">
+    <div className={`pointer-events-none fixed inset-0 z-20 overflow-hidden transition-all duration-700 ease-out ${isIdle ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'}`}>
       <div 
         ref={containerRef}
         className={`absolute top-16 left-4 right-4 md:right-auto md:top-8 md:left-8 bg-black/60 backdrop-blur-xl border-s-4 ${moodStyle.borderColor} ps-4 py-3 pe-4 rounded-e-xl rounded-l-lg md:rounded-l-none md:max-w-lg transition-all duration-700 shadow-[0_4px_20px_rgba(0,0,0,0.6)] pointer-events-auto group origin-top-center md:origin-top-left animate-fade-in-up border-y border-r border-y-white/5 border-r-white/5`}
         style={{ 
           animationDuration: '0.8s',
-          transform: 'scale(var(--pulse-scale, 1))',
-          opacity: 'var(--pulse-opacity, 1)'
+          transform: 'scale(var(--pulse-scale, 1))'
         }}
       >
         <div className={`absolute inset-0 bg-gradient-to-r ${moodStyle.gradient} opacity-20 pointer-events-none rounded-e-xl`} />
@@ -115,7 +115,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
         <div className="relative z-10 flex gap-4 items-start">
             {/* Album Art Section */}
             {albumArt && showAlbumArt && (
-                <div className="shrink-0 relative group/art">
+                <div className="shrink-0 relative group/art self-center">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden shadow-lg border border-white/10 relative z-10 bg-white/5">
                         <img src={albumArt} alt="Album Art" className="w-full h-full object-cover transition-transform duration-700 group-hover/art:scale-110" />
                     </div>
@@ -132,14 +132,17 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
                 </div>
                 )}
                 
-                <h2 className={`${isConfidenceLow ? 'text-white/90 text-lg' : 'text-white text-lg md:text-2xl'} font-bold tracking-tight leading-tight break-words line-clamp-2 md:line-clamp-none drop-shadow-md`}>
-                {displayTitle}
-                </h2>
-                {displayArtist && (
-                <p className={`${isConfidenceLow ? 'text-white/60 text-xs' : 'text-blue-300 text-sm md:text-base'} font-medium mt-0.5 truncate`}>
-                    {displayArtist}
-                </p>
-                )}
+                {/* Title and Artist forced to new lines with generous spacing */}
+                <div className="flex flex-col gap-1">
+                    <h2 className={`text-white text-lg md:text-2xl font-bold tracking-tight leading-tight break-words drop-shadow-md`}>
+                    {displayTitle}
+                    </h2>
+                    {displayArtist && (
+                    <p className={`text-blue-300 text-sm md:text-base font-medium truncate opacity-90`}>
+                        {displayArtist}
+                    </p>
+                    )}
+                </div>
                 
                 <div className="flex items-center gap-2 mt-2.5 flex-wrap">
                     {song.mood && (

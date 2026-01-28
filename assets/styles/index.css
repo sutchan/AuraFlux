@@ -1,9 +1,9 @@
 /*
  * File: assets/styles/index.css
- * Version: 1.7.32
+ * Version: 1.8.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-09 17:00
  */
 
 @tailwind base;
@@ -84,3 +84,64 @@ input[type=range]:active::-webkit-slider-thumb {
   transform: scale(1.2);
   box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
 }
+
+/* --- LIGHT THEME OVERRIDES --- */
+.light-theme {
+  --bg-color: #f3f4f6;
+  --text-main: #111827;
+  --panel-bg: #ffffff;
+}
+
+.light-theme body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+}
+
+/* Override utility classes used in the UI for light mode compatibility */
+.light-theme .bg-black { background-color: #ffffff !important; color: #000 !important; }
+.light-theme .bg-black\/20 { background-color: rgba(255,255,255,0.5) !important; }
+.light-theme .bg-black\/40 { background-color: rgba(255,255,255,0.7) !important; }
+.light-theme .bg-black\/60 { background-color: rgba(255,255,255,0.9) !important; }
+.light-theme .bg-black\/80 { background-color: rgba(255,255,255,0.95) !important; }
+.light-theme .bg-black\/90 { background-color: #ffffff !important; }
+
+.light-theme .bg-\[\#0a0a0c\] { background-color: #f9fafb !important; }
+.light-theme .bg-\[\#0f0f11\]\/90 { background-color: rgba(255,255,255,0.95) !important; }
+.light-theme .bg-\[\#050505\]\/85 { background-color: rgba(255,255,255,0.9) !important; }
+
+/* Invert white background opacities to black/dark opacities for contrast */
+.light-theme .bg-white\/5 { background-color: rgba(0,0,0,0.05) !important; }
+.light-theme .bg-white\/10 { background-color: rgba(0,0,0,0.08) !important; }
+.light-theme .bg-white\/20 { background-color: rgba(0,0,0,0.15) !important; }
+.light-theme .bg-white\/25 { background-color: rgba(0,0,0,0.2) !important; }
+.light-theme .bg-white\/\[0\.02\] { background-color: rgba(0,0,0,0.02) !important; }
+.light-theme .bg-white\/\[0\.03\] { background-color: rgba(0,0,0,0.03) !important; }
+.light-theme .bg-white\/\[0\.04\] { background-color: rgba(0,0,0,0.04) !important; }
+
+/* Invert borders */
+.light-theme .border-white\/5 { border-color: rgba(0,0,0,0.08) !important; }
+.light-theme .border-white\/10 { border-color: rgba(0,0,0,0.15) !important; }
+.light-theme .border-white\/20 { border-color: rgba(0,0,0,0.25) !important; }
+
+/* Invert text colors */
+.light-theme .text-white { color: #111827 !important; }
+.light-theme .text-white\/20 { color: rgba(0,0,0,0.2) !important; }
+.light-theme .text-white\/30 { color: rgba(0,0,0,0.3) !important; }
+.light-theme .text-white\/40 { color: rgba(0,0,0,0.4) !important; }
+.light-theme .text-white\/50 { color: rgba(0,0,0,0.5) !important; }
+.light-theme .text-white\/60 { color: rgba(0,0,0,0.6) !important; }
+.light-theme .text-white\/70 { color: rgba(0,0,0,0.7) !important; }
+.light-theme .text-white\/80 { color: rgba(0,0,0,0.8) !important; }
+.light-theme .text-white\/90 { color: rgba(0,0,0,0.9) !important; }
+
+/* Improve visibility for colored text in light mode */
+.light-theme .text-blue-200 { color: #1d4ed8 !important; } 
+.light-theme .text-green-200 { color: #15803d !important; } 
+.light-theme .text-red-200 { color: #b91c1c !important; }
+.light-theme .text-red-400 { color: #ef4444 !important; } 
+
+/* Inputs & Form Elements */
+.light-theme input::placeholder { color: rgba(0,0,0,0.4) !important; }
+.light-theme select { color: #000 !important; background-color: rgba(0,0,0,0.05) !important; }
+.light-theme .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+.light-theme .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }

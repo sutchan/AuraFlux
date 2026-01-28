@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.9.1
+ * Version: 1.9.3
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 14:00
+ * Updated: 2025-03-09 21:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -148,7 +148,10 @@ export const en = {
     includeInAutoRotate: 'Include in Auto-Rotate',
     excludeFromAutoRotate: 'Exclude from Auto-Rotate',
     albumArtBackground: 'Show album art as a blurred background layer.',
-    overlayCover: 'Show album art thumbnail in the song info overlay.'
+    overlayCover: 'Show album art thumbnail in the song info overlay.',
+    lightMode: 'Switch between light and dark UI themes.',
+    localFont: 'Font Name',
+    enterLocalFont: 'Enter local font name (e.g. Arial)'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -259,7 +262,8 @@ export const en = {
     analyze: 'Generate Visuals'
   },
   systemPanel: {
-    interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI'
+    interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI',
+    lightMode: 'Light Theme', darkMode: 'Dark Theme'
   },
   config: {
     title: 'Cloud & Data',

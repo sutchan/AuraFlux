@@ -1,10 +1,10 @@
 /**
  * File: components/ui/controls/SettingsToggle.tsx
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-26 21:00
- * Description: Fixed a visual bug where the slider thumb was not translating to the correct end position.
+ * Updated: 2025-03-09 18:00
+ * Description: Unified UI style with other controls (text-xs uppercase).
  */
 
 import React, { memo } from 'react';
@@ -35,11 +35,16 @@ export const SettingsToggle = memo(({ label, value, onChange, activeColor = 'blu
     ? 'flex items-center justify-between w-full' 
     : 'flex items-center justify-between min-h-[22px] w-full';
 
+  // Unified label style: text-xs, bold, uppercase, tracking-wider, text-white/60
+  const labelClasses = `text-xs font-bold uppercase tracking-wider leading-none transition-colors ${
+    variant === 'clean' ? 'text-white/60 group-hover:text-white' : 'text-white/60'
+  }`;
+
   return (
     <div className={containerClasses}> 
       <div className={headerClasses}>
         <TooltipArea text={hintText}>
-          <span className={`text-sm font-bold leading-none transition-colors ${variant === 'clean' ? 'text-white/70 group-hover:text-white' : 'text-white/80'}`}>{label}</span>
+          <span className={labelClasses}>{label}</span>
         </TooltipArea>
         <button 
           onClick={onChange} 
@@ -51,7 +56,7 @@ export const SettingsToggle = memo(({ label, value, onChange, activeColor = 'blu
           <span className={`inline-block w-4 h-4 transform transition-transform duration-200 ease-in-out bg-white rounded-full shadow-sm ${value ? 'translate-x-[22px]' : 'translate-x-[2px]'}`} />
         </button>
       </div>
-      {statusText && <div className="text-[11px] font-mono text-white/30 uppercase tracking-widest text-right mt-1">{statusText}</div>}
+      {statusText && <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest text-right mt-1">{statusText}</div>}
       {value && children && <div className="mt-2 pt-2 border-t border-white/5 animate-fade-in-up w-full">{children}</div>}
     </div>
   );

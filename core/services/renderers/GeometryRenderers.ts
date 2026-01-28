@@ -1,9 +1,9 @@
 /**
  * File: core/services/renderers/GeometryRenderers.ts
- * Version: 1.7.33
+ * Version: 1.7.34
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-09 13:00
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -39,8 +39,9 @@ export class TunnelRenderer implements IVisualizerRenderer {
     const cx = w / 2;
     const cy = h / 2;
     
+    // Optimization: Reduced node counts for sharper, cleaner lines and better performance
     const rings = settings.quality === 'high' ? 24 : (settings.quality === 'med' ? 16 : 10);
-    const sides = settings.quality === 'high' ? 16 : (settings.quality === 'med' ? 10 : 6);
+    const sides = settings.quality === 'high' ? 12 : (settings.quality === 'med' ? 8 : 5);
     
     this.updateCache(sides);
 
@@ -97,7 +98,11 @@ export class TunnelRenderer implements IVisualizerRenderer {
         const baseR = 500;
         const audioAmp = 280 * settings.sensitivity;
         
-        const baseWidth = Math.max(0.5, 1.5 * scale * (1 + bass));
+        // Depth-based thickening: Lines closer to camera (higher scale) are thicker.
+        // Power curve 1.5 emphasizes the very close lines.
+        const proximityBoost = Math.pow(scale, 1.5);
+        const baseWidth = Math.max(0.5, 1.5 * proximityBoost * (1 + bass));
+        
         const baseAlpha = depthAlpha * (0.35 + bass * 0.4);
         const color = colors[i % colors.length];
 
@@ -164,17 +169,20 @@ export class TunnelRenderer implements IVisualizerRenderer {
             }
         }
         
-        const baseLineWidth = 0.8;
+        // Use a consistent base line width for longitudinals, but allow some scaling
+        // We use a thinner line here to keep the "grid" look clean
+        const longLineWidth = 0.8 * (1 + bass * 0.5); 
         const baseLineAlpha = 0.12;
+        
         for (const color in pathsByColor) {
             const path = pathsByColor[color];
             ctx.strokeStyle = color;
             if (settings.glow) {
-                ctx.lineWidth = baseLineWidth * 5;
+                ctx.lineWidth = longLineWidth * 5;
                 ctx.globalAlpha = baseLineAlpha * 0.5;
                 ctx.stroke(path);
             }
-            ctx.lineWidth = baseLineWidth;
+            ctx.lineWidth = longLineWidth;
             ctx.globalAlpha = baseLineAlpha;
             ctx.stroke(path);
         }

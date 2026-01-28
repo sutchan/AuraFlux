@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.4.2
+ * Version: 2.5.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 02:30
+ * Updated: 2025-03-09 15:00
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -66,6 +66,9 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
   const [isSimulating, setIsSimulating] = useState(false);
   const demoGraphRef = useRef<{ stop: () => void } | null>(null);
   const featuresRef = useRef<AudioFeatures>({ rms: 0, energy: 0, timestamp: 0 });
+
+  // Track End Handler Ref (to avoid stale closures in onended)
+  const handleTrackEndRef = useRef<() => void>(() => {});
 
   // Cleanup Worklet URL on unmount
   useEffect(() => {
@@ -195,8 +198,17 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
           if (window.jsmediatags) {
               window.jsmediatags.read(file, {
                   onSuccess: (tag: any) => {
-                      const { title, artist, picture } = tag.tags;
+                      const { title, artist, picture, lyrics } = tag.tags;
                       let albumArtUrl = undefined;
+                      let lyricsText: string | undefined = undefined;
+
+                      // Extract Lyrics (USLT frame)
+                      if (typeof lyrics === 'string') {
+                          lyricsText = lyrics;
+                      } else if (typeof lyrics === 'object' && lyrics.lyrics) {
+                          lyricsText = lyrics.lyrics;
+                      }
+
                       if (picture) {
                           try {
                               const { data, format } = picture;
@@ -212,6 +224,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
                           title: title || basicTrack.title,
                           artist: artist || basicTrack.artist,
                           albumArtUrl,
+                          lyrics: lyricsText,
                           identified: true
                       });
                   },
@@ -251,6 +264,49 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
   const loadFile = useCallback(async (file: File) => {
       await importFiles([file]);
   }, [importFiles]);
+
+  // Internal function to play the loaded buffer
+  const playFileBuffer = useCallback(async () => {
+    if (!audioBufferRef.current) return;
+    const ctx = await ensureContext();
+
+    if (fileSourceNodeRef.current) {
+        try { fileSourceNodeRef.current.stop(); } catch(e){}
+        fileSourceNodeRef.current.disconnect();
+    }
+
+    const source = ctx.createBufferSource();
+    source.buffer = audioBufferRef.current;
+    
+    source.connect(analyserRef.current!);
+    analyserRef.current!.connect(ctx.destination);
+
+    source.onended = () => {
+       // Check if it ended naturally (approx duration match)
+       // We use a small tolerance because currentTime might be slightly off
+       if (audioBufferRef.current && Math.abs(ctx.currentTime - startTimeRef.current - audioBufferRef.current.duration) < 0.5) {
+           handleTrackEndRef.current();
+       }
+    };
+
+    source.start(0, pausedAtRef.current);
+    startTimeRef.current = ctx.currentTime - pausedAtRef.current;
+    fileSourceNodeRef.current = source;
+    setIsPlaying(true);
+
+    const updateProgress = () => {
+      if (!audioBufferRef.current || !audioContextRef.current) return;
+      const now = audioContextRef.current.currentTime;
+      const current = now - startTimeRef.current;
+      setCurrentTime(Math.min(current, audioBufferRef.current.duration));
+      
+      if (audioContextRef.current.state === 'running' && fileSourceNodeRef.current) {
+          rafRef.current = requestAnimationFrame(updateProgress);
+      }
+    };
+    rafRef.current = requestAnimationFrame(updateProgress);
+
+  }, []);
 
   const playTrackByIndex = useCallback(async (index: number, currentList?: Track[]) => {
       const list = currentList || playlist;
@@ -298,7 +354,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       } finally {
           setIsPending(false);
       }
-  }, [playlist, setCurrentSong]);
+  }, [playlist, setCurrentSong, playFileBuffer]);
 
   const removeFromPlaylist = useCallback((index: number) => {
       setPlaylist(prev => {
@@ -357,49 +413,6 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       playTrackByIndex(prevIndex);
   }, [playlist, currentIndex, playTrackByIndex]);
 
-  // Internal function to play the loaded buffer
-  const playFileBuffer = useCallback(async () => {
-    if (!audioBufferRef.current) return;
-    const ctx = await ensureContext();
-
-    if (fileSourceNodeRef.current) {
-        try { fileSourceNodeRef.current.stop(); } catch(e){}
-        fileSourceNodeRef.current.disconnect();
-    }
-
-    const source = ctx.createBufferSource();
-    source.buffer = audioBufferRef.current;
-    
-    source.connect(analyserRef.current!);
-    analyserRef.current!.connect(ctx.destination);
-
-    source.onended = () => {
-       // Check if it ended naturally (approx duration match)
-       // We use a small tolerance because currentTime might be slightly off
-       if (audioBufferRef.current && Math.abs(ctx.currentTime - startTimeRef.current - audioBufferRef.current.duration) < 0.5) {
-           handleTrackEnd();
-       }
-    };
-
-    source.start(0, pausedAtRef.current);
-    startTimeRef.current = ctx.currentTime - pausedAtRef.current;
-    fileSourceNodeRef.current = source;
-    setIsPlaying(true);
-
-    const updateProgress = () => {
-      if (!audioBufferRef.current || !audioContextRef.current) return;
-      const now = audioContextRef.current.currentTime;
-      const current = now - startTimeRef.current;
-      setCurrentTime(Math.min(current, audioBufferRef.current.duration));
-      
-      if (audioContextRef.current.state === 'running' && fileSourceNodeRef.current) {
-          rafRef.current = requestAnimationFrame(updateProgress);
-      }
-    };
-    rafRef.current = requestAnimationFrame(updateProgress);
-
-  }, []);
-
   // Handle auto-advance
   const handleTrackEnd = useCallback(() => {
       setIsPlaying(false);
@@ -422,6 +435,11 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
           }
       }
   }, [playlist, currentIndex, playbackMode, playTrackByIndex]);
+
+  // Update ref whenever handleTrackEnd changes (due to state/props changes)
+  useEffect(() => {
+      handleTrackEndRef.current = handleTrackEnd;
+  }, [handleTrackEnd]);
 
   const pauseFile = useCallback(() => {
     if (fileSourceNodeRef.current && isPlaying && audioContextRef.current) {
