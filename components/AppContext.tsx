@@ -1,9 +1,9 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.9.2
+ * Version: 1.9.5
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-08 02:30
+ * Updated: 2025-03-08 17:30
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
@@ -20,9 +20,10 @@ const DEFAULT_SETTINGS: VisualizerSettings = {
   uiMode: 'advanced',
   sensitivity: 1.5, speed: 1.0, glow: false, trails: true, 
   albumArtBackground: false,
-  albumArtDim: 0.5,
+  albumArtDim: 0.8, // Default dimming increased to 0.8 for better contrast
+  showAlbumArtOverlay: true, 
   autoRotate: false, rotateInterval: 30, includedModes: Object.values(VisualizerMode), 
-  cycleColors: false, colorInterval: 10, hideCursor: false, smoothing: 0.8, fftSize: 512, 
+  cycleColors: true, colorInterval: 5, hideCursor: false, smoothing: 0.8, fftSize: 512, 
   quality: 'high', monitor: false, wakeLock: false, 
   customText: 'AURA', showCustomText: false, textSource: 'AUTO',
   textPulse: true, customTextRotation: 0, customTextSize: 12, customTextFont: 'Inter, sans-serif',

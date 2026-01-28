@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const tw = {
         fade: '在錄製開始時音訊淡入，停止時自動淡出。'
     }
   },
+  bgImage: '專輯封面背景',
+  bgDim: '背景調暗',
+  overlayCover: '懸浮窗封面',
   hints: {
     mode: '選擇用於生成視覺效果的數學渲染引擎。',
     theme: '應用精心調校的場景配色方案。',
@@ -148,7 +151,9 @@ export const tw = {
     loadPreset: '載入此預設。',
     copyConfig: '將配置代碼複製到剪貼簿以便分享。',
     includeInAutoRotate: '加入自動巡航',
-    excludeFromAutoRotate: '移出自動巡航'
+    excludeFromAutoRotate: '移出自動巡航',
+    albumArtBackground: '將模糊的專輯封面顯示為背景圖層。',
+    overlayCover: '在歌曲資訊懸浮窗中顯示專輯封面縮略圖。'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -170,7 +175,7 @@ export const tw = {
       update: '更新',
       geminiHint: '可選。留空則使用預設免費配額。',
       customHint: '必填。金鑰將存儲在您的本地瀏覽器中。',
-      notImplemented: '尚未實現對 {provider} 的 AI 處理。請選擇 Gemini 以使用 AI 功能。'
+      notImplemented: '尚未實現對 {provider} 的 AI 处理。请选择 Gemini 以使用 AI 功能。'
   },
   visualizerMode: '視覺引擎',
   styleTheme: '色彩主題',
@@ -226,7 +231,7 @@ export const tw = {
   defaultMic: '系統預設麥克風',
   customText: '自訂文字內容',
   textProperties: '排版與佈局',
-  text3D: '3D 立體效果',
+  text3D: '3D 立体效果',
   textSource: '顯示內容',
   textSources: {
       auto: '智能自動 (優先歌曲)',
@@ -290,7 +295,7 @@ export const tw = {
     all_modes: '所有模式',
     calm: '數位波形',
     party: '動感光牆派對',
-    ambient: '深空星雲',
+    ambient: '深空星云',
     cyberpunk: '賽博雷射', 
     retrowave: '復古力場',
     vocal: '人聲頻譜' 

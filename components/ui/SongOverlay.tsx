@@ -1,9 +1,9 @@
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 16:00
+ * Updated: 2025-03-08 14:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -19,6 +19,7 @@ interface SongOverlayProps {
   onClose: () => void;
   analyser?: AnalyserNode | null;
   sensitivity?: number;
+  showAlbumArt?: boolean;
 }
 
 const getMoodStyle = (keywords: string | undefined | null) => {
@@ -70,7 +71,7 @@ const getProviderLabel = (source: string | undefined) => {
     }
 };
 
-const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, onRetry, onClose, analyser, sensitivity = 1.0 }) => {
+const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, onRetry, onClose, analyser, sensitivity = 1.0, showAlbumArt = true }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const moodStyle = useMemo(() => song ? getMoodStyle(song.mood_en_keywords || song.mood) : getMoodStyle('default'), [song]);
   
@@ -113,7 +114,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
 
         <div className="relative z-10 flex gap-4 items-start">
             {/* Album Art Section */}
-            {albumArt && (
+            {albumArt && showAlbumArt && (
                 <div className="shrink-0 relative group/art">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden shadow-lg border border-white/10 relative z-10 bg-white/5">
                         <img src={albumArt} alt="Album Art" className="w-full h-full object-cover transition-transform duration-700 group-hover/art:scale-110" />

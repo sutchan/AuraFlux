@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const fr = {
         fade: 'Applique un fondu d\'entrée au début et un fondu de sortie à l\'arrêt.'
     }
   },
+  bgImage: 'Fond Pochette',
+  bgDim: 'Assombrir Fond',
+  overlayCover: 'Pochette Overlay',
   hints: {
     mode: 'Sélectionnez le moteur mathématique principal pour générer les visuels.',
     theme: 'Appliquez une palette de couleurs soignée à la scène.',
@@ -98,7 +101,7 @@ export const fr = {
     rotateInterval: 'Temps avant de passer au moteur visuel suivant.',
     cycleColors: 'Transitionne automatiquement entre les thèmes de couleur.',
     colorInterval: 'Temps avant de se fondre vers la palette suivante.',
-    reset: 'Restaure tous les paramètres de l\'application aux valeurs d\'usine.',
+    reset: 'Restaura tous les paramètres de l\'application aux valeurs d\'usine.',
     confirmReset: 'Confirmer la réinitialisation ? Cette action est irréversible.',
     resetVisual: 'Réinitialise uniquement l\'esthétique (Vitesse, Lueur, Traînées).',
     resetText: 'Effacer les paramètres de texte personnalisé, de police et de position.',
@@ -143,7 +146,9 @@ export const fr = {
     loadPreset: 'Restaurer cet état prédéfini.',
     copyConfig: 'Copier la chaîne de configuration dans le presse-papiers pour un partage rapide.',
     includeInAutoRotate: 'Inclure dans la Rotation Auto',
-    excludeFromAutoRotate: 'Exclure de la Rotation Auto'
+    excludeFromAutoRotate: 'Exclure de la Rotation Auto',
+    albumArtBackground: 'Affiche la pochette de l\'album en arrière-plan flou.',
+    overlayCover: 'Affiche la miniature de la pochette dans les infos de la chanson.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',

@@ -1,10 +1,10 @@
 /**
  * File: core/services/aiService.ts
- * Version: 3.1.0
+ * Version: 3.1.1
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 17:00
- * Description: Added generateVisualConfigFromAudio for Auto-Director feature.
+ * Updated: 2025-03-08 21:00
+ * Description: Increased timeout to 45s to accommodate search grounding latency.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -12,7 +12,7 @@ import { GEMINI_MODEL, REGION_NAMES, VISUALIZER_PRESETS } from '../constants';
 import { SongInfo, Language, Region, AIProvider, VisualizerMode } from '../types';
 import { generateFingerprint, saveToLocalCache, findLocalMatch } from './fingerprintService';
 
-const REQUEST_TIMEOUT_MS = 25000;
+const REQUEST_TIMEOUT_MS = 45000;
 
 const PROVIDER_PROFILES: Record<string, string> = {
     GEMINI: "Role: Google Gemini. Style: Balanced, high-fidelity analysis. Focus on accurate metadata and holistic emotional context. Use rich, evocative language for moods.",

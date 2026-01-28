@@ -1,9 +1,9 @@
 /**
  * File: core/services/renderers/NebulaRenderer.ts
- * Version: 1.7.36
+ * Version: 1.7.37
  * Author: Sut
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-08 16:00
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -191,13 +191,18 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
     ctx.save();
     
-    const bgGradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w,h)/2);
-    const bgColor1 = safeColors[0];
-    const bgColor2 = safeColors[1] || safeColors[0];
-    bgGradient.addColorStop(0, `${bgColor1}1A`);
-    bgGradient.addColorStop(1, '#050508');
-    ctx.fillStyle = bgGradient;
-    ctx.fillRect(0, 0, w, h);
+    // Only draw opaque background if Album Art BG is OFF.
+    // If ON, we skip this to allow the previous frame to fade out via the Worker's destination-out logic,
+    // revealing the album art underneath.
+    if (!settings.albumArtBackground) {
+        const bgGradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w,h)/2);
+        const bgColor1 = safeColors[0];
+        const bgColor2 = safeColors[1] || safeColors[0];
+        bgGradient.addColorStop(0, `${bgColor1}1A`);
+        bgGradient.addColorStop(1, '#050508');
+        ctx.fillStyle = bgGradient;
+        ctx.fillRect(0, 0, w, h);
+    }
 
     ctx.globalCompositeOperation = 'screen';
 

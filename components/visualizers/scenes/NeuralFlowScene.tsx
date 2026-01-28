@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/NeuralFlowScene.tsx
- * Version: 2.0.1
+ * Version: 2.0.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 15:30
+ * Updated: 2025-03-08 16:00
  * Description: Major overhaul for "Neural Fluid" aesthetic.
  * Features: Filament clustering, synaptic pulsing, and biological luminescence.
  */
@@ -107,7 +107,7 @@ export const NeuralFlowScene: React.FC<SceneProps> = ({ analyser, colors, settin
 
   return (
     <>
-      <color attach="background" args={['#000000']} />
+      {!settings.albumArtBackground && <color attach="background" args={['#000000']} />}
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />

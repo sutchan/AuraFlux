@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const ko = {
         fade: '녹화 시작 시 페이드 인, 중지 시 자동 페이드 아웃을 적용합니다.'
     }
   },
+  bgImage: '앨범 아트 배경',
+  bgDim: '배경 어둡기',
+  overlayCover: '커버 오버레이',
   hints: {
     mode: '시각 효과 생성을 위한 핵심 수리 렌더링 엔진을 선택합니다。',
     theme: '장면에 최적화된 컬러 팔레트를 적용합니다。',
@@ -143,7 +146,9 @@ export const ko = {
     loadPreset: '이 프리셋을 불러옵니다。',
     copyConfig: '설정 코드를 클립보드에 복사합니다。',
     includeInAutoRotate: '자동 회전 포함',
-    excludeFromAutoRotate: '자동 회전 제외'
+    excludeFromAutoRotate: '자동 회전 제외',
+    albumArtBackground: '앨범 아트를 흐린 배경 레이어로 표시합니다。',
+    overlayCover: '노래 정보 오버레이에 앨범 아트 썸네일을 표시합니다。'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',

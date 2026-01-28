@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/LiquidSphereScene.tsx
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-22 21:15
+ * Updated: 2025-03-08 16:00
  */
 
 import React, { useRef, useMemo, Suspense } from 'react';
@@ -142,7 +142,7 @@ export const LiquidSphereScene: React.FC<SceneProps> = ({ analyser, colors, sett
 
   return (
     <>
-      <color attach="background" args={['#030303']} />
+      {!settings.albumArtBackground && <color attach="background" args={['#030303']} />}
       <Suspense fallback={null}>
         <group ref={starsRef}>
           <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />

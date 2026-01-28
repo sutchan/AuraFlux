@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const es = {
         fade: 'Aplica fundido de entrada al inicio y fundido de salida al detener.'
     }
   },
+  bgImage: 'Fondo de Portada',
+  bgDim: 'Atenuación Fondo',
+  overlayCover: 'Portada Flotante',
   hints: {
     mode: 'Selecciona el motor matemático principal para la generación visual.',
     theme: 'Aplica una paleta de colores curada a la escena.',
@@ -143,7 +146,9 @@ export const es = {
     loadPreset: 'Restaurar este estado preestablecido.',
     copyConfig: 'Copiar la cadena de configuración al portapapeles para compartirla rápidamente.',
     includeInAutoRotate: 'Incluir en Rotación Automática',
-    excludeFromAutoRotate: 'Excluir de Rotación Automática'
+    excludeFromAutoRotate: 'Excluir de Rotación Automática',
+    albumArtBackground: 'Muestra la portada del álbum como fondo desenfocado.',
+    overlayCover: 'Muestra la miniatura de la portada en la información de la canción.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',

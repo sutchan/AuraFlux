@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const de = {
         fade: 'Wendet Audio-Einblenden beim Start und Ausblenden beim Stopp an.'
     }
   },
+  bgImage: 'Album-Cover HG',
+  bgDim: 'HG-Verdunkelung',
+  overlayCover: 'Cover-Overlay',
   hints: {
     mode: 'Wählen Sie den mathematischen Kern für die Generation von Visuals.',
     theme: 'Wenden Sie eine kuratierte Farbpalette auf die Szene an.',
@@ -143,7 +146,9 @@ export const de = {
     loadPreset: 'Diesen Preset-Zustand wiederherstellen.',
     copyConfig: 'Konfigurationszeichenfolge zum schnellen Teilen in die Zwischenablage kopieren.',
     includeInAutoRotate: 'In Auto-Rotation aufnehmen',
-    excludeFromAutoRotate: 'Aus Auto-Rotation ausschließen'
+    excludeFromAutoRotate: 'Aus Auto-Rotation ausschließen',
+    albumArtBackground: 'Zeigt das Album-Cover als verschwommenen Hintergrund an.',
+    overlayCover: 'Zeigt das Album-Cover-Thumbnail im Song-Info-Overlay an.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',

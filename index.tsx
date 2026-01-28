@@ -1,9 +1,9 @@
 /**
  * File: index.tsx
- * Version: 1.8.6
+ * Version: 1.8.7
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 15:00
+ * Updated: 2025-03-07 16:00
  */
 
 import React from 'react';
@@ -18,6 +18,8 @@ if (!rootElement) {
 }
 
 // PWA Service Worker Registration
+// Disabled for preview environment to prevent caching issues and CORS errors
+/*
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(
@@ -30,6 +32,7 @@ if ('serviceWorker' in navigator) {
     );
   });
 }
+*/
 
 const root = createRoot(rootElement);
 root.render(

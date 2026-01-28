@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.7.39
+ * Version: 1.8.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:15
+ * Updated: 2025-03-08 17:30
  */
 
 import React from 'react';
@@ -51,7 +51,6 @@ export const VisualSettingsPanel: React.FC = () => {
           } else {
               newList = [...currentList, mode];
           }
-          // Using "All Modes" preset should clear when a user manually edits the list
           if (activePreset === 'all_modes') setActivePreset('');
           return { ...prev, includedModes: newList };
       });
@@ -137,7 +136,6 @@ export const VisualSettingsPanel: React.FC = () => {
 
             <div>
                 <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1 mb-1.5 flex-shrink-0">{t?.styleTheme || "Visual Theme"}</span>
-                {/* REMOVED MAX-HEIGHT to allow full expansion in parent scroll container */}
                 <div className="pr-1">
                     <div className="grid grid-cols-6 gap-1.5 p-0.5 content-start">
                       {COLOR_THEMES.map((theme, i) => (

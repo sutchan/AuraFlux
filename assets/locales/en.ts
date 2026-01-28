@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 14:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const en = {
         fade: 'Applies audio fade-in at start and fade-out at stop.'
     }
   },
+  bgImage: 'Album Art BG',
+  bgDim: 'BG Dimming',
+  overlayCover: 'Overlay Cover',
   hints: {
     mode: 'Select the core mathematical engine for generating visuals.',
     theme: 'Apply a curated color palette to the scene.',
@@ -143,7 +146,9 @@ export const en = {
     copyConfig: 'Copy configuration string to clipboard for quick sharing.',
     wakeLock: 'Prevent screen from sleeping while visualizer is active.',
     includeInAutoRotate: 'Include in Auto-Rotate',
-    excludeFromAutoRotate: 'Exclude from Auto-Rotate'
+    excludeFromAutoRotate: 'Exclude from Auto-Rotate',
+    albumArtBackground: 'Show album art as a blurred background layer.',
+    overlayCover: 'Show album art thumbnail in the song info overlay.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -235,7 +240,7 @@ export const en = {
   textSize: 'Font Size',
   textRotation: 'Rotation',
   textFont: 'Font Family',
-  textOpacity: 'Opacity',
+  textOpacity: 'Text Position',
   textPosition: 'Text Position',
   quality: 'Render Quality',
   qualities: {

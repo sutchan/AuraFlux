@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const zh = {
         fade: '在录制开始时音频淡入，停止时自动淡出。'
     }
   },
+  bgImage: '专辑封面背景',
+  bgDim: '背景暗度',
+  overlayCover: '悬浮窗封面',
   hints: {
     mode: '切换用于生成实时影像的核心数学引擎。',
     theme: '应用精心调校的沉浸式色彩主题。',
@@ -143,7 +146,9 @@ export const zh = {
     copyConfig: '将配置代码复制到剪贴板。',
     wakeLock: '屏幕常亮，防止设备休眠。',
     includeInAutoRotate: '加入自动巡航',
-    excludeFromAutoRotate: '移出自动巡航'
+    excludeFromAutoRotate: '移出自动巡航',
+    albumArtBackground: '将模糊的专辑封面显示为背景图层。',
+    overlayCover: '在歌曲信息悬浮窗中显示专辑封面缩略图。'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -333,7 +338,7 @@ export const zh = {
     [VisualizerMode.LASERS]: '高能锐利光束。',
     [VisualizerMode.FLUID_CURVES]: '平滑大气光波。',
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微观液泡。',
-    [VisualizerMode.KINETIC_WALL]: '带有 3D 动力学挤出的巨型 LED 舞台背景墙。',
+    [VisualizerMode.KINETIC_WALL]: '带有 3D 動力學挤出的巨型 LED 舞台背景墙。',
     [VisualizerMode.LIQUID]: '对低频做出反应的抽象球体。',
     [VisualizerMode.WAVEFORM]: '展现实时频谱历史的液体丝带。'
   },

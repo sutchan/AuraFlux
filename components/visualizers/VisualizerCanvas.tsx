@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.1.7
+ * Version: 1.1.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-25 19:30
+ * Updated: 2025-03-08 12:00
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -34,6 +34,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     propsRef.current = { mode, colors, settings };
   }, [mode, colors, settings]);
 
+  // Init Renderers
   useEffect(() => {
     renderersRef.current = createVisualizerRenderers();
     (Object.values(renderersRef.current) as IVisualizerRenderer[]).forEach((r) => {
@@ -41,22 +42,48 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     });
   }, []);
 
+  // Handle Resize via Observer (Perf optimized + Recording Friendly)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const observer = new ResizeObserver(() => {
+      // Only resize if the display size actually changed.
+      // This allows external tools (like the Recorder) to manually set canvas.width/height 
+      // for upscaling without being immediately overwritten by a loop check.
+      const displayWidth = canvas.clientWidth;
+      const displayHeight = canvas.clientHeight;
+      
+      // Basic check to prevent zero-size errors
+      if (displayWidth > 0 && displayHeight > 0) {
+          canvas.width = displayWidth;
+          canvas.height = displayHeight;
+      }
+    });
+    
+    observer.observe(canvas);
+    
+    // Initial size set
+    if (canvas.clientWidth > 0) {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Main Render Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !analyser) return;
 
-    const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
     if (!ctx) return;
 
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
     const renderLoop = () => {
       const { mode: currentMode, colors: currentColors, settings: currentSettings } = propsRef.current;
-
-      if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-      }
       const { width, height } = canvas;
 
       analyser.getByteFrequencyData(dataArray);
@@ -67,8 +94,17 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
 
       // 基础清理
       if (currentSettings.trails) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-        ctx.fillRect(0, 0, width, height);
+        if (currentSettings.albumArtBackground) {
+            // Transparent Fade Logic
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.globalCompositeOperation = 'source-over';
+        } else {
+            // Standard Fade Logic
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.fillRect(0, 0, width, height);
+        }
       } else {
         ctx.clearRect(0, 0, width, height);
       }
@@ -124,7 +160,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
   }, [analyser]);
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none bg-black overflow-hidden">
+    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
       <canvas 
         ref={canvasRef} 
         className="w-full h-full block" 

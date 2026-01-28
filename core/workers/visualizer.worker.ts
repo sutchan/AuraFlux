@@ -1,9 +1,9 @@
 /**
  * File: core/workers/visualizer.worker.ts
- * Version: 1.7.32
+ * Version: 1.7.33
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-08 12:00
  *
  * This worker script is responsible for offloading 2D visualizer rendering
  * from the main thread using OffscreenCanvas.
@@ -51,8 +51,20 @@ const loop = () => {
   const logicalH = height;
 
   if (currentSettings.trails) {
-    ctx.fillStyle = `rgba(0, 0, 0, 0.15)`;
-    ctx.fillRect(0, 0, logicalW, logicalH);
+    // Advanced Trails Logic:
+    // If we have an Album Art Background active, we need to clear to TRANSPARENT, not Black.
+    // 'destination-out' composites the new shape (rect) onto the existing content, 
+    // removing the destination (existing content) where they overlap based on alpha.
+    if (currentSettings.albumArtBackground) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = `rgba(0, 0, 0, 0.15)`; // Remove 15% opacity per frame
+        ctx.fillRect(0, 0, logicalW, logicalH);
+        ctx.globalCompositeOperation = 'source-over'; // Reset
+    } else {
+        // Standard Behavior: Overlay semi-transparent black to create fade-to-black trails
+        ctx.fillStyle = `rgba(0, 0, 0, 0.15)`;
+        ctx.fillRect(0, 0, logicalW, logicalH);
+    }
   } else {
     ctx.clearRect(0, 0, logicalW, logicalH);
   }
@@ -94,7 +106,7 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
       canvas.width = width * dpr;
       canvas.height = height * dpr;
 
-      ctx = canvas.getContext('2d', { alpha: false, desynchronized: true }) as OffscreenCanvasRenderingContext2D;
+      ctx = canvas.getContext('2d', { alpha: true, desynchronized: true }) as OffscreenCanvasRenderingContext2D;
       Object.values(renderers).forEach(r => r?.init(canvas));
       loop();
       break;
@@ -114,11 +126,7 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
       currentColors = msg.colors;
 
       if (modeChanged && ctx) {
-        ctx.save();
-        ctx.scale(dpr, dpr);
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0, 0, width, height);
-        ctx.restore();
+        ctx.clearRect(0, 0, width, height); // Always clear fully on mode change
         const renderer = renderers[currentMode];
         if (renderer && renderer.init) {
             renderer.init(canvas);

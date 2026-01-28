@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const ru = {
         fade: 'Применяет нарастание звука в начале и затухание в конце.'
     }
   },
+  bgImage: 'Фон обложки',
+  bgDim: 'Затемнение фона',
+  overlayCover: 'Обложка в инфо',
   hints: {
     mode: 'Выберите основной математический движок для генерации визуальных эффектов.',
     theme: 'Применить подобранную цветовую палитру к сцене.',
@@ -148,7 +151,9 @@ export const ru = {
     loadPreset: 'Загрузить этот пресет.',
     copyConfig: 'Копировать код конфигурации в буфер обмена.',
     includeInAutoRotate: 'Включить в авто-ротацию',
-    excludeFromAutoRotate: 'Исключить из авто-ротации'
+    excludeFromAutoRotate: 'Исключить из авто-ротации',
+    albumArtBackground: 'Показывать размытую обложку альбома на фоне.',
+    overlayCover: 'Показывать миниатюру обложки в информации о песне.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
@@ -367,8 +372,16 @@ export const ru = {
     version: 'Сборка', coreTech: 'Технологии', repository: 'Источник', support: 'Поддержка', reportBug: 'Ошибка'
   },
   onboarding: {
-    welcome: 'Добро пожаловать в Aura Flux', subtitle: 'ИИ-Движок Синестезии Нового Поколения', selectLanguage: 'Выберите язык', next: 'Далее', back: 'Назад', skip: 'Пропустить', finish: 'Начать',
+    welcome: 'Добро пожаловать в Aura Flux',
+    subtitle: 'ИИ-Движок Синестезии Нового Поколения',
+    selectLanguage: 'Выберите язык',
+    next: 'Далее', back: 'Назад', skip: 'Пропустить', finish: 'Начать',
     features: {
       title: 'Ключевые Особенности',
       visuals: { title: 'Генеративное Искусство', desc: '12+ движков WebGL, материализующих звуковые волны.' },
-      ai: {
+      ai: { title: 'Интеллект Gemini', desc: 'Мгновенные метаданные трека и распознавание настроения от Google Gemini 3.' },
+      privacy: { title: 'Граничный ИИ', desc: 'Обработка происходит локально. Мы никогда не записываем и не храним ваши личные аудиоданные.' }
+    },
+    shortcuts: { title: 'Динамическое управление', desc: 'Управляйте своим окружением как дирижер с помощью этих клавиатурных команд.' }
+  }
+};

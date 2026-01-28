@@ -1,10 +1,10 @@
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 3.7.0
+ * Version: 3.7.2
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 00:10
- * Description: UI Overhaul for better usability and visual hierarchy. Added Playlist & Navigation controls.
+ * Updated: 2025-03-08 20:00
+ * Description: UI Overhaul for better usability. Added Show Lyrics toggle and optimized Sync/Countdown buttons.
  */
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -14,6 +14,7 @@ import { useVideoRecorder, RecorderConfig } from '../../../core/hooks/useVideoRe
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { Slider } from '../../ui/controls/Slider';
 import { SteppedSlider } from '../../ui/controls/SteppedSlider';
+import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 import { getAverage } from '../../../core/services/audioUtils';
 import { generateVisualConfigFromAudio } from '../../../core/services/aiService';
@@ -42,14 +43,14 @@ export const StudioPanel: React.FC = () => {
       isPlaying, currentSong, audioDevices, selectedDeviceId, onDeviceChange, 
       toggleMicrophone, isListening, isPending, importFiles, fileName, getAudioSlice,
       togglePlayback, seekFile, currentTime, duration: fileDuration,
-      playNext, playPrev, playlist, currentIndex, playTrackByIndex
+      playNext, playPrev, playlist, currentIndex, playTrackByIndex, removeFromPlaylist
   } = useAudioContext();
   
   // Visuals Context
   const { settings, setSettings, mode, setMode, setColorTheme, setActivePreset } = useVisuals();
   
   // AI Context
-  const { apiKeys } = useAI();
+  const { apiKeys, showLyrics, setShowLyrics } = useAI();
   
   // Advanced Config State (Video)
   const [resolution, setResolution] = useState<number | 'native'>('native');
@@ -190,6 +191,11 @@ export const StudioPanel: React.FC = () => {
   const handleAudioSettingChange = (key: keyof typeof settings, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }));
     setActivePreset('');
+  };
+
+  // Helper for visual setting changes
+  const handleVisualSettingChange = (key: keyof typeof settings, value: any) => {
+    setSettings(prev => ({ ...prev, [key]: value }));
   };
 
   const handleAiDirector = async () => {
@@ -349,15 +355,25 @@ export const StudioPanel: React.FC = () => {
                                         <div className="text-[9px] text-white/30 text-center py-2 uppercase tracking-widest">{t?.common?.empty || "Empty"}</div>
                                     ) : (
                                         playlist.map((track, idx) => (
-                                            <button 
+                                            <div 
                                                 key={idx}
                                                 onClick={() => playTrackByIndex(idx)}
-                                                className={`w-full text-left px-2 py-1.5 rounded flex items-center gap-2 group transition-all ${currentIndex === idx ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
+                                                className={`w-full text-left px-2 py-1.5 rounded flex items-center gap-2 group transition-all cursor-pointer border ${currentIndex === idx ? 'bg-white/10 text-white border-white/5' : 'text-white/60 hover:bg-white/5 hover:text-white border-transparent'}`}
                                             >
                                                 <span className="text-[9px] font-mono opacity-50 w-3 shrink-0">{idx+1}</span>
                                                 <span className="text-[10px] font-bold truncate flex-1">{track.title}</span>
                                                 {currentIndex === idx && isPlaying && <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />}
-                                            </button>
+                                                
+                                                <button 
+                                                    onClick={(e) => { e.stopPropagation(); removeFromPlaylist(idx); }}
+                                                    className="p-1 rounded hover:bg-white/10 text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all ml-1"
+                                                    aria-label="Remove"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         ))
                                     )}
                                 </div>
@@ -411,9 +427,42 @@ export const StudioPanel: React.FC = () => {
          </div>
       </div>
 
-      {/* Col 2: Recorder Configuration */}
+      {/* Col 2: Recorder Configuration & Display Settings */}
       <div className="p-3 pt-4 h-full flex flex-col border-b lg:border-b-0 lg:border-e border-white/5 overflow-hidden">
         <div className="space-y-3 overflow-y-auto custom-scrollbar pr-1.5">
+            {/* Display Settings Block (Moved from VisualSettingsPanel) */}
+            <div className="space-y-1 pb-3 border-b border-white/5">
+                <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1 mb-1.5">{t?.displaySettings || "Display"}</span>
+                <SettingsToggle 
+                    label={t?.bgImage || "Album Art BG"} 
+                    value={!!settings.albumArtBackground} 
+                    onChange={() => handleVisualSettingChange('albumArtBackground', !settings.albumArtBackground)} 
+                    hintText={audioHints?.albumArtBackground || "Show album art as background"}
+                >
+                    <div className="pt-1">
+                        <Slider 
+                            label={t?.bgDim || "Dimming"} 
+                            value={settings.albumArtDim ?? 0.8} 
+                            min={0} max={0.9} step={0.1} 
+                            onChange={(v) => handleVisualSettingChange('albumArtDim', v)} 
+                        />
+                    </div>
+                </SettingsToggle>
+                <SettingsToggle 
+                    label={t?.overlayCover || "Overlay Cover"} 
+                    value={settings.showAlbumArtOverlay} 
+                    onChange={() => handleVisualSettingChange('showAlbumArtOverlay', !settings.showAlbumArtOverlay)} 
+                    hintText={audioHints?.overlayCover || "Show album art in song info"}
+                />
+                {/* NEW LYRICS TOGGLE */}
+                <SettingsToggle 
+                    label={t?.showLyrics || "AI Lyrics"} 
+                    value={showLyrics} 
+                    onChange={() => setShowLyrics(!showLyrics)} 
+                    hintText={audioHints?.lyrics || "Show AI recognition overlay"}
+                />
+            </div>
+
             <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1 mb-1">VIDEO STREAM</span>
             
             <div className="space-y-2">
@@ -486,26 +535,29 @@ export const StudioPanel: React.FC = () => {
              </div>
           </div>
 
-          <div className="w-full pt-3 border-t border-white/5 flex gap-2">
-              <TooltipArea text={hints.syncStart}>
-                <button 
-                    onClick={() => setSyncStart(!syncStart)} 
-                    className={`flex-1 py-1.5 rounded text-[9px] font-bold uppercase transition-all border flex flex-col items-center gap-0.5 ${syncStart ? 'bg-green-500/10 text-green-300 border-green-500/20 shadow-[0_0_10px_rgba(34,197,94,0.1)]' : 'bg-white/5 text-white/30 border-transparent hover:text-white hover:bg-white/10'}`}
-                >
-                    <div className={`w-1.5 h-1.5 rounded-full ${syncStart ? 'bg-green-400 animate-pulse' : 'bg-white/20'}`} />
-                    {settingsLabels.syncStart}
-                </button>
-              </TooltipArea>
-              
-              <TooltipArea text={hints.countdown}>
-                <button 
-                    onClick={() => setEnableCountdown(!enableCountdown)} 
-                    className={`flex-1 py-1.5 rounded text-[9px] font-bold uppercase transition-all border flex flex-col items-center gap-0.5 ${enableCountdown ? 'bg-blue-500/10 text-blue-300 border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-white/5 text-white/30 border-transparent hover:text-white hover:bg-white/10'}`}
-                >
-                    <span className="leading-none text-[10px]">{enableCountdown ? "3s" : "--"}</span>
-                    {settingsLabels.countdown}
-                </button>
-              </TooltipArea>
+          <div className="w-full pt-4 border-t border-white/5">
+              <div className="grid grid-cols-2 gap-2">
+                  <TooltipArea text={hints.syncStart}>
+                    <button 
+                        onClick={() => setSyncStart(!syncStart)} 
+                        className={`relative py-2 px-3 rounded-xl border flex items-center justify-center gap-2 transition-all group ${syncStart ? 'bg-green-500/10 border-green-500/30 text-green-400' : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10 hover:text-white'}`}
+                    >
+                        <div className={`w-2 h-2 rounded-full ${syncStart ? 'bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-current opacity-50'}`} />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">{settingsLabels.syncStart || "Sync"}</span>
+                    </button>
+                  </TooltipArea>
+                  
+                  <TooltipArea text={hints.countdown}>
+                    <button 
+                        onClick={() => setEnableCountdown(!enableCountdown)} 
+                        className={`relative py-2 px-3 rounded-xl border flex items-center justify-center gap-2 transition-all group ${enableCountdown ? 'bg-blue-500/10 border-blue-500/30 text-blue-400' : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10 hover:text-white'}`}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span className="text-[10px] font-bold uppercase tracking-wider">{settingsLabels.countdown || "Timer"}</span>
+                        {enableCountdown && <span className="absolute -top-1 -right-1 flex h-3 w-3"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span></span>}
+                    </button>
+                  </TooltipArea>
+              </div>
           </div>
       </div>
     </>

@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/CubeFieldScene.tsx
- * Version: 1.6.17
+ * Version: 1.6.18
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: Added per-particle audio reaction smoothing.
+ * Updated: 2025-03-08 16:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -233,8 +233,8 @@ export const CubeFieldScene: React.FC<SceneProps> = ({ analyser, colors, setting
 
   return (
     <>
-      <color attach="background" args={['#000000']} />
-      <fog attach="fog" args={['#000000', 30, 220]} /> 
+      {!settings.albumArtBackground && <color attach="background" args={['#000000']} />}
+      {!settings.albumArtBackground && <fog attach="fog" args={['#000000', 30, 220]} />} 
       
       <ambientLight intensity={0.2} />
       {/* @fixtsx(234-236) - JSX props are now correctly typed with named imports */}

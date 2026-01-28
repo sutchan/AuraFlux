@@ -1,9 +1,9 @@
 /**
  * File: components/App.tsx
- * Version: 1.8.4
+ * Version: 1.8.7
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-07 23:55
+ * Updated: 2025-03-08 17:00
  */
 
 import React, { useCallback, useState } from 'react';
@@ -69,6 +69,8 @@ const AppContent: React.FC = () => {
     return <WelcomeScreen />;
   }
 
+  const showAlbumArt = settings.albumArtBackground && currentSong?.albumArtUrl;
+
   return (
     <div 
       className="h-[100dvh] bg-black overflow-hidden relative touch-none" 
@@ -89,8 +91,23 @@ const AppContent: React.FC = () => {
           </div>
       )}
 
-      {/* Background Layer */}
-      <div className={`absolute inset-0 z-0 ${settings.hideCursor ? 'cursor-none' : ''}`} style={settings.mirrorDisplay ? { transform: 'scaleX(-1)' } : undefined}>
+      {/* Album Art Background Layer */}
+      {showAlbumArt && (
+          <div className="absolute inset-0 z-0 transition-opacity duration-1000 ease-in-out pointer-events-none overflow-hidden">
+              <div 
+                className="absolute inset-0 bg-cover bg-center transition-all duration-700 scale-110"
+                style={{ 
+                    backgroundImage: `url(${currentSong.albumArtUrl})`,
+                    opacity: 1 - (settings.albumArtDim ?? 0.8), // Updated default fallback to 0.8
+                    filter: 'blur(20px) saturate(1.5)'
+                }}
+              />
+              <div className="absolute inset-0 bg-black/40" /> 
+          </div>
+      )}
+
+      {/* Visualization Layer */}
+      <div className={`absolute inset-0 z-1 ${settings.hideCursor ? 'cursor-none' : ''}`} style={settings.mirrorDisplay ? { transform: 'scaleX(-1)' } : undefined}>
         {isThreeMode ? (
           <ThreeVisualizer analyser={analyser} mode={mode} colors={colorTheme} settings={settings} />
         ) : (
@@ -117,7 +134,16 @@ const AppContent: React.FC = () => {
               </div>
             )}
             
-            <SongOverlay song={currentSong} showLyrics={showLyrics} language={language} onRetry={() => mediaStream && performIdentification(mediaStream)} onClose={() => setCurrentSong(null)} analyser={analyser} sensitivity={settings.sensitivity} />
+            <SongOverlay 
+              song={currentSong} 
+              showLyrics={showLyrics} 
+              language={language} 
+              onRetry={() => mediaStream && performIdentification(mediaStream)} 
+              onClose={() => setCurrentSong(null)} 
+              analyser={analyser} 
+              sensitivity={settings.sensitivity}
+              showAlbumArt={settings.showAlbumArtOverlay}
+            />
             <Controls />
           </div>
       </div>

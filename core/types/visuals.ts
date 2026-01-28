@@ -1,9 +1,9 @@
 /**
  * File: core/types/visuals.ts
- * Version: 1.7.37
+ * Version: 1.7.38
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 20:00
+ * Updated: 2025-03-08 14:00
  */
 
 import { Position, Region } from './common';
@@ -56,6 +56,7 @@ export interface VisualizerSettings {
   // Media Settings
   albumArtBackground?: boolean;
   albumArtDim?: number;
+  showAlbumArtOverlay: boolean; // Control cover in SongOverlay
 
   // Overlay Settings
   customText: string;

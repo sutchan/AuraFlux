@@ -1,9 +1,9 @@
 /**
  * File: components/visualizers/scenes/KineticWallScene.tsx
- * Version: 3.9.2
+ * Version: 3.9.3
  * Author: Sut
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-08 16:00
  * Description: Further reduced brick spacing for a near-seamless appearance.
  */
 
@@ -208,7 +208,7 @@ export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, setti
 
   return (
     <>
-      <color attach="background" args={['#010103']} />
+      {!settings.albumArtBackground && <color attach="background" args={['#010103']} />}
       <ambientLight intensity={0.2} />
       {/* @fixtsx(206-208) - JSX props are now correctly typed with named imports */}
       <directionalLight position={[15, 15, 25]} intensity={1.8} color={c0} />

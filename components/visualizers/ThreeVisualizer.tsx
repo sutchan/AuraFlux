@@ -1,14 +1,14 @@
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.8.0
+ * Version: 1.8.1
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-02-28 10:00
- * Description: Integrated new WebGL scenes for robustness.
+ * Updated: 2025-03-08 12:00
+ * Description: Added BackgroundController for transparent clear color handling.
  */
 
-import React, { Suspense, useMemo } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { Suspense, useMemo, useEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
 import { EffectComposer, Bloom, Noise } from '@react-three/postprocessing';
 import { VisualizerMode, VisualizerSettings } from '../../core/types';
 import { 
@@ -25,9 +25,18 @@ interface ThreeVisualizerProps {
   mode: VisualizerMode; 
 }
 
+// Helper component to manage WebGL Clear Color reactively
+const BackgroundController: React.FC<{ isTransparent: boolean }> = ({ isTransparent }) => {
+    const { gl } = useThree();
+    useEffect(() => {
+        // If transparent (showing album art), set alpha to 0. Otherwise opaque black.
+        gl.setClearColor('#000000', isTransparent ? 0 : 1);
+    }, [isTransparent, gl]);
+    return null;
+};
+
 const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
   
-  // 1. Memoize Device Pixel Ratio
   const dpr = useMemo(() => {
     if (!settings) return 1;
     const quality = settings.quality;
@@ -36,22 +45,19 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
     return Math.min(window.devicePixelRatio, 1.5);
   }, [settings?.quality]);
 
-  // 2. Memoize Camera Configuration (Prevents R3F from resetting camera on every render)
   const cameraConfig = useMemo(() => ({ 
     position: [0, 2, 16] as [number, number, number], 
     fov: 55 
   }), []);
 
-  // 3. Memoize WebGL Context Attributes
   const glConfig = useMemo(() => ({ 
     antialias: false,
-    alpha: false,
+    alpha: true, // Enable alpha buffer for transparency
     stencil: false,
     depth: true,
     powerPreference: "high-performance" as WebGLPowerPreference
   }), []);
 
-  // 4. Memoize Bloom intensity based on the active mode
   const bloomIntensity = useMemo(() => {
       const base = 2.0;
       switch (mode) {
@@ -63,7 +69,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
       }
   }, [mode]);
 
-  // 5. Memoize Post-Processing Chain
   const postProcessingEffects = useMemo(() => {
       const ditheringNoise = <Noise opacity={0.025} premultiply />;
 
@@ -87,11 +92,8 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
       );
   }, [settings.glow, bloomIntensity]);
 
-  // 6. Memoize the Active Scene Logic (Expensive Computation)
   const activeScene = useMemo(() => {
     if (!analyser || !settings) return null;
-    
-    // Pass references to stable components
     const sceneProps = { analyser, colors, settings };
 
     switch (mode) {
@@ -106,8 +108,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         default:
             return <NeuralFlowScene {...sceneProps} />;
     }
-    // We include 'colors' in dependencies to ensure theme updates propagate,
-    // but the component switching logic itself is now stable.
   }, [mode, analyser, colors, settings]);
 
   if (!analyser || !settings) return null;
@@ -120,12 +120,14 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
         dpr={dpr} 
         gl={glConfig}
         onCreated={({ gl }) => {
-          gl.setClearColor('#000000');
-          // Context loss handling
+          // Initial clear color, will be managed by BackgroundController
+          gl.setClearColor('#000000', 1);
           const handleContextLost = (event: Event) => { event.preventDefault(); };
           gl.domElement.addEventListener('webglcontextlost', handleContextLost, false);
         }}
       >
+        <BackgroundController isTransparent={!!settings.albumArtBackground} />
+        
         <Suspense fallback={null}>
             {activeScene}
         </Suspense>

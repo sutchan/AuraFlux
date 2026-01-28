@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:00
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const ja = {
         fade: '録画開始時にフェードイン、停止時に自動フェードアウトを適用します。'
     }
   },
+  bgImage: 'アルバムアート背景',
+  bgDim: '背景の暗さ',
+  overlayCover: 'カバー表示',
   hints: {
     mode: '視覚表現の核となる数理レンダリングエンジンを選択します。',
     theme: 'シーンに合わせて厳選されたカラーパレットを適用します。',
@@ -143,7 +146,9 @@ export const ja = {
     loadPreset: 'このプリセットを適用します。',
     copyConfig: '設定コードをクリップボードにコピーします。',
     includeInAutoRotate: '自動切替に含める',
-    excludeFromAutoRotate: '自動切替から除外'
+    excludeFromAutoRotate: '自動切替から除外',
+    albumArtBackground: 'アルバムアートをぼかした背景として表示します。',
+    overlayCover: '曲情報オーバーレイにアルバムアートのサムネイルを表示します。'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',

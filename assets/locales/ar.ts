@@ -1,9 +1,9 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.8.9
+ * Version: 1.9.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 03:15
+ * Updated: 2025-03-08 19:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -82,6 +82,9 @@ export const ar = {
         fade: 'يطبق تلاشي الدخول عند البدء وتلاشي الخروج عند التوقف.'
     }
   },
+  bgImage: 'خلفية الغلاف',
+  bgDim: 'تعتيم الخلفية',
+  overlayCover: 'غلاف عائم',
   hints: {
     mode: 'اختر المحرك الرياضي الأساسي لتوليد المؤثرات البصرية.',
     theme: 'تطبيق لوحة ألوان منسقة على المشهد.',
@@ -146,9 +149,10 @@ export const ar = {
     savePreset: 'حفظ الحالة الحالية في تخزين المتصفح.',
     loadPreset: 'استعادة هذه الحالة المعدة مسبقًا.',
     copyConfig: 'نسخ سلسلة التكوين إلى الحافظة للمشاركة السريعة.',
-    wakeLock: 'منع الشاشة من النوم أثناء نشاط المتخيل.',
     includeInAutoRotate: 'تضمين في التدوير التلقائي',
-    excludeFromAutoRotate: 'استبعاد من التدوير التلقائي'
+    excludeFromAutoRotate: 'استبعاد من التدوير التلقائي',
+    albumArtBackground: 'عرض غلاف الألبوم كخلفية ضبابية.',
+    overlayCover: 'عرض مصغر لغلاف الألبوم في معلومات الأغنية.'
   },
   aiProviders: {
     GEMINI: 'Gemini 3.0',
