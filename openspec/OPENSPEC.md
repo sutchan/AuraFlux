@@ -14,7 +14,7 @@
 6.  **[06 持久化与国际化规范](./06_storage_and_i18n_spec.md)** - 同步 v1.7.46。
 7.  **[07 部署与环境规范](./07_deployment_guide.md)** - 同步 v1.7.46。
 8.  **[08 测试与验证](./08_testing_and_validation.md)** - 同步 v1.8.8。
-9.  **[09 营销与宣传文档](./09_marketing_and_press.md)** - 同步 v1.8.4。
+9.  **[09 营销与宣传文档](./09_marketing_and_press.md)** - 同步 v1.8.8。
 
 ---
 *Aura Flux Project Specification - Version 1.8.8*
