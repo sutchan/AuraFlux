@@ -1,9 +1,9 @@
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.1.7
+ * Version: 1.2.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-07 16:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -64,6 +64,7 @@ const getProviderLabel = (source: string | undefined) => {
         case 'OPENAI': return 'GPT-4o';
         case 'LOCAL': return 'Local Cache';
         case 'MOCK': return 'Simulation';
+        case 'FILE': return 'ID3 Tag';
         case 'GEMINI': 
         default: return 'Gemini 3.0';
     }
@@ -80,7 +81,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
     analyser,
     settings: { sensitivity },
     isEnabled: !!isEnabled,
-    pulseStrength: 0.1,
+    pulseStrength: 0.05, // Reduce pulse strength to avoid jitter with image
   });
 
   if (!isEnabled || !song) return null;
@@ -91,12 +92,13 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
   const displayArtist = isApiError ? null : (song.identified ? song.artist : (song.artist || "Analyzing..."));
   const isConfidenceLow = !song.identified && !isApiError;
   const sourceLabel = getProviderLabel(song.matchSource);
+  const albumArt = song.albumArtUrl;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-20 overflow-hidden">
       <div 
         ref={containerRef}
-        className={`absolute top-14 left-4 right-4 md:right-auto md:top-8 md:left-8 bg-black/40 backdrop-blur-md border-s-4 ${moodStyle.borderColor} ps-4 py-3 pe-4 rounded-e-xl rounded-l-lg md:rounded-l-none md:max-w-md transition-all duration-700 shadow-[0_4px_10px_rgba(0,0,0,0.5)] pointer-events-auto group origin-top-center md:origin-top-left animate-fade-in-up`}
+        className={`absolute top-16 left-4 right-4 md:right-auto md:top-8 md:left-8 bg-black/60 backdrop-blur-xl border-s-4 ${moodStyle.borderColor} ps-4 py-3 pe-4 rounded-e-xl rounded-l-lg md:rounded-l-none md:max-w-lg transition-all duration-700 shadow-[0_4px_20px_rgba(0,0,0,0.6)] pointer-events-auto group origin-top-center md:origin-top-left animate-fade-in-up border-y border-r border-y-white/5 border-r-white/5`}
         style={{ 
           animationDuration: '0.8s',
           transform: 'scale(var(--pulse-scale, 1))',
@@ -105,65 +107,78 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
       >
         <div className={`absolute inset-0 bg-gradient-to-r ${moodStyle.gradient} opacity-20 pointer-events-none rounded-e-xl`} />
         
-        <button onClick={onClose} className="absolute top-2 end-2 p-1 rounded-full bg-black/20 hover:bg-white/20 text-white/40 hover:text-white opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        <button onClick={onClose} className="absolute top-2 end-2 p-1.5 rounded-full bg-black/20 hover:bg-white/20 text-white/40 hover:text-white opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
 
-        <div className="relative z-10">
-            {isConfidenceLow && (
-               <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest mb-1 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-white/40 rounded-full animate-pulse"></span>
-                  AI Synesthesia
-               </div>
-            )}
-            
-            <h2 className={`${isConfidenceLow ? 'text-white/90 text-lg' : 'text-white text-lg md:text-2xl'} font-bold tracking-tight pe-6 break-words line-clamp-2 md:line-clamp-none`}>
-              {displayTitle}
-            </h2>
-            {displayArtist && (
-              <p className={`${isConfidenceLow ? 'text-white/60 text-xs' : 'text-blue-300 text-sm md:text-base'} font-medium pe-6 break-words`}>
-                {displayArtist}
-              </p>
-            )}
-            
-            <div className="flex items-center gap-2 mt-2 flex-wrap">
-                {song.mood && (
-                  <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r ${moodStyle.badgeGradient} border border-white/10 rounded-full`}>
-                     <span className={moodStyle.textColor}>{moodStyle.icon}</span>
-                     <span className={`text-[10px] font-bold uppercase tracking-wider ${moodStyle.textColor}`}>{song.mood}</span>
-                  </div>
-                )}
-                
-                <div className="inline-flex items-center px-2 py-1 bg-white/5 border border-white/10 rounded-full">
-                    <span className="text-[9px] font-mono text-white/40 uppercase tracking-widest">via {sourceLabel}</span>
-                </div>
-            </div>
-            
-            {isApiError && song.lyricsSnippet && (
-                <div className="mt-3 pt-3 border-t border-white/10">
-                    <p className="text-xs text-red-200/70">{song.lyricsSnippet}</p>
+        <div className="relative z-10 flex gap-4 items-start">
+            {/* Album Art Section */}
+            {albumArt && (
+                <div className="shrink-0 relative group/art">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden shadow-lg border border-white/10 relative z-10 bg-white/5">
+                        <img src={albumArt} alt="Album Art" className="w-full h-full object-cover transition-transform duration-700 group-hover/art:scale-110" />
+                    </div>
+                    {/* Glow behind art */}
+                    <div className="absolute inset-0 bg-white/20 blur-xl rounded-full opacity-0 group-hover/art:opacity-40 transition-opacity duration-500 -z-10" />
                 </div>
             )}
 
-            <div className="flex items-center gap-4 mt-3 pt-2 border-t border-white/10 opacity-80 md:opacity-60 group-hover:opacity-100 transition-opacity">
-                {song.searchUrl && song.identified && (
-                    <a href={song.searchUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[10px] text-white/70 hover:text-blue-300 transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-                      <span>Google</span>
-                    </a>
+            <div className="flex-1 min-w-0 pt-0.5">
+                {isConfidenceLow && (
+                <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
+                    AI Synesthesia
+                </div>
                 )}
-                <button 
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onClose();
-                        setTimeout(onRetry, 100);
-                    }} 
-                    className="flex items-center gap-1 text-[10px] text-white/70 hover:text-orange-400 transition-colors"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    <span>{t.wrongSong || "Retry"}</span>
-                </button>
+                
+                <h2 className={`${isConfidenceLow ? 'text-white/90 text-lg' : 'text-white text-lg md:text-2xl'} font-bold tracking-tight leading-tight break-words line-clamp-2 md:line-clamp-none drop-shadow-md`}>
+                {displayTitle}
+                </h2>
+                {displayArtist && (
+                <p className={`${isConfidenceLow ? 'text-white/60 text-xs' : 'text-blue-300 text-sm md:text-base'} font-medium mt-0.5 truncate`}>
+                    {displayArtist}
+                </p>
+                )}
+                
+                <div className="flex items-center gap-2 mt-2.5 flex-wrap">
+                    {song.mood && (
+                    <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 bg-gradient-to-r ${moodStyle.badgeGradient} border border-white/10 rounded-md shadow-sm`}>
+                        <span className={moodStyle.textColor}>{moodStyle.icon}</span>
+                        <span className={`text-[9px] font-bold uppercase tracking-wider ${moodStyle.textColor}`}>{song.mood}</span>
+                    </div>
+                    )}
+                    
+                    <div className="inline-flex items-center px-2 py-0.5 bg-white/5 border border-white/5 rounded-md">
+                        <span className="text-[9px] font-mono text-white/30 uppercase tracking-widest">{sourceLabel}</span>
+                    </div>
+                </div>
             </div>
+        </div>
+            
+        {isApiError && song.lyricsSnippet && (
+            <div className="mt-3 pt-2 border-t border-white/10">
+                <p className="text-xs text-red-200/70 leading-relaxed">{song.lyricsSnippet}</p>
+            </div>
+        )}
+
+        <div className="flex items-center gap-4 mt-2 pt-2 border-t border-white/5 opacity-80 md:opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+            {song.searchUrl && song.identified && (
+                <a href={song.searchUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-white/50 hover:text-blue-300 transition-colors bg-white/5 hover:bg-white/10 px-2 py-1 rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                    <span>Google Search</span>
+                </a>
+            )}
+            <button 
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                    setTimeout(onRetry, 100);
+                }} 
+                className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-white/50 hover:text-orange-300 transition-colors bg-white/5 hover:bg-white/10 px-2 py-1 rounded ml-auto"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                <span>{t.wrongSong || "Retry Analysis"}</span>
+            </button>
         </div>
       </div>
     </div>

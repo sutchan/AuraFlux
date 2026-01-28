@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:00
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ru = {
   common: {
-    on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ', new: 'НОВЫЙ', unknownTrack: 'Неизвестный трек'
+    on: 'ВКЛ', off: 'ВЫКЛ', visible: 'ПОКАЗАТЬ', hidden: 'СКРЫТЬ', active: 'АКТИВЕН', muted: 'БЕЗ ЗВУКА', beta: 'БЕТА', simple: 'ПРОСТОЙ', advanced: 'ПРОФИ', new: 'НОВЫЙ', unknownTrack: 'Неизвестный трек',
+    menu: 'МЕНЮ', queue: 'Очередь', empty: 'Список пуст', unknownArtist: 'Неизвестный исполнитель',
+    clearAll: 'Очистить всё', confirmClear: 'Очистить очередь?'
   },
   tabs: {
     visual: 'Визуал', text: 'Текст', audio: 'Аудио', ai: 'ИИ-Синестезия', system: 'Система', studio: 'Студия'
@@ -35,6 +37,8 @@ export const ru = {
     save: 'Сохранить видео',
     discard: 'Сбросить',
     share: 'Поделиться',
+    videoStream: 'ВИДЕОПОТОК',
+    audioStream: 'АУДИОПОТОК',
     stats: {
         time: 'ВРЕМЯ',
         size: 'РАЗМЕР'
@@ -124,6 +128,12 @@ export const ru = {
     textSize: 'Масштаб текстового слоя.',
     textRotation: 'Вращение текстового слоя.',
     textPosition: 'Якорь для текста.',
+    textSource: 'Источник текста',
+    textSources: {
+        auto: 'Авто (Смарт)',
+        custom: 'Только свой текст',
+        song: 'Только инфо трека'
+    },
     lyricsPosition: 'Якорь для текста ИИ.',
     customTextPlaceholder: 'Введите ваше сообщение.',
     textOpacity: 'Уровень прозрачности пользовательского текста.',
@@ -361,9 +371,4 @@ export const ru = {
     features: {
       title: 'Ключевые Особенности',
       visuals: { title: 'Генеративное Искусство', desc: '12+ движков WebGL, материализующих звуковые волны.' },
-      ai: { title: 'Интеллект Gemini AI', desc: 'Мгновенное распознавание треков и настроения через Google Gemini 3.' },
-      privacy: { title: 'Приватно и Безопасно', desc: 'Обработка локальная. Мы не записываем ваши данные.' }
-    },
-    shortcuts: { title: 'Динамичное Управление', desc: 'Управляйте светом с помощью клавиш.' }
-  }
-};
+      ai: {

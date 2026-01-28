@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 1.7.37
+ * Version: 1.7.39
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 16:00
+ * Updated: 2025-03-08 03:15
  */
 
 import React from 'react';
@@ -64,12 +64,12 @@ export const VisualSettingsPanel: React.FC = () => {
   return (
     <>
       {/* Col 1: Visual Modes Selection */}
-      <div className="flex flex-col h-full border-b lg:border-b-0 lg:border-e border-white/5 overflow-hidden relative">
-        <div className="p-3 pb-1.5 shrink-0 z-10">
+      <div className="flex flex-col border-b lg:border-b-0 lg:border-e border-white/5 relative">
+        <div className="p-3 pb-1.5 z-10">
             <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1">{t?.visualizerMode || "Visualizer Mode"}</span>
         </div>
         
-        <div className="flex-grow overflow-y-auto custom-scrollbar px-3 pb-4 mask-fade-vertical">
+        <div className="px-3 pb-4">
             <div className="grid grid-cols-2 gap-2 pb-6">
                {Object.keys(VISUALIZER_PRESETS).map(m => {
                  const mode = m as VisualizerMode;
@@ -90,8 +90,8 @@ export const VisualSettingsPanel: React.FC = () => {
       </div>
       
       {/* Col 2: Quality, Themes & Smart Presets */}
-      <div className="flex flex-col p-3 h-full border-b lg:border-b-0 lg:border-e border-white/5 pt-4 overflow-hidden">
-        <div className="space-y-4 flex-grow overflow-y-auto custom-scrollbar pe-1.5">
+      <div className="flex flex-col p-3 border-b lg:border-b-0 lg:border-e border-white/5 pt-4">
+        <div className="space-y-4 pe-1.5">
             {isAdvanced && (
                 <div className="pb-2 border-b border-white/5 animate-fade-in-up">
                    <div className="py-1">
@@ -137,7 +137,8 @@ export const VisualSettingsPanel: React.FC = () => {
 
             <div>
                 <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1 mb-1.5 flex-shrink-0">{t?.styleTheme || "Visual Theme"}</span>
-                <div className="max-h-[140px] overflow-y-auto custom-scrollbar pr-1">
+                {/* REMOVED MAX-HEIGHT to allow full expansion in parent scroll container */}
+                <div className="pr-1">
                     <div className="grid grid-cols-6 gap-1.5 p-0.5 content-start">
                       {COLOR_THEMES.map((theme, i) => (
                         <button key={i} onClick={() => setColorTheme(theme)} aria-label={`Theme ${i+1}`} className={`aspect-square rounded-full flex-shrink-0 transition-all duration-300 ${JSON.stringify(colorTheme) === JSON.stringify(theme) ? 'ring-2 ring-white/80 scale-110 shadow-[0_0_10px_rgba(255,255,255,0.25)]' : 'opacity-60 hover:opacity-100'}`} style={{background: `linear-gradient(135deg, ${theme[0]}, ${theme[1]})` }} />
@@ -149,8 +150,8 @@ export const VisualSettingsPanel: React.FC = () => {
       </div>
       
       {/* Col 3: Tuning & Automation */}
-      <div className="flex flex-col p-3 h-full pt-4 overflow-hidden">
-        <div className="space-y-3 flex-grow overflow-y-auto custom-scrollbar pe-1.5">
+      <div className="flex flex-col p-3 pt-4">
+        <div className="space-y-3 pe-1.5">
           <div className="space-y-3">
             <Slider label={t?.speed || "Speed"} hintText={hints?.speed} value={settings.speed} min={0.1} max={3.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('speed', v)} />
             <Slider label={t?.sensitivity || "Sensitivity"} hintText={hints?.sensitivity} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('sensitivity', v)} />

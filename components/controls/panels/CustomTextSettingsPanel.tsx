@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 1.7.35
+ * Version: 1.8.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-07 20:00
  */
 
 import React from 'react';
@@ -22,6 +22,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
   
   const isAdvanced = settings.uiMode === 'advanced';
   const hints = t?.hints || {};
+  const textSources = t?.textSources || {};
   
   const positionOptions = getPositionOptions(t);
 
@@ -65,6 +66,21 @@ export const CustomTextSettingsPanel: React.FC = () => {
                   hintText={hints?.showCustomText}
                   activeColor="blue"
                 />
+                
+                <div className="pt-1 pb-1">
+                    <CustomSelect 
+                        label={t?.textSource || "Source"}
+                        value={settings.textSource || 'AUTO'}
+                        options={[
+                            { value: 'AUTO', label: textSources.auto || 'Auto (Smart)' },
+                            { value: 'CUSTOM', label: textSources.custom || 'Custom Text Only' },
+                            { value: 'SONG', label: textSources.song || 'Song Info Only' }
+                        ]}
+                        onChange={(val) => setSettings({...settings, textSource: val})}
+                        hintText={hints?.textSource}
+                    />
+                </div>
+
                 <TooltipArea text={hints?.customTextPlaceholder || "Enter message"}>
                   <textarea 
                     value={settings.customText} 

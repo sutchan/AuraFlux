@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/tw.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:00
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const tw = {
   common: {
-    on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業', new: '新', unknownTrack: '未知曲目'
+    on: '開啟', off: '關閉', visible: '顯示', hidden: '隱藏', active: '啟用', muted: '靜音', beta: '測試版', simple: '簡潔', advanced: '專業', new: '新', unknownTrack: '未知曲目',
+    menu: '選單', queue: '播放佇列', empty: '清單為空', unknownArtist: '未知演出者',
+    clearAll: '清空列表', confirmClear: '確認清空播放佇列？'
   },
   tabs: {
     visual: '視覺', text: '文字', audio: '音訊', ai: 'AI 通感辨識', system: '系統', studio: '工作室'
@@ -35,6 +37,8 @@ export const tw = {
     save: '保存影片',
     discard: '丟棄',
     share: '分享',
+    videoStream: '視訊流',
+    audioStream: '音訊流',
     stats: {
         time: '時長',
         size: '大小'
@@ -124,6 +128,12 @@ export const tw = {
     textSize: '縮放自訂文字圖層的大小。',
     textRotation: '旋轉文字覆蓋層。',
     textPosition: '自訂文字的錨定錨點位置。',
+    textSource: '設定主疊加層顯示的內容。',
+    textSources: {
+        auto: '智能自動 (優先歌曲)',
+        custom: '僅自訂文字',
+        song: '僅歌曲資訊'
+    },
     lyricsPosition: 'AI 歌詞覆蓋層的顯示錨點位置。',
     customTextPlaceholder: '輸入您的訊息。',
     textOpacity: '自訂文字的透明度。',
@@ -159,24 +169,24 @@ export const tw = {
       save: '保存',
       update: '更新',
       geminiHint: '可選。留空則使用預設免費配額。',
-      customHint: '必填。Key 僅保存在本地瀏覽器中。',
+      customHint: '必填。金鑰將存儲在您的本地瀏覽器中。',
       notImplemented: '尚未實現對 {provider} 的 AI 處理。請選擇 Gemini 以使用 AI 功能。'
   },
-  visualizerMode: '視覺化模式',
-  styleTheme: '視覺風格',
-  settings: '進階設定',
+  visualizerMode: '視覺引擎',
+  styleTheme: '色彩主題',
+  settings: '參數微調',
   sensitivity: '響應靈敏度',
   speed: '演化速度',
-  glow: '霓虹光暈',
+  glow: '霓虹泛光',
   trails: '動態殘影',
-  autoRotate: '視覺化模式循環',
+  autoRotate: '引擎自動巡航',
   rotateInterval: '切換間隔 (秒)',
-  cycleColors: '自動循環配色',
+  cycleColors: '色彩自動流轉',
   colorInterval: '切換間隔 (秒)',
   cycleSpeed: '循環週期 (秒)',
   monitorAudio: '音訊監聽',
-  audioInput: '輸入來源選擇',
-  lyrics: 'AI 通感辨識',
+  audioInput: '輸入源選擇',
+  lyrics: 'AI 通感辨識', 
   showLyrics: '激活通感引擎',
   displaySettings: '顯示設定',
   language: '介面語言',
@@ -184,16 +194,16 @@ export const tw = {
   startMic: '開啟音訊採集',
   stopMic: '停止音訊採集',
   listening: '監聽中',
-  identifying: '正在捕獲聲景特徵...',
+  identifying: '正在捕獲聲景特徵...', 
   startExperience: '步入流光之境',
   welcomeTitle: 'Aura Flux | 靈動流光',
-  welcomeText: '讓每一縷振動凝結為視覺杰作。由 Gemini AI 驅動，將聲音重構為觸手可及的光影藝術。',
-  unsupportedTitle: '瀏覽器不受支援',
-  unsupportedText: 'Aura Flux 需要現代瀏覽器功能才能運作。請更新 Chrome, Edge 或 Safari。',
-  hideOptions: '收起',
+  welcomeText: '讓每一縷振動凝結為視覺傑作。由 Gemini AI 驅動，將聲音重構為觸手可及的光影藝術。',
+  unsupportedTitle: '瀏覽器不支援',
+  unsupportedText: 'Aura Flux 需要現代瀏覽器功能才能運行。請更新 Chrome, Edge 或 Safari。',
+  hideOptions: '收起面板',
   showOptions: '顯示設定',
   reset: '重置全域設定',
-  confirmReset: '確認重設？',
+  confirmReset: '確認重置？',
   resetEngine: '重置引擎',
   confirmResetAction: '確認重置',
   resetVisual: '重置視覺參數',
@@ -201,9 +211,9 @@ export const tw = {
   resetAudio: '重置音訊設定',
   resetAi: '重置辨識設定',
   randomize: '隨機美學組合',
-  help: '說明與協助',
+  help: '幫助與說明',
   close: '關閉',
-  betaDisclaimer: 'Beta：通感神經網絡正在校準中。',
+  betaDisclaimer: 'Beta：通感神經網路正在校準中。',
   wrongSong: '特徵不匹配？重新採樣',
   hideCursor: '隱藏滑鼠游標',
   customColor: '文字顏色',
@@ -211,15 +221,21 @@ export const tw = {
   smoothing: '動態平滑度',
   fftSize: '頻域解析度 (FFT)',
   appInfo: '關於應用',
-  appDescription: '一個基於即時頻域分析與 Gemini AI 語意辨識的沉浸式音樂視覺化套件。',
+  appDescription: '一個基於即時頻域分析與 Gemini AI 語義辨識的沉浸式音樂視覺化套件。',
   version: '版本號',
   defaultMic: '系統預設麥克風',
   customText: '自訂文字內容',
   textProperties: '排版與佈局',
   text3D: '3D 立體效果',
-  customTextPlaceholder: '輸入文字',
+  textSource: '顯示內容',
+  textSources: {
+      auto: '智能自動 (優先歌曲)',
+      custom: '僅自訂文字',
+      song: '僅歌曲資訊'
+  },
+  customTextPlaceholder: '輸入文字...',
   showText: '顯示文字圖層',
-  pulseBeat: '隨節奏律動',
+  pulseBeat: '隨節拍律動',
   textAudioReactive: '音訊響應',
   textSize: '字體大小',
   textRotation: '旋轉角度',
@@ -234,7 +250,7 @@ export const tw = {
     effects: '視覺特效', automation: '自動化', display: '顯示'
   },
   audioPanel: {
-    info: '調節「靈敏度」以改變反應強度。更高的 FFT 解析度能提供更精細的細節。',
+    info: '調節「靈敏度」以改變反應強度。更高的 FFT 能提供更精細的細節',
     mic: '麥克風',
     file: '檔案',
     upload: '點擊上傳音訊',
@@ -243,10 +259,10 @@ export const tw = {
     analyze: '生成視覺方案'
   },
   systemPanel: {
-    interface: '介面互動', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染架構', audio: '音訊架構', ai: 'AI'
+    interface: '介面交互', behavior: '系統行為', maintenance: '維護與資訊', engine: '渲染架構', audio: '音訊架構', ai: 'AI'
   },
   config: {
-    title: '雲端與資料',
+    title: '雲端與數據',
     export: '導出配置',
     import: '導入配置',
     library: '本地預設庫',
@@ -259,7 +275,7 @@ export const tw = {
     importSuccess: '配置載入成功',
     copy: '複製',
     copied: '已複製',
-    limitReached: '最多只能儲存 5 個預設。'
+    limitReached: '最多只能保存 5 個預設。'
   },
   showFps: '顯示幀率',
   showTooltips: '顯示提示',
@@ -267,13 +283,13 @@ export const tw = {
   autoHideUi: '自動隱藏控制欄',
   mirrorDisplay: '鏡像翻轉',
   presets: {
-    title: '智慧預設',
+    title: '智能預設',
     hint: '一鍵應用由專家精心調校的參數組合。',
     select: '選擇一種心境...',
-    custom: '自定義 / 已修改',
+    custom: '自訂 / 已修改',
     all_modes: '所有模式',
     calm: '數位波形',
-    party: '動感光墙派對',
+    party: '動感光牆派對',
     ambient: '深空星雲',
     cyberpunk: '賽博雷射', 
     retrowave: '復古力場',
@@ -292,7 +308,7 @@ export const tw = {
     shortcuts: { mic: '麥克風', ui: '介面', mode: '模式', random: '隨機' }
   },
   errors: {
-    title: '音訊錯誤', accessDenied: '權限被拒絕', noDevice: '未發現設備', deviceBusy: '設備忙', general: '無法訪問音訊', tryDemo: '演示模式'
+    title: '音訊錯誤', accessDenied: '權限被拒絕', noDevice: '未發現裝置', deviceBusy: '裝置忙碌', general: '無法存取音訊', tryDemo: '演示模式'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: '突觸風暴 (WebGL)',
@@ -313,10 +329,10 @@ export const tw = {
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基於 WebGL 粒子系統的有機流體模擬。',
     [VisualizerMode.CUBE_FIELD]: '響應頻率的幾何方塊無盡矩陣。',
-    [VisualizerMode.PLASMA]: '基於經典展示場景效果的平滑流體色彩混合。',
+    [VisualizerMode.PLASMA]: '基於經典演示場景效果的平滑流體色彩混合。',
     [VisualizerMode.BARS]: '帶有懸浮峰值的經典頻譜分析儀。',
     [VisualizerMode.PARTICLES]: '隨節拍強度反應的深空星野穿越。',
-    [VisualizerMode.TUNNEL]: '遞迴幾何隧道。',
+    [VisualizerMode.TUNNEL]: '遞歸幾何隧道。',
     [VisualizerMode.RINGS]: '從中心向外擴散的霓虹共振環。',
     [VisualizerMode.NEBULA]: '深空粒子模擬。',
     [VisualizerMode.LASERS]: '高能銳利光束。',
@@ -332,28 +348,28 @@ export const tw = {
   helpModal: {
     title: 'Aura Flux 交互指南',
     tabs: { guide: '指南', shortcuts: '控制', about: '關於' },
-    intro: 'Aura Flux 利用高精度採樣，結合 Gemini 3 智能大腦，將音訊實時轉化為數學生成的數字藝術。',
+    intro: 'Aura Flux 利用高精度採樣，結合 Gemini 3 智能大腦，將音訊即時轉化為數學生成的數位藝術。',
     shortcutsTitle: '快捷操作鍵',
     gesturesTitle: '觸控手勢',
     shortcutItems: {
-      toggleMic: '麥克風', fullscreen: '全屏', randomize: '隨機', lyrics: '曲目辨識', hideUi: '顯示/隱藏面板', glow: '霓虹光暈', trails: '動態殘影', changeMode: '切換模式', changeTheme: '切換配色'
+      toggleMic: '麥克風', fullscreen: '全螢幕', randomize: '隨機', lyrics: '曲目辨識', hideUi: '顯示/隱藏面板', glow: '霓虹光暈', trails: '動態殘影', changeMode: '切換模式', changeTheme: '切換配色'
     },
     gestureItems: {
         swipeMode: '左右滑動切換模式', swipeSens: '上下滑動調節靈敏度', longPress: '長按激活 AI 辨識'
     },
     howItWorksTitle: '使用指南',
     howItWorksSteps: [
-      '1. 連接: 點擊「開啟體驗」並授權麥克風。',
-      '2. 視覺: 播放音樂。使用「智慧預設」設定氛圍。',
+      '1. 連接: 點擊「開啟」並授權麥克風。',
+      '2. 視覺: 播放音樂。使用「智能預設」設定氛圍。',
       '3. 定制: 切換「專業模式」以微調參數。',
       '4. 交互: 滑動切換模式，長按 AI 辨識。',
-      '5. 探索: 按 H 打開設置，F 全屏，R 隨機。'
+      '5. 探索: 按 H 打開設定，F 全螢幕，R 隨機。'
     ],
     settingsTitle: '核心參數指南',
     settingsDesc: {
       sensitivity: '振幅反應增益。', speed: '時間演化速率。', glow: '全域輝光強度。', trails: '運動模糊效果。', smoothing: '平滑係數。', fftSize: '頻譜採樣精度。'
     },
-    projectInfoTitle: '項目簡介',
+    projectInfoTitle: '專案簡介',
     aboutDescription: '新一代視聽交互工具。適用於直播、VJ 演出及沉浸式環境。',
     privacyTitle: '隱私安全',
     privacyText: '音訊分析在本地完成。僅在辨識時發送加密特徵至 Gemini。',
@@ -366,10 +382,10 @@ export const tw = {
     next: '繼續', back: '返回', skip: '跳過', finish: '開啟盛宴',
     features: {
       title: '感官特性',
-      visuals: { title: '數學生成藝術', desc: '內置 15+ 種基於 WebGL 的數學動力學引擎，將聲波具象化。' },
-      ai: { title: 'Gemini 智能核心', desc: '實時感知曲目元數據與視覺情緒，由 Google Gemini 3 提供支持。' },
+      visuals: { title: '數學生成藝術', desc: '內建 15+ 種基於 WebGL 的數學動力學引擎，將聲波具象化。' },
+      ai: { title: 'Gemini 智能核心', desc: '即時感知曲目元數據與視覺情緒，由 Google Gemini 3 提供支援。' },
       privacy: { title: '邊緣計算保護', desc: '所有分析均在本地執行，我們絕不記錄或存儲您的私人聲音數據。' }
     },
-    shortcuts: { title: '指揮官快捷鍵', desc: '像指揮家一樣掌控全場，通过键盘即時調遣光影。' }
+    shortcuts: { title: '指揮官快捷鍵', desc: '像指揮家一樣掌控全場，通過鍵盤即時調遣光影。' }
   }
 };

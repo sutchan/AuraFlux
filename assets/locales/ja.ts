@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/ja.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:00
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ja = {
   common: {
-    on: 'ON', off: 'OFF', visible: '表示', hidden: '非表示', active: '有効', muted: 'ミュート', beta: 'ベータ', simple: '簡易', advanced: '詳細', new: 'NEW', unknownTrack: '不明なトラック'
+    on: 'ON', off: 'OFF', visible: '表示', hidden: '非表示', active: '有効', muted: 'ミュート', beta: 'ベータ', simple: '簡易', advanced: '詳細', new: 'NEW', unknownTrack: '不明なトラック',
+    menu: 'メニュー', queue: 'キュー', empty: 'リストは空です', unknownArtist: '不明なアーティスト',
+    clearAll: 'すべてクリア', confirmClear: 'キューをクリアしますか？'
   },
   tabs: {
     visual: 'ビジュアル', text: 'テキスト', audio: 'オーディオ', ai: 'AI 曲識別', system: 'システム', studio: 'スタジオ'
@@ -35,6 +37,8 @@ export const ja = {
     save: 'ビデオを保存',
     discard: '破棄',
     share: '共有',
+    videoStream: 'ビデオストリーム',
+    audioStream: 'オーディオストリーム',
     stats: {
         time: '時間',
         size: 'サイズ'
@@ -124,6 +128,7 @@ export const ja = {
     textSize: 'カスタムテキストレイヤーのスケールを調整します。',
     textRotation: 'テキストオーバーレイを回転させます。',
     textPosition: 'カスタムテキストのアンカーポイント。',
+    textSource: 'メインオーバーレイに表示するコンテンツを設定します。',
     lyricsPosition: 'AI歌詞オーバーレイのアンカーポイント。',
     customTextPlaceholder: 'メッセージを入力してください。',
     textOpacity: 'カスタムテキストの透明度レベル。',
@@ -216,6 +221,12 @@ export const ja = {
   customText: 'カスタムテキスト',
   textProperties: 'タイポグラフィ',
   text3D: '3D効果',
+  textSource: '表示ソース',
+  textSources: {
+      auto: '自動 (スマート)',
+      custom: 'カスタムテキストのみ',
+      song: '曲情報のみ'
+  },
   customTextPlaceholder: 'テキストを入力',
   showText: 'オーバーレイを表示',
   pulseBeat: 'ビートに同調',

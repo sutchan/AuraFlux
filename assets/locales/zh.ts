@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 11:30
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const zh = {
   common: {
-    on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业', new: '新', unknownTrack: '未知曲目'
+    on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业', new: '新', unknownTrack: '未知曲目',
+    menu: '菜单', queue: '播放队列', empty: '列表为空', unknownArtist: '未知艺术家',
+    clearAll: '清空列表', confirmClear: '确认清空播放队列？'
   },
   tabs: {
     visual: '视觉', text: '文字', audio: '音频', ai: 'AI 通感', system: '系统', studio: '工作室'
@@ -35,6 +37,8 @@ export const zh = {
     save: '保存视频',
     discard: '丢弃',
     share: '分享',
+    videoStream: '视频流',
+    audioStream: '音频流',
     stats: {
         time: '时长',
         size: '大小'
@@ -123,6 +127,7 @@ export const zh = {
     textSize: '缩放自定义文字图层的大小。',
     textRotation: '旋转文字覆盖层。',
     textPosition: '自定义文字的锚定位置。',
+    textSource: '设置主叠加层显示的内容。',
     lyricsPosition: 'AI 歌词覆盖层的显示锚点。',
     customTextPlaceholder: '输入您的自定义信息。',
     textOpacity: '自定义文字的透明度级别。',
@@ -217,6 +222,12 @@ export const zh = {
   customText: '自定义文字内容',
   textProperties: '排版与布局',
   text3D: '3D 立体效果',
+  textSource: '显示内容',
+  textSources: {
+      auto: '智能自动 (优先歌曲)',
+      custom: '仅自定义文字',
+      song: '仅歌曲信息'
+  },
   customTextPlaceholder: '输入文字...',
   showText: '显示文字图层',
   pulseBeat: '随节拍律动',
@@ -346,18 +357,18 @@ export const zh = {
       '1. 连接: 点击“开启”并授权麦克风。',
       '2. 视觉: 播放音乐。使用“智能预设”设定氛围。',
       '3. 定制: 切换“专业模式”以微调参数。',
-      '4. 交互: 滑动切换模式，长按 AI 识别。',
+      '4. 交互: 滑动切换模式，长按 AI 辨识。',
       '5. 探索: 按 H 打开设置，F 全屏，R 随机。'
     ],
     settingsTitle: '核心参数指南',
     settingsDesc: {
       sensitivity: '振幅反应增益。', speed: '时间演化速率。', glow: '全域辉光强度。', trails: '运动模糊效果。', smoothing: '平滑系数。', fftSize: '频谱采样精度。'
     },
-    projectInfoTitle: '项目简介',
-    aboutDescription: '新一代视听交互工具。适用于直播、VJ 演出及沉浸式环境。',
-    privacyTitle: '隐私安全',
-    privacyText: '音频分析在本地完成。仅在识别时发送加密特征至 Gemini。',
-    version: '版本号', coreTech: '技术栈', repository: '仓库', support: '支持', reportBug: '反馈'
+    projectInfoTitle: '项目愿景',
+    aboutDescription: 'Aura Flux 是一个实时通感实验引擎，旨在打破听觉与视觉的界限。通过融合 WebGL 的数学精度与 Google Gemini 的语义理解，它将声音重构为流动的光影雕塑。适用于 VJ 演出、直播背景、沉浸式冥想及创意编程展示。',
+    privacyTitle: '隐私承诺',
+    privacyText: '我们坚持“边缘优先”的隐私原则。所有频谱分析与视觉渲染均在您的设备本地完成。只有在您主动激活 AI 识别时，经过加密的简短音频指纹才会被发送至 Gemini 进行分析，且绝不保存。',
+    version: '当前版本', coreTech: '核心技术', repository: '开源仓库', support: '技术支持', reportBug: '问题反馈'
   },
   onboarding: {
     welcome: '欢迎体验 Aura Flux',

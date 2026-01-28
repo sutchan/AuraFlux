@@ -1,28 +1,47 @@
 /**
  * File: components/ui/CustomTextOverlay.tsx
- * Version: 1.0.6
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-07 20:00
  */
 
 import React, { useRef, useEffect } from 'react';
-import { VisualizerSettings } from '../../core/types';
+import { VisualizerSettings, SongInfo } from '../../core/types';
 import { useAudioPulse } from '../../core/hooks/useAudioPulse';
 
 interface CustomTextOverlayProps {
   settings: VisualizerSettings;
   analyser: AnalyserNode | null;
+  song?: SongInfo | null;
 }
 
-const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyser }) => {
+const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyser, song }) => {
   const textRef = useRef<HTMLDivElement>(null);
   const hueRef = useRef(0);
   const lastTimeRef = useRef(0);
   const sizeVw = settings.customTextSize || 12;
   const sizePx = sizeVw * 13; 
 
-  const pulseEnabled = settings.showCustomText && !!settings.customText && settings.textPulse;
+  // Priority Logic based on textSource setting
+  let isSongMode = false;
+  const mode = settings.textSource || 'AUTO';
+
+  if (mode === 'SONG') {
+      isSongMode = true;
+  } else if (mode === 'CUSTOM') {
+      isSongMode = false;
+  } else {
+      // AUTO mode
+      // Show song info if available and valid; otherwise fallback to Custom Text.
+      isSongMode = !!(song && (song.title || song.artist) && song.artist !== 'System Alert');
+  }
+  
+  const mainText = isSongMode ? (song?.title || '') : settings.customText;
+  const subText = isSongMode ? (song?.artist || '') : null;
+
+  const hasContent = !!mainText;
+  const pulseEnabled = settings.showCustomText && hasContent && settings.textPulse;
   
   // Always use the optimized 'beat' mode which now includes breathing/hybrid behavior
   useAudioPulse({
@@ -71,23 +90,28 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
   }, [settings.customTextCycleColor, settings.customTextColor, settings.customTextCycleInterval]);
 
 
-  if (!settings.showCustomText || !settings.customText) return null;
+  if (!settings.showCustomText || !hasContent) return null;
 
+  // Increased margins from 8 (2rem) to 12 (3rem) for better aesthetic breathing room
   const getPositionClasses = () => {
       const pos = settings.customTextPosition || 'mc';
       const map: Record<string, string> = {
-          tl: 'top-8 left-8 text-left items-start',
-          tc: 'top-8 left-1/2 -translate-x-1/2 text-center items-center',
-          tr: 'top-8 right-8 text-right items-end',
-          ml: 'top-1/2 left-8 -translate-y-1/2 text-left items-start',
-          mc: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center items-center',
-          mr: 'top-1/2 right-8 -translate-y-1/2 text-right items-end',
-          bl: 'bottom-8 left-8 text-left items-start',
-          bc: 'bottom-8 left-1/2 -translate-x-1/2 text-center items-center',
-          br: 'bottom-8 right-8 text-right items-end',
+          tl: 'top-12 left-12 items-start',
+          tc: 'top-12 left-1/2 -translate-x-1/2 items-center',
+          tr: 'top-12 right-12 items-end',
+          ml: 'top-1/2 left-12 -translate-y-1/2 items-start',
+          mc: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center',
+          mr: 'top-1/2 right-12 -translate-y-1/2 items-end',
+          bl: 'bottom-12 left-12 items-start',
+          bc: 'bottom-12 left-1/2 -translate-x-1/2 items-center',
+          br: 'bottom-12 right-12 items-end',
       };
       return map[pos] || map.mc;
   };
+
+  const alignClass = settings.customTextPosition?.includes('l') 
+    ? 'items-start text-left' 
+    : (settings.customTextPosition?.includes('r') ? 'items-end text-right' : 'items-center text-center');
 
   const rotation = settings.customTextRotation || 0;
   const textShadow = settings.customText3D 
@@ -98,20 +122,26 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
     <div className={`pointer-events-none fixed z-[100] flex flex-col ${getPositionClasses()}`}>
       <div 
         ref={textRef} 
-        className="font-black tracking-widest uppercase select-none inline-block origin-center break-words transition-opacity duration-300"
+        className={`font-black tracking-widest uppercase select-none flex flex-col justify-center origin-center transition-opacity duration-300 ${alignClass}`}
         style={{ 
             color: settings.customTextCycleColor ? undefined : (settings.customTextColor || '#ffffff'),
             fontSize: `min(${sizeVw}vw, ${sizePx}px)`, 
-            whiteSpace: 'pre-wrap', 
-            lineHeight: 1.1,
             fontFamily: settings.customTextFont || 'Inter, sans-serif',
             textShadow,
-            // FIX: Use fallback values when pulse is disabled to ensure settings are respected immediately
             transform: `rotate(${rotation}deg) ${pulseEnabled ? 'scale(var(--pulse-scale, 1))' : ''}`,
-            opacity: pulseEnabled ? 'var(--pulse-opacity, 1)' : settings.customTextOpacity
+            opacity: pulseEnabled ? 'var(--pulse-opacity, 1)' : settings.customTextOpacity,
+            lineHeight: 1.1,
         } as React.CSSProperties}
       >
-        {settings.customText}
+        <span className="whitespace-pre-wrap break-words max-w-[80vw]">{mainText}</span>
+        {subText && (
+            <span 
+                className="font-bold opacity-80 mt-[0.2em] whitespace-nowrap overflow-hidden text-ellipsis max-w-[80vw]"
+                style={{ fontSize: '0.4em', lineHeight: 1.2 }}
+            >
+                {subText}
+            </span>
+        )}
       </div>
     </div>
   );

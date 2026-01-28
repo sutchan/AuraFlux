@@ -1,9 +1,9 @@
 /**
  * File: core/types/audio.ts
- * Version: 1.8.0
+ * Version: 1.9.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 16:00
+ * Updated: 2025-03-07 18:30
  */
 
 export enum LyricsStyle {
@@ -13,6 +13,8 @@ export enum LyricsStyle {
 }
 
 export type AudioSourceType = 'MICROPHONE' | 'FILE';
+
+export type PlaybackMode = 'repeat-all' | 'repeat-one' | 'shuffle';
 
 export interface SongInfo {
   title: string;
@@ -24,6 +26,12 @@ export interface SongInfo {
   searchUrl?: string;
   albumArtUrl?: string;
   matchSource?: 'AI' | 'LOCAL' | 'MOCK' | 'GEMINI' | 'OPENAI' | 'GROQ' | 'CLAUDE' | 'DEEPSEEK' | 'QWEN' | 'PREVIEW' | 'FILE';
+}
+
+export interface Track extends SongInfo {
+    id: string;
+    file: File;
+    duration: number;
 }
 
 export interface AudioDevice {

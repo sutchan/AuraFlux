@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/ko.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:00
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ko = {
   common: {
-    on: 'ON', off: 'OFF', visible: '표시', hidden: '숨김', active: '활성화', muted: '음소거', beta: '베타', simple: '간편', advanced: '고급', new: 'NEW', unknownTrack: '알 수 없는 트랙'
+    on: 'ON', off: 'OFF', visible: '표시', hidden: '숨김', active: '활성화', muted: '음소거', beta: '베타', simple: '간편', advanced: '고급', new: 'NEW', unknownTrack: '알 수 없는 트랙',
+    menu: '메뉴', queue: '대기열', empty: '목록 비어있음', unknownArtist: '알 수 없는 아티스트',
+    clearAll: '모두 지우기', confirmClear: '대기열을 비우시겠습니까?'
   },
   tabs: {
     visual: '시각 효과', text: '텍스트', audio: '오디오', ai: '트랙 인식', system: '시스템', studio: '스튜디오'
@@ -35,6 +37,8 @@ export const ko = {
     save: '비디오 저장',
     discard: '삭제',
     share: '공유',
+    videoStream: '비디오 스트림',
+    audioStream: '오디오 스트림',
     stats: {
         time: '시간',
         size: '크기'
@@ -124,6 +128,7 @@ export const ko = {
     textSize: '사용자 정의 텍스트 레이어의 크기를 조절합니다。',
     textRotation: '텍스트 오버레이를 회전합니다。',
     textPosition: '사용자 정의 텍스트의 앵커 포인트입니다。',
+    textSource: '메인 오버레이에 표시할 콘텐츠를 설정합니다.',
     lyricsPosition: 'AI 가사 오버레이의 앵커 포인트입니다。',
     customTextPlaceholder: '메시지를 입력하세요。',
     textOpacity: '사용자 정의 텍스트의 투명도 수준입니다。',

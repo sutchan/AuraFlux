@@ -24,5 +24,11 @@
 - `L`: `setShowLyrics`
 - `H`: `toggleExpanded`
 
+## 5. 文件与导出规范 (v1.8.6)
+- **录制文件名生成:**
+  - 自动将歌曲元数据 (Title/Artist) 嵌入文件名。
+  - **Unicode 支持:** 完整支持中文、日文等非 ASCII 字符。
+  - **清洗规则:** 仅移除操作系统保留字符 (`< > : " / \ | ? *`)，其余字符保留，以确保文件名的可读性和兼容性。
+
 ---
-*Aura Flux Interface - Version 1.8.3*
+*Aura Flux Interface - Version 1.8.6*

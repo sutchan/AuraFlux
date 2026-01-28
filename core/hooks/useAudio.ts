@@ -1,13 +1,13 @@
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.2.5
+ * Version: 2.4.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:45
+ * Updated: 2025-03-08 02:30
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { AudioDevice, VisualizerSettings, Language, AudioFeatures, AudioSourceType, SongInfo } from '../types';
+import { AudioDevice, VisualizerSettings, Language, AudioFeatures, AudioSourceType, SongInfo, Track, PlaybackMode } from '../types';
 import { createDemoAudioGraph } from '../services/audioSynthesis';
 import { audioBufferToWav } from '../services/audioUtils';
 
@@ -34,13 +34,18 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [audioDevices, setAudioDevices] = useState<AudioDevice[]>([]);
 
-  // --- File State ---
+  // --- File/Playlist State ---
   const [fileStatus, setFileStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [fileName, setFileName] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   
+  // Playlist State
+  const [playlist, setPlaylist] = useState<Track[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(-1);
+  const [playbackMode, setPlaybackMode] = useState<PlaybackMode>('repeat-all');
+
   // --- Refs ---
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -172,121 +177,207 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
     } catch (e) {}
   };
 
-  // --- File Logic ---
-  const loadFile = useCallback(async (file: File) => {
-    setIsPending(true);
-    await stopAll();
-    setSourceType('FILE');
-    setFileStatus('loading');
-    setFileName(file.name);
-    pausedAtRef.current = 0;
-    setCurrentTime(0);
-    
-    // Reset Song Metadata immediately
-    setCurrentSong(null);
+  // --- Playlist Logic ---
 
-    // Safely attempt to read ID3 tags using global window.jsmediatags
-    // Wrap in a promise to prevent blocking, but don't await the Audio decoding on it.
-    new Promise<void>((resolve) => {
-        try {
-            if (window.jsmediatags) {
-                window.jsmediatags.read(file, {
-                    onSuccess: (tag: any) => {
-                        const { title, artist, picture } = tag.tags;
-                        let albumArtUrl = undefined;
-                        if (picture) {
-                            try {
-                                const { data, format } = picture;
-                                let base64String = "";
-                                for (let i = 0; i < data.length; i++) {
-                                    base64String += String.fromCharCode(data[i]);
-                                }
-                                albumArtUrl = `data:${format};base64,${window.btoa(base64String)}`;
-                            } catch (imgErr) {
-                                console.warn("Failed to process album art", imgErr);
-                            }
-                        }
-                        
-                        setCurrentSong({
-                            title: title || file.name,
-                            artist: artist || 'Unknown Artist',
-                            albumArtUrl,
-                            identified: true,
-                            matchSource: 'FILE'
-                        });
-                        resolve();
-                    },
-                    onError: (error: any) => {
-                        console.warn("ID3 read failed", error);
-                        setCurrentSong({
-                            title: file.name,
-                            artist: 'Unknown Artist',
-                            identified: false,
-                            matchSource: 'FILE'
-                        });
-                        resolve();
-                    }
-                });
-            } else {
-                // Graceful fallback if library failed to load
-                setCurrentSong({
-                    title: file.name,
-                    artist: 'Unknown Artist',
-                    identified: false,
-                    matchSource: 'FILE'
-                });
-                resolve();
-            }
-        } catch (e) {
-            console.warn("jsmediatags invocation error:", e);
-            setCurrentSong({
-                title: file.name,
-                artist: 'Unknown Artist',
-                identified: false,
-                matchSource: 'FILE'
-            });
-            resolve();
-        }
-    });
+  // Helper to extract metadata
+  const extractMetadata = (file: File): Promise<Track> => {
+      return new Promise((resolve) => {
+          const basicTrack: Track = {
+              id: Math.random().toString(36).substr(2, 9),
+              file,
+              title: file.name.replace(/\.[^/.]+$/, ""),
+              artist: 'Unknown Artist',
+              identified: false,
+              matchSource: 'FILE',
+              duration: 0 
+          };
 
-    try {
-      const ctx = await ensureContext();
-      const arrayBuffer = await file.arrayBuffer();
-      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-      audioBufferRef.current = audioBuffer;
-      setDuration(audioBuffer.duration);
-      setFileStatus('ready');
+          if (window.jsmediatags) {
+              window.jsmediatags.read(file, {
+                  onSuccess: (tag: any) => {
+                      const { title, artist, picture } = tag.tags;
+                      let albumArtUrl = undefined;
+                      if (picture) {
+                          try {
+                              const { data, format } = picture;
+                              let base64String = "";
+                              for (let i = 0; i < data.length; i++) {
+                                  base64String += String.fromCharCode(data[i]);
+                              }
+                              albumArtUrl = `data:${format};base64,${window.btoa(base64String)}`;
+                          } catch (e) {}
+                      }
+                      resolve({
+                          ...basicTrack,
+                          title: title || basicTrack.title,
+                          artist: artist || basicTrack.artist,
+                          albumArtUrl,
+                          identified: true
+                      });
+                  },
+                  onError: () => resolve(basicTrack)
+              });
+          } else {
+              resolve(basicTrack);
+          }
+      });
+  };
+
+  const importFiles = useCallback(async (files: FileList | File[]) => {
+      const fileArray = Array.from(files);
+      if (fileArray.length === 0) return;
+
+      setFileStatus('loading');
       
-      // Auto play on load
-      playFile();
-    } catch (e) {
-      console.error("File load error:", e);
-      setErrorMessage("Failed to decode audio file.");
-      setFileStatus('error');
-    } finally {
-      setIsPending(false);
-    }
+      const newTracks: Track[] = [];
+      for (const file of fileArray) {
+          const track = await extractMetadata(file);
+          newTracks.push(track);
+      }
+
+      setPlaylist(prev => {
+          const combined = [...prev, ...newTracks];
+          // If we were empty, start playing the first new track
+          if (prev.length === 0 && newTracks.length > 0) {
+              // Delay slightly to let state update
+              setTimeout(() => playTrackByIndex(0, combined), 100);
+          }
+          return combined;
+      });
+      setFileStatus('ready');
+  }, []);
+
+  // For legacy drag-drop single file support
+  const loadFile = useCallback(async (file: File) => {
+      await importFiles([file]);
+  }, [importFiles]);
+
+  const playTrackByIndex = useCallback(async (index: number, currentList?: Track[]) => {
+      const list = currentList || playlist;
+      if (index < 0 || index >= list.length) return;
+
+      const track = list[index];
+      setCurrentIndex(index);
+      
+      // Stop current playback & Microphone
+      setIsPending(true);
+      
+      // Explicitly stop microphone stream if active
+      if (streamRef.current) {
+          streamRef.current.getTracks().forEach(track => track.stop());
+          streamRef.current = null;
+          setIsListening(false);
+      }
+
+      if (fileSourceNodeRef.current) {
+          try { fileSourceNodeRef.current.stop(); } catch(e) {}
+          fileSourceNodeRef.current.disconnect();
+          fileSourceNodeRef.current = null;
+      }
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+
+      setSourceType('FILE');
+      setFileName(track.title);
+      setCurrentSong(track);
+      pausedAtRef.current = 0;
+      setCurrentTime(0);
+
+      try {
+          const ctx = await ensureContext();
+          const arrayBuffer = await track.file.arrayBuffer();
+          const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+          audioBufferRef.current = audioBuffer;
+          setDuration(audioBuffer.duration);
+          
+          playFileBuffer(); // Call internal play function
+          setFileStatus('ready');
+      } catch (e) {
+          console.error("Track load error", e);
+          setErrorMessage("Failed to play track.");
+          setFileStatus('error');
+      } finally {
+          setIsPending(false);
+      }
+  }, [playlist, setCurrentSong]);
+
+  const removeFromPlaylist = useCallback((index: number) => {
+      setPlaylist(prev => {
+          const newList = [...prev];
+          newList.splice(index, 1);
+          
+          // Adjust index if we removed the playing track or one before it
+          if (index < currentIndex) {
+              setCurrentIndex(c => c - 1);
+          } else if (index === currentIndex) {
+              // If we removed the current track, stop or play next
+              if (newList.length === 0) {
+                  stopAll();
+                  setCurrentIndex(-1);
+                  setCurrentSong(null);
+                  setFileName(null);
+              } else {
+                  // Play the track that moved into this slot (or the previous one if we were last)
+                  const nextIdx = index < newList.length ? index : index - 1;
+                  setTimeout(() => playTrackByIndex(nextIdx, newList), 50);
+              }
+          }
+          return newList;
+      });
+  }, [currentIndex, stopAll, setCurrentSong, playTrackByIndex]);
+
+  const clearPlaylist = useCallback(() => {
+      stopAll();
+      setPlaylist([]);
+      setCurrentIndex(-1);
+      setCurrentSong(null);
+      setFileName(null);
+      setFileStatus('idle');
   }, [stopAll, setCurrentSong]);
 
-  const playFile = useCallback(async () => {
+  const playNext = useCallback(() => {
+      if (playlist.length === 0) return;
+      
+      let nextIndex = -1;
+      if (playbackMode === 'shuffle') {
+          nextIndex = Math.floor(Math.random() * playlist.length);
+          // Avoid repeating same song in shuffle if possible
+          if (playlist.length > 1 && nextIndex === currentIndex) {
+              nextIndex = (nextIndex + 1) % playlist.length;
+          }
+      } else {
+          // Repeat All or Repeat One (manual next always goes next)
+          nextIndex = (currentIndex + 1) % playlist.length;
+      }
+      playTrackByIndex(nextIndex);
+  }, [playlist, currentIndex, playbackMode, playTrackByIndex]);
+
+  const playPrev = useCallback(() => {
+      if (playlist.length === 0) return;
+      let prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+      playTrackByIndex(prevIndex);
+  }, [playlist, currentIndex, playTrackByIndex]);
+
+  // Internal function to play the loaded buffer
+  const playFileBuffer = useCallback(async () => {
     if (!audioBufferRef.current) return;
     const ctx = await ensureContext();
 
-    if (fileSourceNodeRef.current) fileSourceNodeRef.current.disconnect();
+    if (fileSourceNodeRef.current) {
+        try { fileSourceNodeRef.current.stop(); } catch(e){}
+        fileSourceNodeRef.current.disconnect();
+    }
 
     const source = ctx.createBufferSource();
     source.buffer = audioBufferRef.current;
     
-    // Connect: Source -> Analyser -> Speakers
     source.connect(analyserRef.current!);
     analyserRef.current!.connect(ctx.destination);
 
     source.onended = () => {
-       // Only handle end if natural end, not manual stop
-       if (ctx.currentTime - startTimeRef.current >= audioBufferRef.current!.duration - 0.1) {
-           setIsPlaying(false);
-           pausedAtRef.current = 0;
-           setCurrentTime(0);
+       // Check if it ended naturally (approx duration match)
+       // We use a small tolerance because currentTime might be slightly off
+       if (audioBufferRef.current && Math.abs(ctx.currentTime - startTimeRef.current - audioBufferRef.current.duration) < 0.5) {
+           handleTrackEnd();
        }
     };
 
@@ -295,11 +386,9 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
     fileSourceNodeRef.current = source;
     setIsPlaying(true);
 
-    // Progress Loop
     const updateProgress = () => {
       if (!audioBufferRef.current || !audioContextRef.current) return;
       const now = audioContextRef.current.currentTime;
-      // If playing, calculate time. If paused, use pausedAt.
       const current = now - startTimeRef.current;
       setCurrentTime(Math.min(current, audioBufferRef.current.duration));
       
@@ -310,6 +399,29 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
     rafRef.current = requestAnimationFrame(updateProgress);
 
   }, []);
+
+  // Handle auto-advance
+  const handleTrackEnd = useCallback(() => {
+      setIsPlaying(false);
+      pausedAtRef.current = 0;
+      setCurrentTime(0);
+
+      // Auto Advance Logic
+      if (playlist.length > 0) {
+          if (playbackMode === 'repeat-one') {
+              playTrackByIndex(currentIndex);
+          } else if (playbackMode === 'shuffle') {
+              const nextIndex = Math.floor(Math.random() * playlist.length);
+              playTrackByIndex(nextIndex);
+          } else {
+              // Repeat All (default linear)
+              const nextIndex = (currentIndex + 1) % playlist.length;
+              // If we wrapped around and user doesn't want endless, we could stop here.
+              // But 'repeat-all' implies endless loop usually.
+              playTrackByIndex(nextIndex);
+          }
+      }
+  }, [playlist, currentIndex, playbackMode, playTrackByIndex]);
 
   const pauseFile = useCallback(() => {
     if (fileSourceNodeRef.current && isPlaying && audioContextRef.current) {
@@ -323,23 +435,31 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
   }, [isPlaying]);
 
   const togglePlayback = useCallback(() => {
-      if (isPlaying) pauseFile();
-      else playFile();
-  }, [isPlaying, pauseFile, playFile]);
+      if (isPlaying) {
+          pauseFile();
+      } else {
+          // If resuming playback, ensure microphone is off
+          if (streamRef.current) {
+              streamRef.current.getTracks().forEach(track => track.stop());
+              streamRef.current = null;
+              setIsListening(false);
+          }
+          playFileBuffer();
+      }
+  }, [isPlaying, pauseFile, playFileBuffer]);
 
   const seekFile = useCallback((time: number) => {
       const wasPlaying = isPlaying;
       if (isPlaying) pauseFile();
       pausedAtRef.current = Math.max(0, Math.min(time, duration));
       setCurrentTime(pausedAtRef.current);
-      if (wasPlaying) playFile();
-  }, [isPlaying, duration, pauseFile, playFile]);
+      if (wasPlaying) playFileBuffer();
+  }, [isPlaying, duration, pauseFile, playFileBuffer]);
 
   // --- AI Analysis Helper ---
   const getAudioSlice = useCallback(async (durationSeconds: number = 15): Promise<Blob | null> => {
       if (!audioBufferRef.current) return null;
       
-      // Try to take a slice from the middle of the song (e.g., 20% mark) to catch the main theme
       const totalDuration = audioBufferRef.current.duration;
       let startOffset = Math.min(totalDuration * 0.2, Math.max(0, totalDuration - durationSeconds));
       if (startOffset < 0) startOffset = 0;
@@ -348,7 +468,6 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       const sampleRate = audioBufferRef.current.sampleRate;
       const frameCount = Math.floor(sliceDuration * sampleRate);
       
-      // Create a new offline context to render just this slice
       const offlineCtx = new OfflineAudioContext(
           audioBufferRef.current.numberOfChannels,
           frameCount,
@@ -375,7 +494,6 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       setIsListening(true);
   }, [stopAll]);
 
-  // --- Update Analyser Settings on Change ---
   useEffect(() => {
     if (analyser) {
       analyser.smoothingTimeConstant = safeSmoothing;
@@ -390,13 +508,15 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       
       // Mic
       isListening, isSimulating, mediaStream, audioDevices, 
-      startMicrophone, startDemoMode, toggleMicrophone: startMicrophone, // Alias for legacy
+      startMicrophone, startDemoMode, toggleMicrophone: startMicrophone,
       
-      // File
+      // File / Playlist
       fileStatus, fileName, isPlaying, duration, currentTime,
-      loadFile, togglePlayback, seekFile,
-      getAudioSlice,
+      playlist, currentIndex, playbackMode, setPlaybackMode,
+      importFiles, loadFile, togglePlayback, seekFile,
+      playNext, playPrev, playTrackByIndex, removeFromPlaylist, clearPlaylist,
       
+      getAudioSlice,
       audioFeaturesRef: featuresRef 
   };
 };

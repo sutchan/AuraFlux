@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/fr.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:00
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const fr = {
   common: {
-    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'MASQUÉ', active: 'ACTIF', muted: 'MUET', beta: 'BÊTA', simple: 'Simple', advanced: 'Avancé', new: 'NOUVEAU', unknownTrack: 'Piste Inconnue'
+    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'MASQUÉ', active: 'ACTIF', muted: 'MUET', beta: 'BÊTA', simple: 'Simple', advanced: 'Avancé', new: 'NOUVEAU', unknownTrack: 'Piste Inconnue',
+    menu: 'MENU', queue: 'File', empty: 'Liste Vide', unknownArtist: 'Artiste Inconnu',
+    clearAll: 'Tout Effacer', confirmClear: 'Vider la file d\'attente ?'
   },
   tabs: {
     visual: 'Visuel', text: 'Texte', audio: 'Audio', ai: 'Synesthésie IA', system: 'Système', studio: 'Studio'
@@ -35,6 +37,8 @@ export const fr = {
     save: 'Sauvegarder Vidéo',
     discard: 'Jeter',
     share: 'Partager',
+    videoStream: 'FLUX VIDÉO',
+    audioStream: 'FLUX AUDIO',
     stats: {
         time: 'TEMPS',
         size: 'TAILLE'
@@ -124,6 +128,7 @@ export const fr = {
     textSize: 'Mettre à l\'échelle le calque de texte personnalisé.',
     textRotation: 'Faire pivoter la superposition de texte.',
     textPosition: 'Point d\'ancrage pour le texte personnalisé.',
+    textSource: 'Source d\'Affichage',
     lyricsPosition: 'Point d\'ancrage pour la superposition des paroles de l\'IA.',
     customTextPlaceholder: 'Saisissez votre message.',
     textOpacity: 'Niveau de transparence du texte personnalisé.',

@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/es.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:00
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const es = {
   common: {
-    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'OCULTO', active: 'ACTIVO', muted: 'SILENCIADO', beta: 'BETA', simple: 'Simple', advanced: 'Avanzado', new: 'NUEVO', unknownTrack: 'Pista Desconocida'
+    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'OCULTO', active: 'ACTIVO', muted: 'SILENCIADO', beta: 'BETA', simple: 'Simple', advanced: 'Avanzado', new: 'NUEVO', unknownTrack: 'Pista Desconocida',
+    menu: 'MENÚ', queue: 'Cola', empty: 'Lista Vacía', unknownArtist: 'Artista Desconocido',
+    clearAll: 'Borrar Todo', confirmClear: '¿Borrar la cola?'
   },
   tabs: {
     visual: 'Visual', text: 'Texto', audio: 'Audio', ai: 'Sinestesia IA', system: 'Sistema', studio: 'Estudio'
@@ -35,6 +37,8 @@ export const es = {
     save: 'Guardar Video',
     discard: 'Descartar',
     share: 'Compartir',
+    videoStream: 'FLUJO DE VIDEO',
+    audioStream: 'FLUJO DE AUDIO',
     stats: {
         time: 'TIEMPO',
         size: 'TAMAÑO'
@@ -124,6 +128,7 @@ export const es = {
     textSize: 'Escalar la capa de texto personalizado.',
     textRotation: 'Rotar la superposición de texto.',
     textPosition: 'Punto de anclaje para el texto personalizado.',
+    textSource: 'Fuente de contenido para la superposición principal.',
     lyricsPosition: 'Punto de anclaje para la superposición de letras de IA.',
     customTextPlaceholder: 'Introduce tu mensaje.',
     textOpacity: 'Nivel de transparencia del texto personalizado.',
@@ -216,6 +221,12 @@ export const es = {
   customText: 'Contenido de Texto Personalizado',
   textProperties: 'Tipografía y Diseño',
   text3D: 'Efecto 3D',
+  textSource: 'Fuente de Visualización',
+  textSources: {
+      auto: 'Auto (Inteligente)',
+      custom: 'Solo Texto Personalizado',
+      song: 'Solo Info de Canción'
+  },
   customTextPlaceholder: 'ESCRIBE TEXTO',
   showText: 'Mostrar Superposición',
   pulseBeat: 'Pulsar con el Ritmo',

@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 11:30
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const en = {
   common: {
-    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED', new: 'NEW', unknownTrack: 'Unknown Track'
+    on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED', new: 'NEW', unknownTrack: 'Unknown Track',
+    menu: 'MENU', queue: 'Queue', empty: 'List Empty', unknownArtist: 'Unknown Artist',
+    clearAll: 'Clear All', confirmClear: 'Clear Queue?'
   },
   tabs: {
     visual: 'Visual', text: 'Text', audio: 'Audio', ai: 'AI Synesthesia', system: 'System', studio: 'Studio'
@@ -35,6 +37,8 @@ export const en = {
     save: 'Save Video',
     discard: 'Discard',
     share: 'Share',
+    videoStream: 'VIDEO STREAM',
+    audioStream: 'AUDIO STREAM',
     stats: {
         time: 'TIME',
         size: 'SIZE'
@@ -123,6 +127,7 @@ export const en = {
     textSize: 'Scale the custom text layer.',
     textRotation: 'Rotate the text overlay.',
     textPosition: 'Anchor point for the custom text.',
+    textSource: 'Determine what content is shown in the main overlay.',
     lyricsPosition: 'Anchor point for the AI lyrics overlay.',
     customTextPlaceholder: 'Enter your message.',
     textOpacity: 'Transparency level of the custom text.',
@@ -147,7 +152,8 @@ export const en = {
     CLAUDE: 'Claude 3',
     DEEPSEEK: 'DeepSeek',
     QWEN: 'Qwen',
-    MOCK: 'Simulated'
+    MOCK: 'Simulated',
+    FILE: 'ID3 Tag'
   },
   aiPanel: {
       keySaved: 'API Key Verified & Saved',
@@ -216,6 +222,12 @@ export const en = {
   customText: 'Custom Text Content',
   textProperties: 'Typography & Layout',
   text3D: '3D Effect',
+  textSource: 'Display Source',
+  textSources: {
+      auto: 'Auto (Smart)',
+      custom: 'Custom Text Only',
+      song: 'Song Info Only'
+  },
   customTextPlaceholder: 'ENTER TEXT',
   showText: 'Show Overlay',
   pulseBeat: 'Pulse with Beat',
@@ -372,10 +384,10 @@ export const en = {
       smoothing: 'Temporal damping of spectral data.',
       fftSize: 'Frequency resolution.'
     },
-    projectInfoTitle: 'Project Info',
-    aboutDescription: 'A next-gen synesthetic experience. Designed for VJs, Streamers, and immersive environments.',
-    privacyTitle: 'Privacy',
-    privacyText: 'Audio is analyzed locally. Snapshots are sent to Gemini solely for identification.',
+    projectInfoTitle: 'Our Vision',
+    aboutDescription: 'Aura Flux is a real-time synesthesia engine that transmutes audio frequencies into generative 3D art. By fusing the mathematical precision of WebGL with the semantic understanding of Google Gemini, it creates a visual language that doesn\'t just react to sound—it understands it. Designed for VJs, streamers, and immersive installations.',
+    privacyTitle: 'Privacy Commitment',
+    privacyText: 'We believe in edge-first privacy. All spectral analysis and visual rendering happen locally on your device. Only when you actively trigger AI identification are short, encrypted audio fingerprints sent to Gemini for analysis, and never stored.',
     version: 'Release', coreTech: 'Tech', repository: 'Source', support: 'Support', reportBug: 'Bug'
   },
   onboarding: {

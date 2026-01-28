@@ -1,9 +1,9 @@
 /**
  * File: core/types/visuals.ts
- * Version: 1.7.36
+ * Version: 1.7.37
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Updated: 2025-03-07 20:00
  */
 
 import { Position, Region } from './common';
@@ -60,6 +60,7 @@ export interface VisualizerSettings {
   // Overlay Settings
   customText: string;
   showCustomText: boolean;
+  textSource: 'AUTO' | 'CUSTOM' | 'SONG'; // NEW: Content source control
   textPulse: boolean;
   customTextRotation: number;
   customTextSize: number;

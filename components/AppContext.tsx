@@ -1,13 +1,13 @@
 /**
  * File: components/AppContext.tsx
- * Version: 1.8.6
+ * Version: 1.9.2
  * Author: Aura Flux Team
- * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-07 11:30
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
+ * Updated: 2025-03-08 02:30
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
-import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioSourceType } from '../core/types';
+import { VisualizerMode, LyricsStyle, Language, VisualizerSettings, Region, AudioDevice, SongInfo, SmartPreset, AudioSourceType, Track, PlaybackMode } from '../core/types';
 import { useAudio } from '../core/hooks/useAudio';
 import { useLocalStorage } from '../core/hooks/useLocalStorage';
 import { useAppState } from '../core/hooks/useAppState';
@@ -23,7 +23,8 @@ const DEFAULT_SETTINGS: VisualizerSettings = {
   albumArtDim: 0.5,
   autoRotate: false, rotateInterval: 30, includedModes: Object.values(VisualizerMode), 
   cycleColors: false, colorInterval: 10, hideCursor: false, smoothing: 0.8, fftSize: 512, 
-  quality: 'high', monitor: false, wakeLock: false, customText: 'AURA', showCustomText: false,
+  quality: 'high', monitor: false, wakeLock: false, 
+  customText: 'AURA', showCustomText: false, textSource: 'AUTO',
   textPulse: true, customTextRotation: 0, customTextSize: 12, customTextFont: 'Inter, sans-serif',
   customTextOpacity: 0.35, customTextColor: '#ffffff', customTextPosition: 'mc', customTextCycleColor: false, customTextCycleInterval: 5,
   customText3D: false, 
@@ -87,15 +88,25 @@ interface AudioContextType {
   currentSong: SongInfo | null;
   setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
   
-  // File Playback
+  // File / Playlist
   fileStatus: 'idle' | 'loading' | 'ready' | 'error';
   fileName: string | null;
   isPlaying: boolean;
   duration: number;
   currentTime: number;
-  loadFile: (file: File) => Promise<void>;
+  playlist: Track[];
+  currentIndex: number;
+  playbackMode: PlaybackMode;
+  setPlaybackMode: React.Dispatch<React.SetStateAction<PlaybackMode>>;
+  importFiles: (files: FileList | File[]) => Promise<void>;
+  loadFile: (file: File) => Promise<void>; // Legacy wrapper
   togglePlayback: () => void;
   seekFile: (time: number) => void;
+  playNext: () => void;
+  playPrev: () => void;
+  playTrackByIndex: (index: number) => void;
+  removeFromPlaylist: (index: number) => void;
+  clearPlaylist: () => void;
   getAudioSlice: (durationSeconds?: number) => Promise<Blob | null>;
 }
 const AudioContext = createContext<AudioContextType | null>(null);
@@ -202,6 +213,7 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     ...p, 
     customText: DEFAULT_SETTINGS.customText, 
     showCustomText: DEFAULT_SETTINGS.showCustomText, 
+    textSource: DEFAULT_SETTINGS.textSource,
     textPulse: DEFAULT_SETTINGS.textPulse,
     customTextRotation: DEFAULT_SETTINGS.customTextRotation, 
     customTextSize: DEFAULT_SETTINGS.customTextSize, 

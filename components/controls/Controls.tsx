@@ -1,15 +1,14 @@
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.2.1
+ * Version: 1.4.2
  * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 14:30
+ * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: 2025-03-08 02:00
  */
 
 import React, { useState, useEffect } from 'react';
 import { ActionButton } from '../ui/controls/ActionButton';
 import { VisualSettingsPanel } from './panels/VisualSettingsPanel';
-import { AudioSettingsPanel } from './panels/AudioSettingsPanel';
 import { AiSettingsPanel } from './panels/AiSettingsPanel';
 import { SystemSettingsPanel } from './panels/SystemSettingsPanel';
 import { CustomTextSettingsPanel } from './panels/CustomTextSettingsPanel';
@@ -17,25 +16,27 @@ import { StudioPanel } from './panels/StudioPanel';
 import { HelpModal } from '../ui/HelpModal';
 import { useIdleTimer } from '../../core/hooks/useIdleTimer';
 import { useVisuals, useAI, useAudioContext, useUI } from '../AppContext';
-import { MiniControls } from './MiniControls';
+import { BottomBar } from './BottomBar';
 import { TooltipArea } from '../ui/controls/Tooltip';
+import { VISUALIZER_PRESETS } from '../../core/constants';
+import { VisualizerMode } from '../../core/types';
 
-type TabType = 'visual' | 'text' | 'audio' | 'ai' | 'studio' | 'system';
+// Updated Tab List
+type TabType = 'visual' | 'text' | 'studio' | 'ai' | 'system';
 
 const TAB_ICONS: Record<TabType, React.ReactNode> = {
   visual: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>,
   text: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>,
-  audio: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>,
+  studio: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14v-4" /></svg>,
   ai: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
-  studio: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>,
   system: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
 };
 
 const Controls: React.FC = () => {
-  const { settings, setSettings, randomizeSettings } = useVisuals();
+  const { settings, setSettings, randomizeSettings, mode, setMode } = useVisuals();
   const { showLyrics, setShowLyrics } = useAI();
-  const { toggleMicrophone } = useAudioContext();
-  const { t, language } = useUI();
+  const { toggleMicrophone, sourceType, togglePlayback, playNext, playPrev } = useAudioContext();
+  const { t } = useUI();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('visual');
@@ -63,33 +64,84 @@ const Controls: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
+      // Allow shortcuts even if focused on button, but not input/textarea
       if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') return;
       if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+      const modes = Object.keys(VISUALIZER_PRESETS) as VisualizerMode[];
+
       switch (e.code) {
-        case 'Space': e.preventDefault(); toggleMicrophone(settings.recognitionProvider); break;
+        case 'Space': 
+            e.preventDefault(); 
+            if (sourceType === 'FILE') {
+                togglePlayback();
+            } else {
+                toggleMicrophone(settings.recognitionProvider); 
+            }
+            break;
         case 'KeyF': toggleFullscreen(); break;
         case 'KeyR': randomizeSettings(); break;
         case 'KeyL': setShowLyrics(!showLyrics); break;
         case 'KeyH': setIsExpanded(prev => !prev); break;
-        case 'KeyG': setSettings({ ...settings, glow: !settings.glow }); break;
-        case 'KeyT': setSettings({ ...settings, trails: !settings.trails }); break;
+        case 'KeyG': setSettings(s => ({ ...s, glow: !s.glow })); break;
+        case 'KeyT': setSettings(s => ({ ...s, trails: !s.trails })); break;
+        case 'Escape': 
+            if (showHelpModal) setShowHelpModal(false);
+            else if (isExpanded) setIsExpanded(false); 
+            break;
+        
+        // Navigation & Adjustments
+        case 'ArrowRight':
+            if (sourceType === 'FILE' && e.shiftKey) {
+                // Shift+Right: Next Track (File Mode)
+                playNext();
+            } else {
+                // Default: Cycle Mode Next
+                const nextIdx = (modes.indexOf(mode) + 1) % modes.length;
+                setMode(modes[nextIdx]);
+            }
+            break;
+        case 'ArrowLeft':
+            if (sourceType === 'FILE' && e.shiftKey) {
+                // Shift+Left: Prev Track (File Mode)
+                playPrev();
+            } else {
+                // Default: Cycle Mode Prev
+                const prevIdx = (modes.indexOf(mode) - 1 + modes.length) % modes.length;
+                setMode(modes[prevIdx]);
+            }
+            break;
+        case 'ArrowUp':
+            e.preventDefault();
+            setSettings(s => ({ ...s, sensitivity: Math.min(4.0, Number((s.sensitivity + 0.1).toFixed(1))) }));
+            break;
+        case 'ArrowDown':
+            e.preventDefault();
+            setSettings(s => ({ ...s, sensitivity: Math.max(0.5, Number((s.sensitivity - 0.1).toFixed(1))) }));
+            break;
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings]);
+  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, isExpanded, showHelpModal]);
 
   return (
     <>
-      <MiniControls isExpanded={isExpanded} isIdle={isIdle} setIsExpanded={setIsExpanded} toggleFullscreen={toggleFullscreen} />
+      <BottomBar 
+        isExpanded={isExpanded} 
+        setIsExpanded={setIsExpanded} 
+        toggleFullscreen={toggleFullscreen} 
+        isIdle={isIdle} 
+      />
+      
       {isExpanded && (
-        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505]/85 backdrop-blur-xl border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col">
+        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505]/85 backdrop-blur-xl border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col animate-fade-in-up">
           <div className="max-h-[85dvh] md:max-h-[65vh] overflow-y-auto custom-scrollbar relative flex flex-col">
             
             <div className="sticky top-0 z-50 bg-[#0a0a0c] border-b border-white/10 px-4 md:px-6 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.9)]">
                 <div className="max-w-5xl mx-auto flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-2">
                     <div className="flex bg-white/[0.04] p-0.5 rounded-lg overflow-x-auto max-w-full scrollbar-hide gap-0.5 mask-fade-right touch-pan-x" role="tablist" aria-label="Settings Categories">
-                    {(['visual', 'text', 'audio', 'ai', 'studio', 'system'] as TabType[]).map(tab => (
+                    {(['visual', 'studio', 'text', 'ai', 'system'] as TabType[]).map(tab => (
                         <button 
                         key={tab} 
                         onClick={() => setActiveTab(tab)} 
@@ -117,9 +169,17 @@ const Controls: React.FC = () => {
                     <div className="flex items-center gap-1.5">
                         <div className="hidden md:flex gap-1.5">
                             <ActionButton onClick={() => setShowHelpModal(true)} hintText={t?.hints?.help || "Help & Info"} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.546-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} />
-                            <ActionButton onClick={randomizeSettings} hintText={`${t?.hints?.randomize || "Randomize"} [R]`} icon={<span className="font-bold text-xs">R</span>} />
+                            <ActionButton 
+                                onClick={randomizeSettings} 
+                                hintText={`${t?.hints?.randomize || "Randomize"} [R]`} 
+                                icon={
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    </svg>
+                                } 
+                            />
                         </div>
-                        <button onClick={() => setIsExpanded(false)} className="w-8 h-8 flex items-center justify-center bg-blue-600 rounded-lg text-white shadow-[0_4px_15px_rgba(37,99,235,0.3)] hover:bg-blue-500 transition-all duration-300 flex-shrink-0" aria-label={t?.hideOptions || "Collapse"}><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg></button>
+                        <button onClick={() => setIsExpanded(false)} className="w-8 h-8 flex items-center justify-center bg-blue-600 rounded-lg text-white shadow-[0_4px_15px_rgba(37,99,235,0.3)] hover:bg-blue-500 transition-all duration-300 flex-shrink-0" aria-label={t?.hideOptions || "Collapse"}><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" /></svg></button>
                     </div>
                     </div>
                 </div>
@@ -136,9 +196,8 @@ const Controls: React.FC = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 items-stretch">
                     {activeTab === 'visual' && <VisualSettingsPanel />}
                     {activeTab === 'text' && <CustomTextSettingsPanel />}
-                    {activeTab === 'audio' && <AudioSettingsPanel />}
-                    {activeTab === 'ai' && <AiSettingsPanel />}
                     {activeTab === 'studio' && <StudioPanel />}
+                    {activeTab === 'ai' && <AiSettingsPanel />}
                     {activeTab === 'system' && <SystemSettingsPanel />}
                   </div>
                 </div>

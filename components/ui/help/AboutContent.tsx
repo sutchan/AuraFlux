@@ -1,9 +1,9 @@
 /**
  * File: components/ui/help/AboutContent.tsx
- * Version: 1.6.30
+ * Version: 1.6.31
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-18 18:30
+ * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: 2025-03-08 01:00
  */
 
 import React from 'react';
@@ -15,7 +15,7 @@ interface AboutContentProps {
 }
 
 const TechBadge = ({ label, colorClass }: { label: string, colorClass: string }) => (
-  <div className={`px-3 py-1.5 rounded-md bg-white/[0.03] border border-white/5 text-[10px] font-bold ${colorClass} flex items-center justify-center shadow-sm`}>
+  <div className={`px-3 py-1.5 rounded-md bg-white/[0.05] border border-white/10 text-[10px] font-bold ${colorClass} flex items-center justify-center shadow-sm uppercase tracking-wider`}>
     {label}
   </div>
 );
@@ -23,23 +23,26 @@ const TechBadge = ({ label, colorClass }: { label: string, colorClass: string })
 export const AboutContent: React.FC<AboutContentProps> = ({ h, t }) => (
     <div className="space-y-6 animate-fade-in-up">
         {/* Project Description */}
-        <div className="bg-white/[0.03] p-5 rounded-2xl border border-white/5">
-           <h4 className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-             {h?.projectInfoTitle || "About Aura"}
+        <div className="bg-gradient-to-br from-blue-900/10 to-purple-900/10 p-5 rounded-2xl border border-white/10 shadow-inner">
+           <h4 className="text-[10px] font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+             {h?.projectInfoTitle || "Our Vision"}
            </h4>
-           <p className="text-sm text-white/60 leading-relaxed font-medium">
-             {h?.aboutDescription || "Immersive AI visualizer for Streamers, VJs, Ambient decor, and Focus sessions."}
+           <p className="text-sm text-white/70 leading-relaxed font-medium">
+             {h?.aboutDescription || "Aura Flux is a real-time synesthesia engine that transmutes audio frequencies into generative 3D art. By fusing the mathematical precision of WebGL with the semantic understanding of Google Gemini, it creates a visual language that doesn't just react to sound—it understands it."}
            </p>
         </div>
 
         {/* Tech Stack */}
         <div>
             <h4 className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-3 px-1">{h?.coreTech || "Core Technology"}</h4>
-            <div className="grid grid-cols-3 gap-2">
-                <TechBadge label="Gemini 3 Flash" colorClass="text-purple-300" />
-                <TechBadge label="React 19" colorClass="text-blue-300" />
-                <TechBadge label="WebGL / Three.js" colorClass="text-green-300" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <TechBadge label="Gemini 3 Intelligence" colorClass="text-purple-300" />
+                <TechBadge label="React 19 Core" colorClass="text-blue-300" />
+                <TechBadge label="WebGL Acceleration" colorClass="text-green-300" />
+                <TechBadge label="Web Audio API" colorClass="text-yellow-300" />
+                <TechBadge label="Offscreen Canvas" colorClass="text-orange-300" />
+                <TechBadge label="Edge Computing" colorClass="text-pink-300" />
             </div>
         </div>
 
@@ -47,9 +50,9 @@ export const AboutContent: React.FC<AboutContentProps> = ({ h, t }) => (
         <div className="bg-white/[0.03] p-5 rounded-2xl border border-white/5">
            <h4 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2 flex items-center gap-2">
              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-             {h?.privacyTitle || "Privacy"}
+             {h?.privacyTitle || "Privacy Commitment"}
            </h4>
-           <p className="text-xs text-white/50 leading-relaxed">{h?.privacyText || "Local analysis only."}</p>
+           <p className="text-xs text-white/50 leading-relaxed">{h?.privacyText || "We believe in edge-first privacy. All spectral analysis and visual rendering happen locally on your device. Only when you actively trigger AI identification are short, encrypted audio fingerprints sent to Gemini for analysis, and never stored."}</p>
         </div>
 
         {/* Links Grid */}
@@ -71,10 +74,10 @@ export const AboutContent: React.FC<AboutContentProps> = ({ h, t }) => (
         </div>
         
         <div className="text-center pt-6 border-t border-white/5">
-             <div className="inline-flex items-center gap-3 px-4 py-1 rounded-full bg-white/[0.03] border border-white/5">
-                <span className="text-[10px] font-mono text-white/40">{t?.version || "Build"} v{APP_VERSION}</span>
+             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-colors">
+                <span className="text-[10px] font-mono text-white/40 font-bold">{t?.version || "Build"} v{APP_VERSION}</span>
                 <span className="w-px h-3 bg-white/10"></span>
-                <span className="text-[10px] font-mono text-white/40">&copy; 2026 Auro Flux @Sut</span>
+                <span className="text-[10px] font-mono text-white/40 font-bold">&copy; {new Date().getFullYear()} Aura Flux @Sut</span>
              </div>
         </div>
     </div>

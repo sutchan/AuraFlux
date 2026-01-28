@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:00
+ * Updated: 2025-03-08 03:15
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const ar = {
   common: {
-    on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم', new: 'جديد', unknownTrack: 'مقطع غير معروف'
+    on: 'تشغيل', off: 'إيقاف', visible: 'مرئي', hidden: 'مخفي', active: 'نشط', muted: 'مكتوم', beta: 'بيتا', simple: 'بسيط', advanced: 'متقدم', new: 'جديد', unknownTrack: 'مقطع غير معروف',
+    menu: 'قائمة', queue: 'قائمة الانتظار', empty: 'القائمة فارغة', unknownArtist: 'فنان غير معروف',
+    clearAll: 'مسح الكل', confirmClear: 'مسح قائمة الانتظار؟'
   },
   tabs: {
     visual: 'بصري', text: 'نص', audio: 'صوت', ai: 'تحسس الذكاء الاصطناعي', system: 'النظام', studio: 'ستوديو'
@@ -35,6 +37,8 @@ export const ar = {
     save: 'حفظ الفيديو',
     discard: 'تجاهل',
     share: 'مشاركة',
+    videoStream: 'تدفق الفيديو',
+    audioStream: 'تدفق الصوت',
     stats: {
         time: 'الوقت',
         size: 'الحجم'
@@ -123,6 +127,12 @@ export const ar = {
     textSize: 'تغيير حجم طبقة النص المخصص.',
     textRotation: 'تدوير تراكب النص.',
     textPosition: 'نقطة الارتكاز للنص المخصص.',
+    textSource: 'مصدر العرض',
+    textSources: {
+        auto: 'تلقائي (ذكي)',
+        custom: 'نص مخصص فقط',
+        song: 'معلومات الأغنية فقط'
+    },
     lyricsPosition: 'نقطة الارتكاز لتراكب كلمات الأغاني بالذكاء الاصطناعي.',
     customTextPlaceholder: 'أدخل رسالتك.',
     textOpacity: 'مستوى شفافية النص المخصص.',

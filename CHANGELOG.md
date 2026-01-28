@@ -2,6 +2,16 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.8.6] - 2025-03-07
+
+### Fix
+*   **🎥 Studio:** Fixed an issue where non-English characters (Chinese, Japanese, etc.) in song titles were stripped from recorded video filenames. The filename generation logic now correctly supports Unicode while sanitizing only system-reserved characters.
+*   **🎥 Studio:** Resolved a UI flickering/layout jump issue in the recording preview modal caused by frequent re-renders during audio playback.
+
+### Refactor
+*   **🌍 i18n:** Conducted a comprehensive audit of all language files (10 languages) to ensure full coverage of recent features, including Studio Panel recording options and audio error messages.
+*   **📚 Specs:** Updated OpenSpec documentation to include file naming conventions and architecture versioning.
+
 ## [v1.8.5] - 2025-03-07
 
 ### Refactor

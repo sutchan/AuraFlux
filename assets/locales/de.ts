@@ -1,16 +1,18 @@
 /**
  * File: assets/locales/de.ts
- * Version: 1.8.5
+ * Version: 1.8.9
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 12:00
+ * Updated: 2025-03-08 03:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const de = {
   common: {
-    on: 'AN', off: 'AUS', visible: 'SICHTBAR', hidden: 'VERSTECKT', active: 'AKTIV', muted: 'STUMM', beta: 'BETA', simple: 'Einfach', advanced: 'Erweitert', new: 'NEU', unknownTrack: 'Unbekannter Titel'
+    on: 'AN', off: 'AUS', visible: 'SICHTBAR', hidden: 'VERSTECKT', active: 'AKTIV', muted: 'STUMM', beta: 'BETA', simple: 'Einfach', advanced: 'Erweitert', new: 'NEU', unknownTrack: 'Unbekannter Titel',
+    menu: 'MENÜ', queue: 'Warteschlange', empty: 'Liste Leer', unknownArtist: 'Unbekannter Künstler',
+    clearAll: 'Alles löschen', confirmClear: 'Warteschlange löschen?'
   },
   tabs: {
     visual: 'Visuell', text: 'Text', audio: 'Audio', ai: 'KI-Synästhesie', system: 'System', studio: 'Studio'
@@ -35,6 +37,8 @@ export const de = {
     save: 'Video speichern',
     discard: 'Verwerfen',
     share: 'Teilen',
+    videoStream: 'VIDEO-STREAM',
+    audioStream: 'AUDIO-STREAM',
     stats: {
         time: 'ZEIT',
         size: 'GRÖSSE'
@@ -124,6 +128,7 @@ export const de = {
     textSize: 'Benutzerdefinierte Textebene skalieren.',
     textRotation: 'Text-Overlay drehen.',
     textPosition: 'Ankerpunkt für den benutzerdefinierten Text.',
+    textSource: 'Anzeige-Quelle',
     lyricsPosition: 'Ankerpunkt für das KI-Songtext-Overlay.',
     customTextPlaceholder: 'Geben Sie Ihre Nachricht ein.',
     textOpacity: 'Transparenzgrad des benutzerdefinierten Textes.',
@@ -216,6 +221,12 @@ export const de = {
   customText: 'Benutzerdefinierter Textinhalt',
   textProperties: 'Typografie & Layout',
   text3D: '3D-Effekt',
+  textSource: 'Anzeige-Quelle',
+  textSources: {
+      auto: 'Auto (Smart)',
+      custom: 'Nur Benutzertext',
+      song: 'Nur Song-Info'
+  },
   customTextPlaceholder: 'TEXT EINGEBEN',
   showText: 'Overlay anzeigen',
   pulseBeat: 'Pulsieren im Takt',

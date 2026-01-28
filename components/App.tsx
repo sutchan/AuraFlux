@@ -1,16 +1,15 @@
 /**
  * File: components/App.tsx
- * Version: 1.8.0
+ * Version: 1.8.4
  * Author: Aura Flux Team
- * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-05 16:00
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
+ * Updated: 2025-03-07 23:55
  */
 
 import React, { useCallback, useState } from 'react';
 import VisualizerCanvas from './visualizers/VisualizerCanvas';
 import ThreeVisualizer from './visualizers/ThreeVisualizer';
 import Controls from './controls/Controls';
-import { PlayerControls } from './controls/PlayerControls';
 import SongOverlay from './ui/SongOverlay';
 import CustomTextOverlay from './ui/CustomTextOverlay';
 import LyricsOverlay from './ui/LyricsOverlay';
@@ -25,7 +24,7 @@ import { useMobileGestures } from '../core/hooks/useMobileGestures';
 
 const AppContent: React.FC = () => {
   const { settings, isThreeMode, mode, colorTheme } = useVisuals();
-  const { errorMessage, setErrorMessage, isSimulating, analyser, mediaStream, startDemoMode, currentSong, setCurrentSong, loadFile } = useAudioContext();
+  const { errorMessage, setErrorMessage, analyser, mediaStream, startDemoMode, currentSong, setCurrentSong, importFiles } = useAudioContext();
   const { hasStarted, isUnsupported, showOnboarding, language, setLanguage, handleOnboardingComplete, t, toggleFullscreen } = useUI();
   const { showLyrics, lyricsStyle, performIdentification } = useAI();
   const [isDragOver, setIsDragOver] = useState(false);
@@ -52,11 +51,12 @@ const AppContent: React.FC = () => {
   const onDrop = useCallback((e: React.DragEvent) => {
       e.preventDefault();
       setIsDragOver(false);
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('audio/')) {
-          loadFile(file);
+      
+      const files = Array.from(e.dataTransfer.files).filter((file: File) => file.type.startsWith('audio/'));
+      if (files.length > 0) {
+          importFiles(files);
       }
-  }, [loadFile]);
+  }, [importFiles]);
 
   if (showOnboarding) {
     return <OnboardingOverlay language={language} setLanguage={setLanguage} onComplete={handleOnboardingComplete} />;
@@ -84,7 +84,7 @@ const AppContent: React.FC = () => {
       {isDragOver && (
           <div className="absolute inset-0 z-[200] bg-blue-600/30 backdrop-blur-sm border-4 border-blue-400 border-dashed m-4 rounded-3xl flex items-center justify-center animate-pulse pointer-events-none">
               <span className="text-3xl font-black text-white uppercase tracking-widest drop-shadow-lg">
-                  Drop Audio File
+                  Drop Audio Files
               </span>
           </div>
       )}
@@ -100,7 +100,7 @@ const AppContent: React.FC = () => {
 
       {/* Overlays */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-          <CustomTextOverlay settings={settings} analyser={analyser} />
+          <CustomTextOverlay settings={settings} analyser={analyser} song={currentSong} />
           <LyricsOverlay settings={settings} song={currentSong} showLyrics={showLyrics} lyricsStyle={lyricsStyle} analyser={analyser} />
       </div>
 
@@ -117,7 +117,6 @@ const AppContent: React.FC = () => {
               </div>
             )}
             
-            <PlayerControls />
             <SongOverlay song={currentSong} showLyrics={showLyrics} language={language} onRetry={() => mediaStream && performIdentification(mediaStream)} onClose={() => setCurrentSong(null)} analyser={analyser} sensitivity={settings.sensitivity} />
             <Controls />
           </div>
