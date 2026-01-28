@@ -31,4 +31,4 @@
   - **清洗规则:** 仅移除操作系统保留字符 (`< > : " / \ | ? *`)，其余字符保留，以确保文件名的可读性和兼容性。
 
 ---
-*Aura Flux Interface - Version 1.8.6*
+*Aura Flux Interface - Version 1.8.8*

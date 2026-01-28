@@ -2,6 +2,15 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.8.8] - 2025-03-09
+
+### Refactor
+*   **🧠 AI:** Enhanced robustness of the JSON response parser in `aiService`. It now uses a case-insensitive regex to strip Markdown code blocks (e.g., ` ```JSON ` vs ` ```json `), reducing parsing errors from unpredictable LLM outputs.
+*   **🌍 i18n:** Performed a full integrity audit of all 10 language packs. Confirmed that recent additions like `studioPanel` recording options and `aiPanel` status messages are correctly translated and present in all locales (EN, ZH, TW, JA, ES, KO, DE, FR, RU, AR).
+
+### Documentation
+*   **📚 OpenSpec:** Synchronized all specification documents to v1.8.8, updating the Testing & Validation spec to include i18n integrity checks.
+
 ## [v1.8.6] - 2025-03-07
 
 ### Fix

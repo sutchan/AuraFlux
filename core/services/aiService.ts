@@ -1,10 +1,10 @@
 /**
  * File: core/services/aiService.ts
- * Version: 3.1.1
+ * Version: 3.1.2
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-08 21:00
- * Description: Increased timeout to 45s to accommodate search grounding latency.
+ * Updated: 2025-03-09 10:00
+ * Description: Increased timeout to 45s and hardened JSON response parsing.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -144,7 +144,8 @@ export const identifySongFromAudio = async (
       const response = await Promise.race([generatePromise, timeoutPromise]) as any;
 
       let rawText = response.text || "";
-      rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+      // Robust cleaning: Handle ```json, ```JSON, or just ```
+      rawText = rawText.replace(/```(?:json)?/gi, "").replace(/```/g, "").trim();
       
       let songInfo: SongInfo;
       try {
@@ -233,7 +234,7 @@ export const generateVisualConfigFromAudio = async (
             }
         });
         
-        const jsonStr = response.text?.replace(/```json/g, "").replace(/```/g, "").trim();
+        const jsonStr = response.text?.replace(/```(?:json)?/gi, "").replace(/```/g, "").trim();
         if (jsonStr) return JSON.parse(jsonStr);
         throw new Error("Empty response");
     } catch (e) {
