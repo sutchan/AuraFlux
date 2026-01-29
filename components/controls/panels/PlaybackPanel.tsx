@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/PlaybackPanel.tsx
- * Version: 1.2.3
+ * Version: 1.2.4
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: Optimized Playlist Scrolling with Height Constraints
+ * Updated: Optimized layout to prevent excessive height and ensure internal scrolling.
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -49,7 +50,7 @@ export const PlaybackPanel: React.FC = () => {
   }, [currentIndex]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-full">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
       {/* Card 1: Library Actions & Controls */}
       <BentoCard title={t?.tabs?.playback || "Library"}>
         <div className="flex flex-col h-full gap-4">
