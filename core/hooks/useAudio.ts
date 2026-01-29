@@ -1,9 +1,11 @@
+
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.6.1
+ * Version: 2.7.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 15:00
+ * Updated: 2025-03-12 12:00
+ * Changes: Added stereo support (analyserR) and ChannelSplitterNode logic.
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -26,7 +28,8 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
   // --- Common State ---
   const [sourceType, setSourceType] = useState<AudioSourceType>('MICROPHONE');
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
+  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null); // Left / Mono
+  const [analyserR, setAnalyserR] = useState<AnalyserNode | null>(null); // Right
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
 
@@ -49,7 +52,8 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
 
   // --- Refs ---
   const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null); // Left
+  const analyserRRef = useRef<AnalyserNode | null>(null); // Right
   
   // Mic Refs
   const streamRef = useRef<MediaStream | null>(null);
@@ -59,6 +63,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
   // File Refs
   const audioBufferRef = useRef<AudioBuffer | null>(null);
   const fileSourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
+  const splitterRef = useRef<ChannelSplitterNode | null>(null);
   const startTimeRef = useRef(0);
   const pausedAtRef = useRef(0);
   const rafRef = useRef(0);
@@ -114,6 +119,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       await audioContextRef.current.resume();
     }
 
+    // Init Left Analyser
     if (!analyserRef.current) {
       const node = audioContextRef.current.createAnalyser();
       node.fftSize = safeFftSize;
@@ -121,9 +127,20 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       analyserRef.current = node;
       setAnalyser(node);
     } else {
-        // Update existing analyser settings
         analyserRef.current.fftSize = safeFftSize;
         analyserRef.current.smoothingTimeConstant = safeSmoothing;
+    }
+
+    // Init Right Analyser
+    if (!analyserRRef.current) {
+      const node = audioContextRef.current.createAnalyser();
+      node.fftSize = safeFftSize;
+      node.smoothingTimeConstant = safeSmoothing;
+      analyserRRef.current = node;
+      setAnalyserR(node);
+    } else {
+        analyserRRef.current.fftSize = safeFftSize;
+        analyserRRef.current.smoothingTimeConstant = safeSmoothing;
     }
 
     return audioContextRef.current;
@@ -145,6 +162,10 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       try { fileSourceNodeRef.current.stop(); } catch(e) {}
       fileSourceNodeRef.current.disconnect();
       fileSourceNodeRef.current = null;
+    }
+    if (splitterRef.current) {
+      splitterRef.current.disconnect();
+      splitterRef.current = null;
     }
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     
@@ -182,13 +203,17 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
 
       const source = ctx.createMediaStreamSource(stream);
       
-      // CRITICAL FIX: Disconnect any previous destination connections (e.g. from File mode)
-      // to prevent microphone input from being routed to speakers (feedback loop).
+      // Cleanup previous connections
       if (analyserRef.current) {
-          try { analyserRef.current.disconnect(); } catch(e) { console.warn("Analyser disconnect error", e); }
+          try { analyserRef.current.disconnect(); } catch(e) {}
+      }
+      if (analyserRRef.current) {
+          try { analyserRRef.current.disconnect(); } catch(e) {}
       }
 
+      // Route Mic to both analysers (Mirroring Mono)
       source.connect(analyserRef.current!);
+      source.connect(analyserRRef.current!);
       
       setIsListening(true);
       updateAudioDevices();
@@ -304,23 +329,33 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
         try { fileSourceNodeRef.current.stop(); } catch(e){}
         fileSourceNodeRef.current.disconnect();
     }
+    if (splitterRef.current) {
+        splitterRef.current.disconnect();
+    }
 
     const source = ctx.createBufferSource();
     source.buffer = audioBufferRef.current;
     
-    // Connect source to analyser
-    source.connect(analyserRef.current!);
+    // Stereo Routing Logic
+    if (audioBufferRef.current.numberOfChannels >= 2) {
+        const splitter = ctx.createChannelSplitter(2);
+        source.connect(splitter);
+        // Route Left -> AnalyserL
+        splitter.connect(analyserRef.current!, 0);
+        // Route Right -> AnalyserR
+        splitter.connect(analyserRRef.current!, 1);
+        splitterRef.current = splitter;
+    } else {
+        // Mono File -> Mirror
+        source.connect(analyserRef.current!);
+        source.connect(analyserRRef.current!);
+    }
     
-    // Connect analyser to speakers (File Mode needs audio output)
-    try {
-        // In case it's already connected (redundant connect is safe, but disconnect first is cleaner if logic was different)
-        // Here we just ensure connection.
-        analyserRef.current!.connect(ctx.destination);
-    } catch(e) { console.warn("Output connect error", e); }
+    // Connect to destination for hearing
+    source.connect(ctx.destination);
 
     source.onended = () => {
        // Check if it ended naturally (approx duration match)
-       // We use a small tolerance because currentTime might be slightly off
        if (audioBufferRef.current && Math.abs(ctx.currentTime - startTimeRef.current - audioBufferRef.current.duration) < 0.5) {
            handleTrackEndRef.current();
        }
@@ -355,7 +390,6 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       // Stop current playback & Microphone
       setIsPending(true);
       
-      // Explicitly stop microphone stream if active
       if (streamRef.current) {
           streamRef.current.getTracks().forEach(track => track.stop());
           streamRef.current = null;
@@ -366,6 +400,10 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
           try { fileSourceNodeRef.current.stop(); } catch(e) {}
           fileSourceNodeRef.current.disconnect();
           fileSourceNodeRef.current = null;
+      }
+      if (splitterRef.current) {
+          splitterRef.current.disconnect();
+          splitterRef.current = null;
       }
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
@@ -401,18 +439,15 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
           const newList = [...prev];
           newList.splice(index, 1);
           
-          // Adjust index if we removed the playing track or one before it
           if (index < currentIndex) {
               setCurrentIndex(c => c - 1);
           } else if (index === currentIndex) {
-              // If we removed the current track, stop or play next
               if (newList.length === 0) {
                   stopAll();
                   setCurrentIndex(-1);
                   setCurrentSong(null);
                   setFileName(null);
               } else {
-                  // Play the track that moved into this slot (or the previous one if we were last)
                   const nextIdx = index < newList.length ? index : index - 1;
                   setTimeout(() => playTrackByIndex(nextIdx, newList), 50);
               }
@@ -423,7 +458,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
 
   const clearPlaylist = useCallback(() => {
       stopAll();
-      clearPlaylistDB(); // Clear DB
+      clearPlaylistDB(); 
       setPlaylist([]);
       setCurrentIndex(-1);
       setCurrentSong(null);
@@ -433,16 +468,13 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
 
   const playNext = useCallback(() => {
       if (playlist.length === 0) return;
-      
       let nextIndex = -1;
       if (playbackMode === 'shuffle') {
           nextIndex = Math.floor(Math.random() * playlist.length);
-          // Avoid repeating same song in shuffle if possible
           if (playlist.length > 1 && nextIndex === currentIndex) {
               nextIndex = (nextIndex + 1) % playlist.length;
           }
       } else {
-          // Repeat All or Repeat One (manual next always goes next)
           nextIndex = (currentIndex + 1) % playlist.length;
       }
       playTrackByIndex(nextIndex);
@@ -454,13 +486,11 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       playTrackByIndex(prevIndex);
   }, [playlist, currentIndex, playTrackByIndex]);
 
-  // Handle auto-advance
   const handleTrackEnd = useCallback(() => {
       setIsPlaying(false);
       pausedAtRef.current = 0;
       setCurrentTime(0);
 
-      // Auto Advance Logic
       if (playlist.length > 0) {
           if (playbackMode === 'repeat-one') {
               playTrackByIndex(currentIndex);
@@ -468,16 +498,12 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
               const nextIndex = Math.floor(Math.random() * playlist.length);
               playTrackByIndex(nextIndex);
           } else {
-              // Repeat All (default linear)
               const nextIndex = (currentIndex + 1) % playlist.length;
-              // If we wrapped around and user doesn't want endless, we could stop here.
-              // But 'repeat-all' implies endless loop usually.
               playTrackByIndex(nextIndex);
           }
       }
   }, [playlist, currentIndex, playbackMode, playTrackByIndex]);
 
-  // Update ref whenever handleTrackEnd changes (due to state/props changes)
   useEffect(() => {
       handleTrackEndRef.current = handleTrackEnd;
   }, [handleTrackEnd]);
@@ -497,7 +523,6 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       if (isPlaying) {
           pauseFile();
       } else {
-          // If resuming playback, ensure microphone is off
           if (streamRef.current) {
               streamRef.current.getTracks().forEach(track => track.stop());
               streamRef.current = null;
@@ -547,7 +572,6 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       await stopAll();
       const ctx = await ensureContext();
       const demo = createDemoAudioGraph(ctx, analyserRef.current!);
-      // Ensure analyzer connected to destination for Demo so user can hear it
       try { analyserRef.current!.connect(ctx.destination); } catch(e){}
       
       demo.start();
@@ -561,12 +585,16 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       analyser.smoothingTimeConstant = safeSmoothing;
       if (analyser.fftSize !== safeFftSize) analyser.fftSize = safeFftSize;
     }
-  }, [safeSmoothing, safeFftSize, analyser]);
+    if (analyserR) {
+        analyserR.smoothingTimeConstant = safeSmoothing;
+        if (analyserR.fftSize !== safeFftSize) analyserR.fftSize = safeFftSize;
+    }
+  }, [safeSmoothing, safeFftSize, analyser, analyserR]);
 
   return { 
       // Common
       sourceType, setSourceType,
-      audioContext, analyser, errorMessage, setErrorMessage, isPending,
+      audioContext, analyser, analyserR, errorMessage, setErrorMessage, isPending,
       
       // Mic
       isListening, isSimulating, mediaStream, audioDevices, 

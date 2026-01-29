@@ -1,10 +1,10 @@
 
 /**
  * File: core/services/aiService.ts
- * Version: 3.2.0
+ * Version: 3.2.1
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-10 16:30
+ * Updated: 2025-03-13 13:00
  * Description: Robustness update: Fallback for missing mood_en_keywords and localized visual config explanation.
  */
 
@@ -213,12 +213,14 @@ export const generateVisualConfigFromAudio = async (
 
     const systemInstruction = `
         You are a world-class VJ (Visual Jockey) and Creative Director. 
-        Your task is to analyze the provided audio segment and design the perfect visualizer configuration.
+        Your task is to analyze the provided audio segment and design the perfect visualizer configuration based solely on its sonic characteristics (genre, tempo, energy).
+        
+        CRITICAL RULE: **DO NOT** attempt to identify the specific song name, artist, or analyze the lyrics. Focus ONLY on the sound texture and rhythm.
         
         AVAILABLE MODES: [${validModes}]
         
         INSTRUCTIONS:
-        1. Analyze the audio for genre, tempo (BPM), energy level, and emotional atmosphere.
+        1. Analyze the audio for genre (e.g. Rock, EDM, Jazz), tempo (BPM), energy level, and emotional atmosphere.
         2. Select the single most appropriate 'mode' from the list above.
            - Use 'NEURAL_FLOW' or 'LIQUID' for organic, ambient, or complex textures.
            - Use 'KINETIC_WALL' or 'CUBE_FIELD' for high-energy, rhythmic, or industrial beats.
@@ -234,7 +236,7 @@ export const generateVisualConfigFromAudio = async (
         const client = new GoogleGenAI({ apiKey });
         const response = await client.models.generateContent({
             model: GEMINI_MODEL,
-            contents: [{ parts: [{ inlineData: { mimeType: 'audio/wav', data: base64Audio } }, { text: "Design visual experience." }] }],
+            contents: [{ parts: [{ inlineData: { mimeType: 'audio/wav', data: base64Audio } }, { text: "Design visual experience based on genre and mood." }] }],
             config: {
                 systemInstruction: systemInstruction,
                 responseMimeType: "application/json",

@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 4.0.0
+ * Version: 4.0.1
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 10:00
+ * Updated: 2025-03-13 12:30
  */
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -265,7 +266,7 @@ export const StudioPanel: React.FC = () => {
         {isCountingDown && <div className="absolute inset-0 z-20 bg-black/80 flex items-center justify-center backdrop-blur-sm rounded-2xl"><span className="text-6xl font-black text-white animate-ping">{countdownVal}</span></div>}
         
         {/* Card 1: Output Config */}
-        <BentoCard title="Video Configuration">
+        <BentoCard title={studio.videoConfig || "Video Configuration"}>
             <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-2">
                     <CustomSelect label={settingsLabels.resolution} value={resolution} onChange={(val) => setResolution(val === 'native' ? 'native' : Number(val))} 
@@ -292,7 +293,7 @@ export const StudioPanel: React.FC = () => {
         </BentoCard>
 
         {/* Card 2: Audio & Automation */}
-        <BentoCard title="Audio & Mix">
+        <BentoCard title={studio.audioMix || "Audio & Mix"}>
             <div className="space-y-4">
                 <Slider label={settingsLabels.recGain} value={recGain} min={0} max={2} step={0.1} onChange={setRecGain} hintText={hints.recGain} />
                 

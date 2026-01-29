@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 2.4.0
+ * Version: 2.4.1
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: UI Simplification - Removed manual File source selection (handled via Library).
+ * Updated: 2025-03-13 12:30
  */
 
 import React, { useRef, useState, useEffect } from 'react';
@@ -177,7 +177,7 @@ export const AudioSettingsPanel: React.FC = () => {
       </BentoCard>
 
       {/* Card 2: Analysis & AI Core */}
-      <BentoCard title="Analysis & AI Intelligence">
+      <BentoCard title={audioPanel.analysisAi || "Analysis & AI Intelligence"}>
         <div className="space-y-4">
           {/* Signal Tuning */}
           <Slider label={t?.sensitivity || "Sensitivity"} hintText={hints?.sensitivity} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v: number) => handleAudioSettingChange('sensitivity', v)} />
@@ -252,7 +252,7 @@ export const AudioSettingsPanel: React.FC = () => {
 
       {/* Card 3: Actions & Activation */}
       <BentoCard 
-        title="Smart Actions" 
+        title={audioPanel.smartActions || "Smart Actions"}
         className="flex flex-col"
         action={
             <TooltipArea text={hints?.resetAudio}>

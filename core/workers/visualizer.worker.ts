@@ -1,9 +1,10 @@
+
 /**
  * File: core/workers/visualizer.worker.ts
- * Version: 1.7.33
+ * Version: 1.8.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 12:00
+ * Updated: 2025-03-12 12:00
  *
  * This worker script is responsible for offloading 2D visualizer rendering
  * from the main thread using OffscreenCanvas.
@@ -23,6 +24,7 @@ let currentMode: VisualizerMode = VisualizerMode.PLASMA;
 let currentSettings: VisualizerSettings | null = null;
 let currentColors: string[] = ['#ffffff'];
 let lastFrameData: Uint8Array | null = null;
+let lastFrameDataR: Uint8Array | undefined = undefined; // Right Channel
 let rotation = 0;
 
 let renderers: Record<string, IVisualizerRenderer> = {};
@@ -52,16 +54,12 @@ const loop = () => {
 
   if (currentSettings.trails) {
     // Advanced Trails Logic:
-    // If we have an Album Art Background active, we need to clear to TRANSPARENT, not Black.
-    // 'destination-out' composites the new shape (rect) onto the existing content, 
-    // removing the destination (existing content) where they overlap based on alpha.
     if (currentSettings.albumArtBackground) {
         ctx.globalCompositeOperation = 'destination-out';
         ctx.fillStyle = `rgba(0, 0, 0, 0.15)`; // Remove 15% opacity per frame
         ctx.fillRect(0, 0, logicalW, logicalH);
         ctx.globalCompositeOperation = 'source-over'; // Reset
     } else {
-        // Standard Behavior: Overlay semi-transparent black to create fade-to-black trails
         ctx.fillStyle = `rgba(0, 0, 0, 0.15)`;
         ctx.fillRect(0, 0, logicalW, logicalH);
     }
@@ -71,6 +69,7 @@ const loop = () => {
 
   rotation += 0.005 * currentSettings.speed;
   const data = lastFrameData || new Uint8Array(0);
+  const dataR = lastFrameDataR;
   
   // Intelligent Noise Filtering in Worker
   if (data.length > 0) {
@@ -83,7 +82,7 @@ const loop = () => {
   if (renderer) {
     try {
       // Pass logical dimensions to renderer, not buffer dimensions
-      renderer.draw(ctx, data, logicalW, logicalH, currentColors, currentSettings, rotation, isBeat);
+      renderer.draw(ctx, data, logicalW, logicalH, currentColors, currentSettings, rotation, isBeat, dataR);
     } catch (e: any) {
       if (Math.random() < 0.01) console.error(`[Worker] Renderer ${currentMode} error:`, e.message);
     }
@@ -135,6 +134,7 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
       break;
     case 'FRAME':
       lastFrameData = msg.data;
+      lastFrameDataR = msg.dataR;
       break;
   }
 };

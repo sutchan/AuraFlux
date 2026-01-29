@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ja.ts
- * Version: 2.1.6
+ * Version: 2.1.7
  * Author: Sut
  */
 
@@ -36,7 +36,9 @@ export const ja = {
     shuffle: 'シャッフル',
     repeatAll: '全曲リピート',
     repeatOne: '1曲リピート',
-    mode: '再生モード'
+    mode: '再生モード',
+    nowPlaying: '再生中',
+    add: '追加'
   },
   tabs: {
     visual: 'ビジュアル', text: 'テキスト', input: 'オーディオ', audio: 'オーディオ', playback: 'ライブラリ', ai: 'AI 共感覚', system: 'システム', studio: 'スタジオ'
@@ -63,6 +65,8 @@ export const ja = {
     share: '共有',
     videoStream: 'ビデオストリーム',
     audioStream: 'オーディオストリーム',
+    videoConfig: 'ビデオ設定',
+    audioMix: 'オーディオ＆ミックス',
     stats: {
         time: '時間',
         size: 'サイズ'
@@ -127,6 +131,10 @@ export const ja = {
       geminiHint: '任意。空欄の場合はデフォルトの無料枠を使用します。',
       customHint: '必須。キーはブラウザ内にローカル保存されます。',
       notImplemented: '{provider} のAI処理は未実装です。AI機能を使用するにはGeminiを選択してください。'
+  },
+  textPanel: {
+      overlay: 'カスタムテキストオーバーレイ',
+      appearance: '外観設定'
   },
   visualizerMode: 'ビジュアルエンジン',
   styleTheme: 'カラーテーマ',
@@ -204,7 +212,8 @@ export const ja = {
     low: '低負荷', med: 'バランス', high: '最高品質'
   },
   visualPanel: {
-    effects: 'エフェクト', automation: '自動化', display: '表示'
+    effects: 'エフェクト', automation: '自動化', display: '表示',
+    atmosphere: '雰囲気', dynamics: 'ダイナミクス'
   },
   audioPanel: {
     info: '「感度」を調整して反応強度を変更します。FFTサイズを上げると詳細になります。',
@@ -213,7 +222,9 @@ export const ja = {
     upload: 'アップロード',
     aiDirector: 'AI 演出家',
     analyzing: '分析中...',
-    analyze: 'ビジュアル生成'
+    analyze: 'ビジュアル生成',
+    analysisAi: '分析と AI インテリジェンス',
+    smartActions: 'スマートアクション'
   },
   systemPanel: {
     interface: 'インターフェース', behavior: '動作設定', maintenance: 'メンテナンス', engine: 'エンジン', audio: 'オーディオ', ai: 'AI',
@@ -375,7 +386,7 @@ export const ja = {
     shortcutsTitle: 'キーボードショートカット',
     gesturesTitle: 'タッチジェスチャー',
     shortcutItems: {
-      toggleMic: 'マイク切替', fullscreen: '全画面', randomize: 'ランダム', lyrics: 'AI情報', hideUi: 'UI表示切替', glow: '発光', trails: '残像', changeMode: 'モード切替', changeTheme: 'テーマ切替'
+      toggleMic: 'マイク切替', fullscreen: '全画面', randomize: 'ランダム', lyrics: 'AI情報', hideUi: 'UI表示切替', glow: '発光', trails: '残像', changeMode: 'モード切替', changeTheme: 'テーマ切替', speed: '速度調整', tabs: 'タブ切替', help: 'ヘルプ'
     },
     gestureItems: {
         swipeMode: '左右スワイプ: モード切替', swipeSens: '上下スワイプ: 感度調整', longPress: '長押し: AI情報'

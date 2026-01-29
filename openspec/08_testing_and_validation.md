@@ -20,6 +20,7 @@
 - [x] 10种语言切换无乱码或缺失键值 (v1.8.10 Verified)。
 - [ ] 录制功能在 Safari/Chrome 上均可生成有效视频文件。
 - [ ] AI 导演功能在无 API Key 时的提示。
+- [x] 智能预设颜色索引在主题列表缩减后的兼容性 (v1.8.11 Verified)。
 
 ---
-*Aura Flux Testing & Validation - Version 1.8.10*
+*Aura Flux Testing & Validation - Version 1.8.11*

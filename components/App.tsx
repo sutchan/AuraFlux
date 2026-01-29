@@ -1,6 +1,7 @@
+
 /**
  * File: components/App.tsx
- * Version: 1.9.0
+ * Version: 1.9.2
  * Author: Aura Flux Team
  */
 
@@ -23,7 +24,7 @@ import { useIdleTimer } from '../core/hooks/useIdleTimer';
 
 const AppContent: React.FC = () => {
   const { settings, isThreeMode, mode, colorTheme } = useVisuals();
-  const { errorMessage, setErrorMessage, analyser, mediaStream, startDemoMode, currentSong, setCurrentSong, importFiles } = useAudioContext();
+  const { errorMessage, setErrorMessage, analyser, analyserR, mediaStream, startDemoMode, currentSong, setCurrentSong, importFiles } = useAudioContext();
   const { hasStarted, isUnsupported, showOnboarding, language, setLanguage, handleOnboardingComplete, t, toggleFullscreen } = useUI();
   const { showLyrics, lyricsStyle, performIdentification } = useAI();
   const [isDragOver, setIsDragOver] = useState(false);
@@ -38,7 +39,9 @@ const AppContent: React.FC = () => {
 
   const handleDoubleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    if (target.tagName === 'BUTTON' || target.tagName === 'INPUT' || target.closest('button')) return;
+    // Only allow fullscreen if clicking on the visualizer layer directly
+    // This prevents double-clicks on UI elements (which are in z-20) from triggering it
+    if (!target.closest('[data-visualizer-layer]')) return;
     
     if (settings.doubleClickFullscreen) {
       toggleFullscreen();
@@ -112,11 +115,15 @@ const AppContent: React.FC = () => {
       )}
 
       {/* Visualization Layer */}
-      <div className={`absolute inset-0 z-1 ${settings.hideCursor ? 'cursor-none' : ''}`} style={settings.mirrorDisplay ? { transform: 'scaleX(-1)' } : undefined}>
+      <div 
+        data-visualizer-layer="true"
+        className={`absolute inset-0 z-1 ${settings.hideCursor ? 'cursor-none' : ''}`} 
+        style={settings.mirrorDisplay ? { transform: 'scaleX(-1)' } : undefined}
+      >
         {isThreeMode ? (
           <ThreeVisualizer analyser={analyser} mode={mode} colors={colorTheme} settings={settings} />
         ) : (
-          <VisualizerCanvas analyser={analyser} mode={mode} colors={colorTheme} settings={settings} />
+          <VisualizerCanvas analyser={analyser} analyserR={analyserR} mode={mode} colors={colorTheme} settings={settings} />
         )}
       </div>
 

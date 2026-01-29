@@ -1,7 +1,7 @@
 
 /**
  * File: core/types/visuals.ts
- * Version: 1.7.40
+ * Version: 1.8.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  * Updated: 2025-03-12 10:00
@@ -106,6 +106,7 @@ export interface SmartPreset {
     smoothing: number;
     fftSize?: number;
     includedModes?: VisualizerMode[]; 
+    autoRotate?: boolean;
   };
 }
 
@@ -122,7 +123,8 @@ export interface IVisualizerRenderer {
     colors: string[], 
     settings: VisualizerSettings,
     rotation: number, 
-    beat: boolean
+    beat: boolean,
+    dataR?: Uint8Array // Optional Right Channel Data for Stereo
   ): void;
   cleanup?(): void;
 }
@@ -131,5 +133,5 @@ export interface IVisualizerRenderer {
 export type WorkerMessage = 
   | { type: 'INIT'; canvas: OffscreenCanvas; width: number; height: number; devicePixelRatio: number }
   | { type: 'RESIZE'; width: number; height: number; devicePixelRatio: number }
-  | { type: 'FRAME'; data: Uint8Array }
+  | { type: 'FRAME'; data: Uint8Array; dataR?: Uint8Array }
   | { type: 'CONFIG'; mode: VisualizerMode; settings: VisualizerSettings; colors: string[] };

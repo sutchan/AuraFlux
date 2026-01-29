@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 2.0.0
+ * Version: 2.0.3
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 10:00
+ * Updated: 2025-03-13 12:45
  */
 
 import React from 'react';
@@ -34,8 +35,7 @@ export const VisualSettingsPanel: React.FC = () => {
   const modes = t?.modes || {};
   const qualities = t?.qualities || {};
   const presets = t?.presets || {};
-  const visualPanel = t?.visualPanel || {};
-
+  
   const isAdvanced = settings.uiMode === 'advanced';
 
   const handleVisualSettingChange = (key: keyof typeof settings, value: any) => {
@@ -43,153 +43,144 @@ export const VisualSettingsPanel: React.FC = () => {
     setActivePreset('');
   };
 
-  const handleToggleModeInclusion = (mode: VisualizerMode) => {
-      setSettings(prev => {
-          const currentList = prev.includedModes || [];
-          const exists = currentList.includes(mode);
-          let newList;
-          if (exists) {
-              newList = currentList.filter(m => m !== mode);
-          } else {
-              newList = [...currentList, mode];
+  const toggleIncludeMode = (m: VisualizerMode) => {
+      const current = settings.includedModes || Object.values(VisualizerMode);
+      if (current.includes(m)) {
+          // Don't allow empty list
+          if (current.length > 1) {
+              handleVisualSettingChange('includedModes', current.filter(x => x !== m));
           }
-          if (activePreset === 'all_modes') setActivePreset('');
-          return { ...prev, includedModes: newList };
-      });
-  };
-
-  const isModeIncluded = (mode: VisualizerMode) => {
-      return (settings.includedModes || []).includes(mode);
+      } else {
+          handleVisualSettingChange('includedModes', [...current, m]);
+      }
   };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
-      {/* Card 1: Visual Modes Selection */}
-      <BentoCard title={t?.visualizerMode || "Visualizer Mode"} className="row-span-1 md:row-span-2 lg:row-span-1">
-        <div className="grid grid-cols-2 gap-2 pb-2">
-            {Object.keys(VISUALIZER_PRESETS).map(m => {
-                const mode = m as VisualizerMode;
-                return (
-                <VisualizerPreview
-                    key={mode}
-                    mode={mode}
-                    name={modes[mode] || mode}
-                    isActive={currentMode === mode}
-                    isIncluded={isModeIncluded(mode)}
-                    onClick={() => setMode(mode)}
-                    onToggleInclude={() => handleToggleModeInclusion(mode)}
-                />
-                );
-            })}
-        </div>
-      </BentoCard>
-      
-      {/* Card 2: Atmosphere (Quality, Presets, Themes) */}
-      <BentoCard title="Atmosphere" className="space-y-4">
-        {isAdvanced && (
-            <div className="space-y-1">
-                <SegmentedControl 
-                    label={t?.quality || "Quality"}
-                    value={settings.quality}
-                    options={(['low', 'med', 'high'] as const).map(q => ({ value: q, label: qualities[q] || q }))}
-                    onChange={(val) => setSettings(prev => ({...prev, quality: val}))}
-                    hintText={hints?.quality}
-                />
-            </div>
-        )}
-
-        <div className="space-y-1">
-            <CustomSelect 
-                label={presets.title || 'Smart Presets'}
-                value={activePreset}
-                hintText={presets.hint || 'Apply a curated aesthetic'}
-                options={[
-                    { value: '', label: activePreset ? (presets.custom || 'Custom / Modified') : (presets.select || 'Select a mood...') },
-                    { value: 'all_modes', label: `⚙️ ${presets.all_modes || 'All Modes'}` },
-                    ...Object.keys(SMART_PRESETS).map(key => ({
-                    value: key,
-                    label: presets[key] || SMART_PRESETS[key].nameKey,
-                    }))
-                ]}
-                onChange={(val) => {
-                    if (val === 'all_modes') {
-                    setSettings(prev => ({...prev, includedModes: Object.values(VisualizerMode)}));
-                    setActivePreset('all_modes');
-                    } else if (val && SMART_PRESETS[val]) {
-                    applyPreset(SMART_PRESETS[val]);
-                    } else {
-                    setActivePreset('');
-                    }
-                }}
-            />
-        </div>
-
-        <div>
-            <span className="text-xs font-black uppercase text-white/50 tracking-widest block ms-1 mb-2 flex-shrink-0">{t?.styleTheme || "Visual Theme"}</span>
-            <div className="grid grid-cols-6 gap-2 p-1">
-                {COLOR_THEMES.map((theme, i) => (
-                <button key={i} onClick={() => setColorTheme(theme)} aria-label={`Theme ${i+1}`} className={`aspect-square rounded-full flex-shrink-0 transition-all duration-300 ${JSON.stringify(colorTheme) === JSON.stringify(theme) ? 'ring-2 ring-white/80 scale-110 shadow-[0_0_10px_rgba(255,255,255,0.25)]' : 'opacity-60 hover:opacity-100'}`} style={{background: `linear-gradient(135deg, ${theme[0]}, ${theme[1]})` }} />
+      {/* Card 1: Presets & Styles */}
+      <BentoCard title={presets.title || "Smart Presets"}>
+        <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-2">
+                {Object.values(SMART_PRESETS).map(preset => (
+                    <button
+                        key={preset.nameKey}
+                        onClick={() => applyPreset(preset)}
+                        className={`py-3 px-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border ${activePreset === preset.nameKey ? 'bg-white text-black border-white shadow-lg scale-105' : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10 hover:text-white'}`}
+                    >
+                        {presets[preset.nameKey] || preset.nameKey}
+                    </button>
                 ))}
             </div>
+            
+            <div className="pt-2 border-t border-white/5 space-y-2">
+                <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{t?.styleTheme || "Color Theme"}</span>
+                    <SettingsToggle 
+                        label={t?.cycleColors || "Cycle"} 
+                        value={settings.cycleColors} 
+                        onChange={() => handleVisualSettingChange('cycleColors', !settings.cycleColors)} 
+                        variant="clean"
+                        hintText={hints?.cycleColors}
+                    />
+                </div>
+                {!settings.cycleColors && (
+                    <div className="grid grid-cols-6 gap-2 p-1">
+                        {COLOR_THEMES.map((theme, idx) => {
+                            const isActive = JSON.stringify(colorTheme) === JSON.stringify(theme);
+                            return (
+                                <button 
+                                    key={idx}
+                                    onClick={() => setColorTheme(theme)}
+                                    className={`aspect-square rounded-full transition-all duration-300 relative overflow-hidden ${isActive ? 'ring-2 ring-white scale-110 shadow-lg' : 'opacity-60 hover:opacity-100 hover:scale-105'}`}
+                                    aria-label={`Theme ${idx + 1}`}
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-br" style={{ backgroundImage: `linear-gradient(to bottom right, ${theme[0]}, ${theme[1]}, ${theme[2] || theme[0]})` }} />
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
         </div>
       </BentoCard>
-      
-      {/* Card 3: Dynamics (Tuning & Automation) */}
+
+      {/* Card 2: Visual Engine */}
       <BentoCard 
-        title="Dynamics" 
-        className="flex flex-col"
+        title={t?.visualizerMode || "Visual Engine"} 
+        action={
+            <div className="flex items-center gap-2">
+                <span className="text-[9px] font-mono text-white/30 uppercase">{settings.autoRotate ? (t?.common?.active || "ACTIVE") : (t?.common?.off || "OFF")}</span>
+                <SettingsToggle 
+                    label={t?.autoRotate || "Auto-Cycle"} 
+                    value={settings.autoRotate} 
+                    onChange={() => handleVisualSettingChange('autoRotate', !settings.autoRotate)} 
+                    variant="clean"
+                    hintText={hints?.autoRotate}
+                />
+            </div>
+        }
+      >
+        <div className="grid grid-cols-2 gap-2 pb-2">
+            {Object.values(VisualizerMode).map((mode) => (
+                <VisualizerPreview 
+                    key={mode} 
+                    mode={mode} 
+                    name={modes[mode] || mode} 
+                    isActive={currentMode === mode}
+                    isIncluded={settings.includedModes ? settings.includedModes.includes(mode) : true}
+                    onClick={() => setMode(mode)}
+                    onToggleInclude={() => toggleIncludeMode(mode)}
+                />
+            ))}
+        </div>
+      </BentoCard>
+
+      {/* Card 3: Tuning & Dynamics */}
+      <BentoCard 
+        title={t?.settings || "Tuning"}
         action={
             <TooltipArea text={hints?.resetVisual}>
-                <button onClick={resetVisualSettings} className="p-1 text-white/30 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                </button>
+              <button onClick={resetVisualSettings} className="p-1 text-white/30 hover:text-white transition-colors">
+                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+              </button>
             </TooltipArea>
         }
       >
-        <div className="space-y-4">
-          <div className="space-y-4">
-            <Slider label={t?.speed || "Speed"} hintText={hints?.speed} value={settings.speed} min={0.1} max={3.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('speed', v)} />
-            <Slider label={t?.sensitivity || "Sensitivity"} hintText={hints?.sensitivity} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('sensitivity', v)} />
-          </div>
-          
-          {isAdvanced && (
-              <>
-                  <div className="space-y-2 pt-2 border-t border-white/5 animate-fade-in-up">
-                      <span className="text-[10px] font-black uppercase text-white/30 tracking-widest block mb-1">{visualPanel.effects || "Effects"}</span>
-                      <div className="grid grid-cols-2 gap-2">
-                          <SettingsToggle label={t?.glow || "Glow"} value={settings.glow} onChange={() => handleVisualSettingChange('glow', !settings.glow)} hintText={`${hints?.glow || "Glow"} [G]`} />
-                          <SettingsToggle label={t?.trails || "Trails"} value={settings.trails} onChange={() => handleVisualSettingChange('trails', !settings.trails)} hintText={`${hints?.trails || "Trails"} [T]`} />
-                      </div>
-                  </div>
-                  <div className="space-y-2 pt-2 border-t border-white/5 animate-fade-in-up">
-                    <span className="text-[10px] font-black uppercase text-white/30 tracking-widest block mb-1">{visualPanel.automation || "Automation"}</span>
-                    <SettingsToggle label={t?.autoRotate || "Auto Rotate"} value={settings.autoRotate} onChange={() => handleVisualSettingChange('autoRotate', !settings.autoRotate)} hintText={hints?.autoRotate}>
-                        <div className="pt-1 px-1">
-                            <Slider 
-                                label={t?.rotateInterval || "Interval"} 
-                                value={settings.rotateInterval} 
-                                min={10} max={120} step={5} 
-                                unit="s" 
-                                hintText={hints?.rotateInterval}
-                                onChange={(v: number) => handleVisualSettingChange('rotateInterval', v)} 
-                            />
-                        </div>
-                    </SettingsToggle>
-                    <SettingsToggle label={t?.cycleColors || "Cycle Colors"} value={settings.cycleColors} onChange={() => handleVisualSettingChange('cycleColors', !settings.cycleColors)} hintText={hints?.cycleColors}>
-                        <div className="pt-1 px-1">
-                            <Slider 
-                                label={t?.colorInterval || "Interval"} 
-                                value={settings.colorInterval} 
-                                min={5} max={60} step={5} 
-                                unit="s" 
-                                hintText={hints?.colorInterval}
-                                onChange={(v: number) => handleVisualSettingChange('colorInterval', v)} 
-                            />
-                        </div>
-                    </SettingsToggle>
-                  </div>
-              </>
-          )}
+        <div className="space-y-5">
+            <div className="space-y-4">
+                <Slider label={t?.speed || "Speed"} hintText={hints?.speed} value={settings.speed} min={0.1} max={3.0} step={0.1} onChange={(v: number) => handleVisualSettingChange('speed', v)} />
+                
+                {isAdvanced && (
+                    <div className="grid grid-cols-2 gap-3">
+                        <SettingsToggle label={t?.glow || "Glow"} value={settings.glow} onChange={() => handleVisualSettingChange('glow', !settings.glow)} hintText={hints?.glow} />
+                        <SettingsToggle label={t?.trails || "Trails"} value={settings.trails} onChange={() => handleVisualSettingChange('trails', !settings.trails)} hintText={hints?.trails} />
+                    </div>
+                )}
+            </div>
+
+            <div className="pt-2 border-t border-white/5 space-y-4">
+                <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{t?.visualPanel?.display || "Display"}</span>
+                </div>
+                
+                {isAdvanced ? (
+                    <>
+                        <SegmentedControl 
+                            label={t?.quality || "Quality"}
+                            value={settings.quality}
+                            options={[
+                                { value: 'low', label: qualities.low || 'Low' },
+                                { value: 'med', label: qualities.med || 'Med' },
+                                { value: 'high', label: qualities.high || 'High' }
+                            ]}
+                            onChange={(val) => handleVisualSettingChange('quality', val)}
+                            hintText={hints?.quality}
+                        />
+                    </>
+                ) : (
+                    <div className="text-center text-xs text-white/20 py-2 font-mono uppercase tracking-widest">{t?.common?.advanced || "Advanced Mode Required"}</div>
+                )}
+            </div>
         </div>
       </BentoCard>
     </div>

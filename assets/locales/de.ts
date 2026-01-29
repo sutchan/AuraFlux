@@ -1,14 +1,13 @@
+
 /**
  * File: assets/locales/de.ts
- * Version: 2.2.1
+ * Version: 2.2.2
  * Author: Sut
- * Updated: 2025-03-11 14:00
  */
 
-import { en } from './en';
+import { VisualizerMode, LyricsStyle } from '../../core/types';
 
 export const de = {
-  ...en,
   common: {
     on: 'EIN', off: 'AUS', visible: 'SICHTBAR', hidden: 'VERSTECKT', active: 'AKTIV', muted: 'STUMM', beta: 'BETA', simple: 'EINFACH', advanced: 'ERWEITERT', new: 'NEU', unknownTrack: 'Unbekannter Titel',
     menu: 'MENÜ', queue: 'Warteschlange', empty: 'Leer', unknownArtist: 'Unbekannter Künstler',
@@ -16,62 +15,103 @@ export const de = {
     dropFiles: 'Audiodateien hier ablegen',
     themeLight: 'Heller Modus', themeDark: 'Dunkler Modus'
   },
+  toasts: {
+    canvasNotFound: 'Leinwand nicht gefunden.',
+    audioNotReady: 'Audioquelle nicht bereit.',
+    noVideoFormat: 'Kein unterstütztes Videoformat.',
+    recInitFail: 'Aufnahmeinitialisierung fehlgeschlagen.',
+    processing: 'Verarbeitung...',
+    reviewReady: 'Bereit zur Vorschau!',
+    exportFail: 'Export fehlgeschlagen.',
+    recStart: 'Aufnahme gestartet!',
+    shareFail: 'Teilen nicht unterstützt.',
+    aiDirectorReq: 'Gemini API Key für KI-Regisseur erforderlich.',
+    aiFail: 'KI-Analyse fehlgeschlagen.'
+  },
   player: {
-    ...en.player,
-    mode: 'Wiedergabemodus'
+    play: 'Abspielen', pause: 'Pause', previous: 'Vorheriges', next: 'Nächstes', shuffle: 'Zufall', repeatAll: 'Alle wiederholen', repeatOne: 'Eins wiederholen', mode: 'Wiedergabemodus',
+    nowPlaying: 'Läuft gerade',
+    add: 'HINZUFÜGEN'
   },
   tabs: {
     visual: 'Visuals', text: 'Text', input: 'Audio', audio: 'Audio', playback: 'Bibliothek', ai: 'KI', system: 'System', studio: 'Studio'
   },
-  welcomeTitle: 'Aura Flux | Der Klang des Lichts',
-  welcomeText: 'Verwandeln Sie jede Schwingung in ein generatives Meisterwerk. Angetrieben von Gemini AI, definiert Aura Flux das sensorische Erlebnis neu.',
-  startExperience: 'Erlebnis starten',
-  errors: {
-    title: 'Audio-Fehler',
-    accessDenied: 'Zugriff verweigert.',
-    noDevice: 'Kein Gerät gefunden.',
-    deviceBusy: 'Gerät beschäftigt.',
-    general: 'Zugriffsfehler.',
-    tryDemo: 'Demo-Modus'
-  },
-  systemPanel: {
-    interface: 'Oberfläche', behavior: 'Verhalten', maintenance: 'Wartung', engine: 'Engine', audio: 'Audio', ai: 'KI',
-    lightMode: 'Heller Modus', darkMode: 'Dunkler Modus'
-  },
-  showFps: 'FPS anzeigen',
-  showTooltips: 'Tooltips anzeigen',
-  doubleClickFullscreen: 'Doppelklick Vollbild',
-  autoHideUi: 'UI autom. ausblenden',
-  mirrorDisplay: 'Anzeige spiegeln',
-  hideCursor: 'Cursor ausblenden',
-  wakeLock: 'Bildschirm wachhalten',
-  language: 'Sprache',
-  localFont: 'Lokale Schriftart',
-  enterLocalFont: 'Schriftartname (z.B. Arial)',
-  aiProviders: {
-    ...(en as any).aiProviders,
-    MOCK: 'Simuliert',
-    FILE: 'ID3-Tag'
-  },
   studioPanel: {
-    ...en.studioPanel,
     title: 'Aufnahmestudio',
+    info: 'Erfassen Sie High-Fidelity-Clips Ihrer Visualisierung. Die Aufnahme erfasst sowohl die Leinwand als auch die Systemaudioausgabe.',
     start: 'Aufnahme starten',
     stop: 'Aufnahme stoppen',
     recording: 'AUFNAHME LÄUFT',
     processing: 'Verarbeitung...',
     ready: 'Bereit',
+    format: 'Format',
+    quality: '8 Mbps (1080p)',
+    autoStop: 'Auto-Stopp',
+    sourceMic: 'Quelle: Mikrofon',
+    sourceInt: 'Quelle: Internes Audio',
+    arming: 'Warten auf Signal...',
+    cancel: 'Abbrechen',
+    stopping: 'Ausblenden...',
+    previewTitle: 'Vorschau',
     save: 'Video speichern',
     discard: 'Verwerfen',
     share: 'Teilen',
+    videoStream: 'Videostream',
+    audioStream: 'Audiostream',
+    videoConfig: 'Video-Konfiguration',
+    audioMix: 'Audio & Mix',
+    stats: {
+        time: 'ZEIT',
+        size: 'GRÖSSE'
+    },
     settings: {
-        ...(en.studioPanel.settings as any),
         resolution: 'Auflösung',
+        aspectRatio: 'Seitenverhältnis',
         fps: 'Bildrate',
         bitrate: 'Bitrate',
+        codec: 'Codec',
+        resNative: 'Fenster (Nativ)',
+        arNative: 'Fenster (Nativ)',
+        bpsLow: 'Niedrig (4 Mbps)',
+        bpsStd: 'Standard (8 Mbps)',
+        bpsHigh: 'Hoch (12 Mbps)',
+        bpsUltra: 'Ultra (25 Mbps)',
+        syncStart: 'Sync-Start',
+        countdown: 'Countdown',
+        duration: 'Dauer',
+        unlimited: 'Unbegrenzt',
+        sec15: '15 Sek (Story)',
+        sec30: '30 Sek',
+        sec60: '60 Sek',
         recGain: 'Aufnahmepegel',
-        fade: 'Ein-/Ausblenden'
+        fade: 'Überblendung',
+        fadeOff: 'Aus',
+        fade1s: '1 Sek',
+        fade2s: '2 Sek'
+    },
+    formats: {
+        vp9: 'WebM (VP9) - Hohe Qualität',
+        vp8: 'WebM (VP8) - Kompatibel',
+        mp4_h264: 'MP4 (H.264) - Sozial',
+        mp4_generic: 'MP4 - Generisch'
+    },
+    hints: {
+        syncStart: 'Wartet auf Audiosignal oder Play-Taste vor Start.',
+        countdown: 'Fügt 3 Sekunden Verzögerung vor Aufnahme hinzu.',
+        duration: 'Stoppt die Aufnahme automatisch nach fester Zeit.',
+        recGain: 'Passt die Lautstärke des Videos an, ohne die Wiedergabe zu ändern.',
+        fade: 'Wendet Fade-In beim Start und Fade-Out beim Stopp an.'
     }
+  },
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: 'Simuliert',
+    FILE: 'ID3-Tag'
   },
   aiPanel: {
       keySaved: 'API-Schlüssel gespeichert',
@@ -84,6 +124,10 @@ export const de = {
       geminiHint: 'Optional. Verwendet Standardquote falls leer.',
       customHint: 'Erforderlich. Wird lokal gespeichert.',
       notImplemented: 'KI für {provider} noch nicht verfügbar.'
+  },
+  textPanel: {
+      overlay: 'Text-Overlay',
+      appearance: 'Aussehen'
   },
   config: {
     title: 'Cloud & Daten',
@@ -103,6 +147,258 @@ export const de = {
     copied: 'Kopiert!',
     limitReached: 'Maximal 5 Presets erlaubt.'
   },
+  showFps: 'FPS anzeigen',
+  showTooltips: 'Tooltips anzeigen',
+  doubleClickFullscreen: 'Doppelklick Vollbild',
+  autoHideUi: 'UI autom. ausblenden',
+  mirrorDisplay: 'Anzeige spiegeln',
+  showCustomText: 'Text anzeigen',
+  customTextCycleColor: 'Farbzyklus',
+  uiModeSimple: 'Einfach',
+  uiModeAdvanced: 'Erweitert',
+  lyricsPosition: 'Textposition',
+  lyricsFont: 'Schriftart',
+  lyricsFontSize: 'Größe',
+  recognitionSource: 'KI-Quelle',
+  exportConfig: 'Export',
+  importConfig: 'Import',
+  savePreset: 'Preset speichern',
+  loadPreset: 'Preset laden',
+  copyConfig: 'Config kopieren',
+  wakeLock: 'Bildschirm wachhalten',
+  includeInAutoRotate: 'In Rotation aufnehmen',
+  excludeFromAutoRotate: 'Aus Rotation ausschließen',
+  albumArtBackground: 'Album-Cover Hintergrund',
+  overlayCover: 'Cover-Overlay',
+  lightMode: 'Heller Modus',
+  localFont: 'Lokale Schrift',
+  enterLocalFont: 'Schriftname (z.B. Arial)',
+  
+  hints: {
+    mode: 'Wählen Sie die mathematische Engine zur Generierung der Visuals.',
+    theme: 'Wenden Sie eine kuratierte Farbpalette an.',
+    speed: 'Passt die Zeitskala an. Niedrige Werte sind hypnotisch, hohe energisch.',
+    glow: 'Aktiviert Nachleuchten. Deaktivieren für bessere Leistung.',
+    trails: 'Steuert die Pixelpersistenz. Hohe Werte erzeugen flüssige Bewegung.',
+    sensitivity: 'Verstärkt die visuelle Reaktion auf Audio.',
+    smoothing: 'Zeitliche Dämpfung. Hohe Werte wirken flüssig, niedrige zuckend.',
+    fftSize: 'Spektrale Auflösung. 4096 bietet feine Details, verbraucht aber mehr CPU.',
+    lyrics: 'Aktiviert KI-gestützte Songerkennung und synästhetische Beschreibung.',
+    lyricsStyle: 'Passt die visuelle Darstellung der Metadaten an.',
+    region: 'Richtet die KI-Suche auf einen bestimmten Musikmarkt aus.',
+    autoRotate: 'Wechselt automatisch durch verschiedene visuelle Engines.',
+    rotateInterval: 'Zeit in Sekunden bis zum nächsten Wechsel.',
+    cycleColors: 'Wechselt automatisch zwischen Farbthemen.',
+    colorInterval: 'Zeit in Sekunden bis zur nächsten Farbe.',
+    reset: 'Alle Einstellungen auf Werkseinstellungen zurücksetzen.',
+    confirmReset: 'Zurücksetzen bestätigen? Dies kann nicht rückgängig gemacht werden.',
+    resetVisual: 'Ästhetik (Geschwindigkeit, Leuchten, Spuren) zurücksetzen.',
+    resetText: 'Benutzerdefinierten Text und Schriftarten löschen.',
+    resetAudio: 'Empfindlichkeit, Glättung und FFT zurücksetzen.',
+    resetAi: 'KI-Persona, Region und Layout zurücksetzen.',
+    randomize: 'Zufällige Kombination aus Modus und Farben generieren.',
+    fullscreen: 'Immersiven Vollbildmodus umschalten.',
+    help: 'Tastaturkürzel und Dokumentation anzeigen.',
+    mic: 'Mikrofoneingang aktivieren oder stummschalten.',
+    device: 'Hardware-Audioeingangsquelle auswählen.',
+    monitor: 'Mikrofon an Lautsprecher weiterleiten (Vorsicht: Rückkopplung).',
+    showFps: 'Echtzeit-Bildrate anzeigen.',
+    showTooltips: 'Hilfreiche Hinweise beim Überfahren von Steuerelementen anzeigen.',
+    doubleClickFullscreen: 'Doppelklick für Vollbildmodus.',
+    autoHideUi: 'Bedienfeld bei Inaktivität automatisch ausblenden.',
+    mirrorDisplay: 'Anzeige horizontal spiegeln.',
+    showCustomText: 'Sichtbarkeit des benutzerdefinierten Textes umschalten.',
+    textPulse: 'Text skaliert dynamisch mit dem Rhythmus.',
+    textAudioReactive: 'Textdeckkraft und -größe reagieren auf Audio.',
+    customTextCycleColor: 'Durchläuft automatisch das Farbspektrum.',
+    text3D: 'Wendet einen Pseudo-3D-Prägeeffekt an.',
+    hideCursor: 'Mauszeiger bei Inaktivität ausblenden.',
+    uiModeSimple: 'Technische Parameter ausblenden.',
+    uiModeAdvanced: 'Alle Parameter zur Feinabstimmung anzeigen.',
+    quality: 'Renderauflösung und Partikeldichte anpassen.',
+    textSize: 'Benutzerdefinierte Textebene skalieren.',
+    textRotation: 'Textüberlagerung rotieren.',
+    textPosition: 'Ankerpunkt für den Text.',
+    textSource: 'Bestimmt den Inhalt der Hauptüberlagerung.',
+    lyricsPosition: 'Ankerpunkt für KI-Texte/Infos.',
+    customTextPlaceholder: 'Geben Sie Ihre Nachricht ein.',
+    textOpacity: 'Transparenzgrad des Textes.',
+    cycleSpeed: 'Zeit für einen vollen Farbzyklus.',
+    lyricsFont: 'Schriftstil für KI-Texte.',
+    lyricsFontSize: 'Skalierung des KI-Erkennungstextes.',
+    textFont: 'Schriftfamilie für benutzerdefinierten Text.',
+    recognitionSource: 'KI-Persönlichkeit oder Anbieter wählen.',
+    exportConfig: 'Einstellungen als JSON herunterladen.',
+    importConfig: 'Einstellungen aus JSON laden.',
+    savePreset: 'Aktuellen Zustand im Browser speichern.',
+    loadPreset: 'Diesen Zustand wiederherstellen.',
+    copyConfig: 'Konfiguration in die Zwischenablage kopieren.',
+    wakeLock: 'Verhindert, dass der Bildschirm ausgeht.',
+    includeInAutoRotate: 'In Auto-Rotation aufnehmen',
+    excludeFromAutoRotate: 'Aus Auto-Rotation ausschließen',
+    albumArtBackground: 'Albumcover als unscharfen Hintergrund anzeigen.',
+    overlayCover: 'Albumcover-Thumbnail in Song-Info anzeigen.',
+    lightMode: 'Zwischen hellem und dunklem Design wechseln.',
+    localFont: 'Schriftartname',
+    enterLocalFont: 'Lokalen Schriftartnamen eingeben (z.B. Arial)'
+  },
+  visualizerMode: 'Visuelle Engine',
+  styleTheme: 'Farbthema',
+  settings: 'Tuning',
+  sensitivity: 'Empfindlichkeit',
+  speed: 'Geschwindigkeit',
+  glow: 'Neon-Glühen',
+  trails: 'Bewegungsspuren',
+  autoRotate: 'Auto-Zyklus',
+  rotateInterval: 'Intervall (s)',
+  cycleColors: 'Farbzyklus',
+  colorInterval: 'Intervall (s)',
+  cycleSpeed: 'Zyklusdauer (s)',
+  monitorAudio: 'Audio-Monitor',
+  audioInput: 'Eingabegerät',
+  lyrics: 'KI-Synästhesie',
+  showLyrics: 'Erkennung an',
+  displaySettings: 'Anzeige',
+  language: 'Sprache',
+  region: 'Zielmarkt',
+  startMic: 'Audio Ein',
+  stopMic: 'Audio Aus',
+  listening: 'Aktiv',
+  identifying: 'KI Analysiert...',
+  startExperience: 'Erlebnis starten',
+  welcomeTitle: 'Aura Flux | Der Klang des Lichts',
+  welcomeText: 'Verwandeln Sie jede Schwingung in ein generatives Meisterwerk. Angetrieben von Gemini AI.',
+  unsupportedTitle: 'Browser inkompatibel',
+  unsupportedText: 'Aura Flux benötigt moderne Web Audio Funktionen. Bitte Chrome, Edge oder Safari nutzen.',
+  hideOptions: 'Einklappen',
+  showOptions: 'Optionen',
+  reset: 'System Reset',
+  confirmReset: 'Reset bestätigen?',
+  resetEngine: 'ENGINE RESET',
+  confirmResetAction: 'BESTÄTIGEN',
+  resetVisual: 'Visuals Reset',
+  resetText: 'Text Reset',
+  resetAudio: 'Audio Reset',
+  resetAi: 'KI Reset',
+  randomize: 'Zufall Smart',
+  help: 'Hilfe',
+  close: 'Schließen',
+  betaDisclaimer: 'KI-Erkennung ist Beta.',
+  wrongSong: 'Falscher Song?',
+  hideCursor: 'Cursor weg',
+  customColor: 'Benutzerdefiniert',
+  randomizeTooltip: 'Alles zufällig',
+  smoothing: 'Glättung',
+  fftSize: 'Auflösung (FFT)',
+  appInfo: 'Über App',
+  appDescription: 'Eine immersive Visualisierungssuite, angetrieben durch Echtzeitanalyse und Gemini KI.',
+  version: 'Version',
+  defaultMic: 'Standardmikrofon',
+  customText: 'Eigener Text',
+  textProperties: 'Typografie',
+  text3D: '3D-Effekt',
+  textSource: 'Anzeigequelle',
+  textSources: {
+      auto: 'Auto (Smart)',
+      custom: 'Nur Text',
+      song: 'Nur Song-Info',
+      clock: 'Uhrzeit'
+  },
+  customTextPlaceholder: 'TEXT EINGEBEN',
+  showText: 'Overlay anzeigen',
+  pulseBeat: 'Pulsieren',
+  textAudioReactive: 'Audio-Reaktiv',
+  textSize: 'Schriftgröße',
+  textRotation: 'Rotation',
+  textFont: 'Schriftart',
+  textOpacity: 'Deckkraft',
+  textPosition: 'Position',
+  quality: 'Qualität',
+  qualities: {
+    low: 'Flüssig', med: 'Balance', high: 'Ultimativ'
+  },
+  visualPanel: {
+    effects: 'Effekte', automation: 'Auto', display: 'Anzeige',
+    atmosphere: 'Atmosphäre', dynamics: 'Dynamik'
+  },
+  audioPanel: {
+    info: 'Empfindlichkeit und Glättung anpassen. Höhere FFT für mehr Details.',
+    mic: 'Mikro',
+    file: 'Datei',
+    upload: 'Hochladen',
+    aiDirector: 'KI-Regisseur',
+    analyzing: 'Analyse...',
+    analyze: 'Generieren',
+    analysisAi: 'Analyse & KI-Intelligenz',
+    smartActions: 'Smarte Aktionen'
+  },
+  systemPanel: {
+    interface: 'Oberfläche', behavior: 'Verhalten', maintenance: 'Wartung', engine: 'Engine', audio: 'Audio', ai: 'KI',
+    lightMode: 'Heller Modus', darkMode: 'Dunkler Modus'
+  },
+  presets: {
+    title: 'Smarte Presets',
+    hint: 'Kuratierte Ästhetik anwenden.',
+    select: 'Stimmung wählen...',
+    custom: 'Benutzerdefiniert',
+    all_modes: 'Alle Modi',
+    calm: 'Digitalwelle',
+    party: 'Kinetik-Party',
+    ambient: 'Tiefer Nebel',
+    cyberpunk: 'Cyber-Laser',
+    retrowave: 'Retro-Feld',
+    vocal: 'Vokal-Balken'
+  },
+  simulatedDemo: 'Simuliert (Offline)',
+  positions: {
+      top: 'Oben', center: 'Mitte', bottom: 'Unten', tl: 'Oben Links', tc: 'Oben Mitte', tr: 'Oben Rechts', ml: 'Mitte Links', mc: 'Zentrum', mr: 'Mitte Rechts', bl: 'Unten Links', bc: 'Unten Mitte', br: 'Unten Rechts'
+  },
+  system: {
+    shortcuts: { mic: 'Mikro', ui: 'UI', mode: 'Modus', random: 'Zufall' }
+  },
+  errors: {
+    title: 'Audio-Fehler',
+    accessDenied: 'Zugriff verweigert.',
+    noDevice: 'Kein Gerät.',
+    deviceBusy: 'Gerät beschäftigt.',
+    general: 'Zugriffsfehler.',
+    tryDemo: 'Demo-Modus'
+  },
+  modes: {
+    [VisualizerMode.NEURAL_FLOW]: 'Synapsen-Sturm (WebGL)',
+    [VisualizerMode.CUBE_FIELD]: 'Quanten-Matrix (WebGL)',
+    [VisualizerMode.PLASMA]: 'Fusion',
+    [VisualizerMode.BARS]: 'Spektrum',
+    [VisualizerMode.PARTICLES]: 'Warp-Antrieb',
+    [VisualizerMode.TUNNEL]: 'Wurmloch',
+    [VisualizerMode.RINGS]: 'Resonanz',
+    [VisualizerMode.NEBULA]: 'Kosmischer Staub',
+    [VisualizerMode.LASERS]: 'Laser-Matrix',
+    [VisualizerMode.FLUID_CURVES]: 'Aurora',
+    [VisualizerMode.MACRO_BUBBLES]: 'Zell-Drift',
+    [VisualizerMode.KINETIC_WALL]: 'Impuls-Wand (WebGL)',
+    [VisualizerMode.LIQUID]: 'Geschmolzener Kern (WebGL)',
+    [VisualizerMode.WAVEFORM]: 'Spektral-Seide'
+  },
+  modeDescriptions: {
+    [VisualizerMode.NEURAL_FLOW]: 'Organische Flüssigkeitssimulation mit WebGL-Partikeln.',
+    [VisualizerMode.CUBE_FIELD]: 'Unendliches Feld geometrischer Blöcke.',
+    [VisualizerMode.PLASMA]: 'Sanfte flüssige Farbmischung.',
+    [VisualizerMode.BARS]: 'Klassischer Frequenzspektrumanalysator.',
+    [VisualizerMode.PARTICLES]: 'Deep-Space-Sternenfeld, das auf Intensität reagiert.',
+    [VisualizerMode.TUNNEL]: 'Rekursiver geometrischer Korridor.',
+    [VisualizerMode.RINGS]: 'Konzentrische Neon-Resonanzmuster.',
+    [VisualizerMode.NEBULA]: 'Deep-Space-Partikelsimulation.',
+    [VisualizerMode.LASERS]: 'Scharfe Hochenergie-Lichtstrahlen.',
+    [VisualizerMode.FLUID_CURVES]: 'Sanfte atmosphärische Lichtwellen.',
+    [VisualizerMode.MACRO_BUBBLES]: 'Mikrozelluläre Visuals mit Weichzeichner.',
+    [VisualizerMode.KINETIC_WALL]: 'Massive LED-Wand mit kinetischen Extrusionen.',
+    [VisualizerMode.LIQUID]: 'Abstrakte Kugel, die auf Rhythmus reagiert.',
+    [VisualizerMode.WAVEFORM]: 'Flüssige Bänder der Spektralfrequenz.'
+  },
+  lyricsStyles: {
+    [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamisch', [LyricsStyle.MINIMAL]: 'Minimalistisch'
+  },
   helpModal: {
     title: 'Aura Flux Anleitung',
     tabs: { guide: 'Anleitung', shortcuts: 'Steuerung', about: 'Über' },
@@ -118,7 +414,10 @@ export const de = {
       glow: 'Leuchten',
       trails: 'Spuren',
       changeMode: 'Modus wechseln',
-      changeTheme: 'Thema wechseln'
+      changeTheme: 'Thema wechseln',
+      speed: 'Geschwindigkeit',
+      tabs: 'Tabs wechseln',
+      help: 'Hilfe'
     },
     gestureItems: {
         swipeMode: 'Wischen: Modus wechseln',
@@ -127,38 +426,38 @@ export const de = {
     },
     howItWorksTitle: 'Verwendung',
     howItWorksSteps: [
-      '1. Verbinden: Klicken Sie auf "Erlebnis starten" und erlauben Sie den Mikrofonzugriff.',
-      '2. Visualisieren: Musik abspielen. Nutzen Sie "Smarte Presets" für die Stimmung.',
-      '3. Anpassen: Nutzen Sie den "Erweiterten Modus" für Empfindlichkeit und Text.',
+      '1. Verbinden: Klicken Sie auf "Start" und erlauben Sie Mikrofonzugriff.',
+      '2. Visualisieren: Musik abspielen. Nutzen Sie "Smarte Presets".',
+      '3. Anpassen: Nutzen Sie den "Erweiterten Modus" für Feinabstimmung.',
       '4. Interagieren: Wischen für Moduswechsel oder langes Drücken für KI.',
-      '5. Entdecken: Drücken Sie H für Optionen, F für Vollbild, R für Zufall.'
+      '5. Entdecken: H für Optionen, F für Vollbild, R für Zufall.'
     ],
     settingsTitle: 'Parameter-Guide',
     settingsDesc: {
-      sensitivity: 'Verstärkungsregelung für Audioreaktion.',
-      speed: 'Zeitliche Frequenz der Muster.',
-      glow: 'Leuchtintensität für atmosphärische Tiefe.',
-      trails: 'Pixelpersistenz für flüssige Bewegung.',
-      smoothing: 'Zeitliche Dämpfung der Spektraldaten.',
-      fftSize: 'Frequenzauflösung.'
+      sensitivity: 'Verstärkung für Audioreaktion.',
+      speed: 'Zeitliche Frequenz.',
+      glow: 'Leuchtintensität.',
+      trails: 'Pixelpersistenz.',
+      smoothing: 'Dämpfung.',
+      fftSize: 'Auflösung.'
     },
     projectInfoTitle: 'Unsere Vision',
     aboutDescription: 'Aura Flux ist eine Echtzeit-Synästhesie-Engine, die Audiofrequenzen in generative 3D-Kunst verwandelt. Durch die Verschmelzung der mathematischen Präzision von WebGL mit dem semantischen Verständnis von Google Gemini entsteht eine visuelle Sprache, die nicht nur auf Klang reagiert, sondern ihn versteht.',
     privacyTitle: 'Datenschutzversprechen',
-    privacyText: 'Wir glauben an Edge-First-Datenschutz. Alle Spektralanalysen und visuellen Renderings finden lokal auf Ihrem Gerät statt. Nur wenn Sie die KI-Identifikation aktiv auslösen, werden kurze, verschlüsselte Audio-Fingerabdrücke zur Analyse an Gemini gesendet und niemals gespeichert.',
+    privacyText: 'Wir glauben an Edge-First-Datenschutz. Alle Analysen finden lokal statt. Nur bei aktiver KI-Identifikation werden kurze, verschlüsselte Fingerabdrücke an Gemini gesendet und nie gespeichert.',
     version: 'Version', coreTech: 'Tech', repository: 'Quelle', support: 'Support', reportBug: 'Fehler'
   },
   onboarding: {
     welcome: 'Willkommen bei Aura Flux',
     subtitle: 'KI-Synästhesie-Engine der nächsten Generation',
-    selectLanguage: 'Wählen Sie Ihre bevorzugte Sprache',
-    next: 'Weiter', back: 'Zurück', skip: 'Überspringen', finish: 'Erlebnis beginnen',
+    selectLanguage: 'Wählen Sie Ihre Sprache',
+    next: 'Weiter', back: 'Zurück', skip: 'Überspringen', finish: 'Starten',
     features: {
       title: 'Sensorische Funktionen',
-      visuals: { title: 'Generative Skulpturen', desc: '15+ reaktive Engines, angetrieben von WebGL und fortgeschrittener Mathematik.' },
-      ai: { title: 'Gemini Intelligenz', desc: 'Sofortige Titel-Metadaten und Stimmungserkennung durch Google Gemini 3.' },
-      privacy: { title: 'Edge-Intelligenz', desc: 'Die Verarbeitung bleibt lokal. Wir zeichnen Ihre privaten Audiodaten niemals auf oder speichern sie.' }
+      visuals: { title: 'Generative Skulpturen', desc: '15+ reaktive Engines, angetrieben von WebGL und Mathematik.' },
+      ai: { title: 'Gemini Intelligenz', desc: 'Sofortige Metadaten und Stimmungserkennung durch Google Gemini 3.' },
+      privacy: { title: 'Edge-Intelligenz', desc: 'Verarbeitung bleibt lokal. Keine Speicherung privater Audiodaten.' }
     },
-    shortcuts: { title: 'Dynamische Steuerung', desc: 'Meistern Sie Ihre Umgebung wie ein Dirigent mit diesen Tastaturbefehlen.' }
+    shortcuts: { title: 'Dynamische Steuerung', desc: 'Meistern Sie Ihre Umgebung wie ein Dirigent mit Tastaturbefehlen.' }
   }
 };

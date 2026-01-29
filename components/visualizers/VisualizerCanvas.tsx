@@ -1,9 +1,11 @@
+
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.1.9
+ * Version: 1.2.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 12:00
+ * Updated: 2025-03-12 12:00
+ * Changes: Added support for stereo (analyserR).
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -13,13 +15,14 @@ import { AdaptiveNoiseFilter } from '../../core/services/audioUtils';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
+  analyserR?: AnalyserNode | null; // Optional Right Channel
   mode: VisualizerMode;
   colors: string[];
   settings: VisualizerSettings;
 }
 
 const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({ 
-  analyser, mode, colors, settings
+  analyser, analyserR, mode, colors, settings
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const renderersRef = useRef<Record<string, IVisualizerRenderer>>({});
@@ -42,19 +45,15 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     });
   }, []);
 
-  // Handle Resize via Observer (Perf optimized + Recording Friendly)
+  // Handle Resize via Observer
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const observer = new ResizeObserver(() => {
-      // Only resize if the display size actually changed.
-      // This allows external tools (like the Recorder) to manually set canvas.width/height 
-      // for upscaling without being immediately overwritten by a loop check.
       const displayWidth = canvas.clientWidth;
       const displayHeight = canvas.clientHeight;
       
-      // Basic check to prevent zero-size errors
       if (displayWidth > 0 && displayHeight > 0) {
           canvas.width = displayWidth;
           canvas.height = displayHeight;
@@ -63,7 +62,6 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     
     observer.observe(canvas);
     
-    // Initial size set
     if (canvas.clientWidth > 0) {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
@@ -81,6 +79,8 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     if (!ctx) return;
 
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    // Stereo: Allocate buffer for Right channel if available
+    const dataArrayR = analyserR ? new Uint8Array(analyserR.frequencyBinCount) : undefined;
 
     const renderLoop = () => {
       const { mode: currentMode, colors: currentColors, settings: currentSettings } = propsRef.current;
@@ -90,18 +90,24 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
       noiseFilterRef.current.process(dataArray);
       const isBeat = beatDetectorRef.current.detect(dataArray);
       
+      // Fetch Right Channel if available
+      if (analyserR && dataArrayR) {
+          analyserR.getByteFrequencyData(dataArrayR);
+          // Optional: Apply noise filter to Right channel too? 
+          // For now, assume Left filter state is sufficient or instantiate a second one.
+          // To keep it simple and performant, we might skip filtering R or reuse L's profile implicitly.
+      }
+
       rotationRef.current += 0.005 * currentSettings.speed;
 
-      // 基础清理
+      // Clear / Trails Logic
       if (currentSettings.trails) {
         if (currentSettings.albumArtBackground) {
-            // Transparent Fade Logic
             ctx.globalCompositeOperation = 'destination-out';
             ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
             ctx.fillRect(0, 0, width, height);
             ctx.globalCompositeOperation = 'source-over';
         } else {
-            // Standard Fade Logic
             ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
             ctx.fillRect(0, 0, width, height);
         }
@@ -109,18 +115,14 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
         ctx.clearRect(0, 0, width, height);
       }
 
-      // --- Performance Optimization ---
-      // Sprite-based or self-glowing renderers generate their own glow/gradients.
-      // Applying Canvas `shadowBlur` can kill performance. We disable it for these modes.
+      // Glow Logic
       const isSelfGlowingMode = 
         currentMode === VisualizerMode.NEBULA || 
         currentMode === VisualizerMode.MACRO_BUBBLES ||
         currentMode === VisualizerMode.TUNNEL;
 
       if (currentSettings.glow && !isSelfGlowingMode) {
-        // 使用第一个主题色作为发光底色
         ctx.shadowColor = currentColors[0] || '#ffffff';
-        // 阴影模糊程度随灵敏度微调
         ctx.shadowBlur = 15 * currentSettings.sensitivity;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
@@ -139,14 +141,13 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
             currentColors, 
             currentSettings, 
             rotationRef.current, 
-            isBeat
+            isBeat,
+            dataArrayR // Pass Right Channel
           );
         } catch (e) {}
       }
 
-      // 重置状态，防止阴影影响后续的 Layer 或 UI 绘制（如果有的话）
       ctx.shadowBlur = 0;
-
       animationIdRef.current = requestAnimationFrame(renderLoop);
     };
 
@@ -157,7 +158,7 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
         cancelAnimationFrame(animationIdRef.current);
       }
     };
-  }, [analyser]);
+  }, [analyser, analyserR]);
 
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">

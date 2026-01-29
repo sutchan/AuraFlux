@@ -1,7 +1,7 @@
 
 /**
  * File: components/controls/BottomBar.tsx
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
  */
@@ -112,9 +112,12 @@ export const BottomBar: React.FC<BottomBarProps> = ({ isExpanded, setIsExpanded,
                     <TooltipArea text={`${t?.hints?.randomize || "Randomize"} [R]`}>
                         <button 
                             onClick={randomizeSettings}
-                            className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all"
+                            className={`h-10 rounded-xl flex items-center justify-center transition-all ${playlist.length === 0 ? 'w-auto px-4 gap-2' : 'w-10'} bg-white/5 text-white/60 hover:text-white hover:bg-white/10`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                            {playlist.length === 0 && (
+                                <span className="text-xs font-bold uppercase tracking-wider whitespace-nowrap">{t?.randomize || "Random"}</span>
+                            )}
                         </button>
                     </TooltipArea>
                     <TooltipArea text={t?.hints?.fullscreen}>
@@ -169,9 +172,12 @@ export const BottomBar: React.FC<BottomBarProps> = ({ isExpanded, setIsExpanded,
                     <TooltipArea text={isExpanded ? t?.hideOptions : t?.showOptions}>
                         <button 
                             onClick={() => setIsExpanded(prev => !prev)}
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isExpanded ? 'bg-white text-black' : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'}`}
+                            className={`h-10 rounded-xl flex items-center justify-center transition-all ${playlist.length === 0 ? 'w-auto px-4 gap-2' : 'w-10'} ${isExpanded ? 'bg-white text-black' : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'}`}
                         >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+                            {playlist.length === 0 && (
+                                <span className="text-xs font-bold uppercase tracking-wider whitespace-nowrap">{isExpanded ? (t?.hideOptions || "Collapse") : (t?.showOptions || "Options")}</span>
+                            )}
                         </button>
                     </TooltipArea>
                 </div>

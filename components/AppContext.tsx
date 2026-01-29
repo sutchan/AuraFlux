@@ -1,9 +1,11 @@
+
 /**
  * File: components/AppContext.tsx
- * Version: 1.9.7
+ * Version: 1.9.8
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-09 18:30
+ * Updated: 2025-03-12 12:00
+ * Changes: Added analyserR to AudioContextType.
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
@@ -80,7 +82,9 @@ interface AudioContextType {
   setSourceType: React.Dispatch<React.SetStateAction<AudioSourceType>>;
   isListening: boolean; isSimulating: boolean; isPending: boolean;
   audioContext: AudioContext | null;
-  analyser: AnalyserNode | null; mediaStream: MediaStream | null; audioDevices: AudioDevice[];
+  analyser: AnalyserNode | null; 
+  analyserR: AnalyserNode | null; // Added Right Channel
+  mediaStream: MediaStream | null; audioDevices: AudioDevice[];
   selectedDeviceId: string; onDeviceChange: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string | null; setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
   startMicrophone: (deviceId?: string) => Promise<void>;

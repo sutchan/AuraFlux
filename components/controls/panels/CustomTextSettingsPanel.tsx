@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 2.1.1
+ * Version: 2.1.2
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-12 10:00
+ * Updated: 2025-03-13 12:30
  */
 
 import React from 'react';
@@ -26,6 +26,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
   const hints = t?.hints || {};
   const textSources = t?.textSources || {};
   const lyricsStyles = t?.lyricsStyles || {};
+  const textPanel = t?.textPanel || {};
   
   const positionOptions = getPositionOptions(t);
 
@@ -50,7 +51,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
       {/* Card 1: Custom Text Content */}
-      <BentoCard title="Custom Text Overlay">
+      <BentoCard title={textPanel.overlay || "Custom Text Overlay"}>
         <div className="space-y-3">
             <SettingsToggle 
                 label={t?.customText || "Text Content"}
@@ -138,7 +139,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
 
       {/* Card 3: Advanced Typography & Color */}
       <BentoCard 
-        title="Custom Appearance"
+        title={textPanel.appearance || "Custom Appearance"}
         action={
             <TooltipArea text={hints?.resetText}>
               <button onClick={resetTextSettings} className="p-1 text-white/30 hover:text-white transition-colors">

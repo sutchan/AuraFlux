@@ -1,17 +1,17 @@
 
 /**
  * File: core/constants/index.ts
- * Version: 1.9.1
+ * Version: 1.9.4
  * Author: Sut
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.8.10';
+export const APP_VERSION = '1.8.11';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
-// Expanded to 30 curated color themes.
+// Reduced to 18 curated color themes (Removed last 6 again).
 export const COLOR_THEMES: string[][] = [
   ['#ff007f', '#7a00ff', '#00e5ff'], // 01: Vaporwave
   ['#00ff87', '#60efff', '#a100ff'], // 02: Aurora Borealis
@@ -31,18 +31,6 @@ export const COLOR_THEMES: string[][] = [
   ['#fffa65', '#fff200', '#ff9f1a'], // 16: Electric Yellow
   ['#32ff7e', '#3ae374', '#05c46b'], // 17: Emerald City
   ['#18dcff', '#00d2d3', '#01a3a4'], // 18: Cyanide
-  ['#ff9ff3', '#f368e0', '#ff4dff'], // 19: Candy Gloss
-  ['#54a0ff', '#00d2d3', '#2e86de'], // 20: Skyward
-  ['#5f27cd', '#341f97', '#222f3e'], // 21: Deep Purple
-  ['#ff9f43', '#ee5253', '#ff6b6b'], // 22: Lava Flow
-  ['#10ac84', '#1dd1a1', '#10ac84'], // 23: Jungle
-  ['#222f3e', '#576574', '#8395a7'], // 24: Storm Cloud
-  ['#00d2d3', '#48dbfb', '#0abde3'], // 25: Glacier
-  ['#ff6b6b', '#ee5253', '#c0392b'], // 26: Crimson
-  ['#feca57', '#ff9f1a', '#f39c12'], // 27: Amber
-  ['#9b59b6', '#8e44ad', '#2c3e50'], // 28: Nebula Dream
-  ['#ffffff', '#8e8e93', '#c7c7cc'], // 29: Monochrome
-  ['#7d5fff', '#4b4b4b', '#1e272e'], // 30: Phantom
 ];
 
 export const REGION_NAMES: Record<string, string> = {
@@ -59,16 +47,11 @@ export const AVAILABLE_FONTS = [
   { value: 'Inter, sans-serif', label: 'Inter (Default)' },
   { value: 'system-ui, sans-serif', label: 'System UI' },
   { value: '"JetBrains Mono", monospace', label: 'JetBrains Mono' },
-  { value: '"Playfair Display", serif', label: 'Playfair Display' },
-  { value: '"Roboto", sans-serif', label: 'Roboto' },
-  { value: '"Open Sans", sans-serif', label: 'Open Sans' },
   { value: '"Montserrat", sans-serif', label: 'Montserrat' },
-  { value: '"Lato", sans-serif', label: 'Lato' },
   { value: '"Oswald", sans-serif', label: 'Oswald' },
+  { value: '"Playfair Display", serif', label: 'Playfair Display' },
   { value: '"Courier New", monospace', label: 'Courier New' },
   { value: '"Times New Roman", serif', label: 'Times New Roman' },
-  { value: '"Impact", sans-serif', label: 'Impact' },
-  { value: '"Comic Sans MS", "Chalkboard SE", sans-serif', label: 'Comic Sans' },
   { value: 'custom', label: '📂 Local / Custom Font...' }
 ];
 
@@ -102,6 +85,20 @@ export const VISUALIZER_PRESETS: Record<string, { description: string }> = {
 };
 
 export const SMART_PRESETS: Record<string, SmartPreset> = {
+  all_modes: {
+    nameKey: 'all_modes',
+    settings: {
+        mode: VisualizerMode.NEBULA, // Starter mode
+        colorTheme: COLOR_THEMES[0],
+        speed: 1.0,
+        sensitivity: 1.5,
+        glow: true,
+        trails: true,
+        smoothing: 0.8,
+        autoRotate: true, // Enable rotation
+        includedModes: Object.values(VisualizerMode) // All modes
+    }
+  },
   calm: {
     nameKey: 'calm',
     settings: {
@@ -171,7 +168,7 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
     nameKey: 'vocal',
     settings: {
       mode: VisualizerMode.BARS,
-      colorTheme: COLOR_THEMES[28],
+      colorTheme: COLOR_THEMES[8], // Updated to Royal Purple (Index 8) as Index 20 is removed
       speed: 0.8,
       sensitivity: 1.3,
       glow: false,

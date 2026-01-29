@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ko.ts
- * Version: 2.1.5
+ * Version: 2.1.6
  * Author: Sut
  */
 
@@ -36,7 +36,9 @@ export const ko = {
     shuffle: '셔플',
     repeatAll: '전체 반복',
     repeatOne: '한 곡 반복',
-    mode: '재생 모드'
+    mode: '재생 모드',
+    nowPlaying: '재생 중',
+    add: '추가'
   },
   tabs: {
     visual: '비주얼', text: '텍스트', input: '오디오', audio: '오디오', playback: '라이브러리', ai: 'AI 공감각', system: '시스템', studio: '스튜디오'
@@ -63,6 +65,8 @@ export const ko = {
     share: '공유',
     videoStream: '비디오 스트림',
     audioStream: '오디오 스트림',
+    videoConfig: '비디오 설정',
+    audioMix: '오디오 및 믹스',
     stats: {
         time: '시간',
         size: '크기'
@@ -127,6 +131,10 @@ export const ko = {
       geminiHint: '선택 사항. 비워두면 기본 무료 할당량을 사용합니다.',
       customHint: '필수. 키는 브라우저에 로컬로 저장됩니다.',
       notImplemented: '{provider}의 AI 처리는 아직 구현되지 않았습니다. AI 기능을 사용하려면 Gemini를 선택하세요.'
+  },
+  textPanel: {
+      overlay: '텍스트 오버레이',
+      appearance: '모양 설정'
   },
   visualizerMode: '비주얼 엔진',
   styleTheme: '컬러 테마',
@@ -204,7 +212,8 @@ export const ko = {
     low: '부드러움', med: '균형', high: '최고 화질'
   },
   visualPanel: {
-    effects: '효과', automation: '자동화', display: '표시'
+    effects: '효과', automation: '자동화', display: '표시',
+    atmosphere: '분위기', dynamics: '다이내믹스'
   },
   audioPanel: {
     info: "'감도'를 조절하여 반응 강도를 변경하세요. FFT 크기가 클수록 디테일이 향상됩니다.",
@@ -213,7 +222,9 @@ export const ko = {
     upload: '업로드',
     aiDirector: 'AI 감독',
     analyzing: '분석 중...',
-    analyze: '비주얼 생성'
+    analyze: '비주얼 생성',
+    analysisAi: '분석 및 AI 지능',
+    smartActions: '스마트 액션'
   },
   systemPanel: {
     interface: '인터페이스', behavior: '동작', maintenance: '유지 관리', engine: '엔진', audio: '오디오', ai: 'AI',

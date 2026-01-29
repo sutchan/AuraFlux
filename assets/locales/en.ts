@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/en.ts
- * Version: 2.1.6
+ * Version: 2.1.9
  * Author: Sut
  */
 
@@ -12,7 +12,7 @@ export const en = {
     on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED', new: 'NEW', unknownTrack: 'Unknown Track',
     menu: 'MENU', queue: 'Queue', empty: 'List Empty', unknownArtist: 'Unknown Artist',
     clearAll: 'Clear All', confirmClear: 'Clear Queue?',
-    dropFiles: 'Drop Audio Files',
+    dropFiles: 'Click / Drop Audio Files',
     themeLight: 'Light Mode', themeDark: 'Dark Mode'
   },
   toasts: {
@@ -36,10 +36,12 @@ export const en = {
     shuffle: 'Shuffle',
     repeatAll: 'Repeat All',
     repeatOne: 'Repeat One',
-    mode: 'Playback Mode'
+    mode: 'Playback Mode',
+    nowPlaying: 'Now Playing',
+    add: 'ADD'
   },
   tabs: {
-    visual: 'Visuals', text: 'Text', input: 'Audio', audio: 'Audio', playback: 'Library', ai: 'AI', system: 'System', studio: 'Studio'
+    visual: 'Visuals', text: 'Info Layer', input: 'Audio', audio: 'Audio', playback: 'Library', ai: 'AI', system: 'System', studio: 'Studio'
   },
   studioPanel: {
     title: 'Recording Studio',
@@ -63,6 +65,8 @@ export const en = {
     share: 'Share',
     videoStream: 'VIDEO STREAM',
     audioStream: 'AUDIO STREAM',
+    videoConfig: 'Video Configuration',
+    audioMix: 'Audio & Mix',
     stats: {
         time: 'TIME',
         size: 'SIZE'
@@ -127,6 +131,10 @@ export const en = {
       geminiHint: 'Optional. Uses default free quota if empty.',
       customHint: 'Required. Key is stored locally in your browser.',
       notImplemented: 'AI processing for {provider} is not yet implemented. Please select Gemini to use AI features.'
+  },
+  textPanel: {
+      overlay: 'Custom Text Overlay',
+      appearance: 'Custom Appearance'
   },
   config: {
     title: 'Cloud & Data',
@@ -290,7 +298,8 @@ export const en = {
     low: 'Smooth', med: 'Balanced', high: 'Ultimate'
   },
   visualPanel: {
-    effects: 'Effects', automation: 'Automation', display: 'Display'
+    effects: 'Effects', automation: 'Automation', display: 'Display',
+    atmosphere: 'Atmosphere', dynamics: 'Dynamics'
   },
   audioPanel: {
     info: 'Adjust input sensitivity and smoothing to customize reaction. Higher FFT sizes provide more detail',
@@ -299,7 +308,9 @@ export const en = {
     upload: 'Click to Upload',
     aiDirector: 'AI Auto-Director',
     analyzing: 'Listening & Designing...',
-    analyze: 'Generate Visuals'
+    analyze: 'Generate Visuals',
+    analysisAi: 'Analysis & AI Intelligence',
+    smartActions: 'Smart Actions'
   },
   systemPanel: {
     interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI',
