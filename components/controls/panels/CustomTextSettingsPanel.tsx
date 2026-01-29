@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 2.0.0
+ * Version: 2.1.1
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 10:00
+ * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: 2025-03-12 10:00
  */
 
 import React from 'react';
@@ -14,7 +15,7 @@ import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { PositionSelector } from '../../ui/controls/PositionSelector';
 import { BentoCard } from '../../ui/layout/BentoCard';
 import { useVisuals, useUI } from '../../AppContext';
-import { Position } from '../../../core/types';
+import { Position, LyricsStyle } from '../../../core/types';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 
 export const CustomTextSettingsPanel: React.FC = () => {
@@ -24,11 +25,16 @@ export const CustomTextSettingsPanel: React.FC = () => {
   const isAdvanced = settings.uiMode === 'advanced';
   const hints = t?.hints || {};
   const textSources = t?.textSources || {};
+  const lyricsStyles = t?.lyricsStyles || {};
   
   const positionOptions = getPositionOptions(t);
 
   const handleTextPositionChange = (value: Position) => {
     setSettings({ ...settings, customTextPosition: value });
+  };
+
+  const handleLyricsPositionChange = (value: Position) => {
+    setSettings({ ...settings, lyricsPosition: value });
   };
 
   const colorPresets = [
@@ -42,9 +48,9 @@ export const CustomTextSettingsPanel: React.FC = () => {
   const selectValue = isPresetFont ? currentFont : 'custom';
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 h-full">
-      {/* Card 1: Content */}
-      <BentoCard title="Content">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
+      {/* Card 1: Custom Text Content */}
+      <BentoCard title="Custom Text Overlay">
         <div className="space-y-3">
             <SettingsToggle 
                 label={t?.customText || "Text Content"}
@@ -60,7 +66,8 @@ export const CustomTextSettingsPanel: React.FC = () => {
                 options={[
                     { value: 'AUTO', label: textSources.auto || 'Auto (Smart)' },
                     { value: 'CUSTOM', label: textSources.custom || 'Custom Text Only' },
-                    { value: 'SONG', label: textSources.song || 'Song Info Only' }
+                    { value: 'SONG', label: textSources.song || 'Song Info Only' },
+                    { value: 'CLOCK', label: textSources.clock || 'Current Time' }
                 ]}
                 onChange={(val) => setSettings({...settings, textSource: val})}
                 hintText={hints?.textSource}
@@ -75,58 +82,63 @@ export const CustomTextSettingsPanel: React.FC = () => {
                 className="w-full bg-white/[0.04] rounded-xl px-3 py-2 text-sm font-bold text-white tracking-widest uppercase focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all resize-none min-h-[60px]" 
                 />
             </TooltipArea>
-        </div>
-      </BentoCard>
 
-      {/* Card 2: Appearance */}
-      <BentoCard title="Appearance">
-        <div className="space-y-4">
             {isAdvanced && (
-                <>
+                <div className="grid grid-cols-2 gap-2 pt-2">
                     <Slider label={t?.textSize || "Size"} hintText={hints?.textSize} value={settings.customTextSize ?? 12} min={2} max={60} step={1} onChange={(v: number) => setSettings({...settings, customTextSize: v})} />
                     <Slider label={t?.textRotation || "Rotate"} hintText={hints?.textRotation} value={settings.customTextRotation ?? 0} min={-180} max={180} step={5} onChange={(v: number) => setSettings({...settings, customTextRotation: v})} unit="°" />
-                    <Slider label={t?.textOpacity || "Opacity"} hintText={hints?.textOpacity} value={settings.customTextOpacity ?? 1.0} min={0} max={1} step={0.05} onChange={(v: number) => setSettings({...settings, customTextOpacity: v})} />
-                </>
-            )}
-
-            <div className="pt-2 border-t border-white/5 space-y-2">
-                <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">{t?.customColor || 'TEXT COLOR'}</span>
-                
-                {isAdvanced && (
-                    <div className="mb-2">
-                        <SettingsToggle 
-                          label={t?.cycleColors || "Cycle Color"} 
-                          value={settings.customTextCycleColor} 
-                          onChange={() => setSettings({...settings, customTextCycleColor: !settings.customTextCycleColor})}
-                          variant="clean"
-                          hintText={hints?.customTextCycleColor}
-                        />
-                        {settings.customTextCycleColor && (
-                            <div className="pl-1 pt-1">
-                                <Slider 
-                                    label={t?.cycleSpeed || "Speed"} 
-                                    hintText={hints?.cycleSpeed}
-                                    value={settings.customTextCycleInterval || 5} 
-                                    min={1} max={60} step={1} unit="s"
-                                    onChange={(v) => setSettings({...settings, customTextCycleInterval: v})} 
-                                />
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                <div className={`flex flex-col gap-2 p-0.5 transition-opacity duration-300 ${settings.customTextCycleColor ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
-                    <div className="grid grid-cols-6 gap-2">
-                        {colorPresets.map(c => ( <button key={c} onClick={() => setSettings({...settings, customTextColor: c})} className={`aspect-square rounded-full transition-all duration-300 ${settings.customTextColor === c ? 'ring-2 ring-white/80 scale-110' : 'opacity-60 hover:opacity-100'}`} style={{backgroundColor: c}} aria-label={`Color ${c}`} /> ))}
-                    </div>
                 </div>
-            </div>
+            )}
         </div>
       </BentoCard>
 
-      {/* Card 3: Typography & Layout */}
+      {/* Card 2: AI Lyrics Appearance */}
+      <BentoCard title={t?.lyrics || "AI Info & Lyrics"}>
+        <div className="space-y-4">
+            <CustomSelect 
+              label={`${t?.styleTheme || "Display Style"}`} 
+              value={settings.lyricsStyle || LyricsStyle.KARAOKE} 
+              hintText={hints?.lyricsStyle} 
+              options={Object.values(LyricsStyle).map(s => ({ value: s, label: lyricsStyles[s] || s }))} 
+              onChange={(val) => setSettings({...settings, lyricsStyle: val as LyricsStyle})} 
+            />
+            
+            {isAdvanced && (
+                <div className="space-y-3 animate-fade-in-up">
+                    <CustomSelect 
+                        label={t?.lyricsFont || "Lyrics Font"} 
+                        value={settings.lyricsFont || 'Inter, sans-serif'} 
+                        options={AVAILABLE_FONTS.filter(f => f.value !== 'custom')} 
+                        hintText={hints?.lyricsFont}
+                        onChange={(val) => setSettings({...settings, lyricsFont: val})} 
+                    />
+                    <Slider 
+                        label={t?.lyricsFontSize || "Font Size"} 
+                        hintText={hints?.lyricsFontSize}
+                        value={settings.lyricsFontSize ?? 4} 
+                        min={1} max={8} step={0.5} 
+                        onChange={(v: number) => setSettings({...settings, lyricsFontSize: v})} 
+                    />
+                    
+                    <div className="pt-2 border-t border-white/5">
+                        <TooltipArea text={hints?.lyricsPosition}>
+                            <PositionSelector
+                                label={t?.lyricsPosition || "Info Position"}
+                                value={settings.lyricsPosition}
+                                onChange={handleLyricsPositionChange}
+                                options={positionOptions}
+                                activeColor="green"
+                            />
+                        </TooltipArea>
+                    </div>
+                </div>
+            )}
+        </div>
+      </BentoCard>
+
+      {/* Card 3: Advanced Typography & Color */}
       <BentoCard 
-        title="Typography"
+        title="Custom Appearance"
         action={
             <TooltipArea text={hints?.resetText}>
               <button onClick={resetTextSettings} className="p-1 text-white/30 hover:text-white transition-colors">
@@ -137,7 +149,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
       >
          <div className="space-y-4">
             {isAdvanced ? (
-                <div className="space-y-4">
+                <>
                     <div className="grid grid-cols-2 gap-2">
                         <SettingsToggle
                             label={t?.textAudioReactive || "Reactive"}
@@ -157,7 +169,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                     
                     <div>
                         <CustomSelect 
-                            label={t?.textFont || "Font Style"} 
+                            label={t?.textFont || "Custom Font"} 
                             value={selectValue} 
                             hintText={hints?.textFont} 
                             options={AVAILABLE_FONTS} 
@@ -171,9 +183,6 @@ export const CustomTextSettingsPanel: React.FC = () => {
                         />
                         {selectValue === 'custom' && (
                             <div className="mt-2 animate-fade-in-up">
-                                <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider ml-1 mb-1 block">
-                                    {hints?.localFont || "Local Font Name"}
-                                </label>
                                 <input 
                                     type="text" 
                                     value={currentFont}
@@ -185,16 +194,25 @@ export const CustomTextSettingsPanel: React.FC = () => {
                         )}
                     </div>
 
-                    <TooltipArea text={hints?.textPosition}>
-                        <PositionSelector 
-                            label={t?.textPosition || "Text Position"} 
-                            value={settings.customTextPosition} 
-                            onChange={handleTextPositionChange} 
-                            options={positionOptions} 
-                            activeColor="blue" 
-                        />
-                    </TooltipArea>
-                </div>
+                    <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                            <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">{t?.customColor || 'TEXT COLOR'}</span>
+                            <SettingsToggle 
+                                label={t?.cycleColors || "Cycle"} 
+                                value={settings.customTextCycleColor} 
+                                onChange={() => setSettings({...settings, customTextCycleColor: !settings.customTextCycleColor})}
+                                variant="clean"
+                                hintText={hints?.customTextCycleColor}
+                            />
+                        </div>
+                        
+                        {!settings.customTextCycleColor && (
+                            <div className="grid grid-cols-6 gap-2 p-0.5 animate-fade-in-up">
+                                {colorPresets.map(c => ( <button key={c} onClick={() => setSettings({...settings, customTextColor: c})} className={`aspect-square rounded-full transition-all duration-300 ${settings.customTextColor === c ? 'ring-2 ring-white/80 scale-110' : 'opacity-60 hover:opacity-100'}`} style={{backgroundColor: c}} aria-label={`Color ${c}`} /> ))}
+                            </div>
+                        )}
+                    </div>
+                </>
             ) : (
                 <div className="flex items-center justify-center h-full text-white/20 text-xs font-mono uppercase tracking-widest text-center px-4">
                     {t?.common?.advanced || "Advanced Mode Required"}

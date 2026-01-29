@@ -1,6 +1,7 @@
+
 /**
  * File: assets/locales/en.ts
- * Version: 2.1.5
+ * Version: 2.1.6
  * Author: Sut
  */
 
@@ -272,7 +273,8 @@ export const en = {
   textSources: {
       auto: 'Auto (Smart)',
       custom: 'Custom Text Only',
-      song: 'Song Info Only'
+      song: 'Song Info Only',
+      clock: 'Current Time'
   },
   customTextPlaceholder: 'ENTER TEXT',
   showText: 'Show Overlay',

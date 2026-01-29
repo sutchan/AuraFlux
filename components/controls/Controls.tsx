@@ -1,20 +1,21 @@
+
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.7.1
+ * Version: 1.7.2
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 14:15
+ * Updated: 2025-03-11 16:30
  */
 
 import React, { useState, useEffect } from 'react';
 import { ActionButton } from '../ui/controls/ActionButton';
 import { VisualSettingsPanel } from './panels/VisualSettingsPanel';
-import { AiSettingsPanel } from './panels/AiSettingsPanel';
+// AiSettingsPanel is deprecated and merged into Audio and Text panels
 import { SystemSettingsPanel } from './panels/SystemSettingsPanel';
 import { CustomTextSettingsPanel } from './panels/CustomTextSettingsPanel';
 import { AudioSettingsPanel } from './panels/AudioSettingsPanel';
 import { StudioPanel } from './panels/StudioPanel';
-import { PlaybackPanel } from './panels/PlaybackPanel'; // New
+import { PlaybackPanel } from './panels/PlaybackPanel';
 import { HelpModal } from '../ui/HelpModal';
 import { useVisuals, useAI, useAudioContext, useUI } from '../AppContext';
 import { BottomBar } from './BottomBar';
@@ -22,8 +23,8 @@ import { TooltipArea } from '../ui/controls/Tooltip';
 import { VISUALIZER_PRESETS, COLOR_THEMES } from '../../core/constants';
 import { VisualizerMode } from '../../core/types';
 
-// Updated Tab List
-type TabType = 'visual' | 'input' | 'playback' | 'text' | 'studio' | 'ai' | 'system';
+// Updated Tab List - Removed 'ai', merged into 'input' and 'text'
+type TabType = 'visual' | 'input' | 'playback' | 'text' | 'studio' | 'system';
 
 const TAB_ICONS: Record<TabType, React.ReactNode> = {
   visual: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>,
@@ -31,7 +32,6 @@ const TAB_ICONS: Record<TabType, React.ReactNode> = {
   playback: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>,
   text: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>,
   studio: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14v-4" /></svg>,
-  ai: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
   system: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
 };
 
@@ -54,10 +54,10 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
       setSettings(s => ({...s, appTheme: s.appTheme === 'light' ? 'dark' : 'light'}));
   };
 
-  // Determine available tabs based on UI mode
+  // Updated tabs array
   const tabs: TabType[] = settings.uiMode === 'simple' 
     ? ['visual', 'playback', 'input', 'system']
-    : ['visual', 'input', 'playback', 'text', 'studio', 'ai', 'system'];
+    : ['visual', 'input', 'playback', 'text', 'studio', 'system'];
 
   // Safety check: Switch to 'visual' if current tab is hidden by mode switch
   useEffect(() => {
@@ -158,14 +158,13 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
             });
             break;
 
-        // Tab Navigation (1-7)
+        // Tab Navigation (1-6)
         case 'Digit1': if (tabs.includes('visual')) setActiveTab('visual'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit2': if (tabs.includes('input')) setActiveTab('input'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit3': if (tabs.includes('playback')) setActiveTab('playback'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit4': if (tabs.includes('text')) setActiveTab('text'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit5': if (tabs.includes('studio')) setActiveTab('studio'); if(!isExpanded) setIsExpanded(true); break;
-        case 'Digit6': if (tabs.includes('ai')) setActiveTab('ai'); if(!isExpanded) setIsExpanded(true); break;
-        case 'Digit7': if (tabs.includes('system')) setActiveTab('system'); if(!isExpanded) setIsExpanded(true); break;
+        case 'Digit6': if (tabs.includes('system')) setActiveTab('system'); if(!isExpanded) setIsExpanded(true); break;
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -244,7 +243,6 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
             
             <div className="p-3 md:p-5 pb-safe">
               <div className="max-w-5xl mx-auto">
-                {/* Refactored to remove rigid grid and allowed panels to define their own internal layout (Bento) */}
                 <div 
                   className="bg-transparent min-h-[35vh] md:min-h-[220px]"
                   role="tabpanel"
@@ -256,7 +254,6 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                     {activeTab === 'playback' && <PlaybackPanel />}
                     {activeTab === 'text' && <CustomTextSettingsPanel />}
                     {activeTab === 'studio' && <StudioPanel />}
-                    {activeTab === 'ai' && <AiSettingsPanel />}
                     {activeTab === 'system' && <SystemSettingsPanel />}
                 </div>
               </div>

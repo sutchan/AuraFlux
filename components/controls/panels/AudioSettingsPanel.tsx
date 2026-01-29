@@ -1,37 +1,79 @@
+
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 2.2.0
+ * Version: 2.4.0
  * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 10:00
+ * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: UI Simplification - Removed manual File source selection (handled via Library).
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Slider } from '../../ui/controls/Slider';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
-import { SegmentedControl } from '../../ui/controls/SegmentedControl';
 import { BentoCard } from '../../ui/layout/BentoCard';
+import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { useVisuals, useAudioContext, useUI, useAI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
-import { generateVisualConfigFromAudio } from '../../../core/services/aiService';
-import { VisualizerMode } from '../../../core/types';
+import { generateVisualConfigFromAudio, validateApiKey } from '../../../core/services/aiService';
+import { VisualizerMode, AIProvider, Region } from '../../../core/types';
+import { REGION_NAMES } from '../../../core/constants';
 
 export const AudioSettingsPanel: React.FC = () => {
   const { settings, setSettings, resetAudioSettings, setActivePreset, setMode, setColorTheme } = useVisuals();
   const { 
       audioDevices, selectedDeviceId, onDeviceChange, toggleMicrophone, isListening, isPending,
-      sourceType, setSourceType, loadFile, fileStatus, fileName, getAudioSlice
+      sourceType, fileStatus, fileName, getAudioSlice
   } = useAudioContext();
-  const { apiKeys } = useAI();
+  const { apiKeys, setApiKeys, showLyrics, setShowLyrics } = useAI();
   const { t, showToast, language } = useUI();
   
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   
+  // AI Key Management State
+  const [inputKey, setInputKey] = useState('');
+  const [isValidating, setIsValidating] = useState(false);
+  const [showKey, setShowKey] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const hints = t?.hints || {};
   const audioPanel = t?.audioPanel || {};
   const toasts = t?.toasts || {};
+  const aiProviders = t?.aiProviders || {};
+  const aiPanel = t?.aiPanel || {};
+  const regions = t?.regions || {};
   const isAdvanced = settings.uiMode === 'advanced';
+
+  const currentProvider = settings.recognitionProvider || 'GEMINI';
+  const hasKey = !!apiKeys[currentProvider];
+  const isMock = currentProvider === 'MOCK';
+
+  useEffect(() => {
+      setInputKey(apiKeys[currentProvider] || '');
+      setShowKey(false);
+  }, [currentProvider, apiKeys]);
+
+  const handleSaveKey = async () => {
+      const provider = settings.recognitionProvider as AIProvider;
+      if (!inputKey.trim()) {
+          const newKeys = { ...apiKeys };
+          delete newKeys[provider];
+          setApiKeys(newKeys);
+          showToast(aiPanel.keyCleared || "Key cleared", 'info');
+          return;
+      }
+
+      setIsValidating(true);
+      const isValid = await validateApiKey('GEMINI', inputKey);
+      setIsValidating(false);
+
+      if (isValid) {
+          setApiKeys(prev => ({ ...prev, [provider]: inputKey }));
+          showToast(aiPanel.keySaved || "Key Verified & Saved", 'success');
+      } else {
+          showToast(aiPanel.keyInvalid || "Invalid Gemini API Key", 'error');
+          inputRef.current?.select();
+      }
+  };
 
   const fftOptions = [
     { value: 512, label: '512' },
@@ -48,13 +90,6 @@ export const AudioSettingsPanel: React.FC = () => {
   const handleAudioSettingChange = (key: keyof typeof settings, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }));
     setActivePreset('');
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-          loadFile(file);
-      }
   };
 
   const handleAiDirector = async () => {
@@ -104,76 +139,54 @@ export const AudioSettingsPanel: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 h-full">
-      {/* Card 1: Input Source */}
-      <BentoCard title={t?.audioInput || "Input Source"}>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
+      {/* Card 1: Input Source (Microphone) */}
+      <BentoCard title={t?.audioInput || "Microphone"}>
          <div className="space-y-4">
-             <SegmentedControl
-                value={sourceType}
-                onChange={(val) => setSourceType(val)}
-                options={[
-                    { value: 'MICROPHONE', label: audioPanel.mic || "MIC" },
-                    { value: 'FILE', label: audioPanel.file || "FILE" }
-                ]}
-             />
+             <div className="space-y-3 animate-fade-in-up">
+                <CustomSelect 
+                    label={t?.audioInput || "Device"}
+                    value={selectedDeviceId}
+                    options={deviceOptions}
+                    onChange={onDeviceChange}
+                    hintText={hints?.device}
+                />
+                
+                {/* File Mode Indicator */}
+                {sourceType === 'FILE' && (
+                    <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-xs flex items-center justify-between group">
+                        <div className="flex items-center gap-2 min-w-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                            <span className="truncate text-white/70 font-medium">{fileName || "Local Audio"}</span>
+                        </div>
+                        <span className="text-[9px] font-black uppercase text-blue-400 tracking-wider">Active</span>
+                    </div>
+                )}
 
-             {sourceType === 'MICROPHONE' ? (
-                 <div className="space-y-3 animate-fade-in-up">
-                    <CustomSelect 
-                        label={t?.audioInput || "Device"}
-                        value={selectedDeviceId}
-                        options={deviceOptions}
-                        onChange={onDeviceChange}
-                        hintText={hints?.device}
-                    />
-                    <TooltipArea text={`${isListening ? t?.stopMic : t?.startMic} [Space]`}>
-                        <button 
-                            onClick={() => toggleMicrophone(selectedDeviceId)} 
-                            disabled={isPending}
-                            className={`w-full py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300 shadow-lg ${isListening ? 'bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/25' : 'bg-blue-600 text-white hover:bg-blue-500'} ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                            {isPending ? '...' : (isListening ? (t?.stopMic || "Stop") : (t?.startMic || "Start"))}
-                        </button>
-                    </TooltipArea>
-                 </div>
-             ) : (
-                 <div className="space-y-3 animate-fade-in-up">
-                     <input 
-                        type="file" 
-                        accept="audio/*" 
-                        ref={fileInputRef} 
-                        className="hidden" 
-                        onChange={handleFileUpload}
-                     />
-                     <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="w-full py-4 border-2 border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all text-white/50 hover:text-blue-300"
-                     >
-                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-                         <span className="text-[10px] font-bold uppercase tracking-widest">{audioPanel.upload || "Click to Upload"}</span>
-                     </button>
-                     {fileName && (
-                         <div className="bg-white/5 p-2 rounded-lg border border-white/10 flex items-center gap-2">
-                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                             <span className="text-xs text-white truncate flex-1">{fileName}</span>
-                         </div>
-                     )}
-                 </div>
-             )}
+                <TooltipArea text={`${isListening ? t?.stopMic : t?.startMic} [Space]`}>
+                    <button 
+                        onClick={() => toggleMicrophone(selectedDeviceId)} 
+                        disabled={isPending}
+                        className={`w-full py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300 shadow-lg ${isListening ? 'bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/25' : 'bg-blue-600 text-white hover:bg-blue-500'} ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                        {isPending ? '...' : (isListening ? (t?.stopMic || "Stop") : (sourceType === 'FILE' ? "Switch to Mic" : (t?.startMic || "Start")))}
+                    </button>
+                </TooltipArea>
+             </div>
          </div>
       </BentoCard>
 
-      {/* Card 2: Analysis */}
-      <BentoCard title="Signal Analysis">
-        <div className="space-y-6">
+      {/* Card 2: Analysis & AI Core */}
+      <BentoCard title="Analysis & AI Intelligence">
+        <div className="space-y-4">
+          {/* Signal Tuning */}
           <Slider label={t?.sensitivity || "Sensitivity"} hintText={hints?.sensitivity} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v: number) => handleAudioSettingChange('sensitivity', v)} />
           
           {isAdvanced && (
-              <div className="space-y-6 animate-fade-in-up">
+              <div className="grid grid-cols-2 gap-2 pb-2 border-b border-white/5">
                   <Slider label={t?.smoothing || "Smoothing"} hintText={hints?.smoothing} value={settings.smoothing} min={0} max={0.95} step={0.01} onChange={(v: number) => handleAudioSettingChange('smoothing', v)} />
-                  
-                  <SegmentedControl
-                        label={t?.fftSize || "FFT Resolution"}
+                  <CustomSelect
+                        label={t?.fftSize || "FFT"}
                         value={settings.fftSize}
                         options={fftOptions}
                         onChange={(val) => handleAudioSettingChange('fftSize', val)}
@@ -181,12 +194,65 @@ export const AudioSettingsPanel: React.FC = () => {
                     />
               </div>
           )}
+
+          {/* AI Core Configuration */}
+          <div className="space-y-3 animate-fade-in-up">
+             <CustomSelect 
+                label={t?.recognitionSource || "AI Model"} 
+                value={currentProvider} 
+                hintText={hints?.recognitionSource}
+                options={[
+                    { value: 'GEMINI', label: `🟢 ${aiProviders.GEMINI || 'Gemini 3.0'}` }, 
+                    { value: 'OPENAI', label: `🔵 ${aiProviders.OPENAI || 'GPT-4o Style'}` },
+                    { value: 'MOCK', label: `⚪ ${t?.simulatedDemo || 'Simulated'}` }
+                ]} 
+                onChange={(val) => setSettings({...settings, recognitionProvider: val})} 
+             />
+             
+             {!isMock && (
+                 <div className="bg-gradient-to-b from-white/5 to-transparent p-2 rounded-xl border border-white/10 space-y-1.5">
+                     <div className="flex justify-between items-center">
+                         <span className="text-[9px] font-bold text-blue-200 uppercase tracking-widest">API Key</span>
+                         <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${hasKey ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-yellow-500/10 text-yellow-500/80 border-yellow-500/20'}`}>
+                             {hasKey ? (aiPanel.saved || 'READY') : (aiPanel.missing || 'OPTIONAL')}
+                         </span>
+                     </div>
+                     <div className="flex gap-1.5">
+                         <div className="relative flex-1">
+                             <input
+                                 ref={inputRef}
+                                 type={showKey ? "text" : "password"} 
+                                 value={inputKey}
+                                 onChange={(e) => setInputKey(e.target.value)}
+                                 className="w-full bg-black/60 border border-white/10 rounded-lg pl-2 pr-7 py-1.5 text-[10px] text-white placeholder-white/20 focus:outline-none focus:border-blue-500 transition-all font-mono"
+                                 autoComplete="off"
+                                 placeholder="AIzaSy..."
+                             />
+                             <button onClick={() => setShowKey(!showKey)} className="absolute right-1 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/80 p-1">
+                                 {showKey ? (
+                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
+                                 ) : (
+                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" /><path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.742L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.064 7 9.542 7 .847 0 1.669-.105 2.454-.303z" /></svg>
+                                 )}
+                             </button>
+                         </div>
+                         <button 
+                            onClick={handleSaveKey} 
+                            disabled={isValidating} 
+                            className={`px-2 rounded-lg text-[9px] font-bold uppercase transition-all shrink-0 flex items-center justify-center min-w-[40px] ${hasKey ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg'}`}
+                         >
+                             {isValidating ? '...' : (hasKey ? 'UPD' : 'SAVE')}
+                         </button>
+                     </div>
+                 </div>
+             )}
+          </div>
         </div>
       </BentoCard>
 
-      {/* Card 3: Actions & AI Director */}
+      {/* Card 3: Actions & Activation */}
       <BentoCard 
-        title="Actions" 
+        title="Smart Actions" 
         className="flex flex-col"
         action={
             <TooltipArea text={hints?.resetAudio}>
@@ -196,17 +262,32 @@ export const AudioSettingsPanel: React.FC = () => {
             </TooltipArea>
         }
       >
-          <div className="flex-grow space-y-3">
-             {sourceType === 'FILE' && fileStatus === 'ready' ? (
-                 <div className="p-4 bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl border border-white/10 animate-fade-in-up">
-                    <div className="flex justify-between items-center mb-3">
+          <div className="flex-grow space-y-4">
+             <div className="bg-white/[0.03] p-2 rounded-xl border border-white/5 space-y-2">
+                 <SettingsToggle label={t?.showLyrics || "AI Synesthesia"} value={showLyrics} onChange={() => setShowLyrics(!showLyrics)} activeColor="green" hintText={`${hints?.lyrics || "Enable AI Lyrics"} [L]`} />
+                 {isAdvanced && (
+                     <div className="px-1 pb-1 animate-fade-in-up">
+                        <CustomSelect 
+                            label={t?.region || "Region"} 
+                            value={settings.region || 'global'} 
+                            hintText={hints?.region} 
+                            options={Object.keys(REGION_NAMES).map(r => ({ value: r, label: regions[r] || r }))} 
+                            onChange={(val) => setSettings({...settings, region: val as Region})} 
+                        />
+                     </div>
+                 )}
+             </div>
+
+             {sourceType === 'FILE' && fileStatus === 'ready' && (
+                 <div className="p-3 bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl border border-white/10 animate-fade-in-up">
+                    <div className="flex justify-between items-center mb-2">
                         <span className="text-[10px] font-black uppercase tracking-widest text-blue-200">{audioPanel.aiDirector || "AI Auto-Director"}</span>
-                        <div className="px-1.5 py-0.5 bg-blue-500/20 rounded text-[9px] font-bold text-blue-300 border border-blue-500/30">{t?.common?.new || "NEW"}</div>
+                        <div className="px-1.5 py-0.5 bg-blue-500/20 rounded text-[9px] font-bold text-blue-300 border border-blue-500/30">GENERATE</div>
                     </div>
                     <button 
                         onClick={handleAiDirector}
                         disabled={isAnalyzing}
-                        className={`w-full py-3 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${isAnalyzing ? 'bg-white/10 text-white/50 cursor-wait' : 'bg-white text-black hover:scale-[1.02] shadow-lg shadow-white/10'}`}
+                        className={`w-full py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${isAnalyzing ? 'bg-white/10 text-white/50 cursor-wait' : 'bg-white text-black hover:scale-[1.02] shadow-lg shadow-white/10'}`}
                     >
                         {isAnalyzing ? (
                             <>
@@ -216,16 +297,10 @@ export const AudioSettingsPanel: React.FC = () => {
                         ) : (
                             <>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" /></svg>
-                                <span>{audioPanel.analyze || "Generate Visuals"}</span>
+                                <span>{audioPanel.analyze || "Create Visuals"}</span>
                             </>
                         )}
                     </button>
-                 </div>
-             ) : (
-                 <div className="p-4 bg-white/5 rounded-xl border border-white/5 h-full flex items-center justify-center text-center">
-                    <span className="text-xs font-bold text-white/40 uppercase tracking-widest leading-relaxed">
-                       {t?.audioPanel?.info || "Adjust input sensitivity and smoothing to customize visual reaction."}
-                    </span>
                  </div>
              )}
           </div>

@@ -1,12 +1,13 @@
+
 /**
  * File: components/ui/CustomTextOverlay.tsx
- * Version: 1.1.2
+ * Version: 1.2.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 20:00
+ * Updated: 2025-03-12 10:00
  */
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { VisualizerSettings, SongInfo } from '../../core/types';
 import { useAudioPulse } from '../../core/hooks/useAudioPulse';
 
@@ -22,13 +23,27 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
   const lastTimeRef = useRef(0);
   const sizeVw = settings.customTextSize || 12;
   const sizePx = sizeVw * 13; 
+  
+  const [timeString, setTimeString] = useState('');
+
+  useEffect(() => {
+    if (settings.textSource === 'CLOCK') {
+        const updateTime = () => setTimeString(new Date().toLocaleTimeString([], { hour12: false }));
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
+        return () => clearInterval(interval);
+    }
+  }, [settings.textSource]);
 
   // Priority Logic based on textSource setting
   let isSongMode = false;
+  let isClockMode = false;
   const mode = settings.textSource || 'AUTO';
 
   if (mode === 'SONG') {
       isSongMode = true;
+  } else if (mode === 'CLOCK') {
+      isClockMode = true;
   } else if (mode === 'CUSTOM') {
       isSongMode = false;
   } else {
@@ -37,8 +52,17 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
       isSongMode = !!(song && (song.title || song.artist) && song.artist !== 'System Alert');
   }
   
-  const mainText = isSongMode ? (song?.title || '') : settings.customText;
-  const subText = isSongMode ? (song?.artist || '') : null;
+  let mainText = '';
+  let subText: string | null | undefined = null;
+
+  if (isClockMode) {
+      mainText = timeString;
+  } else if (isSongMode) {
+      mainText = song?.title || '';
+      subText = song?.artist || '';
+  } else {
+      mainText = settings.customText;
+  }
 
   const hasContent = !!mainText;
   const pulseEnabled = settings.showCustomText && hasContent && settings.textPulse;

@@ -1,6 +1,7 @@
+
 /**
  * File: assets/locales/zh.ts
- * Version: 2.1.5
+ * Version: 2.1.7
  * Author: Sut
  */
 
@@ -38,7 +39,7 @@ export const zh = {
     mode: '播放模式'
   },
   tabs: {
-    visual: '视觉', text: '文字', input: '音频', audio: '音频', playback: '媒体库', ai: 'AI 通感', system: '系统', studio: '工作室'
+    visual: '视觉', text: '信息层', input: '音频', audio: '音频与智能', playback: '媒体库', ai: 'AI 通感', system: '系统', studio: '工作室'
   },
   studioPanel: {
     title: '录制工作室',
@@ -272,7 +273,8 @@ export const zh = {
   textSources: {
       auto: '智能自动 (优先歌曲)',
       custom: '仅自定义文字',
-      song: '仅歌曲信息'
+      song: '仅歌曲信息',
+      clock: '当前时间'
   },
   customTextPlaceholder: '输入文字...',
   showText: '显示文字图层',

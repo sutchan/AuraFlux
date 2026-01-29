@@ -1,6 +1,7 @@
+
 /**
  * File: assets/locales/ja.ts
- * Version: 2.1.5
+ * Version: 2.1.6
  * Author: Sut
  */
 
@@ -186,7 +187,8 @@ export const ja = {
   textSources: {
       auto: '自動 (スマート)',
       custom: 'カスタムテキストのみ',
-      song: '曲情報のみ'
+      song: '曲情報のみ',
+      clock: '現在時刻'
   },
   customTextPlaceholder: 'テキストを入力',
   showText: 'オーバーレイ表示',
@@ -254,8 +256,8 @@ export const ja = {
   loadPreset: 'プリセット読込',
   copyConfig: '設定コピー',
   wakeLock: 'スリープ防止',
-  includeInAutoRotate: '自動切替に含める',
-  excludeFromAutoRotate: '自動切替から除外',
+  includeInAutoRotate: '自動ローテーションに含める',
+  excludeFromAutoRotate: '自動ローテーションから除外',
   albumArtBackground: 'アルバムアート背景',
   overlayCover: 'カバーオーバーレイ',
   lightMode: 'ライトモード',

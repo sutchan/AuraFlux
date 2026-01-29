@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ko.ts
- * Version: 2.1.4
+ * Version: 2.1.5
  * Author: Sut
  */
 
@@ -187,7 +187,8 @@ export const ko = {
   textSources: {
       auto: '자동 (스마트)',
       custom: '사용자 텍스트만',
-      song: '곡 정보만'
+      song: '곡 정보만',
+      clock: '현재 시간'
   },
   customTextPlaceholder: '텍스트 입력...',
   showText: '오버레이 표시',

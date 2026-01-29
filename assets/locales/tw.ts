@@ -1,6 +1,7 @@
+
 /**
  * File: assets/locales/tw.ts
- * Version: 2.1.5
+ * Version: 2.1.6
  * Author: Sut
  */
 
@@ -152,7 +153,7 @@ export const tw = {
   identifying: '正在捕獲聲景特徵...', 
   startExperience: '步入流光之境',
   welcomeTitle: 'Aura Flux | 靈動流光',
-  welcomeText: '讓每一縷振動凝結為視覺傑作。由 Gemini AI 驅動，將聲音重構為觸手可及的光影藝術。',
+  welcomeText: '讓每一縷振動凝結為視覺杰作。由 Gemini AI 驅動，將聲音重構為觸手可及的光影藝術。',
   unsupportedTitle: '瀏覽器不支援',
   unsupportedText: 'Aura Flux 需要現代瀏覽器功能才能運行。請更新 Chrome, Edge 或 Safari。',
   hideOptions: '收起面板',
@@ -186,7 +187,8 @@ export const tw = {
   textSources: {
       auto: '智慧自動 (優先歌曲)',
       custom: '僅自訂文字',
-      song: '僅歌曲資訊'
+      song: '僅歌曲資訊',
+      clock: '當前時間'
   },
   customTextPlaceholder: '輸入文字...',
   showText: '顯示文字圖層',

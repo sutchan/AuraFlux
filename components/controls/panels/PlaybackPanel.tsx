@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/PlaybackPanel.tsx
- * Version: 1.2.4
+ * Version: 2.0.0
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: Optimized layout to prevent excessive height and ensure internal scrolling.
+ * Updated: UI Overhaul - Centralized file management in Playlist card.
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -20,7 +20,8 @@ export const PlaybackPanel: React.FC = () => {
     currentTime, duration, seekFile, currentSong
   } = useAudioContext();
   const { t } = useUI();
-  const { colorTheme } = useVisuals(); // Use theme color for accents
+  const { colorTheme } = useVisuals();
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
   const activeTrackRef = useRef<HTMLDivElement>(null);
 
@@ -44,63 +45,58 @@ export const PlaybackPanel: React.FC = () => {
   // Scroll to active track when it changes
   useEffect(() => {
     if (activeTrackRef.current) {
-        // Use scrollIntoView with smooth behavior and block 'nearest' to avoid jumping if already visible
         activeTrackRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [currentIndex]);
 
+  // Playlist Header Actions
+  const PlaylistActions = (
+      <div className="flex items-center gap-1">
+          <TooltipArea text={t?.common?.dropFiles || "Add Files"}>
+              <button 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="p-1.5 rounded-lg hover:bg-white/10 text-white/60 hover:text-blue-300 transition-colors border border-transparent hover:border-white/5"
+              >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+              </button>
+          </TooltipArea>
+          <TooltipArea text={t?.common?.clearAll || "Clear Queue"}>
+              <button 
+                  onClick={() => { if(playlist.length > 0 && window.confirm(t?.common?.confirmClear)) clearPlaylist(); }}
+                  disabled={playlist.length === 0}
+                  className={`p-1.5 rounded-lg border border-transparent transition-colors ${playlist.length === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-white/10 text-white/60 hover:text-red-400 hover:border-white/5'}`}
+              >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              </button>
+          </TooltipArea>
+      </div>
+  );
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-      {/* Card 1: Library Actions & Controls */}
-      <BentoCard title={t?.tabs?.playback || "Library"}>
-        <div className="flex flex-col h-full gap-4">
-            {/* File Actions */}
-            <div className="flex gap-2">
-                <TooltipArea text={t?.common?.dropFiles}>
-                    <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 group overflow-hidden relative"
-                    >
-                        {/* Subtle background glow on hover */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-                        
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400 group-hover:text-blue-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                        <span className="relative z-10">{t?.common?.dropFiles || "Add Files"}</span>
-                    </button>
-                </TooltipArea>
-                <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="audio/*" multiple className="hidden" />
-                
-                <TooltipArea text={t?.common?.clearAll}>
-                    <button 
-                        onClick={() => { if(window.confirm(t?.common?.confirmClear)) clearPlaylist(); }}
-                        disabled={playlist.length === 0}
-                        className={`px-3 py-3 border border-white/10 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center ${playlist.length === 0 ? 'opacity-30 cursor-not-allowed bg-transparent' : 'bg-white/5 hover:bg-red-500/10 hover:border-red-500/30 text-white/60 hover:text-red-400'}`}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                    </button>
-                </TooltipArea>
-            </div>
+      {/* Hidden Input for Global Access */}
+      <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="audio/*" multiple className="hidden" />
 
-            {/* Playback Controls */}
+      {/* Card 1: Now Playing & Controls */}
+      <BentoCard title="Now Playing">
+        <div className="flex flex-col h-full gap-4">
+            {/* Playback Status / Art */}
             {playlist.length > 0 ? (
-                <div className="flex flex-col gap-3 p-4 bg-gradient-to-b from-white/[0.03] to-transparent rounded-xl border border-white/5 animate-fade-in-up relative overflow-hidden">
-                    {/* Art Background Blur (Optional, subtle) */}
+                <div className="flex flex-col gap-3 p-4 bg-gradient-to-b from-white/[0.03] to-transparent rounded-xl border border-white/5 animate-fade-in-up relative overflow-hidden flex-1 justify-center">
+                    {/* Art Background Blur */}
                     {currentSong?.albumArtUrl && (
-                        <div className="absolute inset-0 opacity-20 pointer-events-none blur-xl bg-cover bg-center" style={{ backgroundImage: `url(${currentSong.albumArtUrl})` }} />
+                        <div className="absolute inset-0 opacity-20 pointer-events-none blur-xl bg-cover bg-center transition-all duration-700" style={{ backgroundImage: `url(${currentSong.albumArtUrl})` }} />
                     )}
                     
-                    {/* Now Playing Info */}
+                    {/* Metadata */}
                     <div className="relative z-10 text-center mb-1">
-                        <div className="text-xs font-bold text-white truncate px-2">{currentSong?.title || "Unknown Track"}</div>
-                        <div className="text-[10px] text-white/50 truncate px-2">{currentSong?.artist || "Unknown Artist"}</div>
+                        <div className="text-sm font-bold text-white truncate px-2 drop-shadow-md">{currentSong?.title || t?.common?.unknownTrack}</div>
+                        <div className="text-[10px] text-white/60 truncate px-2 font-medium tracking-wide">{currentSong?.artist || t?.common?.unknownArtist}</div>
                     </div>
 
-                    {/* Progress */}
-                    <div className="space-y-1.5 relative z-10">
+                    {/* Progress Bar */}
+                    <div className="space-y-1.5 relative z-10 w-full">
                         <div className="relative h-1.5 bg-black/40 rounded-full overflow-hidden group cursor-pointer border border-white/5">
-                            {/* Buffered/Total background */}
-                            
-                            {/* Played Progress */}
                             <div 
                                 className="absolute top-0 left-0 h-full transition-all duration-100 ease-linear rounded-r-full" 
                                 style={{ 
@@ -109,7 +105,6 @@ export const PlaybackPanel: React.FC = () => {
                                     boxShadow: `0 0 10px ${themeColor}80`
                                 }} 
                             />
-                            
                             <input
                                 type="range"
                                 min={0}
@@ -120,39 +115,39 @@ export const PlaybackPanel: React.FC = () => {
                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                             />
                         </div>
-                        <div className="flex justify-between text-[9px] font-mono text-white/30 px-0.5">
+                        <div className="flex justify-between text-[9px] font-mono text-white/40 px-0.5">
                             <span>{formatDuration(currentTime)}</span>
                             <span>{formatDuration(duration)}</span>
                         </div>
                     </div>
 
-                    {/* Buttons */}
-                    <div className="flex items-center justify-center gap-5 pt-1 relative z-10">
-                        <button onClick={playPrev} className="p-2 text-white/40 hover:text-white transition-colors hover:scale-110">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
+                    {/* Main Controls */}
+                    <div className="flex items-center justify-center gap-6 pt-2 relative z-10">
+                        <button onClick={playPrev} className="p-2 text-white/40 hover:text-white transition-colors hover:scale-110 active:scale-95">
+                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
                         </button>
                         <button 
                             onClick={togglePlayback} 
-                            className="w-12 h-12 rounded-full flex items-center justify-center transition-all shadow-lg hover:scale-105 active:scale-95 border border-white/10"
+                            className="w-14 h-14 rounded-full flex items-center justify-center transition-all shadow-lg hover:scale-105 active:scale-95 border border-white/10 hover:border-white/30"
                             style={{ 
                                 backgroundColor: isPlaying ? 'white' : 'rgba(255,255,255,0.1)',
                                 color: isPlaying ? 'black' : 'white'
                             }}
                         >
-                            {isPlaying ? <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> : <svg className="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>}
+                            {isPlaying ? <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> : <svg className="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>}
                         </button>
-                        <button onClick={playNext} className="p-2 text-white/40 hover:text-white transition-colors hover:scale-110">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z" /></svg>
+                        <button onClick={playNext} className="p-2 text-white/40 hover:text-white transition-colors hover:scale-110 active:scale-95">
+                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z" /></svg>
                         </button>
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center flex-1 bg-white/[0.02] rounded-xl border border-white/5 border-dashed min-h-[100px] group hover:bg-white/[0.04] transition-colors cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                    <svg className="w-8 h-8 text-white/10 group-hover:text-white/20 transition-colors mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
-                    <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">{t?.common?.empty || "No Active Track"}</span>
+                <div className="flex flex-col items-center justify-center flex-1 bg-white/[0.02] rounded-xl border border-white/5 border-dashed min-h-[120px] text-white/20">
+                    <span className="text-[10px] font-bold uppercase tracking-widest">{t?.common?.empty || "No Active Track"}</span>
                 </div>
             )}
 
+            {/* Playback Mode */}
             <div className="mt-auto pt-2 border-t border-white/5">
                 <SegmentedControl 
                     label={t?.player?.mode || "Playback Mode"}
@@ -161,36 +156,15 @@ export const PlaybackPanel: React.FC = () => {
                     options={[
                         { 
                             value: 'repeat-all', 
-                            label: (
-                                <div className="flex items-center justify-center gap-1.5" title={t?.player?.repeatAll || "Repeat All"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                    </svg>
-                                </div>
-                            ) 
+                            label: (<div className="flex justify-center py-0.5" title={t?.player?.repeatAll}><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg></div>) 
                         },
                         { 
                             value: 'repeat-one', 
-                            label: (
-                                <div className="flex items-center justify-center gap-1.5" title={t?.player?.repeatOne || "Repeat One"}>
-                                    <div className="relative flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                        </svg>
-                                        <span className="absolute text-[7px] font-black pt-0.5 select-none">1</span>
-                                    </div>
-                                </div>
-                            ) 
+                            label: (<div className="flex justify-center py-0.5" title={t?.player?.repeatOne}><div className="relative"><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg><span className="absolute text-[7px] font-black right-[-2px] bottom-[-2px] bg-black px-[1px] leading-none">1</span></div></div>) 
                         }, 
                         { 
                             value: 'shuffle', 
-                            label: (
-                                <div className="flex items-center justify-center gap-1.5" title={t?.player?.shuffle || "Shuffle"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
-                                    </svg>
-                                </div>
-                            ) 
+                            label: (<div className="flex justify-center py-0.5" title={t?.player?.shuffle}><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" /></svg></div>) 
                         }
                     ]}
                 />
@@ -198,22 +172,25 @@ export const PlaybackPanel: React.FC = () => {
         </div>
       </BentoCard>
 
-      {/* Card 2 & 3: Playlist (Spans 2 columns) - Height Constrained */}
+      {/* Card 2 & 3: Library / Playlist */}
       <BentoCard 
-        title={`${t?.common?.queue || "Queue"} (${playlist.length})`} 
+        title={`${t?.tabs?.playback || "Library"} (${playlist.length})`} 
         className="md:col-span-2 max-h-[50vh] md:max-h-[420px]"
+        action={PlaylistActions}
       >
         <div className="flex flex-col min-h-full">
             {playlist.length === 0 ? (
-                <div className="flex flex-col items-center justify-center flex-1 min-h-[200px] text-white/20 gap-3 border-2 border-dashed border-white/5 rounded-xl m-1">
-                    <svg className="w-8 h-8 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
-                    <span className="text-xs font-bold uppercase tracking-widest">{t?.common?.empty || "List Empty"}</span>
-                    <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="mt-2 text-[10px] text-blue-400 hover:text-blue-300 font-bold uppercase tracking-wider underline decoration-blue-500/30 hover:decoration-blue-400 underline-offset-4 transition-colors"
-                    >
-                        {t?.common?.dropFiles || "Import Files"}
-                    </button>
+                <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex flex-col items-center justify-center flex-1 min-h-[240px] text-white/30 gap-4 border-2 border-dashed border-white/10 rounded-xl m-1 hover:bg-white/[0.02] hover:border-blue-500/30 hover:text-blue-200 transition-all cursor-pointer group"
+                >
+                    <div className="p-4 bg-white/5 rounded-full group-hover:scale-110 transition-transform duration-300">
+                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    </div>
+                    <div className="text-center">
+                        <p className="text-sm font-bold uppercase tracking-widest mb-1">{t?.common?.dropFiles || "Add Audio Files"}</p>
+                        <p className="text-[10px] opacity-60">MP3, WAV, FLAC, OGG</p>
+                    </div>
                 </div>
             ) : (
                 <div className="space-y-1 pb-2">
