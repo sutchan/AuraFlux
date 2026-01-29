@@ -1,3 +1,4 @@
+
 # OpenSpec: 系统架构规范
 
 ## 1. 核心技术栈
@@ -27,4 +28,4 @@
   - 为 ThreeVisualizer 引入核心组件记忆化策略，减少 R3F 协调开销。
 
 ---
-*Aura Flux Architecture - Version 1.8.8*
+*Aura Flux Architecture - Version 1.8.9*

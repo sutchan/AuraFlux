@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 2.1.1
+ * Version: 2.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 18:00
+ * Updated: 2025-03-10 16:30
  */
 
 import React, { useRef, useState } from 'react';
@@ -22,13 +23,14 @@ export const AudioSettingsPanel: React.FC = () => {
       sourceType, setSourceType, loadFile, fileStatus, fileName, getAudioSlice
   } = useAudioContext();
   const { apiKeys } = useAI();
-  const { t, showToast } = useUI();
+  const { t, showToast, language } = useUI();
   
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const hints = t?.hints || {};
   const audioPanel = t?.audioPanel || {};
+  const toasts = t?.toasts || {};
   const isAdvanced = settings.uiMode === 'advanced';
 
   const fftOptions = [
@@ -60,7 +62,7 @@ export const AudioSettingsPanel: React.FC = () => {
       
       const apiKey = apiKeys['GEMINI'] || process.env.API_KEY;
       if (!apiKey) {
-          showToast('Gemini API Key required for AI Director.', 'error');
+          showToast(toasts.aiDirectorReq || 'Gemini API Key required for AI Director.', 'error');
           return;
       }
 
@@ -77,8 +79,8 @@ export const AudioSettingsPanel: React.FC = () => {
           reader.onloadend = async () => {
               const base64Audio = (reader.result as string).split(',')[1];
               
-              // 3. Call AI Service
-              const config = await generateVisualConfigFromAudio(base64Audio, apiKey);
+              // 3. Call AI Service with current language
+              const config = await generateVisualConfigFromAudio(base64Audio, apiKey, language);
               
               if (config) {
                   // 4. Apply Settings
@@ -101,7 +103,7 @@ export const AudioSettingsPanel: React.FC = () => {
           };
       } catch (e) {
           console.error(e);
-          showToast('AI Analysis Failed.', 'error');
+          showToast(toasts.aiFail || 'AI Analysis Failed.', 'error');
           setIsAnalyzing(false);
       }
   };

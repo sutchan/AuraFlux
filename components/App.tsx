@@ -1,9 +1,7 @@
 /**
  * File: components/App.tsx
- * Version: 1.8.9
+ * Version: 1.9.0
  * Author: Aura Flux Team
- * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-09 20:00
  */
 
 import React, { useCallback, useState } from 'react';
@@ -93,7 +91,7 @@ const AppContent: React.FC = () => {
       {isDragOver && (
           <div className="absolute inset-0 z-[200] bg-blue-600/30 backdrop-blur-sm border-4 border-blue-400 border-dashed m-4 rounded-3xl flex items-center justify-center animate-pulse pointer-events-none">
               <span className="text-3xl font-black text-white uppercase tracking-widest drop-shadow-lg">
-                  Drop Audio Files
+                  {t?.common?.dropFiles || "Drop Audio Files"}
               </span>
           </div>
       )}

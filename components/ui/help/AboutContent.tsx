@@ -1,9 +1,9 @@
 /**
  * File: components/ui/help/AboutContent.tsx
- * Version: 1.6.31
+ * Version: 1.6.32
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 01:00
+ * Updated: 2025-03-10 20:00
  */
 
 import React from 'react';
@@ -24,9 +24,11 @@ export const AboutContent: React.FC<AboutContentProps> = ({ h, t }) => (
     <div className="space-y-6 animate-fade-in-up">
         {/* Project Description */}
         <div className="bg-gradient-to-br from-blue-900/10 to-purple-900/10 p-5 rounded-2xl border border-white/10 shadow-inner">
-           <h4 className="text-[10px] font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+           <h4 className="text-[10px] font-black uppercase tracking-widest mb-3 flex items-center gap-2">
              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-             {h?.projectInfoTitle || "Our Vision"}
+             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                {h?.projectInfoTitle || "Our Vision"}
+             </span>
            </h4>
            <p className="text-sm text-white/70 leading-relaxed font-medium">
              {h?.aboutDescription || "Aura Flux is a real-time synesthesia engine that transmutes audio frequencies into generative 3D art. By fusing the mathematical precision of WebGL with the semantic understanding of Google Gemini, it creates a visual language that doesn't just react to sound—it understands it."}

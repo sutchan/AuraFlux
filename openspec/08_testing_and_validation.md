@@ -1,3 +1,4 @@
+
 # OpenSpec: 测试与验证规范
 
 ## 1. 测试策略
@@ -21,4 +22,4 @@
 - [ ] AI 导演功能在无 API Key 时的提示。
 
 ---
-*Aura Flux Testing & Validation - Version 1.8.8*
+*Aura Flux Testing & Validation - Version 1.8.9*

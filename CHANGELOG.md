@@ -1,6 +1,14 @@
+
 # Changelog
 
 All notable changes to the **Aura Flux** project will be documented in this file.
+
+## [v1.8.9]
+
+### Refactor
+*   **🌍 i18n:** Synchronized all localization files (`zh`, `tw`, `ja`, `es`, `ko`, `de`, `fr`, `ru`, `ar`) with the latest English master to ensure complete coverage of new features like Studio recording options and AI status messages. No keys are missing across any supported language.
+*   **🛡️ Robustness:** Enhanced the AI service (`aiService.ts`) to robustly handle malformed JSON responses by stripping Markdown code blocks before parsing. Added a fallback mechanism for missing `mood_en_keywords` to prevent UI crashes.
+*   **🛡️ Audio:** Added defensive checks in `useVideoRecorder` to prevent initialization errors if the Audio Context is suspended or unavailable (e.g., on some mobile devices in background tabs).
 
 ## [v1.8.8]
 

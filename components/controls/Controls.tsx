@@ -1,9 +1,9 @@
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.4.3
+ * Version: 1.4.4
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 13:00
+ * Updated: 2025-03-10 12:00
  */
 
 import React, { useState, useEffect } from 'react';
@@ -61,6 +61,10 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
         else if (doc.mozCancelFullScreen) doc.mozCancelFullScreen();
         else if (doc.msExitFullscreen) doc.msExitFullscreen();
     }
+  };
+
+  const toggleTheme = () => {
+      setSettings(s => ({...s, appTheme: s.appTheme === 'light' ? 'dark' : 'light'}));
   };
 
   useEffect(() => {
@@ -171,6 +175,15 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                     <div className="flex items-center gap-1.5">
                         <div className="hidden md:flex gap-1.5">
                             <ActionButton onClick={() => setShowHelpModal(true)} hintText={t?.hints?.help || "Help & Info"} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.546-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} />
+                            
+                            <ActionButton onClick={toggleFullscreen} hintText={t?.hints?.fullscreen || "Fullscreen"} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>} />
+                            
+                            <ActionButton onClick={toggleTheme} hintText={settings.appTheme === 'light' ? (t?.common?.themeDark || "Dark Mode") : (t?.common?.themeLight || "Light Mode")} icon={
+                                settings.appTheme === 'light' 
+                                ? <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                                : <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            } />
+                            
                             <ActionButton 
                                 onClick={randomizeSettings} 
                                 hintText={`${t?.hints?.randomize || "Randomize"} [R]`} 

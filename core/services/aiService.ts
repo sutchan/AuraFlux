@@ -1,10 +1,11 @@
+
 /**
  * File: core/services/aiService.ts
- * Version: 3.1.2
+ * Version: 3.2.0
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-09 10:00
- * Description: Increased timeout to 45s and hardened JSON response parsing.
+ * Updated: 2025-03-10 16:30
+ * Description: Robustness update: Fallback for missing mood_en_keywords and localized visual config explanation.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
@@ -150,6 +151,11 @@ export const identifySongFromAudio = async (
       let songInfo: SongInfo;
       try {
         songInfo = JSON.parse(rawText);
+        
+        // Robustness: Fallback if AI omits the required styling keywords
+        if (!songInfo.mood_en_keywords) {
+            songInfo.mood_en_keywords = 'default';
+        }
       } catch (jsonError) {
         console.error("[AI] Robustness: Failed to parse JSON response.", jsonError, "Raw Text:", rawText);
         throw new Error("Invalid JSON response from AI.");
@@ -195,12 +201,15 @@ export const identifySongFromAudio = async (
 
 export const generateVisualConfigFromAudio = async (
     base64Audio: string, 
-    customKey?: string
+    customKey: string | undefined,
+    language: Language = 'en'
 ): Promise<any> => {
     const apiKey = customKey || process.env.API_KEY;
     if (!apiKey) throw new Error("Missing API Key");
 
     const validModes = Object.keys(VISUALIZER_PRESETS).join(', ');
+    const langMap: Record<string, string> = { en: 'English', zh: 'Simplified Chinese', tw: 'Traditional Chinese', ja: 'Japanese', es: 'Spanish', ko: 'Korean', de: 'German', fr: 'French', ru: 'Russian', ar: 'Arabic' };
+    const targetLang = langMap[language] || 'English';
 
     const systemInstruction = `
         You are a world-class VJ (Visual Jockey) and Creative Director. 
@@ -218,7 +227,7 @@ export const generateVisualConfigFromAudio = async (
         3. Create a custom 3-color palette (hex codes) that matches the mood (e.g., Neon for Cyberpunk, Pastels for Lo-fi).
         4. Adjust 'speed' (0.5 - 3.0) based on tempo.
         5. Adjust 'sensitivity' (1.0 - 4.0) based on dynamic range.
-        6. Explain your creative choice in one short sentence.
+        6. Explain your creative choice in one short sentence. IMPORTANT: Write the explanation in ${targetLang}.
     `;
 
     try {

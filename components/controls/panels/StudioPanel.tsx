@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 3.9.1
+ * Version: 3.9.3
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 20:00
+ * Updated: 2025-03-10 16:30
  * Description: Optimized UI layout with grouped sections. Moved stream settings to Column 3. Redesigned Record Card.
  */
 
@@ -14,12 +15,12 @@ import { useVideoRecorder, RecorderConfig } from '../../../core/hooks/useVideoRe
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { Slider } from '../../ui/controls/Slider';
 import { SteppedSlider } from '../../ui/controls/SteppedSlider';
-import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 import { getAverage } from '../../../core/services/audioUtils';
 import { generateVisualConfigFromAudio } from '../../../core/services/aiService';
 import { VisualizerMode, LyricsStyle, Position } from '../../../core/types';
 import { getPositionOptions } from '../../../core/constants';
+import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 
 // Helper to format bytes
 const formatSize = (bytes: number) => {
@@ -36,7 +37,7 @@ const formatDuration = (seconds: number) => {
 };
 
 export const StudioPanel: React.FC = () => {
-  const { t, showToast } = useUI();
+  const { t, showToast, language } = useUI();
   
   // Audio Context
   const { 
@@ -79,7 +80,7 @@ export const StudioPanel: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { isRecording, isProcessing, isFadingOut, recordedBlob, duration: recordingDuration, size, startRecording, stopRecording, discardRecording, getSupportedMimeTypes } = useVideoRecorder({
-      audioContext, analyser, mediaStream, showToast, sourceType
+      audioContext, analyser, mediaStream, showToast, sourceType, t
   });
 
   const studio = t?.studioPanel || {};
@@ -205,7 +206,7 @@ export const StudioPanel: React.FC = () => {
   const handleAiDirector = async () => {
       const apiKey = apiKeys['GEMINI'] || process.env.API_KEY;
       if (!apiKey) {
-          showToast('Gemini API Key required.', 'error');
+          showToast(t?.toasts?.aiDirectorReq || 'Gemini API Key required.', 'error');
           return;
       }
       setIsAnalyzing(true);
@@ -216,7 +217,8 @@ export const StudioPanel: React.FC = () => {
           reader.readAsDataURL(wavBlob);
           reader.onloadend = async () => {
               const base64Audio = (reader.result as string).split(',')[1];
-              const config = await generateVisualConfigFromAudio(base64Audio, apiKey);
+              // Pass language to ensure explanation is localized
+              const config = await generateVisualConfigFromAudio(base64Audio, apiKey, language);
               if (config) {
                   if (config.mode) setMode(config.mode as VisualizerMode);
                   if (config.colors) setColorTheme(config.colors);
@@ -226,7 +228,7 @@ export const StudioPanel: React.FC = () => {
               setIsAnalyzing(false);
           };
       } catch (e) {
-          showToast('Analysis Failed.', 'error');
+          showToast(t?.toasts?.aiFail || 'Analysis Failed.', 'error');
           setIsAnalyzing(false);
       }
   };
@@ -261,7 +263,7 @@ export const StudioPanel: React.FC = () => {
   };
 
   const handleShareVideo = async () => {
-      if (!recordedBlob || !navigator.canShare) { showToast("Sharing not supported.", 'info'); return; }
+      if (!recordedBlob || !navigator.canShare) { showToast(t?.toasts?.shareFail || "Sharing not supported.", 'info'); return; }
       try {
           await navigator.share({ files: [new File([recordedBlob], 'aura_flux.mp4', { type: mimeType })], title: 'Aura Flux', text: 'Generative Art' });
       } catch (e) {}
@@ -492,12 +494,12 @@ export const StudioPanel: React.FC = () => {
                       <div className="relative z-10 group">
                          {isRecording && <div className="absolute inset-0 rounded-full border-4 border-red-500/30 animate-ping pointer-events-none"></div>}
                          {isArmed ? (
-                             <button onClick={cancelArming} className="w-16 h-16 rounded-full flex flex-col items-center justify-center border-4 border-yellow-500 text-yellow-500 bg-yellow-900/20 animate-pulse hover:bg-yellow-900/40 transition-all">
+                             <button onClick={cancelArming} className="w-12 h-12 rounded-full flex flex-col items-center justify-center border-4 border-yellow-500 text-yellow-500 bg-yellow-900/20 animate-pulse hover:bg-yellow-900/40 transition-all">
                                  <span className="text-[9px] font-bold uppercase">{studio.cancel}</span>
                              </button>
                          ) : (
-                             <button onClick={isRecording ? stopRecording : handleStartClick} disabled={isProcessing || isCountingDown || isFadingOut} className={`w-16 h-16 rounded-full flex items-center justify-center border-4 transition-all duration-300 shadow-2xl ${isRecording ? 'bg-red-900/10 border-red-500/50 scale-95' : 'bg-white/5 border-white/20 hover:border-white/40 hover:bg-white/10 hover:scale-105'} ${isProcessing ? 'opacity-50 cursor-wait' : ''}`}>
-                                {isProcessing ? <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"/> : <div className={`transition-all duration-300 ${isRecording ? 'w-5 h-5 bg-red-500 rounded-sm shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'w-8 h-8 bg-red-600 rounded-full shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_4px_8px_rgba(0,0,0,0.3)] group-hover:scale-90 group-hover:bg-red-500'}`} />}
+                             <button onClick={isRecording ? stopRecording : handleStartClick} disabled={isProcessing || isCountingDown || isFadingOut} className={`w-12 h-12 rounded-full flex items-center justify-center border-4 transition-all duration-300 shadow-2xl ${isRecording ? 'bg-red-900/10 border-red-500/50 scale-95' : 'bg-white/5 border-white/20 hover:border-white/40 hover:bg-white/10 hover:scale-105'} ${isProcessing ? 'opacity-50 cursor-wait' : ''}`}>
+                                {isProcessing ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"/> : <div className={`transition-all duration-300 ${isRecording ? 'w-4 h-4 bg-red-500 rounded-sm shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'w-6 h-6 bg-red-600 rounded-full shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_4px_8px_rgba(0,0,0,0.3)] group-hover:scale-90 group-hover:bg-red-500'}`} />}
                              </button>
                          )}
                       </div>

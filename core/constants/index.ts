@@ -1,14 +1,13 @@
+
 /**
  * File: core/constants/index.ts
  * Version: 1.9.0
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 22:00
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.8.8';
+export const APP_VERSION = '1.8.9';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
@@ -58,10 +57,13 @@ export const REGION_NAMES: Record<string, string> = {
 
 export const AVAILABLE_FONTS = [
   { value: 'Inter, sans-serif', label: 'Inter (Default)' },
+  { value: 'system-ui, sans-serif', label: 'System UI' },
   { value: '"JetBrains Mono", monospace', label: 'JetBrains Mono' },
   { value: '"Playfair Display", serif', label: 'Playfair Display' },
   { value: '"Roboto", sans-serif', label: 'Roboto' },
+  { value: '"Open Sans", sans-serif', label: 'Open Sans' },
   { value: '"Montserrat", sans-serif', label: 'Montserrat' },
+  { value: '"Lato", sans-serif', label: 'Lato' },
   { value: '"Oswald", sans-serif', label: 'Oswald' },
   { value: '"Courier New", monospace', label: 'Courier New' },
   { value: '"Times New Roman", serif', label: 'Times New Roman' },

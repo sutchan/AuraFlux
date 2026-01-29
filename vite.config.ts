@@ -2,8 +2,6 @@
  * File: vite.config.ts
  * Version: 1.8.6
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 11:00
  */
 
 import { defineConfig } from 'vite'

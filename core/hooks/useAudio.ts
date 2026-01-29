@@ -1,15 +1,16 @@
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.5.0
+ * Version: 2.6.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 15:00
+ * Updated: 2025-03-10 10:00
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { AudioDevice, VisualizerSettings, Language, AudioFeatures, AudioSourceType, SongInfo, Track, PlaybackMode } from '../types';
 import { createDemoAudioGraph } from '../services/audioSynthesis';
 import { audioBufferToWav } from '../services/audioUtils';
+import { loadPlaylistFromDB, saveTrackToDB, removeTrackFromDB, clearPlaylistDB } from '../services/playlistService';
 
 interface UseAudioProps {
   settings: VisualizerSettings;
@@ -79,6 +80,26 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       stopAll();
     };
   }, []);
+
+  // --- Load Playlist on Mount ---
+  useEffect(() => {
+      const initPlaylist = async () => {
+          const savedTracks = await loadPlaylistFromDB();
+          if (savedTracks.length > 0) {
+              setPlaylist(savedTracks);
+              setSourceType('FILE'); // Switch to file mode if tracks exist
+              setFileStatus('ready');
+              // Auto-select first track but don't play
+              if (savedTracks.length > 0) {
+                  const first = savedTracks[0];
+                  setFileName(first.title);
+                  setCurrentSong(first);
+                  setCurrentIndex(0);
+              }
+          }
+      };
+      initPlaylist();
+  }, [setCurrentSong]);
 
   // --- Initialization Helper ---
   const ensureContext = async (): Promise<AudioContext> => {
@@ -186,7 +207,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
   const extractMetadata = (file: File): Promise<Track> => {
       return new Promise((resolve) => {
           const basicTrack: Track = {
-              id: Math.random().toString(36).substr(2, 9),
+              id: Math.random().toString(36).substr(2, 9) + Date.now(),
               file,
               title: file.name.replace(/\.[^/.]+$/, ""),
               artist: 'Unknown Artist',
@@ -246,6 +267,8 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       for (const file of fileArray) {
           const track = await extractMetadata(file);
           newTracks.push(track);
+          // Persist each track
+          await saveTrackToDB(track);
       }
 
       setPlaylist(prev => {
@@ -358,6 +381,9 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
 
   const removeFromPlaylist = useCallback((index: number) => {
       setPlaylist(prev => {
+          const toRemove = prev[index];
+          if (toRemove) removeTrackFromDB(toRemove.id);
+
           const newList = [...prev];
           newList.splice(index, 1);
           
@@ -383,6 +409,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
 
   const clearPlaylist = useCallback(() => {
       stopAll();
+      clearPlaylistDB(); // Clear DB
       setPlaylist([]);
       setCurrentIndex(-1);
       setCurrentSong(null);

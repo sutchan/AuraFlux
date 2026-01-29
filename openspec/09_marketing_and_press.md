@@ -1,4 +1,5 @@
-# OpenSpec: 营销与宣传文档 (v1.8.8)
+
+# OpenSpec: 营销与宣传文档 (v1.8.9)
 
 ## 1. 核心定位 (Key Messaging)
 - **Slogan:** "The Sound of Light" / "光之旋律"
@@ -35,4 +36,4 @@
 "当 AI 学会了‘听’音乐... Aura Flux 利用 Gemini 3 模型分析歌曲情绪，自动调配色彩与视觉动态。从‘赛博朋克’到‘禅意冥想’，让视觉随情绪流动。🧠✨ #AIArt #Synesthesia"
 
 ---
-*Aura Flux Press Office - Version 1.8.8*
+*Aura Flux Press Office - Version 1.8.9*

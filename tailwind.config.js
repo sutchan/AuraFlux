@@ -1,9 +1,7 @@
 /**
  * File: tailwind.config.js
  * Version: 1.7.32
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Author: Sut
  */
 
 /** @type {import('tailwindcss').Config} */

@@ -1,9 +1,7 @@
 /**
  * File: assets/locales/en.ts
- * Version: 1.9.3
+ * Version: 2.1.0
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 21:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -12,7 +10,31 @@ export const en = {
   common: {
     on: 'ON', off: 'OFF', visible: 'VISIBLE', hidden: 'HIDDEN', active: 'ACTIVE', muted: 'MUTED', beta: 'BETA', simple: 'SIMPLE', advanced: 'ADVANCED', new: 'NEW', unknownTrack: 'Unknown Track',
     menu: 'MENU', queue: 'Queue', empty: 'List Empty', unknownArtist: 'Unknown Artist',
-    clearAll: 'Clear All', confirmClear: 'Clear Queue?'
+    clearAll: 'Clear All', confirmClear: 'Clear Queue?',
+    dropFiles: 'Drop Audio Files',
+    themeLight: 'Light Mode', themeDark: 'Dark Mode'
+  },
+  toasts: {
+    canvasNotFound: 'Canvas not found.',
+    audioNotReady: 'Audio source not ready.',
+    noVideoFormat: 'No supported video format.',
+    recInitFail: 'Recording failed to initialize.',
+    processing: 'Processing video...',
+    reviewReady: 'Ready to review!',
+    exportFail: 'Export failed.',
+    recStart: 'Recording started!',
+    shareFail: 'Sharing not supported.',
+    aiDirectorReq: 'Gemini API Key required for AI Director.',
+    aiFail: 'AI Analysis Failed.'
+  },
+  player: {
+    play: 'Play',
+    pause: 'Pause',
+    previous: 'Previous',
+    next: 'Next',
+    shuffle: 'Shuffle',
+    repeatAll: 'Repeat All',
+    repeatOne: 'Repeat One'
   },
   tabs: {
     visual: 'Visual', text: 'Text', audio: 'Audio', ai: 'AI Synesthesia', system: 'System', studio: 'Studio'
@@ -82,9 +104,46 @@ export const en = {
         fade: 'Applies audio fade-in at start and fade-out at stop.'
     }
   },
-  bgImage: 'Album Art BG',
-  bgDim: 'BG Dimming',
-  overlayCover: 'Overlay Cover',
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: 'Simulated',
+    FILE: 'ID3 Tag'
+  },
+  aiPanel: {
+      keySaved: 'API Key Verified & Saved',
+      keyInvalid: 'Invalid API Key',
+      keyCleared: 'API Key Cleared',
+      saved: 'SAVED',
+      missing: 'MISSING',
+      save: 'Save',
+      update: 'Update',
+      geminiHint: 'Optional. Uses default free quota if empty.',
+      customHint: 'Required. Key is stored locally in your browser.',
+      notImplemented: 'AI processing for {provider} is not yet implemented. Please select Gemini to use AI features.'
+  },
+  config: {
+    title: 'Cloud & Data',
+    export: 'Export File',
+    import: 'Import File',
+    library: 'Local Library',
+    save: 'Save',
+    saved: 'Saved',
+    load: 'Load',
+    delete: 'Del',
+    deleteConfirm: 'Delete this preset?',
+    placeholder: 'Preset Name...',
+    confirmImport: 'Overwrite current settings?',
+    invalidFile: 'Invalid file format',
+    importSuccess: 'Configuration loaded.',
+    copy: 'Copy',
+    copied: 'Copied!',
+    limitReached: 'Maximum of 5 presets allowed.'
+  },
   hints: {
     mode: 'Select the core mathematical engine for generating visuals.',
     theme: 'Apply a curated color palette to the scene.',
@@ -152,28 +211,6 @@ export const en = {
     lightMode: 'Switch between light and dark UI themes.',
     localFont: 'Font Name',
     enterLocalFont: 'Enter local font name (e.g. Arial)'
-  },
-  aiProviders: {
-    GEMINI: 'Gemini 3.0',
-    OPENAI: 'GPT-4o',
-    GROQ: 'Groq',
-    CLAUDE: 'Claude 3',
-    DEEPSEEK: 'DeepSeek',
-    QWEN: 'Qwen',
-    MOCK: 'Simulated',
-    FILE: 'ID3 Tag'
-  },
-  aiPanel: {
-      keySaved: 'API Key Verified & Saved',
-      keyInvalid: 'Invalid API Key',
-      keyCleared: 'API Key Cleared',
-      saved: 'SAVED',
-      missing: 'MISSING',
-      save: 'Save',
-      update: 'Update',
-      geminiHint: 'Optional. Uses default free quota if empty.',
-      customHint: 'Required. Key is stored locally in your browser.',
-      notImplemented: 'AI processing for {provider} is not yet implemented. Please select Gemini to use AI features.'
   },
   visualizerMode: 'Visual Engine',
   styleTheme: 'Color Theme',
@@ -243,7 +280,7 @@ export const en = {
   textSize: 'Font Size',
   textRotation: 'Rotation',
   textFont: 'Font Family',
-  textOpacity: 'Text Position',
+  textOpacity: 'Opacity',
   textPosition: 'Text Position',
   quality: 'Render Quality',
   qualities: {
@@ -265,49 +302,23 @@ export const en = {
     interface: 'Interface', behavior: 'Behavior', maintenance: 'Maintenance', engine: 'Engine', audio: 'Audio', ai: 'AI',
     lightMode: 'Light Theme', darkMode: 'Dark Theme'
   },
-  config: {
-    title: 'Cloud & Data',
-    export: 'Export File',
-    import: 'Import File',
-    library: 'Local Library',
-    save: 'Save',
-    load: 'Load',
-    delete: 'Del',
-    placeholder: 'Preset Name...',
-    confirmImport: 'Overwrite current settings?',
-    invalidFile: 'Invalid file format',
-    importSuccess: 'Configuration loaded.',
-    copy: 'Copy',
-    copied: 'Copied!',
-    limitReached: 'Maximum of 5 presets allowed.'
-  },
-  showFps: 'Show FPS',
-  showTooltips: 'Show Tooltips',
-  doubleClickFullscreen: 'Double-Click Fullscreen',
-  autoHideUi: 'Automatically hide the control panel after a period of inactivity.',
-  mirrorDisplay: 'Mirror Display',
   presets: {
     title: 'Smart Presets',
-    hint: 'Apply a curated aesthetic combination with one click.',
-    select: 'Select a mood...',
+    hint: 'Apply a curated aesthetic combination in one click.',
+    select: 'Choose a mood...',
     custom: 'Custom / Modified',
     all_modes: 'All Modes',
     calm: 'Digital Waveform',
-    party: 'Kinetic Wall Party',
+    party: 'Kinetic Party',
     ambient: 'Deep Nebula',
-    cyberpunk: 'Cyber Lasers', 
+    cyberpunk: 'Cyber Lasers',
     retrowave: 'Retro Field',
-    vocal: 'Vocal Bars' 
+    vocal: 'Vocal Bars'
   },
-  recognitionSource: 'AI Source',
-  lyricsPosition: 'Lyrics Position',
-  lyricsFont: 'Font Family',
-  lyricsFontSize: 'Font Size',
   simulatedDemo: 'Simulated (Offline)',
   positions: {
-      top: 'Top', center: 'Center', bottom: 'Bottom', tl: 'Top Left', tc: 'Top Center', tr: 'Top Right', ml: 'Mid Left', mc: 'Center', mr: 'Mid Right', bl: 'Bottom Left', bc: 'Bottom Center', br: 'Bottom Right'
+      top: 'Top', center: 'Center', bottom: 'Bottom', tl: 'Top Left', tc: 'Top Center', tr: 'Top Right', ml: 'Mid Left', mc: 'Center', mr: 'Mid Right', bl: 'Bot Left', bc: 'Bot Center', br: 'Bot Right'
   },
-  wakeLock: 'Screen Always On',
   system: {
     shortcuts: { mic: 'Mic', ui: 'UI', mode: 'Mode', random: 'Random' }
   },

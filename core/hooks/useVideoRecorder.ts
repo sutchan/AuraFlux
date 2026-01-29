@@ -1,9 +1,10 @@
+
 /**
  * File: core/hooks/useVideoRecorder.ts
- * Version: 2.3.0
+ * Version: 2.3.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 21:30
+ * Updated: 2025-03-10 16:30
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react';
@@ -26,9 +27,10 @@ interface UseVideoRecorderProps {
     mediaStream: MediaStream | null;
     showToast: (message: string, type?: 'success' | 'info' | 'error') => void;
     sourceType: AudioSourceType;
+    t: any; // Added translation object
 }
 
-export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToast, sourceType }: UseVideoRecorderProps) => {
+export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToast, sourceType, t }: UseVideoRecorderProps) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
@@ -40,6 +42,8 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
   const recordedChunksRef = useRef<Blob[]>([]);
   const activeMimeTypeRef = useRef<string>('');
   
+  const toasts = t?.toasts || {};
+
   // Audio Graph for Recording
   const recDestinationRef = useRef<MediaStreamAudioDestinationNode | null>(null);
   const recGainNodeRef = useRef<GainNode | null>(null);
@@ -54,18 +58,14 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
   const originalCanvasStateRef = useRef<{ width: number; height: number; styleWidth: string; styleHeight: string } | null>(null);
 
   // Setup Recording Audio Graph
-  // Returns the destination stream that contains the processed audio
   const setupRecordingAudio = useCallback((inputGain: number, fadeDur: number): MediaStream | null => {
       if (!audioContext || audioContext.state !== 'running') return null;
 
-      // 1. Create Nodes if needed
       if (!recGainNodeRef.current) recGainNodeRef.current = audioContext.createGain();
       if (!recDestinationRef.current) recDestinationRef.current = audioContext.createMediaStreamDestination();
 
-      // Reset Gain
       recGainNodeRef.current.gain.cancelScheduledValues(audioContext.currentTime);
       
-      // Handle Fade In
       if (fadeDur > 0) {
           recGainNodeRef.current.gain.setValueAtTime(0, audioContext.currentTime);
           recGainNodeRef.current.gain.linearRampToValueAtTime(inputGain, audioContext.currentTime + fadeDur);
@@ -73,22 +73,16 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
           recGainNodeRef.current.gain.setValueAtTime(inputGain, audioContext.currentTime);
       }
 
-      // 2. Connect Source
       if (sourceType === 'MICROPHONE' && mediaStream && mediaStream.active) {
-          // Create a new source node for the mic stream
-          // We can't reuse the main app source node easily without prop drilling, 
-          // so we create a new one from the same stream.
           if (recSourceRef.current) recSourceRef.current.disconnect();
           recSourceRef.current = audioContext.createMediaStreamSource(mediaStream);
           recSourceRef.current.connect(recGainNodeRef.current);
       } else if (sourceType === 'FILE' && analyser) {
-          // For file, we tap into the main analyser which carries the file audio
           analyser.connect(recGainNodeRef.current);
       } else {
           return null;
       }
 
-      // 3. Route to Dest
       recGainNodeRef.current.connect(recDestinationRef.current);
       
       return recDestinationRef.current.stream;
@@ -104,8 +98,6 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
       }
       if (recGainNodeRef.current) {
           recGainNodeRef.current.disconnect();
-          // Keep node for reuse or nullify? Reusing is safer for AudioContext limit.
-          // But disconnecting is important.
       }
   }, [analyser, sourceType]);
 
@@ -119,7 +111,6 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
         }
         cleanupAudioGraph();
         
-        // Restore Canvas State if modified
         const canvas = document.querySelector('canvas');
         if (canvas && originalCanvasStateRef.current) {
             const { width, height, styleWidth, styleHeight } = originalCanvasStateRef.current;
@@ -132,16 +123,11 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
         }
     };
 
-    // Fade Out Logic
     if (audioContext && recGainNodeRef.current && fadeDurationRef.current > 0) {
         setIsFadingOut(true);
-        // Cancel any pending ramps
         recGainNodeRef.current.gain.cancelScheduledValues(audioContext.currentTime);
-        // Ramp down
         recGainNodeRef.current.gain.setValueAtTime(recGainNodeRef.current.gain.value, audioContext.currentTime);
         recGainNodeRef.current.gain.linearRampToValueAtTime(0, audioContext.currentTime + fadeDurationRef.current);
-        
-        // Schedule stop
         setTimeout(doStop, fadeDurationRef.current * 1000);
     } else {
         doStop();
@@ -160,7 +146,6 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
 
   const handleVisibilityChange = useCallback(() => {
     if (document.visibilityState === 'hidden') {
-      // Force stop immediately if tab hidden
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
           mediaRecorderRef.current.stop();
           cleanupAudioGraph();
@@ -172,7 +157,6 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      // Force cleanup
       if (recGainNodeRef.current) recGainNodeRef.current.disconnect();
       if (recDestinationRef.current) recDestinationRef.current.disconnect();
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
@@ -193,11 +177,10 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
   const startRecording = useCallback((config: RecorderConfig) => {
     const canvas = document.querySelector('canvas');
     if (!canvas) {
-      showToast('Canvas not found.', 'error');
+      showToast(toasts.canvasNotFound || 'Canvas not found.', 'error');
       return;
     }
 
-    // --- Resolution Override Logic ---
     if (config.resolution !== 'native') {
         const targetHeight = config.resolution;
         let targetWidth = 0;
@@ -222,12 +205,11 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
 
     window.dispatchEvent(new Event('resize'));
 
-    // --- Audio Setup ---
     fadeDurationRef.current = config.fadeDuration;
     const audioStream = setupRecordingAudio(config.recGain, config.fadeDuration);
     
     if (!audioStream) {
-      showToast('Audio source not ready.', 'error');
+      showToast(toasts.audioNotReady || 'Audio source not ready.', 'error');
       if (originalCanvasStateRef.current) stopRecording(); 
       return;
     }
@@ -243,7 +225,7 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
         const supported = getSupportedMimeTypes();
         if (supported.length > 0) mimeType = supported[0];
         else {
-            showToast('No supported video format.', 'error');
+            showToast(toasts.noVideoFormat || 'No supported video format.', 'error');
             if (originalCanvasStateRef.current) stopRecording();
             return;
         }
@@ -258,7 +240,7 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
       });
     } catch (e) {
       console.error('MediaRecorder error:', e);
-      showToast('Recording failed to initialize.', 'error');
+      showToast(toasts.recInitFail || 'Recording failed to initialize.', 'error');
       if (originalCanvasStateRef.current) stopRecording();
       return;
     }
@@ -278,29 +260,27 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
     mediaRecorderRef.current.onstop = () => {
       setIsRecording(false);
       setIsProcessing(true);
-      showToast('Processing video...', 'info');
+      showToast(toasts.processing || 'Processing video...', 'info');
 
       setTimeout(() => {
         try {
             const blob = new Blob(recordedChunksRef.current, { type: activeMimeTypeRef.current });
             setRecordedBlob(blob);
-            showToast('Ready to review!', 'success');
+            showToast(toasts.reviewReady || 'Ready to review!', 'success');
         } catch (err) {
             console.error("Export failed:", err);
-            showToast('Export failed.', 'error');
+            showToast(toasts.exportFail || 'Export failed.', 'error');
         } finally {
             setIsProcessing(false);
         }
       }, 500);
     };
 
-    // Request data every 1 second for size updates
     mediaRecorderRef.current.start(1000);
     
     setIsRecording(true);
-    showToast('Recording started!', 'success');
+    showToast(toasts.recStart || 'Recording started!', 'success');
     
-    // Start Stats Timer
     startTimeRef.current = Date.now();
     timerIntervalRef.current = window.setInterval(() => {
         setDuration(Math.floor((Date.now() - startTimeRef.current) / 1000));
@@ -312,7 +292,7 @@ export const useVideoRecorder = ({ audioContext, analyser, mediaStream, showToas
         }, config.duration);
     }
 
-  }, [setupRecordingAudio, showToast, stopRecording]);
+  }, [setupRecordingAudio, showToast, stopRecording, toasts]);
 
   const discardRecording = useCallback(() => {
       setRecordedBlob(null);

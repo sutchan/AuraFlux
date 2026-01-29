@@ -1,9 +1,7 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 1.9.3
+ * Version: 2.1.0
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 21:00
  */
 
 import { VisualizerMode, LyricsStyle } from '../../core/types';
@@ -12,7 +10,31 @@ export const zh = {
   common: {
     on: '开启', off: '关闭', visible: '显示', hidden: '隐藏', active: '运行中', muted: '静音', beta: '测试版', simple: '简洁', advanced: '专业', new: '新', unknownTrack: '未知曲目',
     menu: '菜单', queue: '播放队列', empty: '列表为空', unknownArtist: '未知艺术家',
-    clearAll: '清空列表', confirmClear: '确认清空播放队列？'
+    clearAll: '清空列表', confirmClear: '确认清空播放队列？',
+    dropFiles: '拖入音频文件',
+    themeLight: '浅色模式', themeDark: '深色模式'
+  },
+  toasts: {
+    canvasNotFound: '未找到画布。',
+    audioNotReady: '音频源未就绪。',
+    noVideoFormat: '无支持的视频格式。',
+    recInitFail: '录制初始化失败。',
+    processing: '正在处理视频...',
+    reviewReady: '准备预览！',
+    exportFail: '导出失败。',
+    recStart: '录制已开始！',
+    shareFail: '不支持分享。',
+    aiDirectorReq: 'AI 导演需要 Gemini API Key。',
+    aiFail: 'AI 分析失败。'
+  },
+  player: {
+    play: '播放',
+    pause: '暂停',
+    previous: '上一首',
+    next: '下一首',
+    shuffle: '随机播放',
+    repeatAll: '列表循环',
+    repeatOne: '单曲循环'
   },
   tabs: {
     visual: '视觉', text: '文字', audio: '音频', ai: 'AI 通感', system: '系统', studio: '工作室'
@@ -82,9 +104,46 @@ export const zh = {
         fade: '在录制开始时音频淡入，停止时自动淡出。'
     }
   },
-  bgImage: '专辑封面背景',
-  bgDim: '背景暗度',
-  overlayCover: '悬浮窗封面',
+  aiProviders: {
+    GEMINI: 'Gemini 3.0',
+    OPENAI: 'GPT-4o',
+    GROQ: 'Groq',
+    CLAUDE: 'Claude 3',
+    DEEPSEEK: 'DeepSeek',
+    QWEN: 'Qwen',
+    MOCK: '模拟 (离线)',
+    FILE: 'ID3 标签'
+  },
+  aiPanel: {
+      keySaved: 'API 密钥已验证并保存',
+      keyInvalid: '无效的 API 密钥',
+      keyCleared: 'API 密钥已清除',
+      saved: '已保存',
+      missing: '未配置',
+      save: '保存',
+      update: '更新',
+      geminiHint: '可选。若留空，将使用默认免费配额。',
+      customHint: '必填项。密钥将存储在您的本地浏览器中。',
+      notImplemented: '尚未实现对 {provider} 的 AI 处理。请选择 Gemini 以使用 AI 功能。'
+  },
+  config: {
+    title: '云端与数据',
+    export: '导出配置',
+    import: '导入配置',
+    library: '本地预设库',
+    save: '保存',
+    saved: '已保存',
+    load: '加载',
+    delete: '删除',
+    deleteConfirm: '删除此预设？',
+    placeholder: '预设名称...',
+    confirmImport: '覆盖当前设置？',
+    invalidFile: '文件格式无效',
+    importSuccess: '配置加载成功',
+    copy: '复制',
+    copied: '已复制',
+    limitReached: '最多只能保存 5 个预设。'
+  },
   hints: {
     mode: '切换用于生成实时影像的核心数学引擎。',
     theme: '应用精心调校的沉浸式色彩主题。',
@@ -152,28 +211,6 @@ export const zh = {
     lightMode: '切换浅色/深色主题。',
     localFont: '本地字体名称',
     enterLocalFont: '输入字体族名称 (如: Microsoft YaHei)'
-  },
-  aiProviders: {
-    GEMINI: 'Gemini 3.0',
-    OPENAI: 'GPT-4o',
-    GROQ: 'Groq',
-    CLAUDE: 'Claude 3',
-    DEEPSEEK: 'DeepSeek',
-    QWEN: 'Qwen',
-    MOCK: '模拟 (离线)',
-    FILE: 'ID3 标签'
-  },
-  aiPanel: {
-      keySaved: 'API 密钥已验证并保存',
-      keyInvalid: '无效的 API 密钥',
-      keyCleared: 'API 密钥已清除',
-      saved: '已保存',
-      missing: '未配置',
-      save: '保存',
-      update: '更新',
-      geminiHint: '可选。若留空，将使用默认免费配额。',
-      customHint: '必填项。密钥将存储在您的本地浏览器中。',
-      notImplemented: '尚未实现对 {provider} 的 AI 处理。请选择 Gemini 以使用 AI 功能。'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -265,27 +302,6 @@ export const zh = {
     interface: '界面交互', behavior: '系统行为', maintenance: '维护与信息', engine: '渲染架构', audio: '音频架构', ai: 'AI',
     lightMode: '浅色主题', darkMode: '深色主题'
   },
-  config: {
-    title: '云端与数据',
-    export: '导出配置',
-    import: '导入配置',
-    library: '本地预设库',
-    save: '保存',
-    load: '加载',
-    delete: '删除',
-    placeholder: '预设名称...',
-    confirmImport: '覆盖当前设置？',
-    invalidFile: '文件格式无效',
-    importSuccess: '配置加载成功',
-    copy: '复制',
-    copied: '已复制',
-    limitReached: '最多只能保存 5 个预设。'
-  },
-  showFps: '显示帧率',
-  showTooltips: '显示提示',
-  doubleClickFullscreen: '双击全屏',
-  autoHideUi: '自动隐藏控制栏',
-  mirrorDisplay: '镜像翻转',
   presets: {
     title: '智能预设',
     hint: '一键应用由专家精心调校的参数组合。',
@@ -295,24 +311,19 @@ export const zh = {
     calm: '数字波形',
     party: '动感光墙派对',
     ambient: '深空星云',
-    cyberpunk: '赛博激光', 
+    cyberpunk: '赛博雷射', 
     retrowave: '复古力场',
     vocal: '人声频谱' 
   },
-  recognitionSource: 'AI 角色偏好',
-  lyricsPosition: '歌词显示位置',
-  lyricsFont: '字体样式',
-  lyricsFontSize: '字体大小',
-  simulatedDemo: '演示模式 (离线)',
+  simulatedDemo: '模拟 (离线)',
   positions: {
       top: '顶部', center: '居中', bottom: '底部', tl: '左上', tc: '中上', tr: '右上', ml: '左中', mc: '正中', mr: '右中', bl: '左下', bc: '中下', br: '右下'
   },
-  wakeLock: '屏幕常亮',
   system: {
     shortcuts: { mic: '麦克风', ui: '界面', mode: '模式', random: '随机' }
   },
   errors: {
-    title: '音频错误', accessDenied: '权限被拒绝', noDevice: '未发现设备', deviceBusy: '设备忙', general: '无法访问音频', tryDemo: '演示模式'
+    title: '音频错误', accessDenied: '权限被拒绝', noDevice: '未发现设备', deviceBusy: '设备忙碌', general: '无法访问音频', tryDemo: '演示模式'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: '突触风暴 (WebGL)',
@@ -342,7 +353,7 @@ export const zh = {
     [VisualizerMode.LASERS]: '高能锐利光束。',
     [VisualizerMode.FLUID_CURVES]: '平滑大气光波。',
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微观液泡。',
-    [VisualizerMode.KINETIC_WALL]: '带有 3D 動力學挤出的巨型 LED 舞台背景墙。',
+    [VisualizerMode.KINETIC_WALL]: '带有 3D 动力学挤出的巨型 LED 舞台背景墙。',
     [VisualizerMode.LIQUID]: '对低频做出反应的抽象球体。',
     [VisualizerMode.WAVEFORM]: '展现实时频谱历史的液体丝带。'
   },
@@ -352,11 +363,11 @@ export const zh = {
   helpModal: {
     title: 'Aura Flux 交互指南',
     tabs: { guide: '指南', shortcuts: '控制', about: '关于' },
-    intro: 'Aura Flux 利用高精度采样，结合 Gemini 3 智能大脑，将音频实时转化为数学生成的数字艺术。',
+    intro: 'Aura Flux 利用高精度采样，结合 Gemini 3 智能大脑，将音频即时转化为数学生成的数字艺术。',
     shortcutsTitle: '快捷操作键',
     gesturesTitle: '触控手势',
     shortcutItems: {
-      toggleMic: '麦克风', fullscreen: '全屏', randomize: '随机', lyrics: '曲目识别', hideUi: '显示/隐藏面板', glow: '霓虹光晕', trails: '动态拖尾', changeMode: '切换模式', changeTheme: '切换配色'
+      toggleMic: '麦克风', fullscreen: '全屏', randomize: '随机', lyrics: '曲目识别', hideUi: '显示/隐藏面板', glow: '霓虹光晕', trails: '动态残影', changeMode: '切换模式', changeTheme: '切换配色'
     },
     gestureItems: {
         swipeMode: '左右滑动切换模式', swipeSens: '上下滑动调节灵敏度', longPress: '长按激活 AI 识别'
@@ -366,18 +377,18 @@ export const zh = {
       '1. 连接: 点击“开启”并授权麦克风。',
       '2. 视觉: 播放音乐。使用“智能预设”设定氛围。',
       '3. 定制: 切换“专业模式”以微调参数。',
-      '4. 交互: 滑动切换模式，长按 AI 辨识。',
-      '5. 探索: 按 H 打开设置，F 全屏，R 随机。'
+      '4. 交互: 滑动切换模式，长按 AI 识别。',
+      '5. 探索: 按 H 打开设定，F 全屏，R 随机。'
     ],
     settingsTitle: '核心参数指南',
     settingsDesc: {
       sensitivity: '振幅反应增益。', speed: '时间演化速率。', glow: '全域辉光强度。', trails: '运动模糊效果。', smoothing: '平滑系数。', fftSize: '频谱采样精度。'
     },
-    projectInfoTitle: '项目愿景',
-    aboutDescription: 'Aura Flux 是一个实时通感实验引擎，旨在打破听觉与视觉的界限。通过融合 WebGL 的数学精度与 Google Gemini 的语义理解，它将声音重构为流动的光影雕塑。适用于 VJ 演出、直播背景、沉浸式冥想及创意编程展示。',
-    privacyTitle: '隐私承诺',
-    privacyText: '我们坚持“边缘优先”的隐私原则。所有频谱分析与视觉渲染均在您的设备本地完成。只有在您主动激活 AI 识别时，经过加密的简短音频指纹才会被发送至 Gemini 进行分析，且绝不保存。',
-    version: '当前版本', coreTech: '核心技术', repository: '开源仓库', support: '技术支持', reportBug: '问题反馈'
+    projectInfoTitle: '项目简介',
+    aboutDescription: '新一代视听交互工具。适用于直播、VJ 演出及沉浸式环境。',
+    privacyTitle: '隐私安全',
+    privacyText: '音频分析在本地完成。仅在识别时发送加密特征至 Gemini。',
+    version: '版本号', coreTech: '技术栈', repository: '仓库', support: '支持', reportBug: '反馈'
   },
   onboarding: {
     welcome: '欢迎体验 Aura Flux',
@@ -386,10 +397,10 @@ export const zh = {
     next: '继续', back: '返回', skip: '跳过', finish: '开启盛宴',
     features: {
       title: '感官特性',
-      visuals: { title: '数学生成艺术', desc: '内置 15+ 種基于 WebGL 的数学动力学引擎，将声波具象化。' },
-      ai: { title: 'Gemini 智能核心', desc: '实时感知曲目元数据与视觉情绪，由 Google Gemini 3 提供支持。' },
+      visuals: { title: '数学生成艺术', desc: '内建 15+ 种基于 WebGL 的数学动力学引擎，将声波具象化。' },
+      ai: { title: 'Gemini 智能核心', desc: '即时感知曲目元数据与视觉情绪，由 Google Gemini 3 提供支持。' },
       privacy: { title: '边缘计算保护', desc: '所有分析均在本地执行，我们绝不记录或存储您的私人声音数据。' }
     },
-    shortcuts: { title: '指挥官快捷键', desc: '像指挥家一样掌控全场，通过键盘实时调遣光影。' }
+    shortcuts: { title: '指挥官快捷键', desc: '像指挥家一样掌控全场，通过键盘即时调遣光影。' }
   }
 };
