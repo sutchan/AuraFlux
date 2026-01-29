@@ -1,8 +1,8 @@
 /**
  * File: assets/locales/de.ts
- * Version: 2.2.0
+ * Version: 2.2.1
  * Author: Sut
- * Updated: 2025-03-10 21:00
+ * Updated: 2025-03-11 14:00
  */
 
 import { en } from './en';
@@ -15,6 +15,13 @@ export const de = {
     clearAll: 'Alles löschen', confirmClear: 'Warteschlange leeren?',
     dropFiles: 'Audiodateien hier ablegen',
     themeLight: 'Heller Modus', themeDark: 'Dunkler Modus'
+  },
+  player: {
+    ...en.player,
+    mode: 'Wiedergabemodus'
+  },
+  tabs: {
+    visual: 'Visuals', text: 'Text', input: 'Audio', audio: 'Audio', playback: 'Bibliothek', ai: 'KI', system: 'System', studio: 'Studio'
   },
   welcomeTitle: 'Aura Flux | Der Klang des Lichts',
   welcomeText: 'Verwandeln Sie jede Schwingung in ein generatives Meisterwerk. Angetrieben von Gemini AI, definiert Aura Flux das sensorische Erlebnis neu.',

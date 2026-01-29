@@ -1,8 +1,8 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 2.2.0
+ * Version: 2.2.1
  * Author: Sut
- * Updated: 2025-03-10 21:00
+ * Updated: 2025-03-11 14:00
  */
 
 import { en } from './en';
@@ -15,6 +15,13 @@ export const ar = {
     clearAll: 'مسح الكل', confirmClear: 'مسح القائمة؟',
     dropFiles: 'إفلات الملفات الصوتية',
     themeLight: 'الوضع الفاتح', themeDark: 'الوضع الداكن'
+  },
+  player: {
+    ...en.player,
+    mode: 'وضع التشغيل'
+  },
+  tabs: {
+    visual: 'مرئي', text: 'نص', input: 'صوت', audio: 'صوت', playback: 'المكتبة', ai: 'AI', system: 'نظام', studio: 'استوديو'
   },
   welcomeTitle: 'Aura Flux | صوت الضوء',
   welcomeText: 'حول كل اهتزاز إلى تحفة فنية توليدية. مدعوم بـ Gemini AI للتعرف في الوقت الفعلي.',

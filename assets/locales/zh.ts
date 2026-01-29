@@ -1,6 +1,6 @@
 /**
  * File: assets/locales/zh.ts
- * Version: 2.1.0
+ * Version: 2.1.5
  * Author: Sut
  */
 
@@ -34,10 +34,11 @@ export const zh = {
     next: '下一首',
     shuffle: '随机播放',
     repeatAll: '列表循环',
-    repeatOne: '单曲循环'
+    repeatOne: '单曲循环',
+    mode: '播放模式'
   },
   tabs: {
-    visual: '视觉', text: '文字', audio: '音频', ai: 'AI 通感', system: '系统', studio: '工作室'
+    visual: '视觉', text: '文字', input: '音频', audio: '音频', playback: '媒体库', ai: 'AI 通感', system: '系统', studio: '工作室'
   },
   studioPanel: {
     title: '录制工作室',
@@ -339,7 +340,7 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '细胞漂移', 
     [VisualizerMode.KINETIC_WALL]: '脉冲矩阵 (WebGL)', 
     [VisualizerMode.LIQUID]: '熔核反应 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '流光绸缎'
+    [VisualizerMode.WAVEFORM]: '光谱丝带'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基于 WebGL 粒子系统的有机流体模拟。',
@@ -367,7 +368,7 @@ export const zh = {
     shortcutsTitle: '快捷操作键',
     gesturesTitle: '触控手势',
     shortcutItems: {
-      toggleMic: '麦克风', fullscreen: '全屏', randomize: '随机', lyrics: '曲目识别', hideUi: '显示/隐藏面板', glow: '霓虹光晕', trails: '动态残影', changeMode: '切换模式', changeTheme: '切换配色'
+      toggleMic: '麦克风', fullscreen: '全屏', randomize: '随机', lyrics: '曲目识别', hideUi: '显示/隐藏面板', glow: '霓虹光晕', trails: '动态残影', changeMode: '切换模式', changeTheme: '切换配色', speed: '调节速度', tabs: '切换标签页', help: '帮助'
     },
     gestureItems: {
         swipeMode: '左右滑动切换模式', swipeSens: '上下滑动调节灵敏度', longPress: '长按激活 AI 识别'
@@ -397,9 +398,9 @@ export const zh = {
     next: '继续', back: '返回', skip: '跳过', finish: '开启盛宴',
     features: {
       title: '感官特性',
-      visuals: { title: '数学生成艺术', desc: '内建 15+ 种基于 WebGL 的数学动力学引擎，将声波具象化。' },
-      ai: { title: 'Gemini 智能核心', desc: '即时感知曲目元数据与视觉情绪，由 Google Gemini 3 提供支持。' },
-      privacy: { title: '边缘计算保护', desc: '所有分析均在本地执行，我们绝不记录或存储您的私人声音数据。' }
+      visuals: { title: '实时光影雕塑', desc: '搭载 15+ 种 WebGL 动力学引擎。将不可见的声波频率，重构为触手可及的 3D 数学艺术。' },
+      ai: { title: 'Gemini 通感大脑', desc: '集成 Google Gemini 3 多模态模型。不仅识别曲目，更能深度解析音乐的情绪色谱与纹理。' },
+      privacy: { title: '零信任边缘计算', desc: '极致隐私保护。从频谱分析到视觉渲染，全链路在本地浏览器运行，绝不上传您的音频流。' }
     },
     shortcuts: { title: '指挥官快捷键', desc: '像指挥家一样掌控全场，通过键盘即时调遣光影。' }
   }

@@ -1,10 +1,9 @@
 /**
  * File: components/controls/panels/SystemSettingsPanel.tsx
- * Version: 1.9.1
+ * Version: 2.0.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 17:00
- * Description: Component for system-level settings with Data Management and Theme Toggle.
+ * Updated: 2025-03-11 10:00
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -12,10 +11,10 @@ import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { useVisuals, useUI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
+import { BentoCard } from '../../ui/layout/BentoCard';
 import { Language, VisualizerSettings } from '../../../core/types';
 import { useLocalStorage } from '../../../core/hooks/useLocalStorage';
 
-// This list is also present in OnboardingOverlay.tsx
 const LANGUAGES: { value: Language; label: string }[] = [
   { value: 'en', label: 'English' }, { value: 'zh', label: '简体中文' }, { value: 'tw', label: '繁體中文' },
   { value: 'ja', label: '日本語' }, { value: 'es', label: 'Español' }, { value: 'ko', label: '한국어' },
@@ -39,7 +38,6 @@ export const SystemSettingsPanel: React.FC = () => {
   const systemPanel = t?.systemPanel || {};
   const config = t?.config || {};
 
-  // --- Data Management State ---
   const [presets, setPresets] = useState<SavedPreset[]>([]);
   const [presetName, setPresetName] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -64,7 +62,6 @@ export const SystemSettingsPanel: React.FC = () => {
     }
   };
 
-  // --- Config Actions ---
   const handleExport = () => {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings, null, 2));
       const downloadAnchorNode = document.createElement('a');
@@ -86,7 +83,6 @@ export const SystemSettingsPanel: React.FC = () => {
               const json = JSON.parse(e.target?.result as string);
               if (json && typeof json === 'object') {
                   if (window.confirm(config.confirmImport || 'Overwrite current settings?')) {
-                      // Merge to ensure no keys are lost
                       setSettings(prev => ({ ...prev, ...json }));
                       showToast(config.importSuccess || "Configuration loaded.", 'success');
                   }
@@ -99,7 +95,7 @@ export const SystemSettingsPanel: React.FC = () => {
           }
       };
       reader.readAsText(fileObj);
-      event.target.value = ''; // Reset input
+      event.target.value = '';
   };
 
   const handleSavePreset = () => {
@@ -133,11 +129,10 @@ export const SystemSettingsPanel: React.FC = () => {
   };
 
   return (
-    <>
-      {/* Col 1: Interface Settings */}
-      <div className="p-3 pt-4 h-full flex flex-col border-b lg:border-b-0 lg:border-e border-white/5">
-        <div className="space-y-2.5 flex-grow overflow-y-auto custom-scrollbar pr-1.5">
-          <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">{systemPanel.interface || "Interface"}</span>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 h-full">
+      {/* Card 1: Interface */}
+      <BentoCard title={systemPanel.interface || "Interface"}>
+        <div className="space-y-2">
           <SettingsToggle 
             label={settings.appTheme === 'light' ? (systemPanel.lightMode || "Light Theme") : (systemPanel.darkMode || "Dark Theme")} 
             value={settings.appTheme === 'light'} 
@@ -150,17 +145,18 @@ export const SystemSettingsPanel: React.FC = () => {
           <SettingsToggle label={t?.hideCursor || "Hide Cursor"} value={settings.hideCursor} onChange={() => handleSystemSettingChange('hideCursor', !settings.hideCursor)} hintText={hints?.hideCursor} />
           <SettingsToggle label={t?.showFps || "Show FPS"} value={settings.showFps} onChange={() => handleSystemSettingChange('showFps', !settings.showFps)} hintText={hints?.showFps} />
         </div>
-      </div>
+      </BentoCard>
 
-      {/* Col 2: Behavior & Display */}
-      <div className="p-3 pt-4 h-full flex flex-col border-b lg:border-b-0 lg:border-e border-white/5">
-        <div className="space-y-2.5 flex-grow overflow-y-auto custom-scrollbar pr-1.5">
-          <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">{systemPanel.behavior || "Behavior"}</span>
-          <SettingsToggle label={t?.doubleClickFullscreen || "Double-Click Fullscreen"} value={settings.doubleClickFullscreen} onChange={() => handleSystemSettingChange('doubleClickFullscreen', !settings.doubleClickFullscreen)} hintText={hints?.doubleClickFullscreen} />
-          <SettingsToggle label={t?.mirrorDisplay || "Mirror Display"} value={settings.mirrorDisplay} onChange={() => handleSystemSettingChange('mirrorDisplay', !settings.mirrorDisplay)} hintText={hints?.mirrorDisplay} />
-          <SettingsToggle label={t?.wakeLock || "Screen Always On"} value={settings.wakeLock} onChange={() => handleSystemSettingChange('wakeLock', !settings.wakeLock)} hintText={hints?.wakeLock} />
+      {/* Card 2: Behavior & Language */}
+      <BentoCard title={systemPanel.behavior || "Behavior"}>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <SettingsToggle label={t?.doubleClickFullscreen || "Double-Click Fullscreen"} value={settings.doubleClickFullscreen} onChange={() => handleSystemSettingChange('doubleClickFullscreen', !settings.doubleClickFullscreen)} hintText={hints?.doubleClickFullscreen} />
+            <SettingsToggle label={t?.mirrorDisplay || "Mirror Display"} value={settings.mirrorDisplay} onChange={() => handleSystemSettingChange('mirrorDisplay', !settings.mirrorDisplay)} hintText={hints?.mirrorDisplay} />
+            <SettingsToggle label={t?.wakeLock || "Screen Always On"} value={settings.wakeLock} onChange={() => handleSystemSettingChange('wakeLock', !settings.wakeLock)} hintText={hints?.wakeLock} />
+          </div>
           
-          <div className="pt-2.5 border-t border-white/5 mt-2">
+          <div className="pt-2 border-t border-white/5">
             <CustomSelect
               label={
                 <div className="flex items-center gap-1.5">
@@ -174,16 +170,20 @@ export const SystemSettingsPanel: React.FC = () => {
             />
           </div>
         </div>
-      </div>
+      </BentoCard>
 
-      {/* Col 3: Cloud & Data */}
-      <div className="p-3 pt-4 h-full flex flex-col">
-        <div className="space-y-4 flex-grow overflow-y-auto custom-scrollbar pr-1.5">
-            <span className="text-xs font-black uppercase text-white/50 tracking-widest block ml-1">
-                {config.title || "Data Management"}
-            </span>
-
-            {/* Import / Export Row */}
+      {/* Card 3: Data */}
+      <BentoCard 
+        title={config.title || "Data Management"}
+        action={
+            <TooltipArea text={hints?.confirmReset}>
+                <button onClick={handleConfirmReset} className="p-1 text-red-400 hover:text-red-300 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+            </TooltipArea>
+        }
+      >
+        <div className="space-y-4">
             <div className="grid grid-cols-2 gap-2">
                 <TooltipArea text={hints?.exportConfig}>
                     <button onClick={handleExport} className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 group">
@@ -200,13 +200,11 @@ export const SystemSettingsPanel: React.FC = () => {
                 <input type="file" ref={fileInputRef} onChange={handleImport} accept=".json" className="hidden" />
             </div>
 
-            {/* Local Presets Library */}
             <div className="space-y-2 pt-2 border-t border-white/5">
                 <div className="flex justify-between items-center">
                     <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{config.library || "Local Library"} ({presets.length}/3)</span>
                 </div>
                 
-                {/* Save Input Row */}
                 <div className="flex gap-2">
                     <input 
                         type="text" 
@@ -217,22 +215,18 @@ export const SystemSettingsPanel: React.FC = () => {
                         maxLength={18}
                         disabled={presets.length >= 3}
                     />
-                    <TooltipArea text={presets.length >= 3 ? (config.limitReached || "Limit reached") : (hints?.savePreset || "Save Preset")}>
-                        <button 
-                            onClick={handleSavePreset}
-                            disabled={presets.length >= 3 || !presetName.trim()}
-                            className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all flex items-center justify-center min-w-[50px] ${presets.length >= 3 || !presetName.trim() ? 'bg-white/5 border-transparent text-white/20 cursor-not-allowed' : 'bg-blue-600 border-blue-500 text-white shadow-lg hover:bg-blue-500'}`}
-                        >
-                            {config.save || "Save"}
-                        </button>
-                    </TooltipArea>
+                    <button 
+                        onClick={handleSavePreset}
+                        disabled={presets.length >= 3 || !presetName.trim()}
+                        className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all flex items-center justify-center min-w-[50px] ${presets.length >= 3 || !presetName.trim() ? 'bg-white/5 border-transparent text-white/20 cursor-not-allowed' : 'bg-blue-600 border-blue-500 text-white shadow-lg hover:bg-blue-500'}`}
+                    >
+                        {config.save || "Save"}
+                    </button>
                 </div>
 
-                {/* Preset List */}
                 <div className="space-y-1.5 min-h-[80px]">
                     {presets.length === 0 && (
                         <div className="flex flex-col items-center justify-center py-6 text-white/20 gap-2 border border-dashed border-white/5 rounded-lg bg-white/[0.01]">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" /></svg>
                             <span className="text-[10px] uppercase tracking-widest">{t?.common?.empty || "Empty"}</span>
                         </div>
                     )}
@@ -243,10 +237,6 @@ export const SystemSettingsPanel: React.FC = () => {
                                 <span className="text-[9px] text-white/30 font-mono">{new Date(p.timestamp).toLocaleDateString()}</span>
                             </div>
                             <div className="flex items-center gap-1">
-                                <button onClick={() => handleLoadPreset(p)} className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-blue-400 transition-colors" title={config.load || "Load"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m-4 4v12" /></svg>
-                                </button>
-                                <div className="w-px h-3 bg-white/10 mx-0.5"></div>
                                 <button onClick={() => handleDeletePreset(p.id)} className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-red-400 transition-colors" title={config.delete || "Delete"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
@@ -256,17 +246,7 @@ export const SystemSettingsPanel: React.FC = () => {
                 </div>
             </div>
         </div>
-        
-        {/* Factory Reset Footer */}
-        <div className="mt-auto pt-3 border-t border-white/5">
-          <TooltipArea text={hints?.confirmReset}>
-            <button onClick={handleConfirmReset} className="w-full py-2 bg-red-500/[0.15] rounded-lg text-xs font-bold uppercase tracking-wider text-red-400/80 hover:text-red-300 flex items-center justify-center gap-1.5 border border-red-500/20 hover:border-red-500/40 transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-              {t?.reset || "Factory Reset"}
-            </button>
-          </TooltipArea>
-        </div>
-      </div>
-    </>
+      </BentoCard>
+    </div>
   );
 };

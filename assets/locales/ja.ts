@@ -1,7 +1,6 @@
-
 /**
  * File: assets/locales/ja.ts
- * Version: 2.1.3
+ * Version: 2.1.5
  * Author: Sut
  */
 
@@ -35,10 +34,11 @@ export const ja = {
     next: '次へ',
     shuffle: 'シャッフル',
     repeatAll: '全曲リピート',
-    repeatOne: '1曲リピート'
+    repeatOne: '1曲リピート',
+    mode: '再生モード'
   },
   tabs: {
-    visual: 'ビジュアル', text: 'テキスト', audio: 'オーディオ', ai: 'AI 共感覚', system: 'システム', studio: 'スタジオ'
+    visual: 'ビジュアル', text: 'テキスト', input: 'オーディオ', audio: 'オーディオ', playback: 'ライブラリ', ai: 'AI 共感覚', system: 'システム', studio: 'スタジオ'
   },
   studioPanel: {
     title: 'レコーディングスタジオ',

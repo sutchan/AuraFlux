@@ -1,6 +1,6 @@
 /**
  * File: assets/locales/en.ts
- * Version: 2.1.0
+ * Version: 2.1.5
  * Author: Sut
  */
 
@@ -34,10 +34,11 @@ export const en = {
     next: 'Next',
     shuffle: 'Shuffle',
     repeatAll: 'Repeat All',
-    repeatOne: 'Repeat One'
+    repeatOne: 'Repeat One',
+    mode: 'Playback Mode'
   },
   tabs: {
-    visual: 'Visual', text: 'Text', audio: 'Audio', ai: 'AI Synesthesia', system: 'System', studio: 'Studio'
+    visual: 'Visuals', text: 'Text', input: 'Audio', audio: 'Audio', playback: 'Library', ai: 'AI', system: 'System', studio: 'Studio'
   },
   studioPanel: {
     title: 'Recording Studio',
@@ -344,7 +345,7 @@ export const en = {
     [VisualizerMode.MACRO_BUBBLES]: 'Cellular Drift',
     [VisualizerMode.KINETIC_WALL]: 'Pulse Matrix (WebGL)', 
     [VisualizerMode.LIQUID]: 'Molten Core (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Silk Flow'
+    [VisualizerMode.WAVEFORM]: 'Spectral Silk'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particles.',
@@ -380,7 +381,10 @@ export const en = {
       glow: 'Toggle Bloom',
       trails: 'Toggle Motion Blur',
       changeMode: 'Cycle Modes',
-      changeTheme: 'Cycle Themes'
+      changeTheme: 'Cycle Themes',
+      speed: 'Adjust Speed',
+      tabs: 'Switch Tabs',
+      help: 'Toggle Help'
     },
     gestureItems: {
         swipeMode: 'Swipe Horizontal: Change Mode',
@@ -417,9 +421,9 @@ export const en = {
     next: 'Proceed', back: 'Previous', skip: 'Skip', finish: 'Begin Experience',
     features: {
       title: 'Sensory Features',
-      visuals: { title: 'Generative Sculptures', desc: '15+ reactive engines powered by WebGL and advanced mathematics.' },
-      ai: { title: 'Gemini Intelligence', desc: 'Instant track metadata and mood recognition powered by Google Gemini 3.' },
-      privacy: { title: 'Edge Intelligence', desc: 'Processing stays local. We never record or store your private audio data.' }
+      visuals: { title: 'Real-time Light Sculptures', desc: 'Powered by 15+ WebGL kinetic engines. Reconstructing invisible sound waves into tangible 3D mathematical art.' },
+      ai: { title: 'Gemini Synesthesia Core', desc: 'Integrated with Google Gemini 3 multimodal models. Decoding not just track data, but the emotional spectrum and texture of sound.' },
+      privacy: { title: 'Zero-Trust Edge Computing', desc: 'Ultimate privacy. From spectral analysis to visual rendering, everything runs locally in your browser. No audio upload.' }
     },
     shortcuts: { title: 'Dynamic Controls', desc: 'Master your environment like a conductor with these keyboard commands.' }
   }

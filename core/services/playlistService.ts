@@ -1,9 +1,10 @@
 /**
  * File: core/services/playlistService.ts
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
  * Description: IndexedDB wrapper for persisting audio tracks (files + metadata).
+ * Updated: Robust error handling for SecurityError/Permission denied.
  */
 
 import { Track } from '../types';
@@ -15,22 +16,27 @@ const DB_VERSION = 1;
 // Helper to open DB
 const openDB = (): Promise<IDBDatabase> => {
     return new Promise((resolve, reject) => {
-        if (!window.indexedDB) {
-            reject(new Error("IndexedDB not supported"));
-            return;
-        }
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        
-        request.onupgradeneeded = (e) => {
-            const db = (e.target as IDBOpenDBRequest).result;
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-                // 'id' is a unique string generated in useAudio
-                db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        try {
+            if (typeof window === 'undefined' || !window.indexedDB) {
+                reject(new Error("IndexedDB not supported"));
+                return;
             }
-        };
-        
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            
+            request.onupgradeneeded = (e) => {
+                const db = (e.target as IDBOpenDBRequest).result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                    // 'id' is a unique string generated in useAudio
+                    db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                }
+            };
+            
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        } catch (e) {
+            // Catches synchronous SecurityError (Permission denied) in restricted iframes
+            reject(e);
+        }
     });
 };
 
@@ -45,7 +51,7 @@ export const saveTrackToDB = async (track: Track) => {
             req.onerror = () => reject(req.error);
         });
     } catch (e) {
-        console.warn("[Playlist] Failed to save track:", e);
+        console.warn("[Playlist] Failed to save track (Storage access denied or quota exceeded):", e);
     }
 };
 
@@ -90,7 +96,7 @@ export const loadPlaylistFromDB = async (): Promise<Track[]> => {
             req.onerror = () => reject(req.error);
         });
     } catch (e) {
-        console.warn("[Playlist] Failed to load DB:", e);
+        console.warn("[Playlist] Failed to load DB (Storage access denied):", e);
         return [];
     }
 };

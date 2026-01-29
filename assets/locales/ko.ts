@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ko.ts
- * Version: 2.1.3
+ * Version: 2.1.4
  * Author: Sut
  */
 
@@ -35,10 +35,11 @@ export const ko = {
     next: '다음',
     shuffle: '셔플',
     repeatAll: '전체 반복',
-    repeatOne: '한 곡 반복'
+    repeatOne: '한 곡 반복',
+    mode: '재생 모드'
   },
   tabs: {
-    visual: '비주얼', text: '텍스트', audio: '오디오', ai: 'AI 공감각', system: '시스템', studio: '스튜디오'
+    visual: '비주얼', text: '텍스트', input: '오디오', audio: '오디오', playback: '라이브러리', ai: 'AI 공감각', system: '시스템', studio: '스튜디오'
   },
   studioPanel: {
     title: '레코딩 스튜디오',
@@ -258,7 +259,7 @@ export const ko = {
   excludeFromAutoRotate: '자동 순환 제외',
   albumArtBackground: '앨범 아트 배경',
   overlayCover: '커버 오버레이',
-  lightMode: '라이트 모드',
+  lightMode: '라이트/다크 테마를 전환합니다.',
   localFont: '로컬 폰트',
   enterLocalFont: '폰트 이름 입력 (예: Nanum Gothic)',
   

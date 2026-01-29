@@ -14,12 +14,12 @@
 - **存储防御测试**: 模拟旧版本数据自动补全。
 - **边界条件测试**: 测试空音频输入、超长文件名及断网情况下的降级处理。
 - **WebGL 恢复**: 模拟上下文丢失自动恢复。
-- **i18n 完整性 (v1.8.8):** 验证所有 10 种语言包的键值完整性，特别是 `studioPanel` 和 `aiPanel` 部分。
+- **i18n 完整性 (v1.8.10):** 验证所有 10 种语言包的键值完整性，特别是 `player` (播放控制) 和 `audio` (音频设置) 部分。
 
 ## 3. 回归测试清单
-- [x] 10种语言切换无乱码或缺失键值 (v1.8.8 Verified)。
+- [x] 10种语言切换无乱码或缺失键值 (v1.8.10 Verified)。
 - [ ] 录制功能在 Safari/Chrome 上均可生成有效视频文件。
 - [ ] AI 导演功能在无 API Key 时的提示。
 
 ---
-*Aura Flux Testing & Validation - Version 1.8.9*
+*Aura Flux Testing & Validation - Version 1.8.10*

@@ -1,9 +1,9 @@
 /**
  * File: components/ui/OnboardingOverlay.tsx
- * Version: 1.1.2
+ * Version: 1.1.4
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-10 23:00
+ * Updated: 2025-03-11 13:30
  */
 
 import React, { useState } from 'react';
@@ -44,6 +44,9 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ language, 
     // @ts-ignore
     return t.features?.[section]?.[key] || tEn.features?.[section]?.[key] || '';
   };
+
+  const isZh = language === 'zh' || language === 'tw';
+  const sectionTitleClass = "text-[10px] font-black uppercase text-white/30 tracking-widest mt-5 mb-2 px-1 first:mt-0";
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-xl">
@@ -88,17 +91,39 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ language, 
             </div>
           )}
           {step === 2 && (
-            <div className="space-y-6 animate-fade-in-up">
-              <div className="text-center mb-6"><h2 className="text-xl font-bold text-white mb-1">{t.shortcuts?.title || tEn.shortcuts?.title}</h2><p className="text-white/50 text-xs">{t.shortcuts?.desc || tEn.shortcuts?.desc}</p></div>
-              <div className="grid grid-cols-2 gap-3">
-                <ShortcutRow k="Space" label={h.toggleMic || hEn.toggleMic} /><ShortcutRow k="F" label={h.fullscreen || hEn.fullscreen} />
-                <ShortcutRow k="L" label={h.lyrics || hEn.lyrics} /><ShortcutRow k="H" label={h.hideUi || hEn.hideUi} />
-                <ShortcutRow k="R" label={h.randomize || hEn.randomize} /><ShortcutRow k="← →" label={h.changeMode || hEn.changeMode} />
+            <div className="animate-fade-in-up h-full flex flex-col">
+              <div className="text-center mb-4 shrink-0"><h2 className="text-xl font-bold text-white mb-1">{t.shortcuts?.title || tEn.shortcuts?.title}</h2><p className="text-white/50 text-xs">{t.shortcuts?.desc || tEn.shortcuts?.desc}</p></div>
+              
+              <div className="overflow-y-auto custom-scrollbar flex-1 pr-2 -mr-2">
+                  {/* Essentials */}
+                  <h3 className={sectionTitleClass}>{isZh ? '基础控制' : 'Essentials'}</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <ShortcutRow k="Space" label={h.toggleMic || hEn.toggleMic} />
+                    <ShortcutRow k="F" label={h.fullscreen || hEn.fullscreen} />
+                    <ShortcutRow k="H" label={h.hideUi || hEn.hideUi} />
+                    <ShortcutRow k="?" label={h.help || hEn.help} />
+                  </div>
+
+                  {/* VJ Creative */}
+                  <h3 className={sectionTitleClass}>{isZh ? '视觉创作' : 'Visual Creation'}</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <ShortcutRow k="R" label={h.randomize || hEn.randomize} />
+                    <ShortcutRow k="← →" label={h.changeMode || hEn.changeMode} />
+                    <ShortcutRow k="[ ]" label={h.changeTheme || hEn.changeTheme} />
+                    <ShortcutRow k="Shift + ↑↓" label={h.speed || hEn.speed} />
+                  </div>
+
+                  {/* Advanced */}
+                  <h3 className={sectionTitleClass}>{isZh ? '高级功能' : 'Advanced'}</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <ShortcutRow k="L" label={h.lyrics || hEn.lyrics} />
+                    <ShortcutRow k="1 - 5" label={h.tabs || hEn.tabs} />
+                  </div>
               </div>
             </div>
           )}
         </div>
-        <div className="p-8 pt-4 border-t border-white/5 flex justify-between items-center bg-black/20">
+        <div className="p-8 pt-4 border-t border-white/5 flex justify-between items-center bg-black/20 z-10">
           {step > 0 ? (
             <button onClick={() => setStep(s => s - 1)} className="text-white/40 hover:text-white text-sm font-bold uppercase transition-colors flex items-center gap-1">
               <span>←</span>

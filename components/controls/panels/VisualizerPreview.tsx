@@ -1,9 +1,9 @@
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.7.27
+ * Version: 1.8.0
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-06 18:00
+ * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: 2025-03-11 16:00
  */
 
 import React, { memo } from 'react';
@@ -46,7 +46,15 @@ export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode,
         <button
           onClick={onClick}
           aria-pressed={isActive}
-          className={`relative w-full rounded-xl transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 text-left ${isActive ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:ring-1 hover:ring-white/30'} ${isIncluded ? '' : 'grayscale group-hover:grayscale-0'}`}
+          className={`relative w-full rounded-xl transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 text-left ${
+            isActive 
+              ? 'ring-2 ring-blue-500 shadow-lg' 
+              : 'hover:ring-1 hover:ring-white/30'
+          } ${
+            isIncluded 
+              ? '' 
+              : 'grayscale opacity-60 hover:grayscale-0 hover:opacity-100'
+          }`}
         >
           <div 
             className="h-12 w-full bg-black transition-transform duration-500 ease-in-out group-hover:scale-110"
@@ -70,11 +78,13 @@ export const VisualizerPreview: React.FC<VisualizerPreviewProps> = memo(({ mode,
                 <div className={`w-4 h-4 rounded-full flex items-center justify-center transition-all duration-200 border transform group-hover/toggle:scale-110 ${
                     isIncluded 
                     ? 'bg-green-500 border-green-500 text-black shadow-[0_0_8px_rgba(34,197,94,0.6)]' 
-                    : 'bg-black/40 border-white/30 text-transparent hover:border-white/60'
+                    : 'bg-black/40 border-white/30 text-transparent hover:border-white/60 hover:bg-white/10'
                 }`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
-                    </svg>
+                    {isIncluded && (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
                 </div>
             </div>
           </div>

@@ -15,7 +15,7 @@
 
 ## 3. 控制面板布局规范 (Panel Layouts)
 - **UI 模式:** 切换 `Simple` (简洁) 和 `Advanced` (专业) 模式。
-- **标签页顺序:** `Visual`, `Text`, `Audio`, `AI`, `System`。
+- **标签页顺序:** `Visual`, `Text`, `Audio` (原 Input), `AI`, `System`。
 
 ## 4. 输入映射
 ### 键盘 (Desktop)
@@ -32,4 +32,4 @@
   - **清洗规则:** 仅移除操作系统保留字符 (`< > : " / \ | ? *`)，其余字符保留，以确保文件名的可读性和兼容性。
 
 ---
-*Aura Flux Interface - Version 1.8.9*
+*Aura Flux Interface - Version 1.8.10*

@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.6.0
+ * Version: 2.6.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-10 10:00
+ * Updated: 2025-03-11 15:00
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -181,6 +181,13 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       setMediaStream(stream);
 
       const source = ctx.createMediaStreamSource(stream);
+      
+      // CRITICAL FIX: Disconnect any previous destination connections (e.g. from File mode)
+      // to prevent microphone input from being routed to speakers (feedback loop).
+      if (analyserRef.current) {
+          try { analyserRef.current.disconnect(); } catch(e) { console.warn("Analyser disconnect error", e); }
+      }
+
       source.connect(analyserRef.current!);
       
       setIsListening(true);
@@ -301,8 +308,15 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
     const source = ctx.createBufferSource();
     source.buffer = audioBufferRef.current;
     
+    // Connect source to analyser
     source.connect(analyserRef.current!);
-    analyserRef.current!.connect(ctx.destination);
+    
+    // Connect analyser to speakers (File Mode needs audio output)
+    try {
+        // In case it's already connected (redundant connect is safe, but disconnect first is cleaner if logic was different)
+        // Here we just ensure connection.
+        analyserRef.current!.connect(ctx.destination);
+    } catch(e) { console.warn("Output connect error", e); }
 
     source.onended = () => {
        // Check if it ended naturally (approx duration match)
@@ -533,6 +547,9 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       await stopAll();
       const ctx = await ensureContext();
       const demo = createDemoAudioGraph(ctx, analyserRef.current!);
+      // Ensure analyzer connected to destination for Demo so user can hear it
+      try { analyserRef.current!.connect(ctx.destination); } catch(e){}
+      
       demo.start();
       demoGraphRef.current = demo;
       setIsSimulating(true);

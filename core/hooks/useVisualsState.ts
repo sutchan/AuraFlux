@@ -1,9 +1,9 @@
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 23:00
+ * Updated: 2025-03-10 23:35
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -26,7 +26,8 @@ const NO_GLOW_MODES = [
 const NO_TRAILS_MODES = [
     VisualizerMode.BARS,
     VisualizerMode.RINGS,
-    VisualizerMode.LASERS
+    VisualizerMode.LASERS,
+    VisualizerMode.WAVEFORM
 ];
 
 export const useVisualsState = (hasStarted: boolean, initialSettings: VisualizerSettings) => {

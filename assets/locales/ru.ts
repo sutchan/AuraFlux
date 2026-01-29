@@ -1,8 +1,8 @@
 /**
  * File: assets/locales/ru.ts
- * Version: 2.2.0
+ * Version: 2.2.1
  * Author: Sut
- * Updated: 2025-03-10 21:00
+ * Updated: 2025-03-11 14:00
  */
 
 import { en } from './en';
@@ -15,6 +15,13 @@ export const ru = {
     clearAll: 'Очистить', confirmClear: 'Очистить очередь?',
     dropFiles: 'Перетащите аудиофайлы',
     themeLight: 'Светлая тема', themeDark: 'Темная тема'
+  },
+  player: {
+    ...en.player,
+    mode: 'Режим воспр.'
+  },
+  tabs: {
+    visual: 'Визуал', text: 'Текст', input: 'Аудио', audio: 'Аудио', playback: 'Библиотека', ai: 'ИИ', system: 'Система', studio: 'Студия'
   },
   welcomeTitle: 'Aura Flux | Звук Света',
   welcomeText: 'Превратите каждую вибрацию в генеративный шедевр. Работает на базе Gemini AI для распознавания в реальном времени.',

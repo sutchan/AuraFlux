@@ -1,8 +1,8 @@
 /**
  * File: assets/locales/es.ts
- * Version: 2.2.0
+ * Version: 2.2.1
  * Author: Sut
- * Updated: 2025-03-10 21:00
+ * Updated: 2025-03-11 14:00
  */
 
 import { en } from './en';
@@ -15,6 +15,13 @@ export const es = {
     clearAll: 'Borrar Todo', confirmClear: '¿Borrar cola?',
     dropFiles: 'Soltar archivos de audio',
     themeLight: 'Modo Claro', themeDark: 'Modo Oscuro'
+  },
+  player: {
+    ...en.player,
+    mode: 'Modo de Reproducción'
+  },
+  tabs: {
+    visual: 'Visuales', text: 'Texto', input: 'Audio', audio: 'Audio', playback: 'Biblioteca', ai: 'IA', system: 'Sistema', studio: 'Estudio'
   },
   welcomeTitle: 'Aura Flux | El Sonido de la Luz',
   welcomeText: 'Transmuta cada vibración en una obra maestra generativa. Impulsado por Gemini AI para el reconocimiento en tiempo real, redefiniendo la experiencia sensorial.',

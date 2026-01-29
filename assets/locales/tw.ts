@@ -1,7 +1,6 @@
-
 /**
  * File: assets/locales/tw.ts
- * Version: 2.1.3
+ * Version: 2.1.5
  * Author: Sut
  */
 
@@ -35,10 +34,11 @@ export const tw = {
     next: '下一首',
     shuffle: '隨機播放',
     repeatAll: '列表循環',
-    repeatOne: '單曲循環'
+    repeatOne: '單曲循環',
+    mode: '播放模式'
   },
   tabs: {
-    visual: '視覺', text: '文字', audio: '音訊', ai: 'AI 通感', system: '系統', studio: '工作室'
+    visual: '視覺', text: '文字', input: '音訊', audio: '音訊', playback: '媒體庫', ai: 'AI 通感', system: '系統', studio: '工作室'
   },
   studioPanel: {
     title: '錄製工作室',
@@ -339,7 +339,7 @@ export const tw = {
     all_modes: '所有模式',
     calm: '數位波形',
     party: '動感光牆派對',
-    ambient: '深空星雲',
+    ambient: '深空星云',
     cyberpunk: '賽博雷射', 
     retrowave: '復古力場',
     vocal: '人聲頻譜' 
@@ -368,7 +368,7 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '細胞漂移', 
     [VisualizerMode.KINETIC_WALL]: '脈衝矩陣 (WebGL)', 
     [VisualizerMode.LIQUID]: '熔核反應 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '流光绸緞'
+    [VisualizerMode.WAVEFORM]: '光譜絲帶'
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基於 WebGL 粒子系統的有機流體模擬。',
