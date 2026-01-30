@@ -15,7 +15,7 @@
 
 ## 3. 控制面板布局规范 (Panel Layouts)
 - **UI 模式:** 切换 `Simple` (简洁) 和 `Advanced` (专业) 模式。
-- **标签页顺序:** `Visual`, `Audio` (原 Input), `Playback`, `Info Layer` (原 Text), `Studio`, `System`。
+- **标签页顺序:** `Visual`, `Audio` (原 Input), `Info Layer` (原 Text), `Playback` (媒体库), `Studio`, `System`。
 - **迷你播放列表 (v1.8.12):**
   - **高度限制:** `max-h-[340px]` (约 6 行可见)。
   - **行为:** 位于屏幕底部中央，点击外部自动关闭。

@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/PlaybackPanel.tsx
- * Version: 2.1.7
+ * Version: 2.1.9
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 17:00
+ * Updated: 2025-03-14 20:00
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -66,7 +66,7 @@ export const PlaybackPanel: React.FC = () => {
           <TooltipArea text={t?.common?.clearAll || "Clear Queue"}>
               <button 
                   onClick={() => { 
-                      // Robust confirm check
+                      // Robust confirm check with fallback string
                       if (playlist.length > 0 && window.confirm(t?.common?.confirmClear || "Clear Queue?")) {
                           clearPlaylist(); 
                       }
@@ -234,7 +234,7 @@ export const PlaybackPanel: React.FC = () => {
                             <span className="bg-white/10 px-2 py-0.5 rounded">WAV</span>
                             <span className="bg-white/10 px-2 py-0.5 rounded">FLAC</span>
                         </div>
-                        <p className="text-[10px] opacity-40 font-mono pt-2">Supports ID3 Metadata & Cover Art</p>
+                        <p className="text-[10px] opacity-40 font-mono pt-2">{t?.player?.supportInfo || "Supports ID3 Metadata & Cover Art"}</p>
                     </div>
                 </div>
             ) : (

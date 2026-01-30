@@ -1,9 +1,10 @@
+
 /**
  * File: components/ui/OnboardingOverlay.tsx
- * Version: 1.1.4
+ * Version: 1.1.5
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 13:30
+ * Updated: 2025-03-14 19:00
  */
 
 import React, { useState } from 'react';
@@ -117,7 +118,7 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ language, 
                   <h3 className={sectionTitleClass}>{isZh ? '高级功能' : 'Advanced'}</h3>
                   <div className="grid grid-cols-2 gap-2">
                     <ShortcutRow k="L" label={h.lyrics || hEn.lyrics} />
-                    <ShortcutRow k="1 - 5" label={h.tabs || hEn.tabs} />
+                    <ShortcutRow k="1 - 6" label={h.tabs || hEn.tabs} />
                   </div>
               </div>
             </div>

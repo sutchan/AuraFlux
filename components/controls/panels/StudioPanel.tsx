@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 4.0.1
+ * Version: 4.0.2
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-13 12:30
+ * Updated: 2025-03-14 20:00
  */
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -206,7 +206,7 @@ export const StudioPanel: React.FC = () => {
       let filename = `AuraFlux_${new Date().toISOString().slice(0,19).replace(/[:T]/g, '-')}`;
       
       if (currentSong && currentSong.title) {
-          const artist = currentSong.artist !== "System Alert" ? currentSong.artist : "Unknown";
+          const artist = currentSong.artist !== "System Alert" ? currentSong.artist : (t?.common?.unknownArtist || "Unknown");
           const safeTitle = currentSong.title.replace(/[<>:"/\\|?*]/g, '_').trim().slice(0, 50);
           const safeArtist = artist.replace(/[<>:"/\\|?*]/g, '_').trim().slice(0, 30);
           

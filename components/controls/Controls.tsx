@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.7.5
+ * Version: 1.7.7
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 15:30
+ * Updated: 2025-03-14 18:30
  */
 
 import React, { useState, useEffect } from 'react';
@@ -23,7 +23,7 @@ import { TooltipArea } from '../ui/controls/Tooltip';
 import { VISUALIZER_PRESETS, COLOR_THEMES } from '../../core/constants';
 import { VisualizerMode } from '../../core/types';
 
-// Updated Tab List - Removed 'ai', merged into 'input' and 'text'
+// Updated Tab List - Order matched with OpenSpec 05 (Visual -> Audio -> Text -> Playback -> Studio -> System)
 type TabType = 'visual' | 'input' | 'playback' | 'text' | 'studio' | 'system';
 
 const TAB_ICONS: Record<TabType, React.ReactNode> = {
@@ -54,9 +54,9 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
       setSettings(s => ({...s, appTheme: s.appTheme === 'light' ? 'dark' : 'light'}));
   };
 
-  // Updated tabs array order: Swapped 'playback' and 'text'
+  // Updated tabs array order to match OpenSpec: Visual, Audio, Info Layer, Playback, Studio, System
   const tabs: TabType[] = settings.uiMode === 'simple' 
-    ? ['visual', 'playback', 'input', 'system']
+    ? ['visual', 'input', 'playback', 'system']
     : ['visual', 'input', 'text', 'playback', 'studio', 'system'];
 
   // Safety check: Switch to 'visual' if current tab is hidden by mode switch
@@ -172,11 +172,11 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
             });
             break;
 
-        // Tab Navigation (1-6)
+        // Tab Navigation (1-6) - Aligned with updated order
         case 'Digit1': if (tabs.includes('visual')) setActiveTab('visual'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit2': if (tabs.includes('input')) setActiveTab('input'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit3': 
-            // 3rd tab logic depends on mode
+            // Simple: Playback (3rd) | Advanced: Text (3rd)
             if (settings.uiMode === 'simple') {
                 if (tabs.includes('playback')) setActiveTab('playback'); 
             } else {
@@ -185,6 +185,7 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
             if(!isExpanded) setIsExpanded(true); 
             break;
         case 'Digit4': 
+            // Simple: System (4th) | Advanced: Playback (4th)
             if (settings.uiMode === 'simple') {
                 if (tabs.includes('system')) setActiveTab('system'); 
             } else {
@@ -280,8 +281,9 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                 >
                     {activeTab === 'visual' && <VisualSettingsPanel />}
                     {activeTab === 'input' && <AudioSettingsPanel />}
-                    {activeTab === 'playback' && <PlaybackPanel />}
+                    {/* Updated render order to match visual tabs */}
                     {activeTab === 'text' && <CustomTextSettingsPanel />}
+                    {activeTab === 'playback' && <PlaybackPanel />}
                     {activeTab === 'studio' && <StudioPanel />}
                     {activeTab === 'system' && <SystemSettingsPanel />}
                 </div>

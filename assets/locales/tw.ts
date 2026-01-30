@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/tw.ts
- * Version: 2.2.1
+ * Version: 2.2.2
  * Author: Sut
  */
 
@@ -34,7 +34,7 @@ export const tw = {
     add: '新增'
   },
   tabs: {
-    visual: '視覺', text: '文字', input: '音訊', audio: '音訊', playback: '媒體庫', ai: 'AI 通感', system: '系統', studio: '演播室'
+    visual: '視覺', text: '資訊層', input: '音訊', audio: '音訊', playback: '媒體庫', ai: 'AI 通感', system: '系統', studio: '演播室'
   },
   studioPanel: {
     title: '錄製演播室',

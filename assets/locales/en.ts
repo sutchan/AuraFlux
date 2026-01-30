@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/en.ts
- * Version: 2.1.9
+ * Version: 2.2.1
  * Author: Sut
  */
 
@@ -38,7 +38,8 @@ export const en = {
     repeatOne: 'Repeat One',
     mode: 'Playback Mode',
     nowPlaying: 'Now Playing',
-    add: 'ADD'
+    add: 'ADD',
+    supportInfo: 'Supports ID3 Metadata & Cover Art'
   },
   tabs: {
     visual: 'Visuals', text: 'Info Layer', input: 'Audio', audio: 'Audio', playback: 'Library', ai: 'AI', system: 'System', studio: 'Studio'
@@ -342,7 +343,8 @@ export const en = {
     noDevice: 'No device found.',
     deviceBusy: 'Device busy.',
     general: 'Access error.',
-    tryDemo: 'Demo Mode'
+    tryDemo: 'Demo Mode',
+    trackLoad: 'Failed to play track.'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: 'Synaptic Storm (WebGL)',
@@ -439,5 +441,10 @@ export const en = {
       privacy: { title: 'Zero-Trust Edge Computing', desc: 'Ultimate privacy. From spectral analysis to visual rendering, everything runs locally in your browser. No audio upload.' }
     },
     shortcuts: { title: 'Dynamic Controls', desc: 'Master your environment like a conductor with these keyboard commands.' }
-  }
+  },
+  albumArtBackground: 'Album Art BG',
+  overlayCover: 'Cover Overlay',
+  lightMode: 'Light Mode',
+  localFont: 'Local Font',
+  enterLocalFont: 'Enter Font Name'
 };

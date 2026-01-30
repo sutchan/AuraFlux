@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ja.ts
- * Version: 2.1.7
+ * Version: 2.1.8
  * Author: Sut
  */
 
@@ -38,10 +38,11 @@ export const ja = {
     repeatOne: '1曲リピート',
     mode: '再生モード',
     nowPlaying: '再生中',
-    add: '追加'
+    add: '追加',
+    supportInfo: 'ID3タグとカバーアートに対応'
   },
   tabs: {
-    visual: 'ビジュアル', text: 'テキスト', input: 'オーディオ', audio: 'オーディオ', playback: 'ライブラリ', ai: 'AI 共感覚', system: 'システム', studio: 'スタジオ'
+    visual: 'ビジュアル', text: '情報レイヤー', input: 'オーディオ', audio: 'オーディオ', playback: 'ライブラリ', ai: 'AI 共感覚', system: 'システム', studio: 'スタジオ'
   },
   studioPanel: {
     title: 'レコーディングスタジオ',
@@ -135,100 +136,6 @@ export const ja = {
   textPanel: {
       overlay: 'カスタムテキストオーバーレイ',
       appearance: '外観設定'
-  },
-  visualizerMode: 'ビジュアルエンジン',
-  styleTheme: 'カラーテーマ',
-  settings: 'チューニング',
-  sensitivity: '感度',
-  speed: '速度',
-  glow: 'ネオン発光',
-  trails: '残像効果',
-  autoRotate: '自動切替',
-  rotateInterval: '間隔 (秒)',
-  cycleColors: 'カラー循環',
-  colorInterval: '間隔 (秒)',
-  cycleSpeed: '循環周期 (秒)',
-  monitorAudio: '音声モニタリング',
-  audioInput: '入力デバイス',
-  lyrics: 'AI 共感覚',
-  showLyrics: '認識を有効化',
-  displaySettings: '表示設定',
-  language: '言語',
-  region: '地域設定',
-  startMic: '音声入力を開始',
-  stopMic: '音声入力を停止',
-  listening: '聞き取り中',
-  identifying: 'AI分析中...',
-  startExperience: '体験を開始',
-  welcomeTitle: 'Aura Flux | 光の旋律',
-  welcomeText: 'あらゆる振動を生成的な傑作へと変換。Gemini AIにより、音を光のアートへ。',
-  unsupportedTitle: '非対応ブラウザ',
-  unsupportedText: 'Aura Fluxには最新のWeb Audio機能が必要です。Chrome、Edge、またはSafariを使用してください。',
-  hideOptions: '閉じる',
-  showOptions: '設定を表示',
-  reset: 'リセット',
-  confirmReset: '設定をリセットしますか？',
-  resetEngine: 'エンジンリセット',
-  confirmResetAction: 'リセット実行',
-  resetVisual: 'ビジュアルリセット',
-  resetText: 'テキストリセット',
-  resetAudio: 'オーディオリセット',
-  resetAi: 'AIリセット',
-  randomize: 'ランダム',
-  help: 'ヘルプ',
-  close: '閉じる',
-  betaDisclaimer: 'AI認識機能はベータ版です。',
-  wrongSong: '再分析',
-  hideCursor: 'カーソルを隠す',
-  customColor: 'カスタム色',
-  randomizeTooltip: 'ランダム設定 (R)',
-  smoothing: 'スムージング',
-  fftSize: '解像度 (FFT)',
-  appInfo: 'アプリについて',
-  appDescription: 'リアルタイムスペクトル分析とGemini AI認識を融合した没入型音楽ビジュアライザー。',
-  version: 'バージョン',
-  defaultMic: '既定のマイク',
-  customText: 'カスタムテキスト',
-  textProperties: 'タイポグラフィ',
-  text3D: '3D効果',
-  textSource: '表示ソース',
-  textSources: {
-      auto: '自動 (スマート)',
-      custom: 'カスタムテキストのみ',
-      song: '曲情報のみ',
-      clock: '現在時刻'
-  },
-  customTextPlaceholder: 'テキストを入力',
-  showText: 'オーバーレイ表示',
-  pulseBeat: 'ビート連動',
-  textAudioReactive: 'オーディオ反応',
-  textSize: 'フォントサイズ',
-  textRotation: '回転',
-  textFont: 'フォント',
-  textOpacity: '不透明度',
-  textPosition: '位置',
-  quality: '画質',
-  qualities: {
-    low: '低負荷', med: 'バランス', high: '最高品質'
-  },
-  visualPanel: {
-    effects: 'エフェクト', automation: '自動化', display: '表示',
-    atmosphere: '雰囲気', dynamics: 'ダイナミクス'
-  },
-  audioPanel: {
-    info: '「感度」を調整して反応強度を変更します。FFTサイズを上げると詳細になります。',
-    mic: 'マイク',
-    file: 'ファイル',
-    upload: 'アップロード',
-    aiDirector: 'AI 演出家',
-    analyzing: '分析中...',
-    analyze: 'ビジュアル生成',
-    analysisAi: '分析と AI インテリジェンス',
-    smartActions: 'スマートアクション'
-  },
-  systemPanel: {
-    interface: 'インターフェース', behavior: '動作設定', maintenance: 'メンテナンス', engine: 'エンジン', audio: 'オーディオ', ai: 'AI',
-    lightMode: 'ライトテーマ', darkMode: 'ダークテーマ'
   },
   config: {
     title: 'クラウド & データ',

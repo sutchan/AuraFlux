@@ -34,7 +34,7 @@ export const es = {
     add: 'AÑADIR'
   },
   tabs: {
-    visual: 'Visuales', text: 'Texto', input: 'Audio', audio: 'Audio', playback: 'Biblioteca', ai: 'IA', system: 'Sistema', studio: 'Estudio'
+    visual: 'Visuales', text: 'Capa Info', input: 'Audio', audio: 'Audio', playback: 'Biblioteca', ai: 'IA', system: 'Sistema', studio: 'Estudio'
   },
   studioPanel: {
     title: 'Estudio de Grabación',

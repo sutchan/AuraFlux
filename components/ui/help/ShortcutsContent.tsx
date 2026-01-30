@@ -1,6 +1,7 @@
+
 /**
  * File: components/ui/help/ShortcutsContent.tsx
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
  */
@@ -30,7 +31,7 @@ export const ShortcutsContent: React.FC<ShortcutsContentProps> = ({ h, s }) => {
                 <ShortcutItem label={s?.trails || "Trails"} k="T" />
                 <ShortcutItem label={s?.changeMode || "Cycle Mode"} k="← →" />
                 <ShortcutItem label={s?.changeTheme || "Cycle Theme"} k="[ ]" />
-                <ShortcutItem label={s?.tabs || "Switch Tabs"} k="1 - 5" />
+                <ShortcutItem label={s?.tabs || "Switch Tabs"} k="1 - 6" />
                 <ShortcutItem label={s?.help || "Help"} k="?" />
             </div>
         </div>

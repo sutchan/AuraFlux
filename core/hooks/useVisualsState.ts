@@ -1,9 +1,10 @@
+
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.8.4
+ * Version: 1.8.5
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-10 23:35
+ * Updated: 2025-03-14 21:05
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -17,17 +18,21 @@ const DEFAULT_THEME_INDEX = 1;
 // Regex for validating Hex colors
 const HEX_COLOR_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
+// Modes that should not have Glow enabled during random/auto-cycle
 const NO_GLOW_MODES = [
-    VisualizerMode.BARS, VisualizerMode.TUNNEL,
-    VisualizerMode.RINGS, VisualizerMode.FLUID_CURVES,
-    VisualizerMode.WAVEFORM
+    VisualizerMode.BARS,          // 频谱仪
+    VisualizerMode.TUNNEL,        // 时空隧道
+    VisualizerMode.RINGS,         // 声波共振
+    VisualizerMode.FLUID_CURVES,  // 极光
+    VisualizerMode.WAVEFORM       // 流光绸缎/光谱丝带
 ];
 
+// Modes that should not have Trails enabled during random/auto-cycle
 const NO_TRAILS_MODES = [
-    VisualizerMode.BARS,
-    VisualizerMode.RINGS,
-    VisualizerMode.LASERS,
-    VisualizerMode.WAVEFORM
+    VisualizerMode.BARS,          // 频谱仪
+    VisualizerMode.WAVEFORM,      // 光谱丝带/流光绸缎
+    VisualizerMode.NEURAL_FLOW,   // 突触风暴
+    VisualizerMode.FLUID_CURVES   // Also covers flow/silk aesthetics
 ];
 
 export const useVisualsState = (hasStarted: boolean, initialSettings: VisualizerSettings) => {

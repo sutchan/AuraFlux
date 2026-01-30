@@ -41,7 +41,7 @@ export const ko = {
     add: '추가'
   },
   tabs: {
-    visual: '비주얼', text: '텍스트', input: '오디오', audio: '오디오', playback: '라이브러리', ai: 'AI 공감각', system: '시스템', studio: '스튜디오'
+    visual: '비주얼', text: '정보 레이어', input: '오디오', audio: '오디오', playback: '라이브러리', ai: 'AI 공감각', system: '시스템', studio: '스튜디오'
   },
   studioPanel: {
     title: '레코딩 스튜디오',
@@ -386,7 +386,7 @@ export const ko = {
     shortcutsTitle: '키보드 단축키',
     gesturesTitle: '터치 제스처',
     shortcutItems: {
-      toggleMic: '마이크 전환', fullscreen: '전체 화면', randomize: '무작위', lyrics: 'AI 정보', hideUi: 'UI 토글', glow: '발광', trails: '잔상', changeMode: '모드 전환', changeTheme: '테마 전환'
+      toggleMic: '마이크 전환', fullscreen: '전체 화면', randomize: '무작위', lyrics: 'AI 정보', hideUi: 'UI 토글', glow: '발광', trails: '잔상', changeMode: '모드 전환', changeTheme: '테마 전환', speed: '속도 조절', tabs: '탭 전환', help: '도움말'
     },
     gestureItems: {
         swipeMode: '좌우 스와이프: 모드 전환', swipeSens: '상하 스와이프: 감도 조절', longPress: '길게 누르기: AI 정보'

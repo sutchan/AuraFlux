@@ -34,7 +34,7 @@ export const fr = {
     add: 'AJOUTER'
   },
   tabs: {
-    visual: 'Visuels', text: 'Texte', input: 'Audio', audio: 'Audio', playback: 'Bibliothèque', ai: 'IA', system: 'Système', studio: 'Studio'
+    visual: 'Visuels', text: 'Calque Info', input: 'Audio', audio: 'Audio', playback: 'Bibliothèque', ai: 'IA', system: 'Système', studio: 'Studio'
   },
   studioPanel: {
     title: 'Studio d\'enregistrement',
@@ -231,7 +231,7 @@ export const fr = {
     exportConfig: 'Télécharger JSON.',
     importConfig: 'Charger JSON.',
     savePreset: 'Sauvegarder état navigateur.',
-    loadPreset: 'Restaurer état.',
+    loadPreset: 'Restaurar état.',
     copyConfig: 'Copier configuration.',
     wakeLock: 'Empêcher veille écran.',
     includeInAutoRotate: 'Inclure dans Rotation Auto',

@@ -34,7 +34,7 @@ export const de = {
     add: 'HINZUFÜGEN'
   },
   tabs: {
-    visual: 'Visuals', text: 'Text', input: 'Audio', audio: 'Audio', playback: 'Bibliothek', ai: 'KI', system: 'System', studio: 'Studio'
+    visual: 'Visuals', text: 'Info-Ebene', input: 'Audio', audio: 'Audio', playback: 'Bibliothek', ai: 'KI', system: 'System', studio: 'Studio'
   },
   studioPanel: {
     title: 'Aufnahmestudio',

@@ -1,11 +1,11 @@
 
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.7.0
+ * Version: 2.7.1
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-12 12:00
- * Changes: Added stereo support (analyserR) and ChannelSplitterNode logic.
+ * Updated: 2025-03-14 20:00
+ * Changes: Added localization for track load error.
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -424,7 +424,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
           setFileStatus('ready');
       } catch (e) {
           console.error("Track load error", e);
-          setErrorMessage("Failed to play track.");
+          setErrorMessage(t?.errors?.trackLoad || "Failed to play track.");
           setFileStatus('error');
       } finally {
           setIsPending(false);

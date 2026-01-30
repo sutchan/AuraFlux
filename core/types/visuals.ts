@@ -1,35 +1,35 @@
 
 /**
  * File: core/types/visuals.ts
- * Version: 1.8.1
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-12 10:00
+ * Updated: 2025-03-14 21:00
  */
 
 import { Position, Region } from './common';
 import { LyricsStyle } from './audio';
 
 export enum VisualizerMode {
-  // WebGL Modes (High Fidelity)
-  NEURAL_FLOW = 'NEURAL_FLOW',
-  KINETIC_WALL = 'KINETIC_WALL', 
-  LIQUID = 'LIQUID',
-  CUBE_FIELD = 'CUBE_FIELD',
+  // Priority Modes
+  PLASMA = 'PLASMA',
+  BARS = 'BARS',
 
-  // Modern 2D Modes
-  WAVEFORM = 'WAVEFORM', 
+  // Classic / 2D Modes
+  PARTICLES = 'PARTICLES',
+  TUNNEL = 'TUNNEL',
+  RINGS = 'RINGS',
+  LASERS = 'LASERS',
   FLUID_CURVES = 'FLUID_CURVES',
+  WAVEFORM = 'WAVEFORM',
   NEBULA = 'NEBULA', 
   MACRO_BUBBLES = 'MACRO_BUBBLES',
   
-  // Classic Modes
-  LASERS = 'LASERS',
-  TUNNEL = 'TUNNEL',
-  RINGS = 'RINGS',
-  PARTICLES = 'PARTICLES',
-  PLASMA = 'PLASMA',
-  BARS = 'BARS'
+  // WebGL Modes (High Fidelity)
+  NEURAL_FLOW = 'NEURAL_FLOW',
+  CUBE_FIELD = 'CUBE_FIELD',
+  KINETIC_WALL = 'KINETIC_WALL', 
+  LIQUID = 'LIQUID'
 }
 
 export interface VisualizerSettings {
@@ -121,7 +121,7 @@ export interface IVisualizerRenderer {
     width: number, 
     height: number, 
     colors: string[], 
-    settings: VisualizerSettings,
+    settings: VisualizerSettings, 
     rotation: number, 
     beat: boolean,
     dataR?: Uint8Array // Optional Right Channel Data for Stereo

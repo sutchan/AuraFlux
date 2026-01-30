@@ -3,6 +3,12 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.8.13]
+
+### Feature & Design
+*   **UI/UX:** Updated the Control Panel tab order to better align with the workflow: Visual -> Audio -> Info Layer -> Playback -> Studio -> System. This places the "Info Layer" closer to the "Audio" source controls.
+*   **Documentation:** Updated keyboard shortcut guides in Help and Onboarding to reflect the new tab range (1-6).
+
 ## [v1.8.12]
 
 ### Fix
@@ -21,13 +27,4 @@ All notable changes to the **Aura Flux** project will be documented in this file
 *   **⚡ Performance:** Optimized `COLOR_THEMES` loading to ensure robustness against legacy index references in user local storage.
 
 ## [v1.8.10]
-
-### UI/UX
-*   **🎨 Playback:** Optimized the Library panel layout. Removed rigid height constraints on the main container and applied specific limits to the playlist card (max-h-420px), ensuring the right-side scrollbar appears correctly for long lists without stretching the entire UI.
-*   **📝 Terminology:** Renamed the "Input" tab to "Audio" across all languages. This better reflects its role as a hub for both input selection (Mic/File) and audio analysis tuning (FFT/Smoothing).
-
-### Fix
-*   **🔊 Audio:** Fixed a critical audio feedback loop issue where the microphone input was inadvertently routed to the speakers when switching modes. The analyzer connection is now properly disconnected before switching sources.
-
-## [v1.8.9]
 ...

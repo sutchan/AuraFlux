@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 2.2.4
+ * Version: 2.2.5
  * Author: Sut
  */
 
@@ -31,7 +31,8 @@ export const zh = {
   player: {
     play: '播放', pause: '暂停', previous: '上一首', next: '下一首', shuffle: '随机', repeatAll: '循环全部', repeatOne: '单曲循环', mode: '播放模式',
     nowPlaying: '正在播放',
-    add: '添加'
+    add: '添加',
+    supportInfo: '支持 ID3 元数据与封面'
   },
   tabs: {
     visual: '视觉', text: '信息层', input: '音频', audio: '音频', playback: '媒体库', ai: 'AI 通感', system: '系统', studio: '演播室'
@@ -239,8 +240,8 @@ export const zh = {
     albumArtBackground: '将专辑封面显示为模糊背景层。',
     overlayCover: '在歌曲信息中显示专辑封面缩略图。',
     lightMode: '在亮色和暗色 UI 主题之间切换。',
-    localFont: '字体名称',
-    enterLocalFont: '输入本地字体名称 (如 Arial)'
+    localFont: '本地字体',
+    enterLocalFont: '输入字体名称 (如: 黑体)'
   },
   visualizerMode: '视觉引擎',
   styleTheme: '色彩主题',
@@ -362,7 +363,8 @@ export const zh = {
     noDevice: '未找到设备。',
     deviceBusy: '设备忙。',
     general: '访问错误。',
-    tryDemo: '演示模式'
+    tryDemo: '演示模式',
+    trackLoad: '无法播放曲目。'
   },
   modes: {
     [VisualizerMode.NEURAL_FLOW]: '突触风暴 (WebGL)',

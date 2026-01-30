@@ -34,7 +34,7 @@ export const ru = {
     add: 'ДОБАВИТЬ'
   },
   tabs: {
-    visual: 'Визуал', text: 'Текст', input: 'Аудио', audio: 'Аудио', playback: 'Библиотека', ai: 'ИИ', system: 'Система', studio: 'Студия'
+    visual: 'Визуал', text: 'Инфо-слой', input: 'Аудио', audio: 'Аудио', playback: 'Библиотека', ai: 'ИИ', system: 'Система', studio: 'Студия'
   },
   studioPanel: {
     title: 'Студия записи',

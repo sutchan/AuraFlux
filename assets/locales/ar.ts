@@ -34,7 +34,7 @@ export const ar = {
     add: 'إضافة'
   },
   tabs: {
-    visual: 'مرئي', text: 'نص', input: 'صوت', audio: 'صوت', playback: 'المكتبة', ai: 'ذكاء', system: 'نظام', studio: 'استوديو'
+    visual: 'مرئي', text: 'طبقة المعلومات', input: 'صوت', audio: 'صوت', playback: 'المكتبة', ai: 'ذكاء', system: 'نظام', studio: 'استوديو'
   },
   studioPanel: {
     title: 'استوديو التسجيل',
