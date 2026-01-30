@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 2.4.1
+ * Version: 2.4.2
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-13 12:30
+ * Updated: 2025-03-14 12:00
  */
 
 import React, { useRef, useState, useEffect } from 'react';
@@ -145,7 +145,7 @@ export const AudioSettingsPanel: React.FC = () => {
          <div className="space-y-4">
              <div className="space-y-3 animate-fade-in-up">
                 <CustomSelect 
-                    label={t?.audioInput || "Device"}
+                    label={audioPanel?.mic || "Device"}
                     value={selectedDeviceId}
                     options={deviceOptions}
                     onChange={onDeviceChange}

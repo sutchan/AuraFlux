@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.7.2
+ * Version: 1.7.5
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 16:30
+ * Updated: 2025-03-14 15:30
  */
 
 import React, { useState, useEffect } from 'react';
@@ -54,10 +54,10 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
       setSettings(s => ({...s, appTheme: s.appTheme === 'light' ? 'dark' : 'light'}));
   };
 
-  // Updated tabs array
+  // Updated tabs array order: Swapped 'playback' and 'text'
   const tabs: TabType[] = settings.uiMode === 'simple' 
     ? ['visual', 'playback', 'input', 'system']
-    : ['visual', 'input', 'playback', 'text', 'studio', 'system'];
+    : ['visual', 'input', 'text', 'playback', 'studio', 'system'];
 
   // Safety check: Switch to 'visual' if current tab is hidden by mode switch
   useEffect(() => {
@@ -95,6 +95,20 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
             else if (isExpanded) setIsExpanded(false); 
             break;
         
+        // Playback Control (N/P)
+        case 'KeyN':
+        case 'MediaTrackNext':
+            if (sourceType === 'FILE') playNext();
+            break;
+        case 'KeyP':
+        case 'MediaTrackPrevious':
+            if (sourceType === 'FILE') playPrev();
+            break;
+        case 'MediaPlayPause':
+            e.preventDefault();
+            if (sourceType === 'FILE') togglePlayback();
+            break;
+
         // Help
         case 'Slash': // '?' key
             if (e.shiftKey) setShowHelpModal(prev => !prev);
@@ -161,8 +175,23 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
         // Tab Navigation (1-6)
         case 'Digit1': if (tabs.includes('visual')) setActiveTab('visual'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit2': if (tabs.includes('input')) setActiveTab('input'); if(!isExpanded) setIsExpanded(true); break;
-        case 'Digit3': if (tabs.includes('playback')) setActiveTab('playback'); if(!isExpanded) setIsExpanded(true); break;
-        case 'Digit4': if (tabs.includes('text')) setActiveTab('text'); if(!isExpanded) setIsExpanded(true); break;
+        case 'Digit3': 
+            // 3rd tab logic depends on mode
+            if (settings.uiMode === 'simple') {
+                if (tabs.includes('playback')) setActiveTab('playback'); 
+            } else {
+                if (tabs.includes('text')) setActiveTab('text'); 
+            }
+            if(!isExpanded) setIsExpanded(true); 
+            break;
+        case 'Digit4': 
+            if (settings.uiMode === 'simple') {
+                if (tabs.includes('system')) setActiveTab('system'); 
+            } else {
+                if (tabs.includes('playback')) setActiveTab('playback'); 
+            }
+            if(!isExpanded) setIsExpanded(true); 
+            break;
         case 'Digit5': if (tabs.includes('studio')) setActiveTab('studio'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit6': if (tabs.includes('system')) setActiveTab('system'); if(!isExpanded) setIsExpanded(true); break;
       }
@@ -184,7 +213,7 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
         <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505]/85 backdrop-blur-xl border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col animate-fade-in-up">
           <div className="max-h-[85dvh] md:max-h-[65vh] overflow-y-auto custom-scrollbar relative flex flex-col">
             
-            <div className="sticky top-0 z-50 bg-[#0a0a0c] border-b border-white/10 px-4 md:px-6 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.9)]">
+            <div className="sticky top-0 z-50 bg-[#0a0a0c] border-b border-white/10 px-4 md:px-6 py-2.5 shadow-xl">
                 <div className="max-w-5xl mx-auto flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-2">
                     <div className="flex bg-white/[0.04] p-0.5 rounded-lg overflow-x-auto max-w-full scrollbar-hide gap-0.5 mask-fade-right touch-pan-x" role="tablist" aria-label="Settings Categories">
                     {tabs.map((tab, index) => (
@@ -206,10 +235,10 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                     <div className="flex items-center justify-between lg:justify-end gap-2 md:gap-3">
                     <div className="bg-white/5 p-0.5 rounded-lg flex text-[10px] font-bold uppercase tracking-wider border border-white/5 flex-shrink-0">
                         <TooltipArea text={t?.hints?.uiModeSimple}>
-                            <button onClick={() => setSettings({...settings, uiMode: 'simple'})} className={`px-2.5 py-1 rounded transition-all duration-300 ${settings.uiMode === 'simple' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>{t?.common?.simple || 'SIMPLE'}</button>
+                            <button onClick={() => setSettings({...settings, uiMode: 'simple'})} className={`px-2.5 py-1 rounded transition-all duration-300 ${settings.uiMode === 'simple' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/10'}`}>{t?.common?.simple || 'SIMPLE'}</button>
                         </TooltipArea>
                         <TooltipArea text={t?.hints?.uiModeAdvanced}>
-                            <button onClick={() => setSettings({...settings, uiMode: 'advanced'})} className={`px-2.5 py-1 rounded transition-all duration-300 ${settings.uiMode === 'advanced' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>{t?.common?.advanced || 'ADVANCED'}</button>
+                            <button onClick={() => setSettings({...settings, uiMode: 'advanced'})} className={`px-2.5 py-1 rounded transition-all duration-300 ${settings.uiMode === 'advanced' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/10'}`}>{t?.common?.advanced || 'ADVANCED'}</button>
                         </TooltipArea>
                     </div>
                     <div className="w-px h-5 bg-white/10 mx-1 hidden lg:block"></div>

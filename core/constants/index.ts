@@ -1,13 +1,13 @@
 
 /**
  * File: core/constants/index.ts
- * Version: 1.9.4
+ * Version: 1.9.5
  * Author: Sut
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.8.11';
+export const APP_VERSION = '1.8.12';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 

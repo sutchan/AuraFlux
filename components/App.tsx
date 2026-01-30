@@ -1,7 +1,7 @@
 
 /**
  * File: components/App.tsx
- * Version: 1.9.2
+ * Version: 1.9.3
  * Author: Aura Flux Team
  */
 
@@ -80,8 +80,10 @@ const AppContent: React.FC = () => {
 
   return (
     <div 
-      // Use explicit hex color to prevent light-mode override in index.css (where .bg-black is forced to white)
-      className="h-[100dvh] bg-[#000000] overflow-hidden relative touch-none" 
+      // Force background to black via inline style to override any 'light-mode' CSS variable injections.
+      // This ensures the visualizer canvas always renders on black, even if the UI text turns dark.
+      style={{ backgroundColor: '#000000' }}
+      className="h-[100dvh] overflow-hidden relative touch-none" 
       onDoubleClick={handleDoubleClick}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}

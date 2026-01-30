@@ -16,6 +16,9 @@
 ## 3. 控制面板布局规范 (Panel Layouts)
 - **UI 模式:** 切换 `Simple` (简洁) 和 `Advanced` (专业) 模式。
 - **标签页顺序:** `Visual`, `Audio` (原 Input), `Playback`, `Info Layer` (原 Text), `Studio`, `System`。
+- **迷你播放列表 (v1.8.12):**
+  - **高度限制:** `max-h-[340px]` (约 6 行可见)。
+  - **行为:** 位于屏幕底部中央，点击外部自动关闭。
 
 ## 4. 输入映射
 ### 键盘 (Desktop)
@@ -24,6 +27,8 @@
 - `F`: `toggleFullscreen`
 - `L`: `setShowLyrics`
 - `H`: `toggleExpanded`
+- `N`: `playNext` (仅文件模式)
+- `P`: `playPrev` (仅文件模式)
 
 ## 5. 文件与导出规范 (v1.8.6)
 - **录制文件名生成:**
@@ -32,4 +37,4 @@
   - **清洗规则:** 仅移除操作系统保留字符 (`< > : " / \ | ? *`)，其余字符保留，以确保文件名的可读性和兼容性。
 
 ---
-*Aura Flux Interface - Version 1.8.11*
+*Aura Flux Interface - Version 1.8.12*

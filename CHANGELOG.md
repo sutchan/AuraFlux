@@ -3,6 +3,12 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.8.12]
+
+### Fix
+*   **🎵 Playback:** Fixed an issue where the "Clear Queue" confirmation dialog might display `undefined` if localization was still loading. Added a robust fallback string to ensure the action can always be confirmed.
+*   **UI/UX:** Synchronized the height and behavior of the playlist pop-up in the Mini Bar (Bottom Bar) with the main Playback Panel for a consistent user experience (~6 rows visible).
+
 ## [v1.8.11]
 
 ### Feature & Design

@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/PlaybackPanel.tsx
- * Version: 2.1.2
+ * Version: 2.1.7
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-13 12:45
+ * Updated: 2025-03-14 17:00
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -65,7 +65,12 @@ export const PlaybackPanel: React.FC = () => {
           </TooltipArea>
           <TooltipArea text={t?.common?.clearAll || "Clear Queue"}>
               <button 
-                  onClick={() => { if(playlist.length > 0 && window.confirm(t?.common?.confirmClear)) clearPlaylist(); }}
+                  onClick={() => { 
+                      // Robust confirm check
+                      if (playlist.length > 0 && window.confirm(t?.common?.confirmClear || "Clear Queue?")) {
+                          clearPlaylist(); 
+                      }
+                  }}
                   disabled={playlist.length === 0}
                   className={`p-1.5 rounded-lg border border-transparent transition-colors ${playlist.length === 0 ? 'opacity-30 cursor-not-allowed' : 'bg-white/5 hover:bg-white/10 text-white/60 hover:text-red-400 hover:border-red-500/20'}`}
               >
@@ -82,29 +87,31 @@ export const PlaybackPanel: React.FC = () => {
 
       {/* Card 1: Now Playing & Controls */}
       <BentoCard title={t?.player?.nowPlaying || "Now Playing"} className="flex flex-col h-full">
-        <div className="flex flex-col h-full gap-4 relative">
+        <div className="flex flex-col h-full gap-3 relative">
             {/* Playback Status / Art */}
             {playlist.length > 0 ? (
-                <div className="flex flex-col gap-4 p-5 bg-gradient-to-b from-white/[0.03] to-transparent rounded-2xl border border-white/5 relative overflow-hidden flex-1 justify-center group">
+                <div className="flex flex-col gap-3 p-4 bg-gradient-to-b from-white/[0.03] to-transparent rounded-2xl border border-white/5 relative overflow-hidden flex-1 justify-center group">
                     {/* Art Background Blur */}
                     {currentSong?.albumArtUrl && (
                         <div className="absolute inset-0 opacity-30 pointer-events-none transition-all duration-1000 ease-in-out" style={{ backgroundImage: `url(${currentSong.albumArtUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(30px) saturate(1.2)' }} />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                     
-                    {/* Metadata */}
-                    <div className="relative z-10 text-center mb-2 flex flex-col items-center">
-                        <div className="w-24 h-24 mb-4 rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-white/10 relative">
+                    {/* Metadata - Compact Row Layout */}
+                    <div className="relative z-10 flex items-center gap-4 mb-2 w-full">
+                        <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-white/10 relative bg-white/5">
                              {currentSong?.albumArtUrl ? (
                                  <img src={currentSong.albumArtUrl} alt="Art" className="w-full h-full object-cover" />
                              ) : (
-                                 <div className="w-full h-full bg-white/5 flex items-center justify-center">
+                                 <div className="w-full h-full flex items-center justify-center">
                                      <svg className="w-8 h-8 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                                  </div>
                              )}
                         </div>
-                        <div className="text-base font-black text-white truncate w-full px-2 drop-shadow-md tracking-tight leading-tight">{currentSong?.title || t?.common?.unknownTrack}</div>
-                        <div className="text-xs text-blue-200/80 truncate w-full px-2 font-bold tracking-wide mt-1">{currentSong?.artist || t?.common?.unknownArtist}</div>
+                        <div className="flex flex-col min-w-0 flex-1 text-left justify-center h-20">
+                            <div className="text-sm font-black text-white truncate w-full drop-shadow-md tracking-tight leading-tight">{currentSong?.title || t?.common?.unknownTrack}</div>
+                            <div className="text-xs text-blue-200/80 truncate w-full font-bold tracking-wide mt-1">{currentSong?.artist || t?.common?.unknownArtist}</div>
+                        </div>
                     </div>
 
                     {/* Progress Bar */}
@@ -149,24 +156,6 @@ export const PlaybackPanel: React.FC = () => {
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z" /></svg>
                         </button>
                     </div>
-                    
-                    {/* Visual Art Controls moved here */}
-                    <div className="absolute bottom-2 right-2 left-2 z-10 flex justify-end gap-2">
-                        <SettingsToggle 
-                            label={t?.albumArtBackground || "BG"} 
-                            value={!!settings.albumArtBackground} 
-                            onChange={() => setSettings(prev => ({ ...prev, albumArtBackground: !prev.albumArtBackground }))} 
-                            variant="clean"
-                            hintText={hints?.albumArtBackground}
-                        />
-                        <SettingsToggle 
-                            label={t?.overlayCover || "Cover"} 
-                            value={settings.showAlbumArtOverlay} 
-                            onChange={() => setSettings(prev => ({ ...prev, showAlbumArtOverlay: !prev.showAlbumArtOverlay }))} 
-                            variant="clean"
-                            hintText={hints?.overlayCover}
-                        />
-                    </div>
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center flex-1 bg-white/[0.02] rounded-xl border border-white/5 border-dashed min-h-[200px] text-white/20 animate-pulse">
@@ -175,8 +164,28 @@ export const PlaybackPanel: React.FC = () => {
                 </div>
             )}
 
+            {/* Visual Art Controls */}
+            {playlist.length > 0 && (
+                <div className="grid grid-cols-2 gap-2 px-1">
+                    <SettingsToggle 
+                        label={t?.albumArtBackground || "BG"} 
+                        value={!!settings.albumArtBackground} 
+                        onChange={() => setSettings(prev => ({ ...prev, albumArtBackground: !prev.albumArtBackground }))} 
+                        variant="clean"
+                        hintText={hints?.albumArtBackground}
+                    />
+                    <SettingsToggle 
+                        label={t?.overlayCover || "Cover"} 
+                        value={settings.showAlbumArtOverlay} 
+                        onChange={() => setSettings(prev => ({ ...prev, showAlbumArtOverlay: !prev.showAlbumArtOverlay }))} 
+                        variant="clean"
+                        hintText={hints?.overlayCover}
+                    />
+                </div>
+            )}
+
             {/* Playback Mode */}
-            <div className="mt-auto pt-3 border-t border-white/5">
+            <div className="mt-auto pt-2 border-t border-white/5">
                 <SegmentedControl 
                     label={t?.player?.mode || "Playback Mode"}
                     value={playbackMode}
@@ -206,11 +215,11 @@ export const PlaybackPanel: React.FC = () => {
         className="md:col-span-2 h-full"
         action={PlaylistActions}
       >
-        <div className="flex flex-col h-full min-h-[300px]">
+        <div className="flex flex-col h-full">
             {playlist.length === 0 ? (
                 <div 
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex flex-col items-center justify-center flex-1 h-full text-white/30 gap-6 border-2 border-dashed border-white/10 rounded-xl m-1 hover:bg-white/[0.02] hover:border-blue-500/30 hover:text-blue-200 transition-all cursor-pointer group animate-fade-in-up"
+                    className="flex flex-col items-center justify-center flex-1 h-full min-h-[300px] text-white/30 gap-6 border-2 border-dashed border-white/10 rounded-xl m-1 hover:bg-white/[0.02] hover:border-blue-500/30 hover:text-blue-200 transition-all cursor-pointer group animate-fade-in-up"
                 >
                     <div className="relative">
                         <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full group-hover:bg-blue-500/30 transition-all duration-500" />
@@ -229,7 +238,7 @@ export const PlaybackPanel: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <div className="space-y-1 pb-2 h-full overflow-y-auto custom-scrollbar pr-1">
+                <div className="space-y-1 pb-2 overflow-y-auto custom-scrollbar pr-1 max-h-[340px]">
                     {playlist.map((track, idx) => {
                         const isActive = idx === currentIndex;
                         return (
