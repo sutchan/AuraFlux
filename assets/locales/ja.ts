@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ja.ts
- * Version: 2.1.8
+ * Version: 2.1.9
  * Author: Sut
  */
 
@@ -265,7 +265,8 @@ export const ja = {
     [VisualizerMode.MACRO_BUBBLES]: 'バブル',
     [VisualizerMode.KINETIC_WALL]: 'キネティックウォール (WebGL)',
     [VisualizerMode.LIQUID]: 'リキッドコア (WebGL)',
-    [VisualizerMode.WAVEFORM]: '波形'
+    [VisualizerMode.WAVEFORM]: '波形',
+    [VisualizerMode.DIGITAL_GRID]: 'デジタルグリッド (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'WebGLパーティクルによる有機的な流体シミュレーション。',
@@ -281,7 +282,8 @@ export const ja = {
     [VisualizerMode.MACRO_BUBBLES]: 'ソフトフォーカスの微細な泡。',
     [VisualizerMode.KINETIC_WALL]: '3D押し出し効果を持つ巨大なLEDステージ壁。',
     [VisualizerMode.LIQUID]: 'リズムに反応する抽象的な変形球体。',
-    [VisualizerMode.WAVEFORM]: 'スペクトルの履歴を表示する液体のリボン。'
+    [VisualizerMode.WAVEFORM]: 'スペクトルの履歴を表示する液体のリボン。',
+    [VisualizerMode.DIGITAL_GRID]: '湾曲したLEDスペクトルアナライザーウォール。',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準', [LyricsStyle.KARAOKE]: 'ダイナミック', [LyricsStyle.MINIMAL]: 'ミニマル'

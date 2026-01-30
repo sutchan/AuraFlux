@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/en.ts
- * Version: 2.2.1
+ * Version: 2.2.3
  * Author: Sut
  */
 
@@ -360,7 +360,9 @@ export const en = {
     [VisualizerMode.MACRO_BUBBLES]: 'Cellular Drift',
     [VisualizerMode.KINETIC_WALL]: 'Pulse Matrix (WebGL)', 
     [VisualizerMode.LIQUID]: 'Molten Core (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Spectral Silk'
+    [VisualizerMode.WAVEFORM]: 'Spectral Silk',
+    [VisualizerMode.DIGITAL_GRID]: 'Digital Grid (WebGL)',
+    [VisualizerMode.SILK_WAVE]: 'Silk Wave (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particles.',
@@ -376,7 +378,9 @@ export const en = {
     [VisualizerMode.MACRO_BUBBLES]: 'Soft focus micro-cellular visuals.',
     [VisualizerMode.KINETIC_WALL]: 'Massive LED stage wall with kinetic extrusions.',
     [VisualizerMode.LIQUID]: 'Abstract morphing sphere reacting to rhythm.',
-    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency.'
+    [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency.',
+    [VisualizerMode.DIGITAL_GRID]: 'Curved LED wall spectrum analyzer with pixelated blocks.',
+    [VisualizerMode.SILK_WAVE]: 'Flowing ribbon of thousands of particles, split by stereo channels.',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamic', [LyricsStyle.MINIMAL]: 'Minimalist'

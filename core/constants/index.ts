@@ -1,13 +1,13 @@
 
 /**
  * File: core/constants/index.ts
- * Version: 1.9.6
+ * Version: 1.9.8
  * Author: Sut
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.8.13';
+export const APP_VERSION = '1.8.15';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
@@ -31,6 +31,12 @@ export const COLOR_THEMES: string[][] = [
   ['#fffa65', '#fff200', '#ff9f1a'], // 16: Electric Yellow
   ['#32ff7e', '#3ae374', '#05c46b'], // 17: Emerald City
   ['#18dcff', '#00d2d3', '#01a3a4'], // 18: Cyanide
+];
+
+export const THEME_NAMES = [
+  "Vaporwave", "Aurora", "Sunset", "Cotton Candy", "Electric Blue", "Neon Pink",
+  "Matrix", "Gold", "Royal", "Solar", "Deep Ocean", "Cyber Lime",
+  "Sakura", "Arctic", "Desert", "Voltage", "Emerald", "Cyanide"
 ];
 
 export const REGION_NAMES: Record<string, string> = {

@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ko.ts
- * Version: 2.1.6
+ * Version: 2.1.7
  * Author: Sut
  */
 
@@ -358,7 +358,8 @@ export const ko = {
     [VisualizerMode.MACRO_BUBBLES]: '버블',
     [VisualizerMode.KINETIC_WALL]: '키네틱 월 (WebGL)',
     [VisualizerMode.LIQUID]: '리퀴드 코어 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '파형'
+    [VisualizerMode.WAVEFORM]: '파형',
+    [VisualizerMode.DIGITAL_GRID]: '디지털 그리드 (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'WebGL 입자 시스템 기반의 유기적 유체 시뮬레이션.',
@@ -374,7 +375,8 @@ export const ko = {
     [VisualizerMode.MACRO_BUBBLES]: '부드러운 초점의 미세 세포 비주얼.',
     [VisualizerMode.KINETIC_WALL]: '3D 운동 압출 효과가 있는 거대한 LED 무대 배경.',
     [VisualizerMode.LIQUID]: '리듬에 반응하는 추상적인 변형 구체.',
-    [VisualizerMode.WAVEFORM]: '실시간 스펙트럼 기록을 보여주는 액체 리본.'
+    [VisualizerMode.WAVEFORM]: '실시간 스펙트럼 기록을 보여주는 액체 리본.',
+    [VisualizerMode.DIGITAL_GRID]: '픽셀화된 블록이 있는 곡면 LED 스펙트럼 분석기 벽.',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '표준', [LyricsStyle.KARAOKE]: '다이내믹', [LyricsStyle.MINIMAL]: '미니멀'

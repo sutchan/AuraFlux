@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/ru.ts
- * Version: 2.2.2
+ * Version: 2.2.3
  * Author: Sut
  */
 
@@ -378,7 +378,8 @@ export const ru = {
     [VisualizerMode.MACRO_BUBBLES]: 'Клеточный Дрейф',
     [VisualizerMode.KINETIC_WALL]: 'Матрица Импульса (WebGL)',
     [VisualizerMode.LIQUID]: 'Жидкое Ядро (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Спектральный Шелк'
+    [VisualizerMode.WAVEFORM]: 'Спектральный Шелк',
+    [VisualizerMode.DIGITAL_GRID]: 'Цифровая Сетка (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Органическая симуляция жидкости на WebGL.',
@@ -394,7 +395,8 @@ export const ru = {
     [VisualizerMode.MACRO_BUBBLES]: 'Микроклеточные визуальные эффекты.',
     [VisualizerMode.KINETIC_WALL]: 'Массивная LED стена с кинетикой.',
     [VisualizerMode.LIQUID]: 'Абстрактная сфера, реагирующая на ритм.',
-    [VisualizerMode.WAVEFORM]: 'Жидкие ленты спектральной частоты.'
+    [VisualizerMode.WAVEFORM]: 'Жидкие ленты спектральной частоты.',
+    [VisualizerMode.DIGITAL_GRID]: 'Изогнутая LED-стена спектрального анализатора.',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Стандарт', [LyricsStyle.KARAOKE]: 'Динамичный', [LyricsStyle.MINIMAL]: 'Минимализм'

@@ -1,7 +1,7 @@
 
 /**
  * File: components/App.tsx
- * Version: 1.9.3
+ * Version: 1.9.4
  * Author: Aura Flux Team
  */
 
@@ -123,7 +123,7 @@ const AppContent: React.FC = () => {
         style={settings.mirrorDisplay ? { transform: 'scaleX(-1)' } : undefined}
       >
         {isThreeMode ? (
-          <ThreeVisualizer analyser={analyser} mode={mode} colors={colorTheme} settings={settings} />
+          <ThreeVisualizer analyser={analyser} analyserR={analyserR} mode={mode} colors={colorTheme} settings={settings} />
         ) : (
           <VisualizerCanvas analyser={analyser} analyserR={analyserR} mode={mode} colors={colorTheme} settings={settings} />
         )}

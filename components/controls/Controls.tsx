@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.7.7
+ * Version: 1.7.8
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 18:30
+ * Updated: 2025-03-14 22:30
  */
 
 import React, { useState, useEffect } from 'react';
@@ -218,18 +218,18 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                 <div className="max-w-5xl mx-auto flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-2">
                     <div className="flex bg-white/[0.04] p-0.5 rounded-lg overflow-x-auto max-w-full scrollbar-hide gap-0.5 mask-fade-right touch-pan-x" role="tablist" aria-label="Settings Categories">
                     {tabs.map((tab, index) => (
-                        <button 
-                        key={tab} 
-                        onClick={() => setActiveTab(tab)} 
-                        role="tab"
-                        aria-selected={activeTab === tab}
-                        aria-controls={`panel-${tab}`}
-                        id={`tab-${tab}`}
-                        title={`Shortcut: ${index + 1}`}
-                        className={`px-3 py-1.5 md:px-4 rounded-md text-xs font-bold uppercase tracking-wider transition-all duration-300 flex-shrink-0 whitespace-nowrap flex items-center gap-1.5 ${activeTab === tab ? 'bg-white/25 text-white shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>
-                        {TAB_ICONS[tab]}
-                        <span>{t?.tabs?.[tab] || tab}</span>
-                        </button>
+                        <TooltipArea key={tab} text={`${t?.tabs?.[tab] || tab} [${index + 1}]`} className="flex-shrink-0">
+                            <button 
+                            onClick={() => setActiveTab(tab)} 
+                            role="tab"
+                            aria-selected={activeTab === tab}
+                            aria-controls={`panel-${tab}`}
+                            id={`tab-${tab}`}
+                            className={`px-3 py-1.5 md:px-4 rounded-md text-xs font-bold uppercase tracking-wider transition-all duration-300 w-full h-full whitespace-nowrap flex items-center gap-1.5 ${activeTab === tab ? 'bg-white/25 text-white shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>
+                            {TAB_ICONS[tab]}
+                            <span>{t?.tabs?.[tab] || tab}</span>
+                            </button>
+                        </TooltipArea>
                     ))}
                     </div>
                     

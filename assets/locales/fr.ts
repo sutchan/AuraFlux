@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/fr.ts
- * Version: 2.2.2
+ * Version: 2.2.3
  * Author: Sut
  */
 
@@ -205,7 +205,7 @@ export const fr = {
     showFps: 'Afficher images par seconde.',
     showTooltips: 'Afficher aides au survol.',
     doubleClickFullscreen: 'Double-clic pour plein écran.',
-    autoHideUi: 'Masquer contrôles après inactivité.',
+    autoHideUi: 'Masquer contrôles après inactité.',
     mirrorDisplay: 'Retourner l\'affichage horizontalement.',
     showCustomText: 'Afficher message personnalisé.',
     textPulse: 'Texte à l\'échelle du rythme.',
@@ -378,7 +378,8 @@ export const fr = {
     [VisualizerMode.MACRO_BUBBLES]: 'Dérive Cellulaire',
     [VisualizerMode.KINETIC_WALL]: 'Mur Cinétique (WebGL)',
     [VisualizerMode.LIQUID]: 'Noyau Fondu (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Soie Spectrale'
+    [VisualizerMode.WAVEFORM]: 'Soie Spectrale',
+    [VisualizerMode.DIGITAL_GRID]: 'Grille Numérique (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Simulation fluide organique par particules WebGL.',
@@ -394,7 +395,8 @@ export const fr = {
     [VisualizerMode.MACRO_BUBBLES]: 'Visuels micro-cellulaires flous.',
     [VisualizerMode.KINETIC_WALL]: 'Mur LED massif avec extrusions.',
     [VisualizerMode.LIQUID]: 'Sphère abstraite réactive.',
-    [VisualizerMode.WAVEFORM]: 'Rubans liquides de fréquence.'
+    [VisualizerMode.WAVEFORM]: 'Rubans liquides de fréquence.',
+    [VisualizerMode.DIGITAL_GRID]: 'Mur analyseur de spectre LED incurvé.',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamique', [LyricsStyle.MINIMAL]: 'Minimaliste'

@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/tw.ts
- * Version: 2.2.2
+ * Version: 2.2.3
  * Author: Sut
  */
 
@@ -378,7 +378,8 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '細胞漂移', 
     [VisualizerMode.KINETIC_WALL]: '脈衝矩陣 (WebGL)', 
     [VisualizerMode.LIQUID]: '熔核反應 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '光譜絲帶'
+    [VisualizerMode.WAVEFORM]: '光譜絲帶',
+    [VisualizerMode.DIGITAL_GRID]: '數位網格 (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基於 WebGL 粒子系統的有機流體模擬。',
@@ -394,7 +395,8 @@ export const tw = {
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微觀液泡。',
     [VisualizerMode.KINETIC_WALL]: '帶有 3D 動力學擠出的巨型 LED 舞台背景牆。',
     [VisualizerMode.LIQUID]: '對低頻做出反應的抽象球體。',
-    [VisualizerMode.WAVEFORM]: '展現即時頻譜歷史的液體絲帶。'
+    [VisualizerMode.WAVEFORM]: '展現即時頻譜歷史的液體絲帶。',
+    [VisualizerMode.DIGITAL_GRID]: '帶有像素化方塊的曲面 LED 頻譜分析牆。',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '標準', [LyricsStyle.KARAOKE]: '動態', [LyricsStyle.MINIMAL]: '極簡'

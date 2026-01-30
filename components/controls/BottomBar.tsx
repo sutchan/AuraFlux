@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/BottomBar.tsx
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 16:30
+ * Updated: 2025-03-14 22:30
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -247,7 +247,7 @@ export const BottomBar: React.FC<BottomBarProps> = ({ isExpanded, setIsExpanded,
                             )}
                         </button>
                     </TooltipArea>
-                    <TooltipArea text={isExpanded ? t?.hideOptions : t?.showOptions}>
+                    <TooltipArea text={`${isExpanded ? (t?.hideOptions || "Collapse") : (t?.showOptions || "Options")} [H]`}>
                         <button 
                             onClick={() => setIsExpanded(prev => !prev)}
                             className={`h-10 rounded-xl flex items-center justify-center transition-all ${playlist.length === 0 ? 'w-auto px-4 gap-2' : 'w-10'} ${isExpanded ? 'bg-white text-black' : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'}`}

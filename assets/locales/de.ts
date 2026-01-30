@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/de.ts
- * Version: 2.2.2
+ * Version: 2.2.3
  * Author: Sut
  */
 
@@ -378,7 +378,8 @@ export const de = {
     [VisualizerMode.MACRO_BUBBLES]: 'Zell-Drift',
     [VisualizerMode.KINETIC_WALL]: 'Impuls-Wand (WebGL)',
     [VisualizerMode.LIQUID]: 'Geschmolzener Kern (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Spektral-Seide'
+    [VisualizerMode.WAVEFORM]: 'Spektral-Seide',
+    [VisualizerMode.DIGITAL_GRID]: 'Digitales Raster (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organische Flüssigkeitssimulation mit WebGL-Partikeln.',
@@ -394,7 +395,8 @@ export const de = {
     [VisualizerMode.MACRO_BUBBLES]: 'Mikrozelluläre Visuals mit Weichzeichner.',
     [VisualizerMode.KINETIC_WALL]: 'Massive LED-Wand mit kinetischen Extrusionen.',
     [VisualizerMode.LIQUID]: 'Abstrakte Kugel, die auf Rhythmus reagiert.',
-    [VisualizerMode.WAVEFORM]: 'Flüssige Bänder der Spektralfrequenz.'
+    [VisualizerMode.WAVEFORM]: 'Flüssige Bänder der Spektralfrequenz.',
+    [VisualizerMode.DIGITAL_GRID]: 'Gekrümmte LED-Spektralanalysewand.',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamisch', [LyricsStyle.MINIMAL]: 'Minimalistisch'

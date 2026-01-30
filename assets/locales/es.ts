@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/es.ts
- * Version: 2.2.2
+ * Version: 2.2.3
  * Author: Sut
  */
 
@@ -378,7 +378,8 @@ export const es = {
     [VisualizerMode.MACRO_BUBBLES]: 'Deriva Celular',
     [VisualizerMode.KINETIC_WALL]: 'Matriz de Pulso (WebGL)',
     [VisualizerMode.LIQUID]: 'Núcleo Fundido (WebGL)',
-    [VisualizerMode.WAVEFORM]: 'Seda Espectral'
+    [VisualizerMode.WAVEFORM]: 'Seda Espectral',
+    [VisualizerMode.DIGITAL_GRID]: 'Red Digital (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Simulación de fluido orgánico con partículas WebGL.',
@@ -394,7 +395,8 @@ export const es = {
     [VisualizerMode.MACRO_BUBBLES]: 'Visuales micro-celulares con enfoque suave.',
     [VisualizerMode.KINETIC_WALL]: 'Pared LED masiva con extrusiones cinéticas.',
     [VisualizerMode.LIQUID]: 'Esfera abstracta reaccionando al ritmo.',
-    [VisualizerMode.WAVEFORM]: 'Cintas líquidas de frecuencia espectral.'
+    [VisualizerMode.WAVEFORM]: 'Cintas líquidas de frecuencia espectral.',
+    [VisualizerMode.DIGITAL_GRID]: 'Pared curvada de analizador de espectro LED.',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Estándar', [LyricsStyle.KARAOKE]: 'Dinámico', [LyricsStyle.MINIMAL]: 'Minimalista'

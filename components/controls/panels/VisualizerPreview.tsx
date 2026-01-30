@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 16:00
+ * Updated: 2025-03-14 23:20
  */
 
 import React, { memo } from 'react';
@@ -13,6 +14,8 @@ import { useUI } from '../../AppContext';
 
 const styles: Partial<Record<VisualizerMode, React.CSSProperties>> = {
     // WebGL High-End
+    [VisualizerMode.SILK_WAVE]: { background: 'linear-gradient(90deg, #000, #3b82f6, #000), radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px)', backgroundSize: '100% 100%, 8px 8px' },
+    [VisualizerMode.DIGITAL_GRID]: { background: 'linear-gradient(90deg, #000, #ff00ff, #00ffff, #000), repeating-linear-gradient(0deg, transparent 0px, transparent 3px, #000 3px, #000 4px)' },
     [VisualizerMode.NEURAL_FLOW]: { background: 'radial-gradient(circle at 30% 30%, #00ffaa, transparent), radial-gradient(circle at 70% 70%, #00aaff, #000)' },
     [VisualizerMode.KINETIC_WALL]: { background: 'radial-gradient(ellipse at bottom, #1e3a8a 20%, #020617 80%), repeating-conic-gradient(from 45deg, #020617 0% 2.5%, #1e3a8a22 2.5% 5%)' }, 
     [VisualizerMode.LIQUID]: { background: 'radial-gradient(circle, #4c1d95, #1e1b4b)' },

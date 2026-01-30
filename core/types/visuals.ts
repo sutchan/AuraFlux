@@ -1,10 +1,10 @@
 
 /**
  * File: core/types/visuals.ts
- * Version: 1.8.2
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 21:00
+ * Updated: 2025-03-14 23:15
  */
 
 import { Position, Region } from './common';
@@ -14,6 +14,8 @@ export enum VisualizerMode {
   // Priority Modes
   PLASMA = 'PLASMA',
   BARS = 'BARS',
+  DIGITAL_GRID = 'DIGITAL_GRID',
+  SILK_WAVE = 'SILK_WAVE', // New Mode
 
   // Classic / 2D Modes
   PARTICLES = 'PARTICLES',
@@ -34,7 +36,7 @@ export enum VisualizerMode {
 
 export interface VisualizerSettings {
   uiMode: 'simple' | 'advanced';
-  appTheme: 'dark' | 'light'; // New Theme Setting
+  appTheme: 'dark' | 'light';
   sensitivity: number;
   speed: number;
   glow: boolean;
@@ -110,7 +112,6 @@ export interface SmartPreset {
   };
 }
 
-// RenderContext uses any to avoid bringing in DOM types that might crash Workers
 export type RenderContext = any; 
 
 export interface IVisualizerRenderer {
@@ -124,12 +125,11 @@ export interface IVisualizerRenderer {
     settings: VisualizerSettings, 
     rotation: number, 
     beat: boolean,
-    dataR?: Uint8Array // Optional Right Channel Data for Stereo
+    dataR?: Uint8Array 
   ): void;
   cleanup?(): void;
 }
 
-// Worker Messages
 export type WorkerMessage = 
   | { type: 'INIT'; canvas: OffscreenCanvas; width: number; height: number; devicePixelRatio: number }
   | { type: 'RESIZE'; width: number; height: number; devicePixelRatio: number }

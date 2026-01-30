@@ -1,3 +1,4 @@
+
 /**
  * File: components/visualizers/scenes/KineticWallScene.tsx
  * Version: 3.9.3

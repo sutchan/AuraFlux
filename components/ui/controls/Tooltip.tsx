@@ -1,9 +1,10 @@
+
 /**
  * File: components/ui/controls/Tooltip.tsx
- * Version: 1.0.15
+ * Version: 1.0.16
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-21 20:00
+ * Updated: 2025-03-14 22:30
  */
 
 import React, { useState, useEffect, useRef, memo } from 'react';
@@ -76,7 +77,13 @@ const FloatingTooltipInternal = ({ text, visible, anchorRef }: FloatingTooltipPr
 
 export const FloatingTooltip = memo(FloatingTooltipInternal);
 
-export const TooltipArea = memo(({ children, text }: { children?: React.ReactNode, text: string | undefined | null }) => {
+interface TooltipAreaProps {
+  children?: React.ReactNode;
+  text: string | undefined | null;
+  className?: string;
+}
+
+export const TooltipArea = memo(({ children, text, className = '' }: TooltipAreaProps) => {
   const [shouldShow, setShouldShow] = useState(false);
   const timerRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -105,7 +112,7 @@ export const TooltipArea = memo(({ children, text }: { children?: React.ReactNod
   const visible = settings.showTooltips && shouldShow;
   
   return (
-    <div ref={containerRef} className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div ref={containerRef} className={`relative ${className}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <FloatingTooltip text={text} visible={visible} anchorRef={containerRef} />
       {children}
     </div>

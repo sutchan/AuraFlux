@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 2.2.5
+ * Version: 2.2.7
  * Author: Sut
  */
 
@@ -380,7 +380,9 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '细胞漂移', 
     [VisualizerMode.KINETIC_WALL]: '脉冲矩阵 (WebGL)', 
     [VisualizerMode.LIQUID]: '熔核反应 (WebGL)',
-    [VisualizerMode.WAVEFORM]: '光谱丝带'
+    [VisualizerMode.WAVEFORM]: '光谱丝带',
+    [VisualizerMode.DIGITAL_GRID]: '数位网格 (WebGL)',
+    [VisualizerMode.SILK_WAVE]: '丝绸波浪 (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基于 WebGL 粒子系统的有机流体模拟。',
@@ -396,7 +398,9 @@ export const zh = {
     [VisualizerMode.MACRO_BUBBLES]: '柔焦微观液泡。',
     [VisualizerMode.KINETIC_WALL]: '带有 3D 动力学挤出的巨型 LED 舞台背景墙。',
     [VisualizerMode.LIQUID]: '对低频做出反应的抽象球体。',
-    [VisualizerMode.WAVEFORM]: '展现实时频谱历史的液体丝带。'
+    [VisualizerMode.WAVEFORM]: '展现实时频谱历史的液体丝带。',
+    [VisualizerMode.DIGITAL_GRID]: '带有像素化方块的曲面 LED 频谱分析墙。',
+    [VisualizerMode.SILK_WAVE]: '流动的粒子绸带，上下声道立体分离。',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '标准', [LyricsStyle.KARAOKE]: '动态', [LyricsStyle.MINIMAL]: '极简'

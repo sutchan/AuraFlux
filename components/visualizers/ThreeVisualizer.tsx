@@ -1,10 +1,11 @@
+
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.8.1
+ * Version: 1.8.4
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-08 12:00
- * Description: Added BackgroundController for transparent clear color handling.
+ * Updated: 2025-03-14 23:20
+ * Description: Added SilkWaveScene support.
  */
 
 import React, { Suspense, useMemo, useEffect } from 'react';
@@ -15,11 +16,14 @@ import {
     KineticWallScene, 
     LiquidSphereScene, 
     CubeFieldScene,
-    NeuralFlowScene
+    NeuralFlowScene,
+    DigitalGridScene,
+    SilkWaveScene
 } from './ThreeScenes';
 
 interface ThreeVisualizerProps {
   analyser: AnalyserNode | null;
+  analyserR?: AnalyserNode | null; // Optional Right Channel
   colors: string[];
   settings: VisualizerSettings;
   mode: VisualizerMode; 
@@ -35,7 +39,7 @@ const BackgroundController: React.FC<{ isTransparent: boolean }> = ({ isTranspar
     return null;
 };
 
-const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, settings, mode }) => {
+const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, colors, settings, mode }) => {
   
   const dpr = useMemo(() => {
     if (!settings) return 1;
@@ -65,6 +69,8 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
           case VisualizerMode.LIQUID: return base * 1.5;
           case VisualizerMode.CUBE_FIELD: return base * 1.2;
           case VisualizerMode.NEURAL_FLOW: return base * 1.5;
+          case VisualizerMode.DIGITAL_GRID: return base * 1.8; 
+          case VisualizerMode.SILK_WAVE: return base * 1.4; // Soft glow for silk
           default: return base;
       }
   }, [mode]);
@@ -94,7 +100,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
 
   const activeScene = useMemo(() => {
     if (!analyser || !settings) return null;
-    const sceneProps = { analyser, colors, settings };
+    const sceneProps = { analyser, analyserR, colors, settings };
 
     switch (mode) {
         case VisualizerMode.KINETIC_WALL:
@@ -105,10 +111,14 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, colors, set
             return <CubeFieldScene {...sceneProps} />;
         case VisualizerMode.NEURAL_FLOW:
             return <NeuralFlowScene {...sceneProps} />;
+        case VisualizerMode.DIGITAL_GRID:
+            return <DigitalGridScene {...sceneProps} />;
+        case VisualizerMode.SILK_WAVE:
+            return <SilkWaveScene {...sceneProps} />;
         default:
             return <NeuralFlowScene {...sceneProps} />;
     }
-  }, [mode, analyser, colors, settings]);
+  }, [mode, analyser, analyserR, colors, settings]);
 
   if (!analyser || !settings) return null;
   
