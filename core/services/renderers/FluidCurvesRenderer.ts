@@ -1,13 +1,15 @@
+
 /**
  * File: core/services/renderers/FluidCurvesRenderer.ts
- * Version: 1.7.32
+ * Version: 1.8.0
  * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: 2025-03-16 14:00
+ * Changes: Enhanced parallax effect with bidirectional layer movement.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
-import { getAverage } from '../audioUtils'; // Import getAverage
+import { getAverage } from '../audioUtils';
 
 export class FluidCurvesRenderer implements IVisualizerRenderer {
   private layerOffsets: { phase: number; freq1: number; freq2: number; vert: number; speedMult: number; }[] = [];
@@ -32,12 +34,23 @@ export class FluidCurvesRenderer implements IVisualizerRenderer {
     if (this.layerOffsets.length !== layerCount) {
       this.layerOffsets = [];
       for (let i = 0; i < layerCount; i++) {
+        // --- Parallax & Shear Flow Logic ---
+        // 1. Direction: Alternate directions to create "shearing" effect between gas layers.
+        // Asymmetric factor (1.0 vs -0.7) feels more organic than equal opposing speeds.
+        const direction = i % 2 === 0 ? 1.0 : -0.7; 
+        
+        // 2. Speed: Front layers (higher i) move significantly faster to create depth.
+        // Base speed ramps up: 0.4 -> 1.2 -> 2.0 ...
+        const baseSpeed = 0.4 + (i * 0.8); 
+        const randomVar = Math.random() * 0.5;
+
         this.layerOffsets.push({
           phase: Math.random() * Math.PI * 2,
-          freq1: 0.002 + Math.random() * 0.0025, 
-          freq2: 0.005 + Math.random() * 0.0035, 
-          vert: (Math.random() - 0.5) * 0.15,
-          speedMult: 0.2 + Math.random() * 2.2
+          // Lower frequency for wider, majestic curtains of light
+          freq1: 0.0015 + Math.random() * 0.002, 
+          freq2: 0.004 + Math.random() * 0.003, 
+          vert: (Math.random() - 0.5) * 0.25, // Increased vertical spread
+          speedMult: (baseSpeed + randomVar) * direction
         });
       }
     }

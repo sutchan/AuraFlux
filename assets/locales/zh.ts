@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/zh.ts
- * Version: 2.2.7
+ * Version: 2.2.8
  * Author: Sut
  */
 
@@ -268,7 +268,7 @@ export const zh = {
   identifying: 'AI 分析中...',
   startExperience: '进入流界',
   welcomeTitle: 'Aura Flux | 光之旋律',
-  welcomeText: '将每一次震动转化为生成的杰作。由 Gemini AI 驱动的实时识别，重新定义感官体验。',
+  welcomeText: '将每一次震动转化为生成的傑作。由 Gemini AI 驱动的实时识别，重新定义感官体验。',
   unsupportedTitle: '浏览器不兼容',
   unsupportedText: 'Aura Flux 需要现代 Web Audio 特性。请使用 Chrome, Edge, 或 Safari。',
   hideOptions: '收起',
@@ -383,6 +383,7 @@ export const zh = {
     [VisualizerMode.WAVEFORM]: '光谱丝带',
     [VisualizerMode.DIGITAL_GRID]: '数位网格 (WebGL)',
     [VisualizerMode.SILK_WAVE]: '丝绸波浪 (WebGL)',
+    [VisualizerMode.OCEAN_WAVE]: '立体海浪 (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: '基于 WebGL 粒子系统的有机流体模拟。',
@@ -401,6 +402,7 @@ export const zh = {
     [VisualizerMode.WAVEFORM]: '展现实时频谱历史的液体丝带。',
     [VisualizerMode.DIGITAL_GRID]: '带有像素化方块的曲面 LED 频谱分析墙。',
     [VisualizerMode.SILK_WAVE]: '流动的粒子绸带，上下声道立体分离。',
+    [VisualizerMode.OCEAN_WAVE]: '复古未来风格的线框地形，响应音频频谱。',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: '标准', [LyricsStyle.KARAOKE]: '动态', [LyricsStyle.MINIMAL]: '极简'

@@ -1,53 +1,51 @@
+
 /**
  * File: core/services/renderers/MacroBubblesRenderer.ts
- * Version: 1.7.33
+ * Version: 2.1.0
  * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: 2025-03-16 18:00
+ * Description: "Cellular Drift" - Refined organic biology simulation.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
 import { getAverage } from '../audioUtils';
 
-// Cache configuration
-const SPRITE_SIZE = 128; // High res sprite
-const CACHE_LIMIT = 32;
+const SPRITE_SIZE = 256; 
+const CACHE_LIMIT = 24;
 
-interface BubbleParticle {
+interface CellParticle {
   x: number;
   y: number;
-  r: number; // radius
+  z: number; // Depth: 0 (far) to 1 (close)
+  baseSize: number;
   vx: number;
   vy: number;
   colorHex: string;
-  noiseOffset: number;
-  wobblePhase: number; // For soft-body deformation
-  wobbleSpeed: number;
-  currentAlpha: number; // For fade-in effect
-  wobbleAngle: number;
-  wobbleAngleSpeed: number;
-  wobbleMagnitude: number;
+  phase: number;
+  tumbleSpeed: number;
+  rotation: number;
+  organelleSeed: number;
+  alphaEnv: number; // For fade-in
 }
 
 export class MacroBubblesRenderer implements IVisualizerRenderer {
-  private bubbles: BubbleParticle[] = [];
-  private spriteCache: Record<string, HTMLCanvasElement | OffscreenCanvas> = {};
+  private cells: CellParticle[] = [];
+  private spriteCache: Record<string, OffscreenCanvas | HTMLCanvasElement> = {};
   
   init() {
-    this.bubbles = [];
+    this.cells = [];
     this.spriteCache = {};
   }
 
-  // Generate a high-fidelity soap bubble sprite
-  private getSprite(color: string): HTMLCanvasElement | OffscreenCanvas {
+  // Generate a biological cell sprite with membrane, cytoplasm, and nucleus
+  private getSprite(color: string): OffscreenCanvas | HTMLCanvasElement {
     if (this.spriteCache[color]) return this.spriteCache[color];
 
-    // Cleanup cache if too large
     const keys = Object.keys(this.spriteCache);
     if (keys.length > CACHE_LIMIT) delete this.spriteCache[keys[0]];
 
-    // Create canvas
-    let canvas: HTMLCanvasElement | OffscreenCanvas;
+    let canvas: OffscreenCanvas | HTMLCanvasElement;
     if (typeof OffscreenCanvas !== 'undefined') {
       canvas = new OffscreenCanvas(SPRITE_SIZE, SPRITE_SIZE);
     } else {
@@ -56,51 +54,61 @@ export class MacroBubblesRenderer implements IVisualizerRenderer {
       canvas.height = SPRITE_SIZE;
     }
 
-    const ctx = canvas.getContext('2d') as any; // Cast to allow simple 2d context usage
+    const ctx = canvas.getContext('2d') as any;
     const cx = SPRITE_SIZE / 2;
     const cy = SPRITE_SIZE / 2;
-    const r = SPRITE_SIZE / 2 - 2; // Padding
+    const r = SPRITE_SIZE / 2 - 2;
 
-    // 1. The Body (Subtle Gradient)
-    const grad = ctx.createRadialGradient(cx, cy, r * 0.5, cx, cy, r);
-    grad.addColorStop(0, `${color}05`);
-    grad.addColorStop(0.8, `${color}40`);
-    grad.addColorStop(0.95, `${color}90`);
-    grad.addColorStop(1, `${color}00`);
+    // 1. Membrane Glow (Outer Halo) - Softer
+    const halo = ctx.createRadialGradient(cx, cy, r * 0.7, cx, cy, r);
+    halo.addColorStop(0, `${color}00`);
+    halo.addColorStop(0.6, `${color}15`); // Reduced opacity
+    halo.addColorStop(1, `${color}00`);
+    ctx.fillStyle = halo;
+    ctx.fillRect(0,0,SPRITE_SIZE,SPRITE_SIZE);
 
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 2. Main Specular Highlight
-    const h1x = cx - r * 0.4;
-    const h1y = cy - r * 0.4;
-    const h1r = r * 0.5;
-    const gradH1 = ctx.createRadialGradient(h1x, h1y, 0, h1x, h1y, h1r);
-    gradH1.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-    gradH1.addColorStop(0.2, 'rgba(255, 255, 255, 0.4)');
-    gradH1.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    // 2. Cytoplasm (Main Body) - Texture
+    const body = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.85);
+    body.addColorStop(0, `${color}08`); 
+    body.addColorStop(0.7, `${color}40`); 
+    body.addColorStop(1, `${color}02`); 
     
-    ctx.fillStyle = gradH1;
+    ctx.fillStyle = body;
     ctx.beginPath();
-    ctx.ellipse(h1x, h1y, r * 0.25, r * 0.15, -Math.PI / 4, 0, Math.PI * 2);
+    ctx.arc(cx, cy, r * 0.85, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Secondary Caustic Highlight
-    const h2x = cx + r * 0.35;
-    const h2y = cy + r * 0.35;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    // 3. Nucleus (Dense Core) - High Contrast
+    const nx = cx + (Math.random() - 0.5) * r * 0.3;
+    const ny = cy + (Math.random() - 0.5) * r * 0.3;
+    const nr = r * 0.22;
+    
+    const nucleus = ctx.createRadialGradient(nx, ny, 0, nx, ny, nr);
+    nucleus.addColorStop(0, `${color}FF`); // Bright center
+    nucleus.addColorStop(1, `${color}30`); // Soft edge
+    
+    ctx.fillStyle = nucleus;
     ctx.beginPath();
-    ctx.arc(h2x, h2y, r * 0.05, 0, Math.PI * 2);
+    ctx.arc(nx, ny, nr, 0, Math.PI * 2);
     ctx.fill();
-
-    // 4. Inner Rim Reflection
-    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-    ctx.lineWidth = 2;
+    
+    // 4. Membrane Rim (Defined Edge)
+    ctx.strokeStyle = `${color}80`;
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.arc(cx, cy, r * 0.9, 0, Math.PI * 2);
+    ctx.arc(cx, cy, r * 0.85, 0, Math.PI * 2);
     ctx.stroke();
+
+    // 5. Organelles (Small specks inside)
+    ctx.fillStyle = `${color}50`;
+    for(let i=0; i<5; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        const dist = Math.random() * r * 0.55;
+        const size = Math.random() * r * 0.05 + 1;
+        ctx.beginPath();
+        ctx.arc(cx + Math.cos(ang)*dist, cy + Math.sin(ang)*dist, size, 0, Math.PI * 2);
+        ctx.fill();
+    }
 
     this.spriteCache[color] = canvas;
     return canvas;
@@ -110,94 +118,92 @@ export class MacroBubblesRenderer implements IVisualizerRenderer {
     if (colors.length === 0 || w <= 0 || h <= 0) return;
     
     const bass = Math.pow(getAverage(data, 0, 10) / 255, 1.5) * settings.sensitivity;
-    const treble = getAverage(data, 100, 200) / 255 * settings.sensitivity;
+    const mids = getAverage(data, 20, 100) / 255 * settings.sensitivity;
 
-    const count = settings.quality === 'high' ? 32 : settings.quality === 'med' ? 20 : 12;
+    // Determine particle count based on quality
+    const count = settings.quality === 'high' ? 40 : settings.quality === 'med' ? 25 : 15;
 
-    if (this.bubbles.length > count) this.bubbles.splice(count);
+    if (this.cells.length > count) this.cells.splice(count);
     
-    while (this.bubbles.length < count) {
-      const r = 20 + Math.random() * 80;
-      this.bubbles.push({
+    // Spawn new cells
+    while (this.cells.length < count) {
+      const z = Math.random(); 
+      // Size depends on Z: Front = Big, Back = Small
+      const sizeBase = 40 + z * 120; 
+      
+      this.cells.push({
         x: Math.random() * w,
-        y: Math.random() * (h * 1.2),
-        r: r,
+        y: Math.random() * h,
+        z: z,
+        baseSize: sizeBase,
         vx: (Math.random() - 0.5) * 0.5,
-        vy: -0.2 - Math.random() * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
         colorHex: colors[Math.floor(Math.random() * colors.length)],
-        noiseOffset: Math.random() * 1000,
-        wobblePhase: Math.random() * Math.PI * 2,
-        wobbleSpeed: 0.02 + Math.random() * 0.05,
-        currentAlpha: 0,
-        wobbleAngle: Math.random() * Math.PI * 2,
-        wobbleAngleSpeed: (Math.random() - 0.5) * 0.02,
-        wobbleMagnitude: 0.7 + Math.random() * 0.6,
+        phase: Math.random() * Math.PI * 2,
+        tumbleSpeed: (Math.random() - 0.5) * 0.01,
+        rotation: Math.random() * Math.PI * 2,
+        organelleSeed: Math.random(),
+        alphaEnv: 0
       });
     }
 
+    // Sort by Z (Depth Sorting) - Far cells first
+    this.cells.sort((a, b) => a.z - b.z);
+
     ctx.save();
+    // Use 'screen' for bioluminescent look
     ctx.globalCompositeOperation = 'screen'; 
     
-    this.bubbles.forEach((p, i) => {
-      const time = performance.now() * 0.001;
+    const time = performance.now() * 0.001;
+
+    this.cells.forEach((p) => {
+      // Fade in logic
+      if (p.alphaEnv < 1.0) p.alphaEnv += 0.02;
+
+      // --- Physics & Flow ---
+      // Speed multiplier based on depth (Parallax)
+      const depthSpeed = 0.5 + p.z * 1.5; 
       
-      if (p.currentAlpha < 1.0) {
-          p.currentAlpha += 0.03;
-          if (p.currentAlpha > 1.0) p.currentAlpha = 1.0;
-      }
-
-      // --- Physics: Buoyancy & Enhanced Turbulence ---
-      const turbulenceX = (Math.sin(time * 0.4 + p.noiseOffset) + Math.cos(time * 1.8 + p.noiseOffset)) * 0.2;
-      const turbulenceY = (Math.sin(time * 0.6 + p.noiseOffset + 100) + Math.cos(time * 1.5 + p.noiseOffset)) * 0.1;
-
-      const bassLift = bass * 0.5;
-      p.x += (p.vx + turbulenceX) * settings.speed;
-      p.y += (p.vy - bassLift + turbulenceY) * settings.speed;
+      // Brownian / Fluid drift (Smoother)
+      const noiseX = Math.sin(time * 0.4 + p.phase) * 0.2;
+      const noiseY = Math.cos(time * 0.25 + p.phase) * 0.2;
       
-      const boundary = p.r * 1.5;
-      if (p.y < -boundary) {
-          p.y = h + boundary;
-          p.x = Math.random() * w;
-          p.colorHex = colors[Math.floor(Math.random() * colors.length)];
-          p.currentAlpha = 1.0;
-      }
-      if (p.x < -boundary) p.x = w + boundary;
-      if (p.x > w + boundary) p.x = -boundary;
+      // Audio reaction: Mids increase turbulence
+      const audioTurbulence = mids * 1.5;
 
-      // --- Soft Body Dynamics (The "Wobble") ---
-      p.wobblePhase += (p.wobbleSpeed + (bass * 0.15)) * settings.speed;
-      p.wobbleAngle += (p.wobbleAngleSpeed * (1 + bass * 2)) * settings.speed;
-
-      const wobbleAmount = (0.04 + bass * 0.12) * p.wobbleMagnitude;
-      const stretch = Math.sin(p.wobblePhase) * wobbleAmount;
+      p.x += (p.vx + noiseX) * settings.speed * depthSpeed * (1 + audioTurbulence);
+      p.y += (p.vy + noiseY) * settings.speed * depthSpeed * (1 + audioTurbulence);
       
-      const scaleX = 1.0 + stretch;
-      const scaleY = 1.0 - stretch;
+      // Wrap around screen
+      const margin = p.baseSize;
+      if (p.x < -margin) p.x = w + margin;
+      if (p.x > w + margin) p.x = -margin;
+      if (p.y < -margin) p.y = h + margin;
+      if (p.y > h + margin) p.y = -margin;
 
-      const beatPop = beat ? 0.2 : 0;
-      const sizeMult = (1 + bass * 0.35 + beatPop);
-      
-      const drawW = p.r * 2 * scaleX * sizeMult;
-      const drawH = p.r * 2 * scaleY * sizeMult;
+      // Rotation
+      p.rotation += p.tumbleSpeed * (1 + bass * 2);
 
+      // --- Rendering ---
       const sprite = this.getSprite(p.colorHex);
+      
+      // Pulse size with Bass
+      const pulse = 1.0 + (bass * 0.25 * p.z); // Front cells pulse more
+      // Add "Squash" deformation based on movement
+      const squash = Math.sin(time * 1.5 + p.phase) * 0.03 * p.z;
+      
+      const drawW = p.baseSize * pulse * (1 + squash);
+      const drawH = p.baseSize * pulse * (1 - squash);
 
-      const audioAlpha = 0.6 + treble * 0.4;
-      ctx.globalAlpha = Math.min(1, audioAlpha * p.currentAlpha);
+      // Alpha logic: 
+      // Reduced opacity for better layering
+      const baseAlpha = 0.3 + p.z * 0.5; 
+      ctx.globalAlpha = Math.min(1, baseAlpha * p.alphaEnv * 0.85);
 
-      // --- Draw with Rotated Deformation ---
       ctx.save();
       ctx.translate(p.x, p.y);
-      ctx.rotate(p.wobbleAngle);
-
-      ctx.drawImage(
-          sprite as any, 
-          -drawW / 2, 
-          -drawH / 2, 
-          drawW, 
-          drawH
-      );
-      
+      ctx.rotate(p.rotation);
+      ctx.drawImage(sprite as any, -drawW/2, -drawH/2, drawW, drawH);
       ctx.restore();
     });
 

@@ -1,10 +1,10 @@
 
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.8.5
+ * Version: 1.8.6
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 21:05
+ * Updated: 2025-03-14 22:05
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -18,21 +18,23 @@ const DEFAULT_THEME_INDEX = 1;
 // Regex for validating Hex colors
 const HEX_COLOR_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
-// Modes that should not have Glow enabled during random/auto-cycle
+// Modes that should not have Glow enabled during random/auto-cycle or manual switch
 const NO_GLOW_MODES = [
     VisualizerMode.BARS,          // 频谱仪
     VisualizerMode.TUNNEL,        // 时空隧道
     VisualizerMode.RINGS,         // 声波共振
     VisualizerMode.FLUID_CURVES,  // 极光
-    VisualizerMode.WAVEFORM       // 流光绸缎/光谱丝带
+    VisualizerMode.WAVEFORM,      // 光谱丝带
+    VisualizerMode.SILK_WAVE      // 丝绸波浪 (New)
 ];
 
-// Modes that should not have Trails enabled during random/auto-cycle
+// Modes that should not have Trails enabled during random/auto-cycle or manual switch
 const NO_TRAILS_MODES = [
     VisualizerMode.BARS,          // 频谱仪
-    VisualizerMode.WAVEFORM,      // 光谱丝带/流光绸缎
+    VisualizerMode.WAVEFORM,      // 光谱丝带
     VisualizerMode.NEURAL_FLOW,   // 突触风暴
-    VisualizerMode.FLUID_CURVES   // Also covers flow/silk aesthetics
+    VisualizerMode.FLUID_CURVES,  // 极光
+    VisualizerMode.SILK_WAVE      // 丝绸波浪 (New)
 ];
 
 export const useVisualsState = (hasStarted: boolean, initialSettings: VisualizerSettings) => {
@@ -69,7 +71,22 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
   const colorIntervalRef = useRef<number | null>(null);
 
   const setMode = useCallback((value: React.SetStateAction<VisualizerMode>) => {
-    setModeInternal(value);
+    setModeInternal(prev => {
+        const nextMode = typeof value === 'function' ? value(prev) : value;
+        
+        // Enforce constraints immediately on manual switch
+        const forceNoGlow = NO_GLOW_MODES.includes(nextMode);
+        const forceNoTrails = NO_TRAILS_MODES.includes(nextMode);
+
+        if (forceNoGlow || forceNoTrails) {
+            setSettings(s => ({
+                ...s,
+                glow: forceNoGlow ? false : s.glow,
+                trails: forceNoTrails ? false : s.trails
+            }));
+        }
+        return nextMode;
+    });
     setActivePreset('');
   }, []);
 
@@ -96,7 +113,7 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
             nextMode = availableModes[nextIndex];
           }
 
-          // Enforce constraints for specific modes
+          // Enforce constraints for specific modes during auto-rotation
           const forceNoGlow = NO_GLOW_MODES.includes(nextMode);
           const forceNoTrails = NO_TRAILS_MODES.includes(nextMode);
 

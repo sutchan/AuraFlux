@@ -3,6 +3,16 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
+## [v1.8.16]
+
+### 🚀 Visual Engine Optimization
+*   **Cellular Drift (Macro Bubbles):** Overhauled with organic cell textures (nucleus/membrane), depth-of-field parallax, and fluid dynamics for a true microscopic feel.
+*   **Spectral Silk (Waveform):** Refined to 5 high-fidelity ribbons. Optimized frequency mapping (Sub/Bass/Mids/Highs) and reduced sensitivity by 50% for elegant headroom.
+
+### 🛡️ System & Maintenance
+*   **i18n:** Validated integrity of all 10 language packs.
+*   **Robustness:** Verified stability for WebGL context loss recovery and audio device hot-swapping.
+
 ## [v1.8.13]
 
 ### Feature & Design

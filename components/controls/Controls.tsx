@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.7.8
+ * Version: 1.7.9
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 22:30
+ * Updated: 2025-03-16 16:30
  */
 
 import React, { useState, useEffect } from 'react';
@@ -44,7 +44,7 @@ interface ControlsProps {
 const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }) => {
   const { settings, setSettings, randomizeSettings, mode, setMode, setColorTheme } = useVisuals();
   const { showLyrics, setShowLyrics } = useAI();
-  const { toggleMicrophone, sourceType, togglePlayback, playNext, playPrev } = useAudioContext();
+  const { toggleMicrophone, sourceType, togglePlayback, playNext, playPrev, selectedDeviceId } = useAudioContext();
   const { t, toggleFullscreen } = useUI();
 
   const [activeTab, setActiveTab] = useState<TabType>('visual');
@@ -81,7 +81,7 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
             if (sourceType === 'FILE') {
                 togglePlayback();
             } else {
-                toggleMicrophone(settings.recognitionProvider); 
+                toggleMicrophone(selectedDeviceId); 
             }
             break;
         case 'KeyF': toggleFullscreen(); break;
@@ -199,7 +199,7 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, setColorTheme, isExpanded, showHelpModal, setIsExpanded, toggleFullscreen, tabs]);
+  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, setColorTheme, isExpanded, showHelpModal, setIsExpanded, toggleFullscreen, tabs, selectedDeviceId]);
 
   return (
     <>

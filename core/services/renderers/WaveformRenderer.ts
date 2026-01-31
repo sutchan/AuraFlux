@@ -1,25 +1,25 @@
 
 /**
  * File: core/services/renderers/WaveformRenderer.ts
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-12 12:00
- * Changes: Stereo Support. Top half = Left, Bottom half = Right.
+ * Updated: 2025-03-16 18:00
+ * Changes: Reduced to 5 lines, sensitivity halved, frequency bands optimized.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
 import { getAverage, applySoftCompression } from '../audioUtils';
 
 export class WaveformRenderer implements IVisualizerRenderer {
-  private smoothedEnergiesL: number[] = new Array(6).fill(0);
-  private smoothedEnergiesR: number[] = new Array(6).fill(0);
+  private smoothedEnergiesL: number[] = new Array(5).fill(0);
+  private smoothedEnergiesR: number[] = new Array(5).fill(0);
   private maxEnergyObserved = 0.15; 
   private phaseOffset = 0; 
 
   init() {
-    this.smoothedEnergiesL = new Array(6).fill(0);
-    this.smoothedEnergiesR = new Array(6).fill(0);
+    this.smoothedEnergiesL = new Array(5).fill(0);
+    this.smoothedEnergiesR = new Array(5).fill(0);
     this.maxEnergyObserved = 0.15;
     this.phaseOffset = 0;
   }
@@ -30,10 +30,13 @@ export class WaveformRenderer implements IVisualizerRenderer {
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     
-    const layerCount = 6;
+    const layerCount = 5; // Reduced to 5 lines
     const isStereo = !!dataR;
     const centerY = h / 2;
     
+    // Reduced sensitivity by 50% for more headroom and elegance
+    const effectiveSensitivity = settings.sensitivity * 0.5;
+
     // --- 1. Enhanced Gain Control (Shared) ---
     const globalEnergyL = getAverage(data, 0, data.length) / 255;
     const globalEnergyR = isStereo ? getAverage(dataR!, 0, dataR!.length) / 255 : globalEnergyL;
@@ -45,13 +48,13 @@ export class WaveformRenderer implements IVisualizerRenderer {
     const beatImpact = beat ? 0.3 : 0;
     this.phaseOffset += (settings.speed * 0.04) + beatImpact;
 
+    // Optimized Bands for 5 Ribbons (Sub, Bass, LowMid, Mid, High)
     const configs = [
-        { start: 0, end: 6, amp: 0.7, freq: 0.003, width: 10.5, gain: 1.0 }, 
-        { start: 7, end: 20, amp: 0.7, freq: 0.008, width: 7.0, gain: 1.5 },
-        { start: 25, end: 60, amp: 0.7, freq: 0.015, width: 3.5, gain: 2.0 }, 
-        { start: 65, end: 110, amp: 0.7, freq: 0.03, width: 3.5, gain: 3.0 }, 
-        { start: 120, end: 180, amp: 0.7, freq: 0.06, width: 3.5, gain: 4.5 }, 
-        { start: 190, end: 255, amp: 0.7, freq: 0.12, width: 3.5, gain: 7.0 }  
+        { start: 0, end: 10, amp: 0.8, freq: 0.003, width: 14.0, gain: 1.0 }, 
+        { start: 12, end: 40, amp: 0.8, freq: 0.007, width: 10.0, gain: 1.2 },
+        { start: 45, end: 100, amp: 0.7, freq: 0.015, width: 6.0, gain: 1.5 }, 
+        { start: 110, end: 180, amp: 0.7, freq: 0.04, width: 4.5, gain: 2.0 }, 
+        { start: 190, end: 255, amp: 0.6, freq: 0.09, width: 3.0, gain: 3.5 }  
     ];
 
     const drawWaves = (channelData: Uint8Array, smoothedEnergies: number[], globalEnergy: number, direction: 1 | -1) => {
@@ -63,24 +66,24 @@ export class WaveformRenderer implements IVisualizerRenderer {
             
             const localEnergyRaw = getAverage(channelData, config.start, config.end) / 255;
             const compressedLocal = applySoftCompression(localEnergyRaw, 0.75);
-            const coupling = i > 3 ? 0.4 : 0; 
+            // Less coupling for cleaner separation
+            const coupling = i > 3 ? 0.2 : 0; 
             let combined = (compressedLocal * (1 - coupling) + globalEnergy * coupling) * config.gain * autoGainScale;
             if (combined < 0.02) combined = 0;
 
-            const targetEnergy = combined * settings.sensitivity;
-            const lerpFactor = targetEnergy > smoothedEnergies[i] ? 0.25 : 0.06;
+            const targetEnergy = combined * effectiveSensitivity;
+            const lerpFactor = targetEnergy > smoothedEnergies[i] ? 0.2 : 0.05; // Smoother attack/decay
             smoothedEnergies[i] += (targetEnergy - smoothedEnergies[i]) * lerpFactor;
             
             const energy = smoothedEnergies[i];
             
             // Stereo Offset: Left channel slightly up, Right channel slightly down
-            // Or stick to center and mirror
             const channelYOffset = isStereo ? (direction * h * 0.05) : 0; 
             
             // Parallax Depth
             const depthX = Math.sin(rotation * 0.5 + i) * 20;
-            // Layer spread
-            const yLayerSpread = (i - (layerCount - 1) / 2) * (h * 0.05); 
+            // Layer spread (Vertical spacing)
+            const yLayerSpread = (i - (layerCount - 1) / 2) * (h * 0.06); 
 
             const grad = ctx.createLinearGradient(0, 0, w, 0);
             grad.addColorStop(0, 'transparent');
@@ -90,7 +93,9 @@ export class WaveformRenderer implements IVisualizerRenderer {
             ctx.beginPath();
             ctx.strokeStyle = grad;
             ctx.lineWidth = config.width * (0.8 + energy * 0.3);
-            ctx.globalAlpha = (0.25 + energy * 0.6) * (settings.glow ? 1.0 : 0.6);
+            
+            // Lower base alpha for "Silk" look
+            ctx.globalAlpha = (0.2 + energy * 0.5) * (settings.glow ? 0.9 : 0.6);
 
             const points = settings.quality === 'high' ? 90 : (settings.quality === 'med' ? 45 : 30);
             const step = w / points;
@@ -98,22 +103,17 @@ export class WaveformRenderer implements IVisualizerRenderer {
 
             const getY = (x: number) => {
                 const envelope = Math.sin((x / w) * Math.PI);
-                const jitter = (i > 4 && energy > 0.01) ? (Math.random() - 0.5) * 5 * energy : 0;
+                const jitter = (i > 3 && energy > 0.01) ? (Math.random() - 0.5) * 3 * energy : 0;
                 
                 const maxAmplitude = h * 0.35;
-                const rawAmp = (h * 0.12 * config.amp) * energy * envelope;
+                const rawAmp = (h * 0.15 * config.amp) * energy * envelope;
                 const amplitude = Math.min(rawAmp, maxAmplitude);
                 
-                // Direction flips the wave vertically if needed, but here we simply draw in place
                 // Stereo Effect: Invert phase for Right channel to create symmetry
                 const stereoPhase = isStereo && direction === -1 ? Math.PI : 0;
                 
                 const wave1 = Math.sin(x * config.freq + this.phaseOffset * parallaxMultiplier + i + stereoPhase);
                 const wave2 = Math.sin(x * config.freq * 2.5 - this.phaseOffset * 0.4 * parallaxMultiplier);
-                
-                // If stereo, bias drawing towards top or bottom
-                // Or simply center it. Let's keep centered but use direction to flip amplitude?
-                // Visual Design: Top/Bottom mirroring looks best.
                 
                 return centerY + channelYOffset + yLayerSpread + ((wave1 + wave2) * amplitude * direction) + jitter;
             };
@@ -135,17 +135,10 @@ export class WaveformRenderer implements IVisualizerRenderer {
         }
     };
 
-    // Draw Left (Upwards / Top)
-    // If Mono: Draw once (direction 1), standard logic handles display.
-    // If Stereo: Draw Left as Up (1), Right as Down (-1).
-    
     if (isStereo) {
-        // Left Channel (Up)
-        drawWaves(data, this.smoothedEnergiesL, globalEnergyL, -1); // Up (negative Y relative to center)
-        // Right Channel (Down)
+        drawWaves(data, this.smoothedEnergiesL, globalEnergyL, -1); // Up
         drawWaves(dataR!, this.smoothedEnergiesR, globalEnergyR, 1); // Down
     } else {
-        // Mono (Standard)
         drawWaves(data, this.smoothedEnergiesL, globalEnergyL, 1);
     }
 

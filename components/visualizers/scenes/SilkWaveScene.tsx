@@ -1,13 +1,14 @@
 
 /**
  * File: components/visualizers/scenes/SilkWaveScene.tsx
- * Version: 2.9.0
+ * Version: 3.0.0
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Description: "Fiber Optic" Aesthetic Upgrade - Sparse Edition.
+ * Description: "Fiber Optic" Aesthetic Upgrade - Sparse Edition with Depth of Field.
  * - Geometry: Instanced Ribbons with smooth flow.
  * - Physics: Low-frequency noise for zero sharp angles.
- * - Visuals: Highly sparse (70% reduced) stochastic blinking tips.
+ * - Visuals: Highly sparse stochastic blinking tips.
+ * - DOF: Focal plane effect creates blurry lines at distance.
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -287,7 +288,7 @@ export const SilkWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, color
                   sparkle = sin(uTime * 10.0 + aRandom * 100.0) * uTreble;
               }
               vSparkle = sparkle;
-              vDepth = -mvPosition.z;
+              vDepth = -mvPosition.z; // Depth relative to camera plane
             }
           `}
           fragmentShader={`
@@ -304,9 +305,21 @@ export const SilkWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, color
             varying float vRand;
 
             void main() {
-              // --- Fiber Optic Edges ---
+              // --- Fiber Optic Edges (Depth of Field Adjusted) ---
+              
+              // Calculate Blur based on depth
+              // Focal plane at 16.0 (approx mid view distance)
+              float focusDist = 16.0; 
+              float dist = abs(vDepth - focusDist);
+              float blurFactor = smoothstep(0.0, 40.0, dist); // 0 at focus, 1 at max distance
+              
+              // Adjust line softness based on blur
+              // Sharp center (0.02) -> Fuzzy blurry edge (0.95)
+              float softness = mix(0.02, 0.95, blurFactor);
+              
+              // Edge mask
               float edge = 1.0 - abs(vUv.y - 0.5) * 2.0;
-              float alpha = smoothstep(0.0, 0.15, edge); 
+              float alpha = smoothstep(0.0, softness, edge); 
               
               if (alpha < 0.01) discard;
               
@@ -363,7 +376,8 @@ export const SilkWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, color
               float fog = smoothstep(120.0, 30.0, vDepth);
               
               // Global alpha adjustment for faint fibers
-              float fiberAlpha = 0.3 + glow * 0.7 + finalTip * 0.7;
+              // Reduce alpha for out-of-focus elements to simulate light dispersion
+              float fiberAlpha = (0.3 + glow * 0.7 + finalTip * 0.7) * (1.0 - blurFactor * 0.4);
 
               gl_FragColor = vec4(finalCol, alpha * fog * fiberAlpha);
             }

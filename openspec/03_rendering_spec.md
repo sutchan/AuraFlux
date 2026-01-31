@@ -22,9 +22,13 @@
   - **节拍响应增强:** 强化了粒子大小、亮度和全局闪光对音乐节拍的响应强度。
 
 ## 3. 3D WebGL 渲染 (v1.8.0 Global Update)
+- **Ocean Wave (Stereo Terrain):**
+  - **风格:** "Joy Division" 风格的层叠波形图 (Ridge Plot)。
+  - **立体声:** 左侧网格映射左声道，右侧映射右声道，低音汇聚于中央。
+  - **遮挡技术:** 使用不透明 Shader，将波形主体渲染为黑色以遮挡后方线条，创造纯粹的线条悬浮感，摒弃杂乱的 Wireframe 网格。
 - **Neural Flow / Cube Field / Kinetic Wall:**
   - **动态峰值限制器 (Peak Limiter):** 所有 3D 场景的驱动特征（Bass/Mids/Treble）现在经过 `DynamicPeakLimiter` 处理。
   - **软膝盖压缩:** 在传递给着色器前，通过 $v^{0.7}$ 压缩曲线调整，确保在极高音量下 3D 位移依然保持线性动态。
 
 ---
-*Aura Flux Rendering - Version 1.8.15*
+*Aura Flux Rendering - Version 1.8.17*

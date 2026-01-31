@@ -1,7 +1,7 @@
 
 /**
  * File: assets/locales/en.ts
- * Version: 2.2.3
+ * Version: 2.2.4
  * Author: Sut
  */
 
@@ -363,6 +363,7 @@ export const en = {
     [VisualizerMode.WAVEFORM]: 'Spectral Silk',
     [VisualizerMode.DIGITAL_GRID]: 'Digital Grid (WebGL)',
     [VisualizerMode.SILK_WAVE]: 'Silk Wave (WebGL)',
+    [VisualizerMode.OCEAN_WAVE]: 'Ocean Wave (WebGL)',
   },
   modeDescriptions: {
     [VisualizerMode.NEURAL_FLOW]: 'Organic fluid simulation powered by WebGL particles.',
@@ -381,6 +382,7 @@ export const en = {
     [VisualizerMode.WAVEFORM]: 'Liquid ribbons of spectral frequency.',
     [VisualizerMode.DIGITAL_GRID]: 'Curved LED wall spectrum analyzer with pixelated blocks.',
     [VisualizerMode.SILK_WAVE]: 'Flowing ribbon of thousands of particles, split by stereo channels.',
+    [VisualizerMode.OCEAN_WAVE]: 'Retro-futuristic wireframe terrain reacting to audio spectrum.',
   },
   lyricsStyles: {
     [LyricsStyle.STANDARD]: 'Standard', [LyricsStyle.KARAOKE]: 'Dynamic', [LyricsStyle.MINIMAL]: 'Minimalist'

@@ -1,11 +1,11 @@
 
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.8.4
+ * Version: 1.9.0
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 23:20
- * Description: Added SilkWaveScene support.
+ * Updated: 2025-03-16 10:15
+ * Description: Added OceanWaveScene support.
  */
 
 import React, { Suspense, useMemo, useEffect } from 'react';
@@ -18,7 +18,8 @@ import {
     CubeFieldScene,
     NeuralFlowScene,
     DigitalGridScene,
-    SilkWaveScene
+    SilkWaveScene,
+    OceanWaveScene
 } from './ThreeScenes';
 
 interface ThreeVisualizerProps {
@@ -49,10 +50,13 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
     return Math.min(window.devicePixelRatio, 1.5);
   }, [settings?.quality]);
 
-  const cameraConfig = useMemo(() => ({ 
-    position: [0, 2, 16] as [number, number, number], 
-    fov: 55 
-  }), []);
+  const cameraConfig = useMemo(() => {
+      // Ocean Wave needs a different camera angle
+      if (mode === VisualizerMode.OCEAN_WAVE) {
+          return { position: [0, 8, 15] as [number, number, number], fov: 60 };
+      }
+      return { position: [0, 2, 16] as [number, number, number], fov: 55 };
+  }, [mode]);
 
   const glConfig = useMemo(() => ({ 
     antialias: false,
@@ -70,7 +74,8 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
           case VisualizerMode.CUBE_FIELD: return base * 1.2;
           case VisualizerMode.NEURAL_FLOW: return base * 1.5;
           case VisualizerMode.DIGITAL_GRID: return base * 1.8; 
-          case VisualizerMode.SILK_WAVE: return base * 1.4; // Soft glow for silk
+          case VisualizerMode.SILK_WAVE: return base * 1.4;
+          case VisualizerMode.OCEAN_WAVE: return base * 2.0; // High bloom for neon grid
           default: return base;
       }
   }, [mode]);
@@ -115,6 +120,8 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
             return <DigitalGridScene {...sceneProps} />;
         case VisualizerMode.SILK_WAVE:
             return <SilkWaveScene {...sceneProps} />;
+        case VisualizerMode.OCEAN_WAVE:
+            return <OceanWaveScene {...sceneProps} />;
         default:
             return <NeuralFlowScene {...sceneProps} />;
     }
@@ -125,12 +132,11 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
   return (
     <div className="w-full h-full">
       <Canvas 
-        key={settings.quality}
+        key={settings.quality + mode} // Remount canvas on mode switch to reset camera defaults properly
         camera={cameraConfig}
         dpr={dpr} 
         gl={glConfig}
         onCreated={({ gl }) => {
-          // Initial clear color, will be managed by BackgroundController
           gl.setClearColor('#000000', 1);
           const handleContextLost = (event: Event) => { event.preventDefault(); };
           gl.domElement.addEventListener('webglcontextlost', handleContextLost, false);

@@ -1,11 +1,11 @@
 
 /**
  * File: components/AppContext.tsx
- * Version: 1.9.10
+ * Version: 1.9.11
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-14 23:25
- * Changes: Added SILK_WAVE to isThreeMode.
+ * Updated: 2025-03-16 10:20
+ * Changes: Added OCEAN_WAVE to isThreeMode.
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
@@ -249,7 +249,8 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     mode === VisualizerMode.CUBE_FIELD ||
     mode === VisualizerMode.NEURAL_FLOW ||
     mode === VisualizerMode.DIGITAL_GRID ||
-    mode === VisualizerMode.SILK_WAVE
+    mode === VisualizerMode.SILK_WAVE ||
+    mode === VisualizerMode.OCEAN_WAVE
   , [mode]);
 
   return (

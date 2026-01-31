@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/VisualizerPreview.tsx
- * Version: 1.8.2
+ * Version: 1.9.0
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 23:20
+ * Updated: 2025-03-16 10:15
  */
 
 import React, { memo } from 'react';
@@ -20,7 +20,8 @@ const styles: Partial<Record<VisualizerMode, React.CSSProperties>> = {
     [VisualizerMode.KINETIC_WALL]: { background: 'radial-gradient(ellipse at bottom, #1e3a8a 20%, #020617 80%), repeating-conic-gradient(from 45deg, #020617 0% 2.5%, #1e3a8a22 2.5% 5%)' }, 
     [VisualizerMode.LIQUID]: { background: 'radial-gradient(circle, #4c1d95, #1e1b4b)' },
     [VisualizerMode.CUBE_FIELD]: { background: 'linear-gradient(to top, #0c4a6e, #020617 70%), linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' },
-    
+    [VisualizerMode.OCEAN_WAVE]: { background: 'linear-gradient(to top, #ff00ff 0%, transparent 50%), linear-gradient(0deg, transparent 48%, #00ffff 50%, transparent 52%), repeating-linear-gradient(90deg, transparent 0, transparent 9px, #3b82f6 10px)' },
+
     // Modern 2D
     [VisualizerMode.WAVEFORM]: { background: 'radial-gradient(ellipse 50% 10% at 50% 40%, #8b5cf6, transparent), radial-gradient(ellipse 50% 10% at 50% 60%, #ec4899, transparent), #050508' },
     [VisualizerMode.FLUID_CURVES]: { background: 'radial-gradient(ellipse at 50% 0%, #3b82f6 0%, transparent 50%), radial-gradient(ellipse at 50% 100%, #ec4899 0%, transparent 50%), #050508' },

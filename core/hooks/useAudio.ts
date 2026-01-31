@@ -1,11 +1,11 @@
 
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.7.1
+ * Version: 2.7.2
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 20:00
- * Changes: Added localization for track load error.
+ * Updated: 2025-03-16 16:30
+ * Changes: Fixed toggleMicrophone to correctly stop capture when listening.
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -224,6 +224,17 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       setIsPending(false);
     }
   }, [stopAll, safeFftSize, safeSmoothing, t]);
+
+  const handleToggleMicrophone = useCallback(async (deviceId?: string) => {
+      // If listening to mic, stop.
+      if (isListening && sourceType === 'MICROPHONE') {
+          await stopAll();
+      } 
+      // If in file mode or stopped, start mic.
+      else {
+          await startMicrophone(deviceId);
+      }
+  }, [isListening, sourceType, stopAll, startMicrophone]);
 
   const updateAudioDevices = async () => {
     if (!navigator.mediaDevices?.enumerateDevices) return;
@@ -598,7 +609,8 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
       
       // Mic
       isListening, isSimulating, mediaStream, audioDevices, 
-      startMicrophone, startDemoMode, toggleMicrophone: startMicrophone,
+      startMicrophone, startDemoMode, 
+      toggleMicrophone: handleToggleMicrophone, 
       
       // File / Playlist
       fileStatus, fileName, isPlaying, duration, currentTime,

@@ -1,9 +1,10 @@
+
 /**
  * File: core/types/react-augmentation.d.ts
- * Version: 1.8.6
+ * Version: 1.8.7
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-07 11:00
+ * Updated: 2025-03-16 12:00
  */
 
 import React from 'react';
@@ -26,9 +27,11 @@ interface R3FElements {
   points: any;
   bufferGeometry: any;
   bufferAttribute: any;
+  instancedBufferAttribute: any; // Added for instanced scenes
   shaderMaterial: any;
   instancedMesh: any;
   boxGeometry: any;
+  planeGeometry: any; // Explicitly adding planeGeometry
   [elemName: string]: any;
 }
 

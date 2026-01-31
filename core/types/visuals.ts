@@ -1,10 +1,10 @@
 
 /**
  * File: core/types/visuals.ts
- * Version: 1.8.4
+ * Version: 1.9.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 23:15
+ * Updated: 2025-03-16 10:15
  */
 
 import { Position, Region } from './common';
@@ -15,7 +15,8 @@ export enum VisualizerMode {
   PLASMA = 'PLASMA',
   BARS = 'BARS',
   DIGITAL_GRID = 'DIGITAL_GRID',
-  SILK_WAVE = 'SILK_WAVE', // New Mode
+  SILK_WAVE = 'SILK_WAVE',
+  OCEAN_WAVE = 'OCEAN_WAVE', // New
 
   // Classic / 2D Modes
   PARTICLES = 'PARTICLES',
