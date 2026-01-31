@@ -1,10 +1,8 @@
 
 /**
  * File: components/ui/controls/Tooltip.tsx
- * Version: 1.0.16
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 22:30
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import React, { useState, useEffect, useRef, memo } from 'react';

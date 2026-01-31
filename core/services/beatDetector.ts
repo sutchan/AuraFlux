@@ -1,9 +1,8 @@
+
 /**
  * File: core/services/beatDetector.ts
- * Version: 1.7.32
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 export class BeatDetector {

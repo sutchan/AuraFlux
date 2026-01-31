@@ -1,10 +1,7 @@
-
 /**
  * File: components/controls/panels/SystemSettingsPanel.tsx
- * Version: 2.1.0
+ * Version: 2.0.2
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-20 10:00
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -24,12 +21,7 @@ const LANGUAGES: { value: Language; label: string }[] = [
   { value: 'ar', label: 'العربية' }
 ];
 
-interface SavedPreset {
-    id: number;
-    name: string;
-    data: VisualizerSettings;
-    timestamp: number;
-}
+interface SavedPreset { id: number; name: string; data: VisualizerSettings; timestamp: number; }
 
 export const SystemSettingsPanel: React.FC = () => {
   const { settings, setSettings } = useVisuals();
@@ -49,212 +41,106 @@ export const SystemSettingsPanel: React.FC = () => {
       if (Array.isArray(saved)) setPresets(saved);
   }, [getStorage]);
 
-  const updatePresets = (newPresets: SavedPreset[]) => {
-      setPresets(newPresets);
-      setStorage('user_presets', newPresets);
-  };
-
-  const handleSystemSettingChange = (key: keyof typeof settings, value: any) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
-  };
-
-  const handleConfirmReset = () => {
-    if (window.confirm(t?.hints?.confirmReset || 'Are you sure you want to reset all settings? This cannot be undone.')) {
-      resetSettings();
-    }
-  };
-
   const handleExport = () => {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings, null, 2));
-      const downloadAnchorNode = document.createElement('a');
-      downloadAnchorNode.setAttribute("href", dataStr);
-      downloadAnchorNode.setAttribute("download", `aura_flux_config_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(downloadAnchorNode);
-      downloadAnchorNode.click();
-      downloadAnchorNode.remove();
+      const downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", `aura_config_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
       showToast(t?.config?.copied || "Exported!", 'success');
   };
 
-  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const fileObj = event.target.files && event.target.files[0];
-      if (!fileObj) return;
-
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = (evt) => {
           try {
-              const json = JSON.parse(e.target?.result as string);
-              if (json && typeof json === 'object') {
-                  if (window.confirm(config.confirmImport || 'Overwrite current settings?')) {
-                      setSettings(prev => ({ ...prev, ...json }));
-                      showToast(config.importSuccess || "Configuration loaded.", 'success');
-                  }
-              } else {
-                  throw new Error("Invalid structure");
+              const data = JSON.parse(evt.target?.result as string);
+              if (data && typeof data === 'object') {
+                  setSettings(prev => ({ ...prev, ...data }));
+                  showToast(config.importSuccess || "Configuration loaded successfully", 'success');
               }
           } catch (err) {
-              console.error(err);
               showToast(config.invalidFile || "Invalid file format", 'error');
           }
       };
-      reader.readAsText(fileObj);
-      event.target.value = '';
+      reader.readAsText(file);
+      e.target.value = ''; 
   };
 
   const handleSavePreset = () => {
-      if (presets.length >= 3) {
-          showToast(config.limitReached || "Maximum 3 presets allowed.", 'error');
-          return;
-      }
+      if (presets.length >= 3) { showToast(config.limitReached || "Limit reached", 'error'); return; }
       if (!presetName.trim()) return;
-
-      const newPreset: SavedPreset = {
-          id: Date.now(),
-          name: presetName.trim().slice(0, 20),
-          data: { ...settings },
-          timestamp: Date.now()
-      };
-      
-      updatePresets([...presets, newPreset]);
-      setPresetName('');
-      showToast(config.saved || "Preset Saved", 'success');
-  };
-
-  const handleLoadPreset = (preset: SavedPreset) => {
-      setSettings(prev => ({ ...prev, ...preset.data }));
-      showToast(`${config.load || "Loaded"}: ${preset.name}`, 'success');
+      const newPreset = { id: Date.now(), name: presetName.trim().slice(0, 18), data: { ...settings }, timestamp: Date.now() };
+      const newPresets = [...presets, newPreset];
+      setPresets(newPresets); setStorage('user_presets', newPresets);
+      setPresetName(''); showToast(config.saved || "Saved", 'success');
   };
 
   const handleDeletePreset = (id: number) => {
-      if (window.confirm(config.deleteConfirm || "Delete this preset?")) {
-          updatePresets(presets.filter(p => p.id !== id));
+      if (window.confirm(config.deleteConfirm || "Delete?")) {
+          const newPresets = presets.filter(p => p.id !== id);
+          setPresets(newPresets); setStorage('user_presets', newPresets);
       }
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 h-full">
-      {/* Card 1: Interface */}
-      <BentoCard title={systemPanel.interface || "Interface"}>
-        <div className="space-y-4">
-          <SegmentedControl 
-            label={systemPanel.uiMode || "Control Mode"}
-            value={settings.uiMode}
-            options={[
-                { value: 'simple', label: t?.common?.simple || 'SIMPLE' },
-                { value: 'advanced', label: t?.common?.advanced || 'ADVANCED' }
-            ]}
-            onChange={(val) => handleSystemSettingChange('uiMode', val)}
-          />
-          
-          <div className="space-y-2 border-t border-white/5 pt-2">
-            <SettingsToggle 
-                label={settings.appTheme === 'light' ? (systemPanel.lightMode || "Light Theme") : (systemPanel.darkMode || "Dark Theme")} 
-                value={settings.appTheme === 'light'} 
-                onChange={() => handleSystemSettingChange('appTheme', settings.appTheme === 'light' ? 'dark' : 'light')} 
-                hintText={hints?.lightMode}
-                activeColor="green"
-            />
-            <SettingsToggle label={t?.showTooltips || "Show Tooltips"} value={settings.showTooltips} onChange={() => handleSystemSettingChange('showTooltips', !settings.showTooltips)} hintText={hints?.showTooltips} />
-            <SettingsToggle label={t?.autoHideUi || "Auto-Hide Controls"} value={settings.autoHideUi} onChange={() => handleSystemSettingChange('autoHideUi', !settings.autoHideUi)} hintText={hints?.autoHideUi} />
-            <SettingsToggle label={t?.hideCursor || "Hide Cursor"} value={settings.hideCursor} onChange={() => handleSystemSettingChange('hideCursor', !settings.hideCursor)} hintText={hints?.hideCursor} />
-            <SettingsToggle label={t?.showFps || "Show FPS"} value={settings.showFps} onChange={() => handleSystemSettingChange('showFps', !settings.showFps)} hintText={hints?.showFps} />
-          </div>
-        </div>
-      </BentoCard>
-
-      {/* Card 2: Behavior & Language */}
-      <BentoCard title={systemPanel.behavior || "Behavior"}>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <SettingsToggle label={t?.doubleClickFullscreen || "Double-Click Fullscreen"} value={settings.doubleClickFullscreen} onChange={() => handleSystemSettingChange('doubleClickFullscreen', !settings.doubleClickFullscreen)} hintText={hints?.doubleClickFullscreen} />
-            <SettingsToggle label={t?.mirrorDisplay || "Mirror Display"} value={settings.mirrorDisplay} onChange={() => handleSystemSettingChange('mirrorDisplay', !settings.mirrorDisplay)} hintText={hints?.mirrorDisplay} />
-            <SettingsToggle label={t?.wakeLock || "Screen Always On"} value={settings.wakeLock} onChange={() => handleSystemSettingChange('wakeLock', !settings.wakeLock)} hintText={hints?.wakeLock} />
-          </div>
-          
-          <div className="pt-2 border-t border-white/5">
-            <CustomSelect
-              label={
-                <div className="flex items-center gap-1.5">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  <span>{t?.language || "Interface Language"}</span>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      {/* Column 1: System Experience */}
+      <BentoCard title={systemPanel.interface || "System Architecture"} className="py-2.5">
+        <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                <SettingsToggle label={t?.showTooltips || "Tooltips"} value={settings.showTooltips} onChange={() => setSettings({...settings, showTooltips: !settings.showTooltips})} variant="clean" />
+                <SettingsToggle label={t?.autoHideUi || "Auto HUD"} value={settings.autoHideUi} onChange={() => setSettings({...settings, autoHideUi: !settings.autoHideUi})} variant="clean" />
+                <SettingsToggle label={t?.hideCursor || "No Cursor"} value={settings.hideCursor} onChange={() => setSettings({...settings, hideCursor: !settings.hideCursor})} variant="clean" />
+                <SettingsToggle label={t?.wakeLock || "Keep Alive"} value={settings.wakeLock} onChange={() => setSettings({...settings, wakeLock: !settings.wakeLock})} variant="clean" />
+                <SettingsToggle label={t?.showFps || "Debug FPS"} value={settings.showFps} onChange={() => setSettings({...settings, showFps: !settings.showFps})} variant="clean" />
+                <SettingsToggle label={t?.mirrorDisplay || "Mirror"} value={!!settings.mirrorDisplay} onChange={() => setSettings({...settings, mirrorDisplay: !settings.mirrorDisplay})} variant="clean" />
+                <SettingsToggle label={t?.doubleClickFullscreen || "Quick FS"} value={!!settings.doubleClickFullscreen} onChange={() => setSettings({...settings, doubleClickFullscreen: !settings.doubleClickFullscreen})} variant="clean" />
+            </div>
+            
+            <div className="pt-2 border-t border-white/5 space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                    <CustomSelect label={t?.language} value={language} options={LANGUAGES} onChange={(v) => setLanguage(v as Language)} />
+                    <SegmentedControl 
+                        label={t?.styleTheme || "UI Mode"} 
+                        value={settings.appTheme} 
+                        options={[{ value: 'dark', label: systemPanel.darkMode || 'DARK' }, { value: 'light', label: systemPanel.lightMode || 'LIGHT' }]} 
+                        onChange={(v) => setSettings({...settings, appTheme: v as any})} 
+                    />
                 </div>
-              }
-              value={language}
-              options={LANGUAGES}
-              onChange={(val: string) => setLanguage(val as Language)}
-            />
-          </div>
+                <SegmentedControl label={systemPanel.uiMode} value={settings.uiMode} options={[{ value: 'simple', label: 'SIMPLE' }, { value: 'advanced', label: 'ADVANCED' }]} onChange={(v) => setSettings({...settings, uiMode: v as any})} />
+            </div>
         </div>
       </BentoCard>
 
-      {/* Card 3: Data */}
+      {/* Column 2: Data & Storage */}
       <BentoCard 
         title={config.title || "Data Management"}
-        action={
-            <TooltipArea text={hints?.confirmReset}>
-                <button onClick={handleConfirmReset} className="p-1 text-red-400 hover:text-red-300 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                </button>
-            </TooltipArea>
-        }
+        className="py-2.5"
+        action={<button onClick={() => window.confirm(hints?.confirmReset) && resetSettings()} className="p-1 text-red-500/40 hover:text-red-400 transition-colors"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>}
       >
-        <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-2">
-                <TooltipArea text={hints?.exportConfig}>
-                    <button onClick={handleExport} className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                        {config.export || "Export"}
-                    </button>
-                </TooltipArea>
-                <TooltipArea text={hints?.importConfig}>
-                    <button onClick={() => fileInputRef.current?.click()} className="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m-4 4v12" /></svg>
-                        {config.import || "Import"}
-                    </button>
-                </TooltipArea>
-                <input type="file" ref={fileInputRef} onChange={handleImport} accept=".json" className="hidden" />
+        <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+                <button onClick={handleExport} className="py-2 bg-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white/10 transition-all border border-white/5">{config.export || 'EXPORT'}</button>
+                <button onClick={() => fileInputRef.current?.click()} className="py-2 bg-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white/10 transition-all border border-white/5">{config.import || 'IMPORT'}</button>
+                <input type="file" ref={fileInputRef} className="hidden" accept=".json" onChange={handleImport} />
             </div>
 
-            <div className="space-y-2 pt-2 border-t border-white/5">
-                <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{config.library || "Local Library"} ({presets.length}/3)</span>
-                </div>
-                
+            <div className="pt-2 border-t border-white/5 space-y-3">
+                <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">{config.library || "SNAPSHOTS"} ({presets.length}/3)</span>
                 <div className="flex gap-2">
-                    <input 
-                        type="text" 
-                        value={presetName}
-                        onChange={(e) => setPresetName(e.target.value)}
-                        placeholder={config.placeholder || "Preset Name..."}
-                        className="flex-1 bg-black/40 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500/50 transition-colors font-medium"
-                        maxLength={18}
-                        disabled={presets.length >= 3}
-                    />
-                    <button 
-                        onClick={handleSavePreset}
-                        disabled={presets.length >= 3 || !presetName.trim()}
-                        className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all flex items-center justify-center min-w-[50px] ${presets.length >= 3 || !presetName.trim() ? 'bg-white/5 border-transparent text-white/20 cursor-not-allowed' : 'bg-blue-600 border-blue-500 text-white shadow-lg hover:bg-blue-500'}`}
-                    >
-                        {config.save || "Save"}
-                    </button>
+                    <input type="text" value={presetName} onChange={(e)=>setPresetName(e.target.value)} placeholder={config.placeholder || "Tag name..."} className="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white placeholder-white/20 outline-none focus:border-blue-500/50" maxLength={18} />
+                    <button onClick={handleSavePreset} disabled={presets.length>=3 || !presetName.trim()} className="px-4 py-1.5 bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest disabled:opacity-20">{config.save || 'COMMIT'}</button>
                 </div>
-
-                <div className="space-y-1.5 min-h-[80px]">
-                    {presets.length === 0 && (
-                        <div className="flex flex-col items-center justify-center py-6 text-white/20 gap-2 border border-dashed border-white/5 rounded-lg bg-white/[0.01]">
-                            <span className="text-[10px] uppercase tracking-widest">{t?.common?.empty || "Empty"}</span>
-                        </div>
-                    )}
+                <div className="space-y-1 overflow-y-auto custom-scrollbar max-h-[140px]">
                     {presets.map(p => (
-                        <div key={p.id} className="group flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 hover:border-white/20 rounded-lg px-3 py-2 transition-all">
-                            <div className="flex flex-col flex-1 min-w-0 cursor-pointer" onClick={() => handleLoadPreset(p)} title={hints?.loadPreset}>
-                                <span className="text-xs font-bold text-white/80 group-hover:text-white truncate">{p.name}</span>
-                                <span className="text-[9px] text-white/30 font-mono">{new Date(p.timestamp).toLocaleDateString()}</span>
+                        <div key={p.id} className="flex items-center justify-between bg-white/[0.03] border border-white/5 rounded-xl px-3 py-1.5 hover:bg-white/[0.06] transition-all group">
+                            <div className="flex flex-col flex-1 cursor-pointer" onClick={() => setSettings({...settings, ...p.data})}>
+                                <span className="text-[10px] font-black text-white/80 group-hover:text-blue-300 uppercase truncate">{p.name}</span>
+                                <span className="text-[8px] font-mono text-white/20">{new Date(p.timestamp).toLocaleDateString()}</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                                <button onClick={() => handleDeletePreset(p.id)} className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-red-400 transition-colors" title={config.delete || "Delete"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                </button>
-                            </div>
+                            <button onClick={()=>handleDeletePreset(p.id)} className="p-1.5 opacity-20 group-hover:opacity-100 hover:text-red-500 transition-all"><svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg></button>
                         </div>
                     ))}
                 </div>

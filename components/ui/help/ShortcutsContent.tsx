@@ -1,9 +1,8 @@
 
 /**
  * File: components/ui/help/ShortcutsContent.tsx
- * Version: 1.0.9
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import React from 'react';

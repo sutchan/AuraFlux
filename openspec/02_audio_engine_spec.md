@@ -27,12 +27,15 @@
 ## 3. 频谱分析 (Real-time FFT)
 - **FFT Size:** 默认 512 (UI 可调至 4096)。
 - **Smoothing:** 默认 0.8。
-- **数据流:** Uint8Array 频域数据每帧通过 `postMessage` 发送至 Web Worker 驱动视觉效果。
+- **数据流:** Uint8Array 频域数据每帧发送至渲染线程。
 
-## 4. 声学指纹与切片 (Acoustic Analysis) - v1.8.0 Refactor
-- **核心技术:** `OfflineAudioContext`。
-- **实时指纹:** 使用 `ScriptProcessorNode` 提取星座特征（Constellation Map）。
-- **智能切片 (v1.8.0):** 在 AI 导演模式下，使用 `OfflineAudioContext` 快速渲染音频文件的 15 秒精华片段，转换为 WAV Blob 发送给 Gemini 进行深度分析。
+## 4. 采样标准化 (v1.8.25 Standard)
+- **索引映射原则**: 严禁在渲染逻辑中使用硬编码的数组索引（如 `data[10]`）。
+- **归一化算法**: 必须根据 `analyser.frequencyBinCount` 动态计算偏移。
+  - 低音 (Bass): `[0, length * 0.06]`
+  - 中音 (Mids): `[length * 0.1, length * 0.3]`
+  - 高音 (Highs): `[length * 0.4, length * 0.8]`
+- **目的**: 确保用户切换 FFT Size (512 -> 4096) 时，视觉反馈的频谱分布保持一致。
 
 ---
-*Aura Flux Audio Engine - Version 1.8.3*
+*Aura Flux Audio Engine - Version 1.8.25*

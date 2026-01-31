@@ -1,131 +1,123 @@
-
 /**
  * File: components/App.tsx
- * Version: 1.9.6
- * Author: Aura Flux Team
+ * Version: 1.8.50
+ * Author: Sut
+ * Updated: 2025-03-25 00:10 - Updated version string and verified info layer stability.
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import VisualizerCanvas from './visualizers/VisualizerCanvas';
 import ThreeVisualizer from './visualizers/ThreeVisualizer';
 import Controls from './controls/Controls';
 import SongOverlay from './ui/SongOverlay';
 import CustomTextOverlay from './ui/CustomTextOverlay';
 import LyricsOverlay from './ui/LyricsOverlay';
-import { OnboardingOverlay } from './ui/OnboardingOverlay'; 
-import { FPSCounter } from './ui/FPSCounter';
 import { WelcomeScreen } from './ui/WelcomeScreen';
-import { UnsupportedScreen } from './ui/UnsupportedScreen';
+import { FPSCounter } from './ui/FPSCounter';
 import { AppProvider, useVisuals, useUI, useAudioContext, useAI } from './AppContext';
-import { APP_VERSION } from '../core/constants';
-import { useMobileGestures } from '../core/hooks/useMobileGestures';
-import { useIdleTimer } from '../core/hooks/useIdleTimer';
 
+const BackgroundLayer: React.FC = () => {
+    const { settings } = useVisuals();
+    const { currentSong } = useAudioContext();
+    
+    const showAlbumArt = settings.albumArtBackground && !!currentSong?.albumArtUrl;
+    const showAiBg = settings.showAiBg && !!settings.aiBgUrl;
+    
+    const blurStyle = { filter: `blur(${settings.aiBgBlur}px)` };
+    const opacity = settings.aiBgOpacity ?? 0.5;
+
+    return (
+        <div className="absolute inset-0 z-[-1] overflow-hidden pointer-events-none">
+            {/* Base Layer */}
+            <div className="absolute inset-0 bg-black" />
+            
+            {/* Album Art Layer */}
+            <div 
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${showAlbumArt ? 'opacity-40' : 'opacity-0'}`}
+                style={{ filter: `blur(${settings.albumArtBlur ?? 20}px)` }}
+            >
+                {currentSong?.albumArtUrl && <img src={currentSong.albumArtUrl} className="w-full h-full object-cover scale-110" alt="" />}
+            </div>
+
+            {/* AI Generated Layer */}
+            <div 
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${showAiBg ? '' : 'opacity-0'}`}
+                style={{ ...blurStyle, opacity: showAiBg ? opacity : 0 }}
+            >
+                {settings.aiBgUrl && <img src={settings.aiBgUrl} className="w-full h-full object-cover scale-105" alt="" />}
+            </div>
+
+            {/* Vignette Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-60" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black opacity-40" />
+        </div>
+    );
+};
 
 const AppContent: React.FC = () => {
   const { settings, isThreeMode, mode, colorTheme } = useVisuals();
-  const { errorMessage, setErrorMessage, analyser, analyserR, mediaStream, startDemoMode, currentSong, setCurrentSong, importFiles } = useAudioContext();
-  const { hasStarted, isUnsupported, showOnboarding, language, setLanguage, handleOnboardingComplete, t, toggleFullscreen } = useUI();
-  const { showLyrics, lyricsStyle, performIdentification } = useAI();
-  const [isDragOver, setIsDragOver] = useState(false);
+  const { analyser, analyserR, mediaStream, currentSong, setCurrentSong, importFiles } = useAudioContext();
+  const { hasStarted, language, toggleFullscreen, manageWakeLock } = useUI();
+  const { showLyrics, performIdentification, lyricsStyle } = useAI();
   
-  // --- UI State Lifting ---
-  // Managed here to coordinate visibility between Controls (BottomBar) and SongOverlay (TopLeft)
   const [isControlsOpen, setIsControlsOpen] = useState(false);
-  const { isIdle } = useIdleTimer(isControlsOpen, settings.autoHideUi);
-  
-  // Mobile Gestures
-  const gestureHandlers = useMobileGestures();
+  const [isIdle, setIsIdle] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragCounter = useRef(0);
 
-  const handleDoubleClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-    // Only allow fullscreen if clicking on the visualizer layer directly
-    // This prevents double-clicks on UI elements (which are in z-20) from triggering it
-    if (!target.closest('[data-visualizer-layer]')) return;
-    
-    if (settings.doubleClickFullscreen) {
-      toggleFullscreen();
-    }
+  const appClassName = `h-[100dvh] overflow-hidden relative touch-none select-none transition-colors duration-700 ${
+    settings.appTheme === 'light' ? 'bg-zinc-100 text-black' : 'bg-black text-white'
+  } ${settings.hideCursor ? 'cursor-none' : 'cursor-auto'}`;
+
+  useEffect(() => {
+    let timer: number;
+    const resetTimer = () => {
+        setIsIdle(false);
+        clearTimeout(timer);
+        if (settings.autoHideUi && !isControlsOpen) {
+            timer = window.setTimeout(() => setIsIdle(true), 3000);
+        }
+    };
+    window.addEventListener('mousemove', resetTimer);
+    window.addEventListener('touchstart', resetTimer);
+    resetTimer();
+    return () => {
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('touchstart', resetTimer);
+    };
+  }, [settings.autoHideUi, isControlsOpen]);
+
+  useEffect(() => {
+      if (hasStarted) manageWakeLock(!!settings.wakeLock);
+  }, [settings.wakeLock, hasStarted, manageWakeLock]);
+
+  const handleDrag = (e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); };
+  const handleDragIn = (e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); dragCounter.current++; if (e.dataTransfer.items?.length > 0) setIsDragging(true); };
+  const handleDragOut = (e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); dragCounter.current--; if (dragCounter.current === 0) setIsDragging(false); };
+  const handleDrop = (e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); dragCounter.current = 0; if (e.dataTransfer.files?.length > 0) importFiles(e.dataTransfer.files); };
+
+  const handleDoubleClick = () => {
+      if (settings.doubleClickFullscreen) toggleFullscreen();
   };
 
-  const onDragOver = useCallback((e: React.DragEvent) => {
-      e.preventDefault();
-      setIsDragOver(true);
-  }, []);
-
-  const onDragLeave = useCallback(() => setIsDragOver(false), []);
-
-  const onDrop = useCallback((e: React.DragEvent) => {
-      e.preventDefault();
-      setIsDragOver(false);
-      
-      const files = Array.from(e.dataTransfer.files).filter((file: File) => file.type.startsWith('audio/'));
-      if (files.length > 0) {
-          importFiles(files);
-      }
-  }, [importFiles]);
-
-  // --- Early Returns for App States ---
-  
-  if (showOnboarding) {
-    return <OnboardingOverlay language={language} setLanguage={setLanguage} onComplete={handleOnboardingComplete} />;
-  }
-
-  if (isUnsupported) {
-      return <UnsupportedScreen />;
-  }
-
-  if (!hasStarted) {
-    return <WelcomeScreen />;
-  }
-
-  // --- Main App Logic ---
-
-  const showAlbumArt = settings.albumArtBackground && currentSong?.albumArtUrl;
+  if (!hasStarted) return <WelcomeScreen />;
 
   return (
     <div 
-      // Force background to black via inline style to override any 'light-mode' CSS variable injections.
-      // This ensures the visualizer canvas always renders on black, even if the UI text turns dark.
-      style={{ backgroundColor: '#000000' }}
-      className="h-[100dvh] overflow-hidden relative touch-none" 
-      onDoubleClick={handleDoubleClick}
-      onDragOver={onDragOver}
-      onDragLeave={onDragLeave}
-      onDrop={onDrop}
-      {...gestureHandlers}
+        className={appClassName} 
+        onDragEnter={handleDragIn} 
+        onDragLeave={handleDragOut} 
+        onDragOver={handleDrag} 
+        onDrop={handleDrop}
+        onDoubleClick={handleDoubleClick}
     >
-      {settings.showFps && <FPSCounter />}
+      <BackgroundLayer />
 
-      {/* Drag Overlay */}
-      {isDragOver && (
-          <div className="absolute inset-0 z-[200] bg-blue-600/30 backdrop-blur-sm border-4 border-blue-400 border-dashed m-4 rounded-3xl flex items-center justify-center animate-pulse pointer-events-none">
-              <span className="text-3xl font-black text-white uppercase tracking-widest drop-shadow-lg">
-                  {t?.common?.dropFiles || "Drop Audio Files"}
-              </span>
-          </div>
-      )}
-
-      {/* Album Art Background Layer */}
-      {showAlbumArt && (
-          <div className="absolute inset-0 z-0 transition-opacity duration-1000 ease-in-out pointer-events-none overflow-hidden">
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-all duration-700 scale-110"
-                style={{ 
-                    backgroundImage: `url(${currentSong.albumArtUrl})`,
-                    opacity: 1 - (settings.albumArtDim ?? 0.8), // Updated default fallback to 0.8
-                    filter: `blur(${settings.albumArtBlur ?? 20}px) saturate(1.5)`
-                }}
-              />
-              <div className="absolute inset-0 bg-black/40" /> 
-          </div>
-      )}
-
-      {/* Visualization Layer */}
+      {/* Visualizer Layer with Mirror Support */}
       <div 
-        data-visualizer-layer="true"
-        className={`absolute inset-0 z-1 ${settings.hideCursor ? 'cursor-none' : ''}`} 
-        style={settings.mirrorDisplay ? { transform: 'scaleX(-1)' } : undefined}
+        data-visualizer-layer="true" 
+        className="absolute inset-0 z-0 transition-transform duration-500"
+        style={{ transform: settings.mirrorDisplay ? 'scaleX(-1)' : 'none' }}
       >
         {isThreeMode ? (
           <ThreeVisualizer analyser={analyser} analyserR={analyserR} mode={mode} colors={colorTheme} settings={settings} />
@@ -134,48 +126,35 @@ const AppContent: React.FC = () => {
         )}
       </div>
 
-      {/* Overlays */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-          <CustomTextOverlay settings={settings} analyser={analyser} song={currentSong} />
-          <LyricsOverlay settings={settings} song={currentSong} showLyrics={showLyrics} lyricsStyle={lyricsStyle} analyser={analyser} />
+      {/* Debug Info */}
+      {settings.showFps && <FPSCounter />}
+
+      <div className="fixed bottom-4 right-4 z-[5] pointer-events-none opacity-40 text-[9px] font-mono uppercase tracking-[0.2em]">
+        Aura Flux v1.8.50 | AI Art Synergy
       </div>
 
-      {/* UI Layer */}
-      <div className="absolute inset-0 z-20 pointer-events-none">
-          <div className="pointer-events-auto cursor-default h-full w-full relative">
-            {errorMessage && (
-              <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[150] bg-red-900/90 text-white px-6 py-4 rounded-xl border border-red-500/50 animate-fade-in-up flex flex-col sm:flex-row items-center gap-4 shadow-2xl max-w-[90vw]">
-                  <div className="flex-1 text-xs font-medium">{errorMessage}</div>
-                  <div className="flex items-center gap-3">
-                    <button onClick={startDemoMode} className="whitespace-nowrap px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-bold transition-colors">{t?.errors?.tryDemo || "Demo Mode"}</button>
-                    <button onClick={() => setErrorMessage(null)} className="p-2 hover:bg-white/10 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
-                  </div>
-              </div>
-            )}
-            
-            <SongOverlay 
-              song={currentSong} 
-              isVisible={settings.showSongInfo} 
-              language={language} 
-              onRetry={() => mediaStream && performIdentification(mediaStream)} 
-              onClose={() => setCurrentSong(null)} 
-              analyser={analyser} 
-              sensitivity={settings.sensitivity}
-              showAlbumArt={settings.showAlbumArtOverlay}
-              isIdle={isIdle}
-            />
-            
-            <Controls 
-              isExpanded={isControlsOpen}
-              setIsExpanded={setIsControlsOpen}
-              isIdle={isIdle}
-            />
+      {/* Info Layers */}
+      <div className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${isIdle ? 'opacity-40' : 'opacity-100'}`}>
+          <CustomTextOverlay settings={settings} analyser={analyser} song={currentSong} />
+          <LyricsOverlay settings={settings} song={currentSong} showLyrics={showLyrics} lyricsStyle={lyricsStyle || settings.lyricsStyle} analyser={analyser} />
+          <SongOverlay song={currentSong} isVisible={settings.showSongInfo && !showLyrics} language={language} onRetry={() => mediaStream && performIdentification(mediaStream)} onClose={() => setCurrentSong(null)} analyser={analyser} isIdle={isIdle} />
+      </div>
+
+      {/* Control Layer */}
+      <div className={`absolute inset-0 z-[40] pointer-events-none transition-transform duration-700 ${isIdle ? 'translate-y-8 opacity-0' : 'translate-y-0 opacity-100'}`}>
+          <div className="pointer-events-auto h-full w-full relative">
+            <Controls isExpanded={isControlsOpen} setIsExpanded={setIsControlsOpen} isIdle={isIdle} />
           </div>
       </div>
 
-      <div className="fixed bottom-4 right-4 z-50 pointer-events-none text-white/20 text-[10px] font-mono uppercase tracking-widest">
-        AURA FLUX v{APP_VERSION}
-      </div>
+      {/* Drag Overlay */}
+      {isDragging && (
+        <div className="fixed inset-0 z-[200] bg-blue-600/20 backdrop-blur-md border-4 border-dashed border-blue-500/50 m-4 rounded-3xl flex flex-col items-center justify-center pointer-events-none animate-pulse">
+            <div className="bg-blue-600 text-white p-6 rounded-full shadow-2xl mb-6 scale-125"><svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg></div>
+            <h3 className="text-3xl font-black text-white uppercase tracking-tighter drop-shadow-lg">释放以导入音频</h3>
+            <p className="text-white/60 font-bold mt-2 uppercase tracking-widest text-sm">Supports MP3, WAV, FLAC</p>
+        </div>
+      )}
     </div>
   );
 };

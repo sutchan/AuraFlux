@@ -1,11 +1,8 @@
 
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.3.0
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-20 15:30
- * Description: Decoupled from "Show Lyrics" toggle. Now controlled by "Song Info" setting.
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -39,7 +36,7 @@ const getMoodStyle = (keywords: string | undefined | null) => {
     return {
       textColor: 'text-red-300', borderColor: 'border-red-500',
       gradient: 'from-red-500/10 to-orange-500/10', badgeGradient: 'from-red-500/20 to-orange-500/20',
-      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.031-1.742 3.031H4.42c-1.532 0-2.492-1.697-1.742-3.031l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+      icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.031-1.742 3.031H4.42c-1.532 0-2.492-1.697-1.742-3.031l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1-1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
     };
   }
   if (m.match(/happy|upbeat|energetic|dance|party|fun|joy|pop|bright/)) {
@@ -112,7 +109,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, isVisible, language, on
         <div className={`absolute inset-0 bg-gradient-to-r ${moodStyle.gradient} opacity-20 pointer-events-none rounded-e-xl`} />
         
         <button onClick={onClose} className="absolute top-2 end-2 p-1.5 rounded-full bg-black/20 hover:bg-white/20 text-white/40 hover:text-white opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
 
         <div className="relative z-10 flex gap-4 items-start">

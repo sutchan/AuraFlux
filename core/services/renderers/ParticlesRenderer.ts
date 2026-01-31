@@ -1,9 +1,9 @@
 /**
  * File: core/services/renderers/ParticlesRenderer.ts
- * Version: 1.7.32
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Version: 1.8.25
+ * Author: Sut
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
+ * Updated: 2025-03-24 23:15 - Standardized spectral sampling.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -24,17 +24,17 @@ export class ParticlesRenderer implements IVisualizerRenderer {
   init() { this.particles = []; }
 
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean) {
-    if (colors.length === 0) return;
+    if (colors.length === 0 || data.length === 0) return;
     
-    // 1. Audio Analysis: Split spectrum into Bass, Mids, and Treble
-    const bassRaw = getAverage(data, 0, 10) / 255;
-    const midsRaw = getAverage(data, 20, 60) / 255;
-    const trebleRaw = getAverage(data, 100, 180) / 255;
+    const len = data.length;
+    // Normalize sampling indices based on buffer length
+    const bassRaw = getAverage(data, 0, Math.floor(len * 0.05)) / 255;
+    const midsRaw = getAverage(data, Math.floor(len * 0.08), Math.floor(len * 0.25)) / 255;
+    const trebleRaw = getAverage(data, Math.floor(len * 0.4), Math.floor(len * 0.7)) / 255;
 
-    // Apply sensitivity curve - use power function to emphasize peaks
     const bass = Math.pow(bassRaw * settings.sensitivity, 1.2); 
     const mids = midsRaw * settings.sensitivity;
-    const treble = Math.pow(trebleRaw * settings.sensitivity, 1.5); // Higher exponent for cleaner sparkles
+    const treble = Math.pow(trebleRaw * settings.sensitivity, 1.5);
     
     const driftX = Math.sin(rotation * 0.5) * (w * 0.15);
     const driftY = Math.cos(rotation * 0.3) * (h * 0.15);
@@ -43,8 +43,6 @@ export class ParticlesRenderer implements IVisualizerRenderer {
 
     const maxParticles = settings.quality === 'high' ? 250 : settings.quality === 'med' ? 150 : 80;
 
-    // Optimization: Object Pooling
-    // Ensure array size matches maxParticles without creating unnecessary garbage
     if (this.particles.length < maxParticles) {
         while (this.particles.length < maxParticles) {
             const p = {} as any;
@@ -55,24 +53,18 @@ export class ParticlesRenderer implements IVisualizerRenderer {
         this.particles.length = maxParticles;
     }
 
-    // Base speed calculation
     const baseSpeed = (settings.speed * 0.5) * 8; 
     const beatSurge = beat ? 2.0 : 1.0;
-    
-    // Flow speed: Driven by Bass (pulse) and Mids (consistency)
     const speed = baseSpeed * (1 + bass * 3 + mids * 1.5) * beatSurge; 
     const rotSpeed = 0.001 * (settings.speed * 0.5) * (1 + bass * 1.0);
 
     ctx.lineCap = 'round';
 
     for (const p of this.particles) {
-        // Individual particles speed jitter based on treble
         const individualSpeed = speed * p.speedOffset * (1 + treble * 0.2);
         p.z -= individualSpeed;
         p.angle += rotSpeed * p.speedOffset;
 
-        // Reset if passed camera (z <= 10)
-        // Reuse the object 'p' instead of creating a new one
         if (p.z <= 10) {
             this.resetParticle(p, w, h, 1000 + Math.random() * 200, colors.length);
             continue;
@@ -83,31 +75,17 @@ export class ParticlesRenderer implements IVisualizerRenderer {
         const x = centerX + Math.cos(p.angle) * p.radius * scale;
         const y = centerY + Math.sin(p.angle) * p.radius * scale;
 
-        // Draw only if valid previous coordinates exist and didn't just reset
         if (p.prevX !== -9999) {
             const dx = x - p.prevX;
             const dy = y - p.prevY;
             const distSq = dx*dx + dy*dy;
 
-            // Render if moved slightly but not teleported (check distSq < w*w/4 approx)
             if (distSq > 0.25 && distSq < (w * 0.5) ** 2) {
                 const color = colors[p.colorIdx % colors.length];
-                
-                // Visual Scaling: 
-                // Bass expands thickness significantly
-                // Treble adds fine detail sharpness
                 const audioScale = 1 + bass * 2.0 + treble * 0.5;
                 const size = Math.max(0.5, p.size * scale * audioScale);
-                
-                // Alpha Logic:
-                // 1. Distance fade (closer = brighter, but not too blinding close up)
                 const distAlpha = Math.min(1, scale * 1.2);
-                
-                // 2. Treble Shimmer (high frequencies cause random flashing)
-                // Using random threshold creates a "sparkle" texture
                 const trebleFlash = treble * 0.8 * (Math.random() > 0.4 ? 1 : 0);
-                
-                // 3. Mids Glow (adds sustained brightness)
                 const midGlow = mids * 0.3;
 
                 const alpha = Math.min(1, (distAlpha * 0.7) + trebleFlash + midGlow);
@@ -116,7 +94,6 @@ export class ParticlesRenderer implements IVisualizerRenderer {
                     ctx.lineWidth = size;
                     ctx.strokeStyle = color;
                     ctx.globalAlpha = alpha;
-                    
                     ctx.beginPath();
                     ctx.moveTo(p.prevX, p.prevY);
                     ctx.lineTo(x, y);
@@ -131,18 +108,15 @@ export class ParticlesRenderer implements IVisualizerRenderer {
     ctx.globalAlpha = 1.0;
   }
 
-  // Object pooling helper: Resets an existing particle object in place
   private resetParticle(p: any, w: number, h: number, z: number, colorCount: number) {
       const angle = Math.random() * Math.PI * 2;
       const spread = Math.max(w, h);
-      // Spawn radius: keep them somewhat centered but spread out
       const radius = Math.random() * spread * 1.5 + spread * 0.1; 
-
       p.angle = angle;
       p.radius = radius; 
       p.z = z; 
-      p.speedOffset = 0.5 + Math.random(); // Variation in speed
-      p.prevX = -9999; // Sentinel value for "just reset"
+      p.speedOffset = 0.5 + Math.random();
+      p.prevX = -9999;
       p.prevY = -9999;
       p.size = 0.5 + Math.random() * 1.5;
       p.colorIdx = Math.floor(Math.random() * colorCount);

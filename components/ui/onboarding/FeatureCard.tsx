@@ -1,9 +1,8 @@
-
 /**
  * File: components/ui/onboarding/FeatureCard.tsx
- * Version: 1.0.5
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Version: 1.8.23
+ * Author: Aura Flux Team
+ * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
 
 import React from 'react';

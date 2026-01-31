@@ -1,11 +1,8 @@
-
 /**
  * File: core/services/renderers/BarsRenderer.ts
- * Version: 2.0.0
- * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-12 12:00
- * Changes: Stereo Support. Left channel goes left, Right channel goes right.
+ * Version: 1.9.4
+ * Author: Sut
+ * Description: Snappy Spectrum Analyzer with 50% sensitivity optimization for better headroom.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -22,115 +19,86 @@ export class BarsRenderer implements IVisualizerRenderer {
 
   private drawRoundedRect(ctx: RenderContext, x: number, y: number, width: number, height: number, radius: number) {
     if (height < 0.1) return;
-    if (width < 0) width = 0;
-    const maxRadius = Math.min(width, height) / 2;
-    if (radius > maxRadius) radius = maxRadius;
-    
+    const r = Math.min(radius, width / 2, height / 2);
     ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.arcTo(x + width, y, x + width, y + height, radius);
-    ctx.arcTo(x + width, y + height, x, y + height, radius);
-    ctx.arcTo(x, y + height, x, y, radius);
-    ctx.arcTo(x, y, x + width, y, radius);
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + width - r, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+    ctx.lineTo(x + width, y + height - r);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+    ctx.lineTo(x + r, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
     ctx.closePath();
     ctx.fill();
   }
 
-  // Helper to calculate bar properties
-  private getBarProps(
-      data: Uint8Array, 
-      peaks: number[], 
-      index: number, 
-      step: number, 
-      h: number, 
-      dropRate: number, 
-      sensitivity: number
-  ) {
-      const startBin = Math.floor(index * step);
-      const rawValue = getAverage(data, startBin, startBin + step) / 255;
-      const compressedValue = applySoftCompression(rawValue, 0.8) * sensitivity;
-      const targetHeight = Math.min(compressedValue * h * 0.7, h * 0.85);
+  private getBarProps(data: Uint8Array, peaks: number[], index: number, total: number, h: number, dropRate: number, sensitivity: number) {
+      const len = data.length;
+      const t = index / total;
+      // Power-law sampling (0% to 75% of spectrum)
+      const startBin = Math.floor(Math.pow(t, 1.5) * len * 0.75);
+      const endBin = Math.floor(Math.pow((index + 1) / total, 1.5) * len * 0.75);
       
-      if (targetHeight > peaks[index]) {
-          peaks[index] = targetHeight; 
-      } else {
-          peaks[index] = Math.max(0, peaks[index] - dropRate); 
-      }
+      const rawValue = getAverage(data, startBin, Math.max(startBin + 1, endBin)) / 255;
+      
+      // v1.9.4: Reduced overall gain by 50% to prevent over-saturation and allow more headroom
+      const effectiveSensitivity = sensitivity * 0.5;
+      const compressedValue = applySoftCompression(rawValue, 0.7) * effectiveSensitivity;
+      
+      const targetHeight = Math.min(compressedValue * h * 0.65, h * 0.8);
+      
+      if (targetHeight > peaks[index]) peaks[index] = targetHeight; 
+      else peaks[index] = Math.max(0, peaks[index] - dropRate); 
+      
       return { bar: targetHeight, peak: peaks[index] };
   }
 
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean, dataR?: Uint8Array) {
-    const barCount = 24; 
-    const barWidthRatio = 0.8; 
-    const step = Math.max(1, Math.floor(data.length / (barCount * 1.5)));
-    
-    const slotWidth = w / barCount;
-    const barWidth = slotWidth * barWidthRatio;
-    const barSpacing = slotWidth * (1 - barWidthRatio);
+    if (data.length === 0) return;
+    const barCount = 32;
+    const halfCount = 16;
     const centerX = w / 2;
-    
-    // In stereo mode, we split the 24 bars: 12 left, 12 right? 
-    // Or stick to the visual style of expanding from center.
-    // Standard: HalfCount determines visual density.
-    const halfCount = Math.ceil(barCount / 2);
     
     if (this.peaksL.length !== halfCount) this.peaksL = new Array(halfCount).fill(0);
     if (this.peaksR.length !== halfCount) this.peaksR = new Array(halfCount).fill(0);
 
+    // Dynamic drop rate based on height and sensitivity
+    const dropRate = (h * 0.008) * (1.0 + (settings.sensitivity * 0.15)); 
+    const slotWidth = (w * 0.9) / barCount;
+    const barWidth = slotWidth * 0.75;
+    const barSpacing = slotWidth * 0.25;
+
     const c0 = colors[0] || '#ffffff';
     const c1 = colors[1] || c0;
-    const dropRate = (h * 0.00125) / Math.max(0.5, settings.sensitivity * 0.5);
-
-    const gradient = ctx.createLinearGradient(0, h, 0, 0);
-    gradient.addColorStop(0, c1);
-    gradient.addColorStop(0.5, c0);
-    gradient.addColorStop(1, c0);
-
-    const isStereo = !!dataR;
 
     for (let i = 0; i < halfCount; i++) {
         const offset = i * slotWidth + barSpacing / 2;
-        const cornerRadius = barWidth * 0.3;
-        const capHeight = 4;
+        const radius = barWidth * 0.4;
+        const capH = Math.max(2, h * 0.004);
 
-        // LEFT SIDE (Use Left Data or Mono Data)
-        // Note: For stereo center-out, usually low freqs are in center.
-        // So index 0 (Low) is at center.
-        const leftProps = this.getBarProps(data, this.peaksL, i, step, h, dropRate, settings.sensitivity);
-        
-        // RIGHT SIDE (Use Right Data or Mirror Mono)
-        // If mono, we mirror left data. If stereo, use dataR.
-        const rightProps = isStereo 
-            ? this.getBarProps(dataR!, this.peaksR, i, step, h, dropRate, settings.sensitivity)
-            : { bar: leftProps.bar, peak: leftProps.peak }; // Mirror for Mono
+        const left = this.getBarProps(data, this.peaksL, i, halfCount, h, dropRate, settings.sensitivity);
+        const right = dataR ? this.getBarProps(dataR, this.peaksR, i, halfCount, h, dropRate, settings.sensitivity) : left;
 
-        // Draw Left Bar (expanding left from center)
-        const x_left = centerX - offset - barWidth;
-        const y_bar_l = (h - leftProps.bar) / 2;
-        const y_peak_l = (h - leftProps.peak) / 2;
+        const barGrad = ctx.createLinearGradient(0, h * 0.8, 0, h * 0.2);
+        barGrad.addColorStop(0, c0);
+        barGrad.addColorStop(1, c1);
+        ctx.fillStyle = barGrad;
 
-        if (leftProps.bar > 1) {
-            ctx.fillStyle = gradient;
-            this.drawRoundedRect(ctx, x_left, y_bar_l, barWidth, leftProps.bar, cornerRadius);
-        }
-        if (leftProps.peak > 5) {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-            this.drawRoundedRect(ctx, x_left, y_peak_l - capHeight * 1.5, barWidth, capHeight, 2);
-        }
+        // Left Side
+        const xL = centerX - offset - barWidth;
+        this.drawRoundedRect(ctx, xL, (h - left.bar) / 2, barWidth, left.bar, radius);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        this.drawRoundedRect(ctx, xL, (h - left.peak) / 2 - capH * 2, barWidth, capH, 1);
+        ctx.fillStyle = barGrad;
 
-        // Draw Right Bar (expanding right from center)
-        const x_right = centerX + offset;
-        const y_bar_r = (h - rightProps.bar) / 2;
-        const y_peak_r = (h - rightProps.peak) / 2;
-
-        if (rightProps.bar > 1) {
-            ctx.fillStyle = gradient;
-            this.drawRoundedRect(ctx, x_right, y_bar_r, barWidth, rightProps.bar, cornerRadius);
-        }
-        if (rightProps.peak > 5) {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-            this.drawRoundedRect(ctx, x_right, y_peak_r - capHeight * 1.5, barWidth, capHeight, 2);
-        }
+        // Right Side
+        const xR = centerX + offset;
+        this.drawRoundedRect(ctx, xR, (h - right.bar) / 2, barWidth, right.bar, radius);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        this.drawRoundedRect(ctx, xR, (h - right.peak) / 2 - capH * 2, barWidth, capH, 1);
+        ctx.fillStyle = barGrad;
     }
   }
 }

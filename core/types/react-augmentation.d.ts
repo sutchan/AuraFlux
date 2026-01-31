@@ -1,10 +1,8 @@
-
 /**
  * File: core/types/react-augmentation.d.ts
- * Version: 1.8.7
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-16 12:00
+ * Version: 1.8.23
+ * Author: Aura Flux Team
+ * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
 
 import React from 'react';

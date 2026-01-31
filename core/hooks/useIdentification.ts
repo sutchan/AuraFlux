@@ -1,9 +1,7 @@
 /**
  * File: core/hooks/useIdentification.ts
- * Version: 1.7.33
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
@@ -14,12 +12,12 @@ interface UseIdentificationProps {
   language: Language;
   region: Region;
   provider: AIProvider;
-  showLyrics: boolean;
-  apiKey?: string; // Optional custom key
+  isEnabled: boolean;
+  apiKey?: string;
   onSongUpdate?: (song: SongInfo | null) => void;
 }
 
-export const useIdentification = ({ language, region, provider, showLyrics, apiKey, onSongUpdate }: UseIdentificationProps) => {
+export const useIdentification = ({ language, region, provider, isEnabled, apiKey, onSongUpdate }: UseIdentificationProps) => {
   const [isIdentifying, setIsIdentifying] = useState(false);
   const [currentSong, setCurrentSong] = useState<SongInfo | null>(null);
   
@@ -42,8 +40,8 @@ export const useIdentification = ({ language, region, provider, showLyrics, apiK
       'audio/webm;codecs=opus',
       'audio/webm',
       'audio/ogg;codecs=opus',
-      'audio/mp4', // Fallback for iOS Safari
-      'audio/aac'  // Another common fallback
+      'audio/mp4',
+      'audio/aac'
     ];
     for (const type of types) {
       if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(type)) {
@@ -55,21 +53,15 @@ export const useIdentification = ({ language, region, provider, showLyrics, apiK
   }, []);
 
   const performIdentification = useCallback(async (stream: MediaStream) => {
-    // Note: Removed check for !stream.active because AudioContext streams are always "active" even if paused.
-    // If user forces retry, we ignore isIdentifying state (handled via requestId race condition).
-    if (!showLyrics) return;
+    if (!isEnabled || isIdentifying) return;
     
     const requestId = ++latestRequestId.current;
     const mimeType = getSupportedMimeType();
     
-    if (!mimeType) {
-      console.error("[AI] No supported audio format.");
-      return;
-    }
+    if (!mimeType) return;
 
     setIsIdentifying(true);
     
-    // Clear previous song if manual retry
     if (currentSong?.identified === false) {
         setCurrentSong(null);
         if (onSongUpdate) onSongUpdate(null);
@@ -78,64 +70,47 @@ export const useIdentification = ({ language, region, provider, showLyrics, apiK
     try {
       const recorder = new MediaRecorder(stream, { mimeType });
       recorderRef.current = recorder;
-
       const chunks: Blob[] = [];
+
       recorder.ondataavailable = (e) => {
         if (e.data.size > 0) chunks.push(e.data);
       };
 
       recorder.onstop = async () => {
-        if (!isMounted.current || requestId !== latestRequestId.current || chunks.length === 0) {
-          setIsIdentifying(false);
-          return;
-        }
-
-        try {
-          const blob = new Blob(chunks, { type: mimeType });
-          const reader = new FileReader();
-          
-          reader.onloadend = async () => {
-            if (!isMounted.current || requestId !== latestRequestId.current) return;
-            
-            const resultStr = reader.result as string;
-            const base64Data = resultStr.includes(',') ? resultStr.split(',')[1] : '';
-            if (!base64Data) {
-               setIsIdentifying(false);
-               return;
-            }
-
-            const info = await identifySongFromAudio(base64Data, mimeType, language, region, provider, apiKey);
-            
+        if (!isMounted.current || requestId !== latestRequestId.current) return;
+        const blob = new Blob(chunks, { type: mimeType });
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          if (!isMounted.current || requestId !== latestRequestId.current) return;
+          const base64Audio = (reader.result as string).split(',')[1];
+          try {
+            const result = await identifySongFromAudio(base64Audio, mimeType, language, region, provider, apiKey);
             if (isMounted.current && requestId === latestRequestId.current) {
-              if (info) {
-                // Always update song info, even if identified=false, to show "AI Analysis" results
-                setCurrentSong(info);
-                if (onSongUpdate) onSongUpdate(info);
-              }
+              setCurrentSong(result);
+              if (onSongUpdate) onSongUpdate(result);
+            }
+          } catch (error) {
+            console.error("[AI] Identification request failed:", error);
+          } finally {
+            if (isMounted.current && requestId === latestRequestId.current) {
               setIsIdentifying(false);
             }
-          };
-          reader.readAsDataURL(blob);
-        } catch (e) {
-          console.error("[AI] Processing Error:", e);
-          setIsIdentifying(false);
-        }
+          }
+        };
+        reader.readAsDataURL(blob);
       };
 
       recorder.start();
-      
-      // Record 6 seconds for better lyrics capture
       setTimeout(() => {
         if (recorderRef.current && recorderRef.current.state === 'recording') {
           recorderRef.current.stop();
         }
-      }, 6000); 
-
+      }, 4000);
     } catch (e) {
-      console.error("[AI] Recording Error:", e);
+      console.error("[AI] Recorder initialization failed:", e);
       setIsIdentifying(false);
     }
-  }, [showLyrics, language, region, provider, apiKey, getSupportedMimeType, onSongUpdate, currentSong?.identified]);
+  }, [isEnabled, isIdentifying, language, region, provider, apiKey, onSongUpdate, getSupportedMimeType, currentSong]);
 
   return { isIdentifying, currentSong, setCurrentSong, performIdentification };
 };

@@ -1,424 +1,202 @@
-
 /**
  * File: components/controls/panels/PlaybackPanel.tsx
- * Version: 2.3.4
- * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-20 16:00
+ * Version: 1.8.42
+ * Author: Sut
+ * Updated: 2025-03-25 01:10 - Optimized Now Playing UI by moving controls to the right.
  */
 
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { BentoCard } from '../../ui/layout/BentoCard';
 import { useAudioContext, useUI, useVisuals, useAI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
-import { SegmentedControl } from '../../ui/controls/SegmentedControl';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { Slider } from '../../ui/controls/Slider';
 import { LyricsStyle, Position } from '../../../core/types';
-import { AVAILABLE_FONTS, getPositionOptions, getFontOptions } from '../../../core/constants';
+import { getPositionOptions } from '../../../core/constants';
 
 export const PlaybackPanel: React.FC = () => {
   const { 
-    playlist, currentIndex, playTrackByIndex, removeFromPlaylist, clearPlaylist, 
-    importFiles, playbackMode, setPlaybackMode, playNext, playPrev, isPlaying, togglePlayback,
+    playlist, currentIndex, playTrackByIndex, removeFromPlaylist, 
+    importFiles, playNext, playPrev, isPlaying, togglePlayback,
     currentTime, duration, seekFile, currentSong
   } = useAudioContext();
   const { t } = useUI();
-  const { colorTheme, settings, setSettings } = useVisuals();
-  const { showLyrics, setShowLyrics, resetAiSettings } = useAI();
+  const { settings, setSettings } = useVisuals();
+  const { showLyrics, setShowLyrics } = useAI();
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const activeTrackRef = useRef<HTMLDivElement>(null);
 
-  // Theme color for active elements
-  const themeColor = colorTheme?.[0] || '#3b82f6';
-  const hints = t?.hints || {};
   const lyricsStyles = t?.lyricsStyles || {};
-  const isAdvanced = settings.uiMode === 'advanced';
   const positionOptions = useMemo(() => getPositionOptions(t), [t]);
-  const localizedFonts = useMemo(() => getFontOptions(t), [t]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-        importFiles(e.target.files);
-    }
-    e.target.value = ''; // Reset
+    if (e.target.files && e.target.files.length > 0) importFiles(e.target.files);
+    e.target.value = ''; 
   };
 
-  const formatDuration = (seconds: number) => {
-    if (isNaN(seconds) || seconds === Infinity) return '--:--';
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, '0')}`;
-  };
+  const fmt = (s: number) => isNaN(s) || s === Infinity ? '--:--' : `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
 
-  // Scroll to active track when it changes
   useEffect(() => {
-    if (activeTrackRef.current) {
-        activeTrackRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+    if (activeTrackRef.current) activeTrackRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [currentIndex]);
 
-  const currentFont = settings.lyricsFont || 'Inter, sans-serif';
-  const isPresetFont = AVAILABLE_FONTS.some(f => f.value === currentFont);
-  const selectValue = isPresetFont ? currentFont : 'custom';
-
-  // Playlist Header Actions
-  const PlaylistActions = (
-      <div className="flex items-center gap-1.5">
-          <TooltipArea text={t?.common?.dropFiles || "Add Files"}>
-              <button 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-blue-300 transition-all border border-white/5 hover:border-blue-500/30 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5"
-              >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                  <span>{t?.player?.add || "ADD"}</span>
-              </button>
-          </TooltipArea>
-          <TooltipArea text={t?.common?.clearAll || "Clear Queue"}>
-              <button 
-                  onClick={() => { 
-                      // Robust confirm check with fallback string
-                      if (playlist.length > 0 && window.confirm(t?.common?.confirmClear || "Clear Queue?")) {
-                          clearPlaylist(); 
-                      }
-                  }}
-                  disabled={playlist.length === 0}
-                  className={`p-1.5 rounded-lg border border-transparent transition-colors ${playlist.length === 0 ? 'opacity-30 cursor-not-allowed' : 'bg-white/5 hover:bg-white/10 text-white/60 hover:text-red-400 hover:border-red-500/20'}`}
-              >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-              </button>
-          </TooltipArea>
-      </div>
-  );
+  const progressPercent = (currentTime / (duration || 1)) * 100;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-full">
-      {/* Hidden Input for Global Access */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="audio/*" multiple className="hidden" />
 
-      {/* Card 1: Now Playing & Controls */}
-      <BentoCard title={t?.player?.nowPlaying || "Now Playing"} className="flex flex-col h-full">
-        <div className="flex flex-col h-full gap-3 relative">
-            {/* Playback Status / Art */}
+      {/* Column 1: Player & Info Settings */}
+      <BentoCard title={t?.player?.nowPlaying || "Playback & Display"}>
+        <div className="space-y-6">
             {playlist.length > 0 ? (
-                <div className="flex flex-col gap-3 p-4 bg-gradient-to-b from-white/[0.03] to-transparent rounded-2xl border border-white/5 relative overflow-hidden flex-1 justify-center group">
-                    {/* Art Background Blur */}
+                <div className="group/player relative flex flex-col gap-5 p-4 bg-gradient-to-br from-white/[0.04] to-transparent rounded-2xl border border-white/5 overflow-hidden transition-all hover:border-white/10 shadow-2xl">
+                    {/* Immersive Background Glow */}
                     {currentSong?.albumArtUrl && (
-                        <div className="absolute inset-0 opacity-30 pointer-events-none transition-all duration-1000 ease-in-out" style={{ backgroundImage: `url(${currentSong.albumArtUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(30px) saturate(1.2)' }} />
+                        <div className="absolute inset-0 pointer-events-none opacity-20 blur-3xl scale-150 transition-opacity duration-1000">
+                             <img src={currentSong.albumArtUrl} className="w-full h-full object-cover" alt="" />
+                        </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                     
-                    {/* Metadata - Compact Row Layout */}
-                    <div className="relative z-10 flex items-center gap-4 mb-2 w-full">
-                        <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-white/10 relative bg-white/5">
+                    <div className="flex items-center gap-4 relative z-10">
+                        {/* Left: Cover Art */}
+                        <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-white/10 bg-black/40 shadow-lg transform transition-transform group-hover/player:scale-105 duration-500">
                              {currentSong?.albumArtUrl ? (
-                                 <img src={currentSong.albumArtUrl} alt="Art" className="w-full h-full object-cover" />
+                                 <img src={currentSong.albumArtUrl} className="w-full h-full object-cover" alt="Album Art" />
                              ) : (
-                                 <div className="w-full h-full flex items-center justify-center">
-                                     <svg className="w-8 h-8 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                                 <div className="w-full h-full flex items-center justify-center text-white/5">
+                                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" /></svg>
                                  </div>
                              )}
                         </div>
-                        <div className="flex flex-col min-w-0 flex-1 text-left justify-center h-20">
-                            <div className="text-sm font-black text-white truncate w-full drop-shadow-md tracking-tight leading-tight">{currentSong?.title || t?.common?.unknownTrack}</div>
-                            <div className="text-xs text-blue-200/80 truncate w-full font-bold tracking-wide mt-1">{currentSong?.artist || t?.common?.unknownArtist}</div>
+
+                        {/* Middle: Metadata */}
+                        <div className="flex-1 min-w-0 flex flex-col justify-center">
+                            <div className="text-[12px] font-black text-white truncate uppercase tracking-tight leading-tight">
+                                {currentSong?.title}
+                            </div>
+                            <div className="text-[9px] text-blue-400 truncate font-black uppercase tracking-[0.15em] mt-1 opacity-70">
+                                {currentSong?.artist}
+                            </div>
+                        </div>
+
+                        {/* Right: Actions/Controls */}
+                        <div className="flex items-center gap-2 shrink-0 bg-white/5 p-1.5 rounded-2xl border border-white/5">
+                            <button onClick={playPrev} className="p-2 text-white/20 hover:text-white transition-all hover:scale-110 active:scale-90">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"/></svg>
+                            </button>
+                            <button onClick={togglePlayback} className="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center shadow-lg transform transition-all hover:scale-110 active:scale-95">
+                                {isPlaying ? (
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                ) : (
+                                    <svg className="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                )}
+                            </button>
+                            <button onClick={playNext} className="p-2 text-white/20 hover:text-white transition-all hover:scale-110 active:scale-90">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z"/></svg>
+                            </button>
                         </div>
                     </div>
 
-                    {/* Progress Bar */}
-                    <div className="space-y-1.5 relative z-10 w-full px-1">
-                        <div className="relative h-1.5 bg-white/10 rounded-full overflow-hidden group cursor-pointer">
+                    {/* Progressive SeekBar */}
+                    <div className="space-y-2 relative z-10 px-1">
+                        <div className="relative h-1 bg-white/5 rounded-full overflow-hidden cursor-pointer group/seek">
                             <div 
-                                className="absolute top-0 left-0 h-full transition-all duration-100 ease-linear rounded-full" 
-                                style={{ 
-                                    width: `${(currentTime / (duration || 1)) * 100}%`,
-                                    backgroundColor: themeColor,
-                                    boxShadow: `0 0 15px ${themeColor}`
-                                }} 
+                                className="absolute h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-[width] duration-300 ease-linear" 
+                                style={{ width: `${progressPercent}%` }} 
                             />
-                            <input
-                                type="range"
-                                min={0}
-                                max={duration || 1}
-                                step={0.1}
-                                value={currentTime}
-                                onChange={(e) => seekFile(parseFloat(e.target.value))}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            <input 
+                                type="range" 
+                                min={0} max={duration || 1} step={0.1} 
+                                value={currentTime} 
+                                onChange={(e) => seekFile(parseFloat(e.target.value))} 
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" 
                             />
                         </div>
-                        <div className="flex justify-between text-[9px] font-mono text-white/40 font-medium">
-                            <span>{formatDuration(currentTime)}</span>
-                            <span>{formatDuration(duration)}</span>
+                        <div className="flex justify-between text-[8px] font-mono text-white/30 uppercase tracking-widest">
+                            <span>{fmt(currentTime)}</span>
+                            <span>{fmt(duration)}</span>
                         </div>
-                    </div>
-
-                    {/* Main Controls */}
-                    <div className="flex items-center justify-center gap-5 relative z-10 mt-1">
-                        <button onClick={playPrev} className="p-2.5 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-all hover:scale-105 active:scale-95">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" /></svg>
-                        </button>
-                        <button 
-                            onClick={togglePlayback} 
-                            className="w-12 h-12 rounded-full flex items-center justify-center transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 border border-white/20 hover:border-white/50 bg-white/10 backdrop-blur-md"
-                        >
-                            {isPlaying ? <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> : <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>}
-                        </button>
-                        <button onClick={playNext} className="p-2.5 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-all hover:scale-105 active:scale-95">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z" /></svg>
-                        </button>
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center flex-1 bg-white/[0.02] rounded-xl border border-white/5 border-dashed min-h-[200px] text-white/20 animate-pulse">
-                    <svg className="w-8 h-8 mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
-                    <span className="text-[10px] font-bold uppercase tracking-widest">{t?.player?.noActiveTrack || t?.common?.empty || "No Active Track"}</span>
+                <div className="h-24 rounded-2xl border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-white/10 gap-2 hover:border-white/10 transition-colors">
+                    <svg className="w-6 h-6 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z" />
+                    </svg>
+                    <span className="uppercase text-[9px] font-black tracking-[0.2em]">{t?.player?.noActiveTrack}</span>
                 </div>
             )}
 
-            {/* Playback Mode */}
-            <div className="mt-auto pt-2 border-t border-white/5">
-                <SegmentedControl 
-                    label={t?.player?.mode || "Playback Mode"}
-                    value={playbackMode}
-                    onChange={(val) => setPlaybackMode(val as any)}
-                    options={[
-                        { 
-                            value: 'repeat-all', 
-                            label: (<div className="flex justify-center py-0.5" title={t?.player?.repeatAll}><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg></div>) 
-                        },
-                        { 
-                            value: 'repeat-one', 
-                            label: (<div className="flex justify-center py-0.5" title={t?.player?.repeatOne}><div className="relative"><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg><span className="absolute text-[7px] font-black right-[-3px] bottom-[-2px] bg-black px-[2px] rounded-sm leading-none border border-white/20">1</span></div></div>) 
-                        }, 
-                        { 
-                            value: 'shuffle', 
-                            label: (<div className="flex justify-center py-0.5" title={t?.player?.shuffle}><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" /></svg></div>) 
-                        }
-                    ]}
-                />
+            <div className="grid grid-cols-2 gap-4">
+                <SettingsToggle label={t?.showLyrics || "Lyrics"} value={showLyrics} onChange={() => setShowLyrics(!showLyrics)} activeColor="green" />
+                <SettingsToggle label={t?.player?.info || "Badge"} value={settings.showSongInfo} onChange={() => setSettings(p => ({ ...p, showSongInfo: !p.showSongInfo }))} activeColor="blue" />
+            </div>
+
+            <div className="pt-4 border-t border-white/5 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                    <CustomSelect label={t?.lyricsStyle} value={settings.lyricsStyle || LyricsStyle.KARAOKE} options={Object.values(LyricsStyle).map(s => ({ value: s, label: lyricsStyles[s] || s }))} onChange={(v) => setSettings({...settings, lyricsStyle: v as LyricsStyle})} />
+                    <CustomSelect label={t?.lyricsPosition} value={settings.lyricsPosition} options={positionOptions} onChange={(v) => setSettings({ ...settings, lyricsPosition: v as Position })} />
+                </div>
+                <div className="bg-white/[0.03] rounded-2xl p-3 border border-white/5 space-y-3">
+                    <div className="grid grid-cols-2 gap-4">
+                        <SettingsToggle label={t?.player?.bg || "Cover BG"} value={!!settings.albumArtBackground} onChange={() => setSettings(p => ({ ...p, albumArtBackground: !p.albumArtBackground }))} variant="clean" />
+                        <SettingsToggle label={t?.player?.cover || "Overlay"} value={settings.showAlbumArtOverlay} onChange={() => setSettings(p => ({ ...p, showAlbumArtOverlay: !p.showAlbumArtOverlay }))} variant="clean" />
+                    </div>
+                    {settings.albumArtBackground && <Slider label={t?.player?.blur} value={settings.albumArtBlur ?? 20} min={0} max={50} step={2} onChange={(v) => setSettings({...settings, albumArtBlur: v})} />}
+                </div>
             </div>
         </div>
       </BentoCard>
 
-      {/* Card 2: Library */}
+      {/* Column 2: Track Library */}
       <BentoCard 
-        title={`${t?.tabs?.playback || "Library"} (${playlist.length})`} 
-        className="h-full" // Removed md:col-span-2
-        action={PlaylistActions}
+        title={t?.tabs?.playback || "Media Library"} 
+        action={<button onClick={() => fileInputRef.current?.click()} className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-lg">IMPORT</button>}
       >
-        <div className="flex flex-col h-full">
+        <div className="h-full flex flex-col">
             {playlist.length === 0 ? (
-                <div 
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex flex-col items-center justify-center flex-1 h-full min-h-[300px] text-white/30 gap-6 border-2 border-dashed border-white/10 rounded-xl m-1 hover:bg-white/[0.02] hover:border-blue-500/30 hover:text-blue-200 transition-all cursor-pointer group animate-fade-in-up"
-                >
-                    <div className="relative">
-                        <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full group-hover:bg-blue-500/30 transition-all duration-500" />
-                        <div className="p-8 bg-white/5 rounded-full group-hover:scale-110 transition-transform duration-300 shadow-2xl relative z-10 border border-white/5">
-                            <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                        </div>
-                    </div>
-                    <div className="text-center space-y-2">
-                        <p className="text-lg font-black uppercase tracking-widest group-hover:text-white transition-colors">{t?.common?.dropFiles || "Click / Drop Audio Files"}</p>
-                        <div className="flex items-center gap-2 justify-center opacity-60 text-xs font-medium">
-                            <span className="bg-white/10 px-2 py-0.5 rounded">MP3</span>
-                            <span className="bg-white/10 px-2 py-0.5 rounded">WAV</span>
-                            <span className="bg-white/10 px-2 py-0.5 rounded">FLAC</span>
-                        </div>
-                        <p className="text-[10px] opacity-40 font-mono pt-2">{t?.player?.supportInfo || "Supports ID3 Metadata & Cover Art"}</p>
-                    </div>
+                <div onClick={() => fileInputRef.current?.click()} className="flex-1 min-h-[300px] rounded-2xl border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-white/10 gap-3 hover:bg-white/[0.02] transition-all cursor-pointer">
+                    <svg className="w-10 h-10 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m-4 4v12" /></svg>
+                    <p className="text-[10px] font-black uppercase tracking-widest">{t?.common?.dropFiles}</p>
                 </div>
             ) : (
-                <div className="space-y-1 pb-2 overflow-y-auto custom-scrollbar pr-1 max-h-[340px]">
-                    {playlist.map((track, idx) => {
-                        const isActive = idx === currentIndex;
-                        return (
-                            <div 
-                                key={track.id || idx}
-                                ref={isActive ? activeTrackRef : null}
-                                onClick={() => playTrackByIndex(idx)}
-                                className={`group flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all border relative overflow-hidden ${
-                                    isActive 
-                                    ? 'bg-blue-600/10 border-blue-500/20 shadow-[inset_0_0_20px_rgba(59,130,246,0.05)]' 
-                                    : 'bg-transparent hover:bg-white/[0.04] border-transparent hover:border-white/5'
-                                }`}
-                            >
-                                {/* Active Indicator Bar */}
-                                {isActive && <div className="absolute left-0 top-2 bottom-2 w-0.5 bg-blue-500 rounded-r-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />}
-
-                                <div className="w-8 text-center shrink-0 flex items-center justify-center pl-1">
-                                    {isActive ? (
-                                        isPlaying ? (
-                                            <div className="flex gap-0.5 items-end h-3">
-                                                <div className="w-0.5 bg-blue-400 animate-[bounce_1s_infinite] h-1.5"></div>
-                                                <div className="w-0.5 bg-blue-400 animate-[bounce_1.2s_infinite] h-3"></div>
-                                                <div className="w-0.5 bg-blue-400 animate-[bounce_0.8s_infinite] h-2"></div>
-                                            </div>
-                                        ) : (
-                                            <div className="w-1.5 h-1.5 bg-blue-400 rounded-full shadow-[0_0_5px_rgba(96,165,250,0.8)]"></div>
-                                        )
-                                    ) : (
-                                        <span className="text-[10px] font-mono text-white/20 group-hover:text-white/50 transition-colors">{String(idx + 1).padStart(2, '0')}</span>
-                                    )}
-                                </div>
-                                
-                                {/* Album Art Thumbnail (if available) */}
-                                {track.albumArtUrl ? (
-                                    <div className="w-9 h-9 rounded bg-black/20 overflow-hidden border border-white/5 shrink-0 relative group/art">
-                                        <img src={track.albumArtUrl} alt="Art" className="w-full h-full object-cover opacity-80 group-hover/art:opacity-100 transition-opacity" loading="lazy" />
+                <div className="space-y-1 overflow-y-auto custom-scrollbar lg:max-h-[360px] pr-1">
+                    {playlist.map((track, idx) => (
+                        <div 
+                            key={track.id} 
+                            ref={idx === currentIndex ? activeTrackRef : null}
+                            onClick={() => playTrackByIndex(idx)} 
+                            className={`group flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-all border ${idx === currentIndex ? 'bg-blue-600/10 border-blue-500/30' : 'bg-transparent border-transparent hover:bg-white/[0.03]'}`}
+                        >
+                            <div className="w-6 text-[9px] font-mono text-white/30 text-center">
+                                {idx === currentIndex ? (
+                                    <div className="flex gap-0.5 justify-center items-end h-2">
+                                        <div className="w-0.5 bg-blue-400 animate-[bounce_0.6s_infinite] h-full" />
+                                        <div className="w-0.5 bg-blue-400 animate-[bounce_0.8s_infinite] h-2/3" />
+                                        <div className="w-0.5 bg-blue-400 animate-[bounce_0.4s_infinite] h-1/2" />
                                     </div>
                                 ) : (
-                                    <div className="w-9 h-9 rounded bg-white/5 flex items-center justify-center shrink-0">
-                                        <svg className="w-4 h-4 text-white/10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
-                                    </div>
+                                    (idx + 1).toString().padStart(2, '0')
                                 )}
-
-                                <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                    <div className={`text-xs font-bold truncate transition-colors ${isActive ? 'text-blue-200' : 'text-white/80 group-hover:text-white'}`}>
-                                        {track.title}
-                                    </div>
-                                    <div className="flex items-center gap-2 mt-0.5">
-                                        <span className={`text-[10px] truncate ${isActive ? 'text-blue-300/60' : 'text-white/40'}`}>{track.artist}</span>
-                                    </div>
-                                </div>
-
-                                <div className="text-[10px] font-mono text-white/30 hidden sm:block w-12 text-right">
-                                    {track.duration ? formatDuration(track.duration) : ''}
-                                </div>
-
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); removeFromPlaylist(idx); }}
-                                    className="p-2 opacity-0 group-hover:opacity-100 hover:bg-white/10 rounded-lg text-white/20 hover:text-red-400 transition-all focus:opacity-100 transform hover:scale-110"
-                                    title={t?.config?.delete}
-                                    aria-label="Remove"
-                                >
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" /></svg>
-                                </button>
                             </div>
-                        );
-                    })}
-                </div>
-            )}
-        </div>
-      </BentoCard>
-
-      {/* Card 3: AI Info & Lyrics */}
-      <BentoCard 
-        title={t?.lyrics || "AI Info & Lyrics"}
-        action={
-            <TooltipArea text={hints?.resetAi}>
-              <button onClick={resetAiSettings} className="p-1 text-white/30 hover:text-white transition-colors">
-                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-              </button>
-            </TooltipArea>
-        }
-      >
-        <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-2">
-                <SettingsToggle 
-                    label={t?.showLyrics || "Lyrics Overlay"} 
-                    value={showLyrics} 
-                    onChange={() => setShowLyrics(!showLyrics)} 
-                    activeColor="green" 
-                    hintText={`${t?.showLyrics || "Show Lyrics"} [L]`}
-                />
-                <SettingsToggle 
-                    label={t?.player?.info || "Song Info"}
-                    value={settings.showSongInfo}
-                    onChange={() => setSettings(prev => ({ ...prev, showSongInfo: !prev.showSongInfo }))}
-                    activeColor="blue"
-                    hintText={t?.player?.info || "Toggle Song Info Card"}
-                />
-            </div>
-
-            {/* Style & Position Row */}
-            <div className="grid grid-cols-2 gap-2">
-                <CustomSelect 
-                    label={`${t?.lyricsStyle || "Style"}`} 
-                    value={settings.lyricsStyle || LyricsStyle.KARAOKE} 
-                    hintText={hints?.lyricsStyle} 
-                    options={Object.values(LyricsStyle).map(s => ({ value: s, label: lyricsStyles[s] || s }))} 
-                    onChange={(val) => setSettings({...settings, lyricsStyle: val as LyricsStyle})} 
-                />
-                <CustomSelect
-                    label={t?.lyricsPosition || "Position"}
-                    value={settings.lyricsPosition}
-                    options={positionOptions}
-                    onChange={(val) => setSettings({ ...settings, lyricsPosition: val as Position })}
-                    hintText={hints?.lyricsPosition}
-                />
-            </div>
-
-            {/* Background Settings */}
-            <div className="bg-white/[0.03] rounded-xl p-2 border border-white/5 space-y-3">
-                <div className="grid grid-cols-2 gap-2">
-                    <SettingsToggle 
-                        label={t?.player?.bg || "BG"} 
-                        value={!!settings.albumArtBackground} 
-                        onChange={() => setSettings(prev => ({ ...prev, albumArtBackground: !prev.albumArtBackground }))} 
-                        variant="clean"
-                        hintText={hints?.albumArtBackground}
-                    />
-                    <SettingsToggle 
-                        label={t?.player?.cover || "Cover"} 
-                        value={settings.showAlbumArtOverlay} 
-                        onChange={() => setSettings(prev => ({ ...prev, showAlbumArtOverlay: !prev.showAlbumArtOverlay }))} 
-                        variant="clean"
-                        hintText={hints?.overlayCover}
-                    />
-                </div>
-                
-                {/* Blur Slider - Only if BG is enabled */}
-                {settings.albumArtBackground && (
-                     <div className="px-1 pb-1 animate-fade-in-up">
-                        <Slider 
-                            label={t?.player?.blur || "Blur"}
-                            value={settings.albumArtBlur ?? 20} 
-                            min={0} max={50} step={2} 
-                            onChange={(v) => setSettings({...settings, albumArtBlur: v})} 
-                        />
-                     </div>
-                )}
-            </div>
-            
-            {isAdvanced && (
-                <div className="space-y-3 animate-fade-in-up">
-                    <div>
-                        <CustomSelect 
-                            label={t?.lyricsFont || "Lyrics Font"} 
-                            value={selectValue} 
-                            options={localizedFonts} 
-                            hintText={hints?.lyricsFont}
-                            onChange={(val) => {
-                                if (val === 'custom') {
-                                    setSettings({...settings, lyricsFont: 'Arial'});
-                                } else {
-                                    setSettings({...settings, lyricsFont: val});
-                                }
-                            }} 
-                        />
-                        {selectValue === 'custom' && (
-                            <div className="mt-2 animate-fade-in-up">
-                                <input 
-                                    type="text" 
-                                    value={currentFont}
-                                    onChange={(e) => setSettings({...settings, lyricsFont: e.target.value})}
-                                    placeholder={hints?.enterLocalFont || "e.g. Arial"}
-                                    className="w-full bg-white/[0.04] rounded-xl px-3 py-2 text-xs font-medium text-white focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors"
-                                />
+                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-black/40 shrink-0 border border-white/5">
+                                {track.albumArtUrl && <img src={track.albumArtUrl} className="w-full h-full object-cover" alt="" />}
                             </div>
-                        )}
-                    </div>
-
-                    <Slider 
-                        label={t?.lyricsFontSize || "Font Size"} 
-                        hintText={hints?.lyricsFontSize}
-                        value={settings.lyricsFontSize ?? 4} 
-                        min={1} max={8} step={0.5} 
-                        onChange={(v: number) => setSettings({...settings, lyricsFontSize: v})} 
-                    />
+                            <div className="flex-1 min-w-0">
+                                <div className={`text-[10px] font-black truncate uppercase tracking-wide ${idx === currentIndex ? 'text-white' : 'text-white/60'}`}>{track.title}</div>
+                                <div className="text-[8px] text-white/30 truncate font-bold uppercase tracking-widest mt-0.5">{track.artist}</div>
+                            </div>
+                            <button 
+                                onClick={(e) => { e.stopPropagation(); removeFromPlaylist(idx); }} 
+                                className="p-2 opacity-0 group-hover:opacity-100 hover:text-red-400 transition-all transform hover:scale-110"
+                            >
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
+                    ))}
                 </div>
             )}
         </div>

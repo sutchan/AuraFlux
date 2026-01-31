@@ -1,7 +1,7 @@
 
 # Aura Flux 🎵👁️
 
-### AI-Powered 3D Music Visualizer & Synesthesia Engine (v1.8.21)
+### AI-Powered 3D Music Visualizer & Synesthesia Engine (v1.8.50)
 
 [中文文档](README_ZH.md) | [Live Demo](https://aura.tanox.net/) | [Changelog](CHANGELOG.md)
 
@@ -43,18 +43,29 @@ Unlock the potential of generative audio-reactive art in your daily life and cre
 *   **Music Videos:** Generate instant, high-quality visualizations for your music tracks using the **Recording Studio**.
 *   **Podcast Visualizer:** Create engaging video snippets for audio-only content.
 
-### 🎛️ Live Performance & VJing
+### 🎮 Gaming & Desktop Aesthetics
+*   **Ultimate Setup Background:** Set your secondary monitor to Aura Flux for a reactive "Now Playing" dashboard that matches your RGB peripherals.
+*   **Gaming Atmosphere:** Sync the visual energy to your game's soundtrack for a more intense, immersive experience.
+
+### 🛜 Live Performance & VJing
 *   **Browser-Based VJ Tool:** No heavy software installation required. Connect a projector and press `F` for fullscreen.
 *   **Concerts & Clubs:** Use the "Kinetic Wall" or "Lasers" modes to drive massive LED walls with real-time audio reactivity.
 
-### 🏠 Ambient Computing & Lifestyle
-*   **Living Room Art:** Cast to your TV to turn your home into an immersive audiovisual lounge.
-*   **Focus & Flow:** Switch to "Deep Nebula" or "Fluid Curves" for a calming, hypnotic backdrop ideal for coding, reading, or meditation.
-*   **Digital Decor:** Run on a wall-mounted display or tablet as an always-on digital art piece.
+### 🏠 Ambient Computing & Smart Home
+*   **Living Room Art:** Cast to your 4K TV to turn your home into an immersive audiovisual lounge during parties or dinners.
+*   **Digital Decor:** Run on a wall-mounted tablet or smart display as an always-on generative art piece that reacts to ambient conversation and music.
+
+### 🧘 Wellness & Mindfulness
+*   **Focus & Flow:** Switch to "Deep Nebula" or "Fluid Curves" for a calming, hypnotic backdrop ideal for coding, reading, or deep work.
+*   **Meditation & Yoga:** Use low-energy visual modes as a focus point for mindfulness exercises, sync with ambient binaural beats.
+
+### 🏢 Retail & Commercial Spaces
+*   **Interactive Signage:** Enhance the atmosphere in retail stores, bars, or cafes with visuals that pulse to the background playlist.
+*   **Exhibition Installations:** Use as a low-cost, high-impact interactive installation for art galleries or trade show booths.
 
 ### 📚 Education & Tech
-*   **Physics Visualization:** Demonstrate sound waves, frequency spectrums, and fluid dynamics interactively.
-*   **Tech Demos:** Showcase the power of WebGL and Web Workers on modern devices.
+*   **Physics Visualization:** Demonstrate sound waves, frequency spectrums, and fluid dynamics interactively for students.
+*   **Tech Showcases:** Highlight the power of modern WebGL, Web Workers, and AI integration in a cross-platform web environment.
 
 ---
 

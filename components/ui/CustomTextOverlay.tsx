@@ -1,11 +1,8 @@
 
 /**
  * File: components/ui/CustomTextOverlay.tsx
- * Version: 1.2.2
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-19 20:00
- * Changes: Robust error checking with isError flag.
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import React, { useRef, useEffect, useState } from 'react';

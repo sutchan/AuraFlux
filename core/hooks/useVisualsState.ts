@@ -1,46 +1,88 @@
-
 /**
  * File: core/hooks/useVisualsState.ts
- * Version: 1.8.6
+ * Version: 2.1.0
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 22:05
+ * Updated: 2025-03-25 22:15 - Added AI Background defaults.
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocalStorage } from './useLocalStorage';
-import { VisualizerMode, VisualizerSettings, SmartPreset } from '../types';
+import { VisualizerMode, VisualizerSettings, SmartPreset, LyricsStyle } from '../types';
 import { COLOR_THEMES, VISUALIZER_PRESETS } from '../constants';
 
 const DEFAULT_MODE = VisualizerMode.PLASMA;
 const DEFAULT_THEME_INDEX = 1;
 
-// Regex for validating Hex colors
-const HEX_COLOR_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+export const DEFAULT_SETTINGS: VisualizerSettings = {
+  uiMode: 'advanced',
+  appTheme: 'dark',
+  sensitivity: 1.5,
+  speed: 1.0,
+  glow: true,
+  trails: true,
+  autoRotate: false,
+  rotateInterval: 30,
+  includedModes: Object.values(VisualizerMode),
+  cycleColors: false,
+  colorInterval: 10,
+  hideCursor: false,
+  smoothing: 0.8,
+  fftSize: 512,
+  quality: 'med',
+  monitor: false,
+  wakeLock: false,
+  showAlbumArtOverlay: true,
+  showSongInfo: true,
+  aiBgUrl: '',
+  showAiBg: false,
+  aiBgOpacity: 0.5,
+  aiBgBlur: 10,
+  customText: 'AURA',
+  showCustomText: false,
+  textSource: 'AUTO',
+  textPulse: true,
+  customTextRotation: 0,
+  customTextSize: 12,
+  customTextFont: 'Inter, sans-serif',
+  customTextOpacity: 1.0,
+  customTextColor: '#ffffff',
+  customTextPosition: 'mc',
+  customTextCycleColor: false,
+  customTextCycleInterval: 5,
+  customText3D: false,
+  lyricsPosition: 'mc',
+  recognitionProvider: 'GEMINI',
+  lyricsStyle: LyricsStyle.KARAOKE,
+  lyricsFont: 'Inter, sans-serif',
+  lyricsFontSize: 4,
+  region: 'global',
+  showFps: false,
+  showTooltips: true,
+  doubleClickFullscreen: true,
+  autoHideUi: true,
+  mirrorDisplay: false
+};
 
-// Modes that should not have Glow enabled during random/auto-cycle or manual switch
 const NO_GLOW_MODES = [
-    VisualizerMode.BARS,          // 频谱仪
-    VisualizerMode.TUNNEL,        // 时空隧道
-    VisualizerMode.RINGS,         // 声波共振
-    VisualizerMode.FLUID_CURVES,  // 极光
-    VisualizerMode.WAVEFORM,      // 光谱丝带
-    VisualizerMode.SILK_WAVE      // 丝绸波浪 (New)
+    VisualizerMode.BARS,
+    VisualizerMode.TUNNEL,
+    VisualizerMode.RINGS,
+    VisualizerMode.FLUID_CURVES,
+    VisualizerMode.WAVEFORM,
+    VisualizerMode.SILK_WAVE
 ];
 
-// Modes that should not have Trails enabled during random/auto-cycle or manual switch
 const NO_TRAILS_MODES = [
-    VisualizerMode.BARS,          // 频谱仪
-    VisualizerMode.WAVEFORM,      // 光谱丝带
-    VisualizerMode.NEURAL_FLOW,   // 突触风暴
-    VisualizerMode.FLUID_CURVES,  // 极光
-    VisualizerMode.SILK_WAVE      // 丝绸波浪 (New)
+    VisualizerMode.BARS,
+    VisualizerMode.WAVEFORM,
+    VisualizerMode.NEURAL_FLOW,
+    VisualizerMode.FLUID_CURVES,
+    VisualizerMode.SILK_WAVE
 ];
 
 export const useVisualsState = (hasStarted: boolean, initialSettings: VisualizerSettings) => {
   const { getStorage, setStorage } = useLocalStorage();
 
-  // Robustness: Validate enum from storage. If invalid (old version data), fallback to default.
   const [mode, setModeInternal] = useState<VisualizerMode>(() => {
     const saved = getStorage('mode', DEFAULT_MODE);
     return Object.values(VisualizerMode).includes(saved as VisualizerMode) ? (saved as VisualizerMode) : DEFAULT_MODE;
@@ -48,36 +90,24 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
 
   const [colorTheme, setColorThemeInternal] = useState<string[]>(() => {
     const saved = getStorage('theme', COLOR_THEMES[DEFAULT_THEME_INDEX]);
-    
-    // DEFENSE: Deep validation of color theme array
-    if (Array.isArray(saved) && saved.length > 0) {
-        const isValid = saved.every(c => typeof c === 'string' && HEX_COLOR_REGEX.test(c));
-        if (isValid) return saved;
-    }
-    
+    if (Array.isArray(saved) && saved.length > 0) return saved;
     return COLOR_THEMES[DEFAULT_THEME_INDEX];
   });
 
-  // --- Robustness: Deep settings validation & merge ---
   const [settings, setSettings] = useState<VisualizerSettings>(() => {
     const saved = getStorage<Partial<VisualizerSettings>>('settings', {});
-    // Merge saved with initial to ensure no fields are missing due to version changes
-    return { ...initialSettings, ...saved };
+    return { ...DEFAULT_SETTINGS, ...initialSettings, ...saved };
   });
 
   const [activePreset, setActivePreset] = useState<string>('');
-  
   const rotateIntervalRef = useRef<number | null>(null);
   const colorIntervalRef = useRef<number | null>(null);
 
   const setMode = useCallback((value: React.SetStateAction<VisualizerMode>) => {
     setModeInternal(prev => {
-        const nextMode = typeof value === 'function' ? value(prev) : value;
-        
-        // Enforce constraints immediately on manual switch
+        const nextMode = typeof value === 'function' ? (value as Function)(prev) : value;
         const forceNoGlow = NO_GLOW_MODES.includes(nextMode);
         const forceNoTrails = NO_TRAILS_MODES.includes(nextMode);
-
         if (forceNoGlow || forceNoTrails) {
             setSettings(s => ({
                 ...s,
@@ -102,21 +132,11 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
           const availableModes = (settings.includedModes && settings.includedModes.length > 0) 
             ? settings.includedModes 
             : Object.keys(VISUALIZER_PRESETS) as VisualizerMode[];
-            
           const currentIndex = availableModes.indexOf(currentMode);
-          let nextMode: VisualizerMode;
-          
-          if (currentIndex === -1) {
-            nextMode = availableModes[0];
-          } else {
-            const nextIndex = (currentIndex + 1) % availableModes.length;
-            nextMode = availableModes[nextIndex];
-          }
-
-          // Enforce constraints for specific modes during auto-rotation
+          const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % availableModes.length;
+          const nextMode = availableModes[nextIndex];
           const forceNoGlow = NO_GLOW_MODES.includes(nextMode);
           const forceNoTrails = NO_TRAILS_MODES.includes(nextMode);
-
           if (forceNoGlow || forceNoTrails) {
               setSettings(prev => ({
                   ...prev,
@@ -124,14 +144,11 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
                   trails: forceNoTrails ? false : prev.trails
               }));
           }
-
           return nextMode;
         });
       }, (settings.rotateInterval || 30) * 1000);
     }
-    return () => {
-      if (rotateIntervalRef.current) clearInterval(rotateIntervalRef.current);
-    };
+    return () => { if (rotateIntervalRef.current) clearInterval(rotateIntervalRef.current); };
   }, [settings.autoRotate, settings.rotateInterval, settings.includedModes, hasStarted]);
   
   useEffect(() => {
@@ -144,34 +161,20 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
         });
       }, (settings.colorInterval || 10) * 1000);
     }
-    return () => {
-      if (colorIntervalRef.current) clearInterval(colorIntervalRef.current);
-    };
+    return () => { if (colorIntervalRef.current) clearInterval(colorIntervalRef.current); };
   }, [settings.cycleColors, settings.colorInterval, hasStarted]);
 
   const randomizeSettings = useCallback(() => {
-    // 1. Pick a random color theme
     setColorThemeInternal(COLOR_THEMES[Math.floor(Math.random() * COLOR_THEMES.length)]);
-    
-    // 2. Pick a mode from the whitelist or global list
     const availableModes = (settings.includedModes && settings.includedModes.length > 0)
         ? settings.includedModes
         : Object.keys(VISUALIZER_PRESETS) as VisualizerMode[];
-    
     const nextMode = availableModes[Math.floor(Math.random() * availableModes.length)] as VisualizerMode;
     setModeInternal(nextMode);
-    
-    // 3. Performance-Aware & Aesthetic Setting Randomization
-    const heavyModes = [
-        VisualizerMode.NEURAL_FLOW, VisualizerMode.KINETIC_WALL,
-        VisualizerMode.LIQUID, VisualizerMode.CUBE_FIELD,
-        VisualizerMode.NEBULA, VisualizerMode.MACRO_BUBBLES
-    ];
-    
+    const heavyModes = [VisualizerMode.NEURAL_FLOW, VisualizerMode.KINETIC_WALL, VisualizerMode.RESONANCE_ORB, VisualizerMode.CUBE_FIELD, VisualizerMode.NEBULA];
     const isHeavy = heavyModes.includes(nextMode);
     const forceNoGlow = NO_GLOW_MODES.includes(nextMode);
     const forceNoTrails = NO_TRAILS_MODES.includes(nextMode);
-
     setSettings(p => ({ 
         ...p, 
         speed: 0.8 + Math.random() * 0.8, 
@@ -180,40 +183,77 @@ export const useVisualsState = (hasStarted: boolean, initialSettings: Visualizer
         trails: forceNoTrails ? false : (isHeavy ? Math.random() > 0.6 : Math.random() > 0.2), 
         smoothing: 0.7 + Math.random() * 0.2 
     }));
-
     setActivePreset('');
   }, [settings.includedModes]);
 
   const applyPreset = useCallback((preset: SmartPreset) => {
-    // Apply all settings from the preset, merging over the existing state
     setSettings(prev => ({ ...prev, ...preset.settings }));
     setModeInternal(preset.settings.mode);
     setColorThemeInternal(preset.settings.colorTheme);
     setActivePreset(preset.nameKey);
-  }, [setSettings]);
+  }, []);
 
   const resetVisualSettings = useCallback(() => {
+    setModeInternal(DEFAULT_MODE);
+    setColorThemeInternal(COLOR_THEMES[DEFAULT_THEME_INDEX]);
     setSettings(prev => ({
       ...prev,
-      speed: initialSettings.speed,
-      sensitivity: initialSettings.sensitivity,
-      glow: initialSettings.glow,
-      trails: initialSettings.trails,
-      autoRotate: initialSettings.autoRotate,
-      rotateInterval: initialSettings.rotateInterval,
-      cycleColors: initialSettings.cycleColors,
-      colorInterval: initialSettings.colorInterval
+      speed: DEFAULT_SETTINGS.speed,
+      sensitivity: DEFAULT_SETTINGS.sensitivity,
+      glow: DEFAULT_SETTINGS.glow,
+      trails: DEFAULT_SETTINGS.trails,
+      autoRotate: DEFAULT_SETTINGS.autoRotate,
+      rotateInterval: DEFAULT_SETTINGS.rotateInterval,
+      cycleColors: DEFAULT_SETTINGS.cycleColors,
+      colorInterval: DEFAULT_SETTINGS.colorInterval,
+      smoothing: DEFAULT_SETTINGS.smoothing,
+      quality: DEFAULT_SETTINGS.quality,
+      includedModes: DEFAULT_SETTINGS.includedModes,
+      aiBgUrl: DEFAULT_SETTINGS.aiBgUrl,
+      showAiBg: DEFAULT_SETTINGS.showAiBg
     }));
     setActivePreset('');
-  }, [setSettings, initialSettings]);
+  }, []);
 
-  return {
-    mode, setMode,
-    colorTheme, setColorTheme,
-    settings, setSettings,
-    activePreset, setActivePreset,
-    randomizeSettings,
-    resetVisualSettings,
-    applyPreset
+  const resetTextSettings = useCallback(() => {
+    setSettings(prev => ({
+      ...prev,
+      customText: DEFAULT_SETTINGS.customText,
+      showCustomText: DEFAULT_SETTINGS.showCustomText,
+      textSource: DEFAULT_SETTINGS.textSource,
+      textPulse: DEFAULT_SETTINGS.textPulse,
+      customTextRotation: DEFAULT_SETTINGS.customTextRotation,
+      customTextSize: DEFAULT_SETTINGS.customTextSize,
+      customTextFont: DEFAULT_SETTINGS.customTextFont,
+      customTextOpacity: DEFAULT_SETTINGS.customTextOpacity,
+      customTextColor: DEFAULT_SETTINGS.customTextColor,
+      customTextPosition: DEFAULT_SETTINGS.customTextPosition,
+      customTextCycleColor: DEFAULT_SETTINGS.customTextCycleColor,
+      customTextCycleInterval: DEFAULT_SETTINGS.customTextCycleInterval,
+      customText3D: DEFAULT_SETTINGS.customText3D
+    }));
+  }, []);
+
+  const resetAudioSettings = useCallback(() => {
+    setSettings(prev => ({
+      ...prev,
+      sensitivity: DEFAULT_SETTINGS.sensitivity,
+      smoothing: DEFAULT_SETTINGS.smoothing,
+      fftSize: DEFAULT_SETTINGS.fftSize,
+      recognitionProvider: DEFAULT_SETTINGS.recognitionProvider,
+      region: DEFAULT_SETTINGS.region
+    }));
+  }, []);
+
+  return { 
+    mode, setMode, 
+    colorTheme, setColorTheme, 
+    settings, setSettings, 
+    activePreset, setActivePreset, 
+    randomizeSettings, 
+    resetVisualSettings, 
+    resetTextSettings, 
+    resetAudioSettings,
+    applyPreset 
   };
 };

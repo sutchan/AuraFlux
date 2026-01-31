@@ -1,9 +1,9 @@
 /**
  * File: core/services/renderers/NebulaRenderer.ts
- * Version: 1.7.37
+ * Version: 1.8.25
  * Author: Sut
- * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-08 16:00
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
+ * Updated: 2025-03-24 23:25 - Normalized spectral sampling.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
@@ -114,13 +114,10 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
   private resetParticle(p: Partial<NebulaParticle>, w: number, h: number, colorsCount: number) {
     const isGas = Math.random() > 0.92; 
-    
     const isWanderer = Math.random() > 0.5; 
     p.clusterIdx = isWanderer ? -1 : Math.floor(Math.random() * this.clusters.length);
-
     const angle = Math.random() * Math.PI * 2;
     const orbit = Math.pow(Math.random(), 2.0) * Math.max(w, h) * 0.45; 
-
     p.type = isGas ? 'GAS' : 'DUST';
     
     if (p.clusterIdx === -1) {
@@ -139,26 +136,22 @@ export class NebulaRenderer implements IVisualizerRenderer {
     p.colorIndex = Math.floor(Math.random() * Math.max(1, colorsCount));
     p.colorShift = Math.random();
     p.noiseOffset = Math.random() * 5000;
-    
-    if (isGas) {
-        p.baseSize = w * 0.5 + Math.random() * w * 0.5; 
-    } else {
-        p.baseSize = 0.5 + Math.pow(Math.random(), 4.0) * 30.0;
-    }
-    
+    p.baseSize = isGas ? (w * 0.5 + Math.random() * w * 0.5) : (0.5 + Math.pow(Math.random(), 4.0) * 30.0);
     p.angle = angle;
     p.orbitRadius = orbit;
   }
 
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean) {
-    if (w <= 0 || h <= 0) return; 
+    if (w <= 0 || h <= 0 || data.length === 0) return; 
     
     const safeColors = colors.length > 0 ? colors : ['#4433ff', '#ff00aa', '#00ffaa'];
+    const len = data.length;
     
     if (this.clusters.length === 0) this.initClusters(w, h);
 
-    const bass = Math.pow(getAverage(data, 0, 15) / 255, 1.5) * settings.sensitivity; 
-    const treble = Math.pow(getAverage(data, 130, 255) / 255, 1.5) * settings.sensitivity;
+    // Standardized spectral sampling
+    const bass = Math.pow(getAverage(data, 0, Math.floor(len * 0.06)) / 255, 1.5) * settings.sensitivity; 
+    const treble = Math.pow(getAverage(data, Math.floor(len * 0.5), Math.floor(len * 0.9)) / 255, 1.5) * settings.sensitivity;
 
     if (beat) {
         this.beatImpact = 1.0;
@@ -178,10 +171,7 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
     const maxParticles = settings.quality === 'high' ? 350 : settings.quality === 'med' ? 180 : 80;
 
-    if (this.particles.length > maxParticles) {
-        this.particles.splice(maxParticles);
-    }
-
+    if (this.particles.length > maxParticles) this.particles.splice(maxParticles);
     while (this.particles.length < maxParticles) {
       const p = {} as NebulaParticle;
       this.resetParticle(p, w, h, safeColors.length);
@@ -190,15 +180,9 @@ export class NebulaRenderer implements IVisualizerRenderer {
     }
 
     ctx.save();
-    
-    // Only draw opaque background if Album Art BG is OFF.
-    // If ON, we skip this to allow the previous frame to fade out via the Worker's destination-out logic,
-    // revealing the album art underneath.
     if (!settings.albumArtBackground) {
         const bgGradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w,h)/2);
-        const bgColor1 = safeColors[0];
-        const bgColor2 = safeColors[1] || safeColors[0];
-        bgGradient.addColorStop(0, `${bgColor1}1A`);
+        bgGradient.addColorStop(0, `${safeColors[0]}1A`);
         bgGradient.addColorStop(1, '#050508');
         ctx.fillStyle = bgGradient;
         ctx.fillRect(0, 0, w, h);
@@ -209,10 +193,7 @@ export class NebulaRenderer implements IVisualizerRenderer {
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
       p.life += 1.0 * (1 + bass * 0.5);
-
-      if (p.life > p.maxLife) {
-        this.resetParticle(p, w, h, safeColors.length);
-      }
+      if (p.life > p.maxLife) this.resetParticle(p, w, h, safeColors.length);
 
       const lifeRatio = p.life / p.maxLife;
       const opacityEnv = Math.sin(lifeRatio * Math.PI); 
@@ -233,42 +214,24 @@ export class NebulaRenderer implements IVisualizerRenderer {
 
       const colorIdx1 = p.colorIndex;
       const colorIdx2 = (p.colorIndex + 1 + Math.floor(p.colorShift * (safeColors.length - 1))) % safeColors.length;
-      const activeColor1 = safeColors[colorIdx1];
-      const activeColor2 = safeColors[colorIdx2];
-      
-      const sprite = this.getSprite(activeColor1, activeColor2, p.type);
+      const sprite = this.getSprite(safeColors[colorIdx1], safeColors[colorIdx2], p.type);
       
       let finalSize = p.baseSize;
       let alpha = 0;
 
       if (p.type === 'GAS') {
         finalSize *= (0.9 + bass * 0.6 + this.beatImpact * 0.5);
-        finalSize = Math.min(finalSize, w * 1.2);
         alpha = (0.2 + bass * 0.7 + this.beatImpact * 0.5) * opacityEnv; 
       } else {
         const twinkle = Math.sin(rotation * 10 + p.noiseOffset) * 0.5 + 0.5;
         finalSize *= (1 + treble * 2.5 + this.beatImpact * 2.0);
-        const densityFactor = p.baseSize > 5 ? 0.4 : 0.8;
-        alpha = (0.3 + treble * 0.8 + twinkle * 0.3) * opacityEnv * densityFactor;
+        alpha = (0.3 + treble * 0.8 + twinkle * 0.3) * opacityEnv * (p.baseSize > 5 ? 0.4 : 0.8);
       }
 
       if (alpha < 0.01) continue;
-
       ctx.globalAlpha = Math.min(1.0, alpha);
       ctx.drawImage(sprite as any, p.x - finalSize / 2, p.y - finalSize / 2, finalSize, finalSize);
     }
-
-    if (this.beatImpact > 0.1) {
-        ctx.globalCompositeOperation = 'lighter'; 
-        const flashGradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, w * 0.8);
-        const flashColor = safeColors[2] || safeColors[0];
-        const beatHexOpacity = Math.floor(this.beatImpact * 0.2 * 255).toString(16).padStart(2, '0');
-        flashGradient.addColorStop(0, `${flashColor}${beatHexOpacity}`);
-        flashGradient.addColorStop(1, 'transparent');
-        ctx.fillStyle = flashGradient;
-        ctx.fillRect(0, 0, w, h);
-    }
-
     ctx.restore();
   }
 }

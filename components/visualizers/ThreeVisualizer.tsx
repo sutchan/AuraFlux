@@ -1,11 +1,8 @@
-
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.9.0
+ * Version: 1.9.6
  * Author: Sut
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-16 10:15
- * Description: Added OceanWaveScene support.
+ * Updated: 2025-03-25 17:05 - Updated LIQUID to RESONANCE_ORB.
  */
 
 import React, { Suspense, useMemo, useEffect } from 'react';
@@ -24,17 +21,15 @@ import {
 
 interface ThreeVisualizerProps {
   analyser: AnalyserNode | null;
-  analyserR?: AnalyserNode | null; // Optional Right Channel
+  analyserR?: AnalyserNode | null; 
   colors: string[];
   settings: VisualizerSettings;
   mode: VisualizerMode; 
 }
 
-// Helper component to manage WebGL Clear Color reactively
 const BackgroundController: React.FC<{ isTransparent: boolean }> = ({ isTransparent }) => {
     const { gl } = useThree();
     useEffect(() => {
-        // If transparent (showing album art), set alpha to 0. Otherwise opaque black.
         gl.setClearColor('#000000', isTransparent ? 0 : 1);
     }, [isTransparent, gl]);
     return null;
@@ -51,7 +46,6 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
   }, [settings?.quality]);
 
   const cameraConfig = useMemo(() => {
-      // Ocean Wave needs a different camera angle
       if (mode === VisualizerMode.OCEAN_WAVE) {
           return { position: [0, 8, 15] as [number, number, number], fov: 60 };
       }
@@ -60,7 +54,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
 
   const glConfig = useMemo(() => ({ 
     antialias: false,
-    alpha: true, // Enable alpha buffer for transparency
+    alpha: true, 
     stencil: false,
     depth: true,
     powerPreference: "high-performance" as WebGLPowerPreference
@@ -70,12 +64,12 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
       const base = 2.0;
       switch (mode) {
           case VisualizerMode.KINETIC_WALL: return base * 1.5;
-          case VisualizerMode.LIQUID: return base * 1.5;
+          case VisualizerMode.RESONANCE_ORB: return base * 1.5;
           case VisualizerMode.CUBE_FIELD: return base * 1.2;
           case VisualizerMode.NEURAL_FLOW: return base * 1.5;
           case VisualizerMode.DIGITAL_GRID: return base * 1.8; 
           case VisualizerMode.SILK_WAVE: return base * 1.4;
-          case VisualizerMode.OCEAN_WAVE: return base * 2.0; // High bloom for neon grid
+          case VisualizerMode.OCEAN_WAVE: return base * 2.0; 
           default: return base;
       }
   }, [mode]);
@@ -110,7 +104,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
     switch (mode) {
         case VisualizerMode.KINETIC_WALL:
             return <KineticWallScene {...sceneProps} />;
-        case VisualizerMode.LIQUID:
+        case VisualizerMode.RESONANCE_ORB:
             return <LiquidSphereScene {...sceneProps} />;
         case VisualizerMode.CUBE_FIELD:
             return <CubeFieldScene {...sceneProps} />;
@@ -132,7 +126,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
   return (
     <div className="w-full h-full">
       <Canvas 
-        key={settings.quality + mode} // Remount canvas on mode switch to reset camera defaults properly
+        key={settings.quality + mode} 
         camera={cameraConfig}
         dpr={dpr} 
         gl={glConfig}

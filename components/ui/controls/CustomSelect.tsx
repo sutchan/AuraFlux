@@ -1,9 +1,7 @@
 /**
  * File: components/ui/controls/CustomSelect.tsx
- * Version: 1.0.10
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 22:00
+ * Version: 1.8.24
+ * Author: Sut
  */
 
 import React, { memo } from 'react';
@@ -25,7 +23,7 @@ export const CustomSelect = memo(({ label, value, options, onChange, hintText }:
     <div className="relative">
       <select 
         value={value} 
-        onChange={(e) => onChange(e.target.value)} 
+        onChange={(e) => onChange?.(e.target.value)} 
         className="w-full bg-white/[0.04] rounded-xl px-4 py-2.5 text-xs font-bold text-white uppercase tracking-wider appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors cursor-pointer"
         aria-label={typeof label === 'string' ? label : 'Select'}
       >

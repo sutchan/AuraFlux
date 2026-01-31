@@ -1,10 +1,8 @@
+
 /**
  * File: components/ui/controls/PositionSelector.tsx
- * Version: 1.0.6
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 18:00
- * Description: Standardized label styling.
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import React, { memo } from 'react';

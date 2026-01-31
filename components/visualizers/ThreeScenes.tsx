@@ -1,9 +1,7 @@
-
 /**
  * File: components/visualizers/ThreeScenes.tsx
- * Version: 1.5.0
- * Author: Aura Vision Team
- * Updated: 2025-03-16 10:15
+ * Version: 1.8.23
+ * Author: Aura Flux Team
  */
 
 export { KineticWallScene } from './scenes/KineticWallScene';

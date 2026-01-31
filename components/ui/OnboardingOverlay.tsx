@@ -1,10 +1,8 @@
 
 /**
  * File: components/ui/OnboardingOverlay.tsx
- * Version: 1.1.5
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 19:00
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import React, { useState } from 'react';

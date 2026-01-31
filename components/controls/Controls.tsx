@@ -1,16 +1,13 @@
-
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.7.11
+ * Version: 1.8.33
  * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-20 12:30
+ * Updated: 2025-03-24 19:10 - Fix touch interaction
  */
 
 import React, { useState, useEffect } from 'react';
 import { ActionButton } from '../ui/controls/ActionButton';
 import { VisualSettingsPanel } from './panels/VisualSettingsPanel';
-// AiSettingsPanel is deprecated and merged into Audio and Text panels
 import { SystemSettingsPanel } from './panels/SystemSettingsPanel';
 import { CustomTextSettingsPanel } from './panels/CustomTextSettingsPanel';
 import { AudioSettingsPanel } from './panels/AudioSettingsPanel';
@@ -23,7 +20,6 @@ import { TooltipArea } from '../ui/controls/Tooltip';
 import { VISUALIZER_PRESETS, COLOR_THEMES } from '../../core/constants';
 import { VisualizerMode } from '../../core/types';
 
-// Updated Tab List - Order matched with OpenSpec 05 (Visual -> Audio -> Text -> Playback -> Studio -> System)
 type TabType = 'visual' | 'input' | 'playback' | 'text' | 'studio' | 'system';
 
 const TAB_ICONS: Record<TabType, React.ReactNode> = {
@@ -50,22 +46,19 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
   const [activeTab, setActiveTab] = useState<TabType>('visual');
   const [showHelpModal, setShowHelpModal] = useState(false);
   
-  // Updated tabs array order to match OpenSpec: Visual, Audio, Info Layer, Playback, Studio, System
   const tabs: TabType[] = settings.uiMode === 'simple' 
     ? ['visual', 'input', 'playback', 'system']
     : ['visual', 'input', 'text', 'playback', 'studio', 'system'];
 
-  // Safety check: Switch to 'visual' if current tab is hidden by mode switch
   useEffect(() => {
     if (!tabs.includes(activeTab)) {
         setActiveTab('visual');
     }
-  }, [settings.uiMode, activeTab]);
+  }, [settings.uiMode, activeTab, tabs]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
-      // Allow shortcuts even if focused on button, but not input/textarea
       if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') return;
       if (e.ctrlKey || e.altKey || e.metaKey) return;
 
@@ -74,11 +67,8 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
       switch (e.code) {
         case 'Space': 
             e.preventDefault(); 
-            if (sourceType === 'FILE') {
-                togglePlayback();
-            } else {
-                toggleMicrophone(selectedDeviceId); 
-            }
+            if (sourceType === 'FILE') togglePlayback();
+            else toggleMicrophone(selectedDeviceId); 
             break;
         case 'KeyF': toggleFullscreen(); break;
         case 'KeyR': randomizeSettings(); break;
@@ -90,103 +80,42 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
             if (showHelpModal) setShowHelpModal(false);
             else if (isExpanded) setIsExpanded(false); 
             break;
-        
-        // Playback Control (N/P)
-        case 'KeyN':
-        case 'MediaTrackNext':
-            if (sourceType === 'FILE') playNext();
-            break;
-        case 'KeyP':
-        case 'MediaTrackPrevious':
-            if (sourceType === 'FILE') playPrev();
-            break;
-        case 'MediaPlayPause':
-            e.preventDefault();
-            if (sourceType === 'FILE') togglePlayback();
-            break;
-
-        // Help
-        case 'Slash': // '?' key
-            if (e.shiftKey) setShowHelpModal(prev => !prev);
-            break;
-
-        // Navigation & Adjustments
+        case 'KeyN': if (sourceType === 'FILE') playNext(); break;
+        case 'KeyP': if (sourceType === 'FILE') playPrev(); break;
         case 'ArrowRight':
-            if (sourceType === 'FILE' && e.shiftKey) {
-                // Shift+Right: Next Track (File Mode)
-                playNext();
-            } else {
-                // Default: Cycle Mode Next
+            if (sourceType === 'FILE' && e.shiftKey) playNext();
+            else {
                 const nextIdx = (modes.indexOf(mode) + 1) % modes.length;
                 setMode(modes[nextIdx]);
             }
             break;
         case 'ArrowLeft':
-            if (sourceType === 'FILE' && e.shiftKey) {
-                // Shift+Left: Prev Track (File Mode)
-                playPrev();
-            } else {
-                // Default: Cycle Mode Prev
+            if (sourceType === 'FILE' && e.shiftKey) playPrev();
+            else {
                 const prevIdx = (modes.indexOf(mode) - 1 + modes.length) % modes.length;
                 setMode(modes[prevIdx]);
             }
             break;
         case 'ArrowUp':
             e.preventDefault();
-            if (e.shiftKey) {
-                // Shift+Up: Increase Speed
-                setSettings(s => ({ ...s, speed: Math.min(3.0, Number((s.speed + 0.1).toFixed(1))) }));
-            } else {
-                // Up: Increase Sensitivity
-                setSettings(s => ({ ...s, sensitivity: Math.min(4.0, Number((s.sensitivity + 0.1).toFixed(1))) }));
-            }
+            if (e.shiftKey) setSettings(s => ({ ...s, speed: Math.min(3.0, Number((s.speed + 0.1).toFixed(1))) }));
+            else setSettings(s => ({ ...s, sensitivity: Math.min(4.0, Number((s.sensitivity + 0.1).toFixed(1))) }));
             break;
         case 'ArrowDown':
             e.preventDefault();
-            if (e.shiftKey) {
-                // Shift+Down: Decrease Speed
-                setSettings(s => ({ ...s, speed: Math.max(0.1, Number((s.speed - 0.1).toFixed(1))) }));
-            } else {
-                // Down: Decrease Sensitivity
-                setSettings(s => ({ ...s, sensitivity: Math.max(0.5, Number((s.sensitivity - 0.1).toFixed(1))) }));
-            }
+            if (e.shiftKey) setSettings(s => ({ ...s, speed: Math.max(0.1, Number((s.speed - 0.1).toFixed(1))) }));
+            else setSettings(s => ({ ...s, sensitivity: Math.max(0.5, Number((s.sensitivity - 0.1).toFixed(1))) }));
             break;
-        
-        // Color Themes ([ and ])
-        case 'BracketLeft':
-            setColorTheme(prev => {
-                const currentIdx = COLOR_THEMES.findIndex(t => JSON.stringify(t) === JSON.stringify(prev));
-                const newIdx = (currentIdx - 1 + COLOR_THEMES.length) % COLOR_THEMES.length;
-                return COLOR_THEMES[newIdx];
-            });
-            break;
-        case 'BracketRight':
-            setColorTheme(prev => {
-                const currentIdx = COLOR_THEMES.findIndex(t => JSON.stringify(t) === JSON.stringify(prev));
-                const newIdx = (currentIdx + 1) % COLOR_THEMES.length;
-                return COLOR_THEMES[newIdx];
-            });
-            break;
-
-        // Tab Navigation (1-6) - Aligned with updated order
         case 'Digit1': if (tabs.includes('visual')) setActiveTab('visual'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit2': if (tabs.includes('input')) setActiveTab('input'); if(!isExpanded) setIsExpanded(true); break;
         case 'Digit3': 
-            // Simple: Playback (3rd) | Advanced: Text (3rd)
-            if (settings.uiMode === 'simple') {
-                if (tabs.includes('playback')) setActiveTab('playback'); 
-            } else {
-                if (tabs.includes('text')) setActiveTab('text'); 
-            }
+            if (settings.uiMode === 'simple') { if (tabs.includes('playback')) setActiveTab('playback'); }
+            else { if (tabs.includes('text')) setActiveTab('text'); }
             if(!isExpanded) setIsExpanded(true); 
             break;
         case 'Digit4': 
-            // Simple: System (4th) | Advanced: Playback (4th)
-            if (settings.uiMode === 'simple') {
-                if (tabs.includes('system')) setActiveTab('system'); 
-            } else {
-                if (tabs.includes('playback')) setActiveTab('playback'); 
-            }
+            if (settings.uiMode === 'simple') { if (tabs.includes('system')) setActiveTab('system'); }
+            else { if (tabs.includes('playback')) setActiveTab('playback'); }
             if(!isExpanded) setIsExpanded(true); 
             break;
         case 'Digit5': if (tabs.includes('studio')) setActiveTab('studio'); if(!isExpanded) setIsExpanded(true); break;
@@ -195,7 +124,7 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, setColorTheme, isExpanded, showHelpModal, setIsExpanded, toggleFullscreen, tabs, selectedDeviceId]);
+  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, isExpanded, showHelpModal, setIsExpanded, toggleFullscreen, tabs, selectedDeviceId]);
 
   return (
     <>
@@ -207,21 +136,17 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
       />
       
       {isExpanded && (
-        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505]/85 backdrop-blur-xl border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col animate-fade-in-up">
-          <div className="max-h-[85dvh] md:max-h-[65vh] overflow-y-auto custom-scrollbar relative flex flex-col">
+        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505]/85 backdrop-blur-xl border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col animate-fade-in-up pointer-events-auto touch-auto">
+          <div className="max-h-[85dvh] md:max-h-[60vh] overflow-y-auto custom-scrollbar relative flex flex-col">
             
-            <div className="sticky top-0 z-50 bg-[#0a0a0c] border-b border-white/10 px-4 md:px-6 py-2.5 shadow-xl">
+            <div className="sticky top-0 z-50 bg-[#0a0a0c] border-b border-white/10 px-4 md:px-6 py-2 shadow-xl">
                 <div className="max-w-5xl mx-auto flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-2">
-                    <div className="flex bg-white/[0.04] p-0.5 rounded-lg overflow-x-auto max-w-full scrollbar-hide gap-0.5 mask-fade-right touch-pan-x" role="tablist" aria-label="Settings Categories">
+                    <div className="flex bg-white/[0.04] p-0.5 rounded-lg overflow-x-auto max-w-full scrollbar-hide gap-0.5 mask-fade-right touch-pan-x" role="tablist">
                     {tabs.map((tab, index) => (
                         <TooltipArea key={tab} text={`${t?.tabs?.[tab] || tab} [${index + 1}]`} className="flex-shrink-0">
                             <button 
                             onClick={() => setActiveTab(tab)} 
-                            role="tab"
-                            aria-selected={activeTab === tab}
-                            aria-controls={`panel-${tab}`}
-                            id={`tab-${tab}`}
-                            className={`px-3 py-1.5 md:px-4 rounded-md text-xs font-bold uppercase tracking-wider transition-all duration-300 w-full h-full whitespace-nowrap flex items-center gap-1.5 ${activeTab === tab ? 'bg-white/25 text-white shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>
+                            className={`px-3 py-1.5 md:px-4 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all duration-300 w-full h-full whitespace-nowrap flex items-center gap-1.5 ${activeTab === tab ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>
                             {TAB_ICONS[tab]}
                             <span>{t?.tabs?.[tab] || tab}</span>
                             </button>
@@ -230,17 +155,11 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                     </div>
                     
                     <div className="flex items-center justify-between lg:justify-end gap-2 md:gap-3">
-                    
-                    {/* Quick Playback Controls (Replaced UI Mode Toggle) */}
                     {sourceType === 'FILE' && (
                         <div className="bg-white/5 p-0.5 rounded-lg flex items-center border border-white/5 shrink-0">
                             <TooltipArea text={isPlaying ? t?.player?.pause : t?.player?.play}>
                                 <button onClick={togglePlayback} className="w-8 h-7 flex items-center justify-center rounded hover:bg-white/10 text-white/80 hover:text-white transition-colors">
-                                    {isPlaying ? (
-                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                    ) : (
-                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    )}
+                                    {isPlaying ? <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> : <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>}
                                 </button>
                             </TooltipArea>
                             <div className="w-px h-4 bg-white/10 mx-0.5"></div>
@@ -255,37 +174,20 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                     <div className="w-px h-5 bg-white/10 mx-1 hidden lg:block"></div>
                     <div className="flex items-center gap-1.5">
                         <div className="hidden md:flex gap-1.5">
-                            <ActionButton 
-                                onClick={randomizeSettings} 
-                                hintText={`${t?.hints?.randomize || "Randomize"} [R]`} 
-                                icon={
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                    </svg>
-                                } 
-                            />
-                            
+                            <ActionButton onClick={randomizeSettings} hintText={`${t?.hints?.randomize || "Randomize"} [R]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>} />
                             <ActionButton onClick={toggleFullscreen} hintText={`${t?.hints?.fullscreen || "Fullscreen"} [F]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>} />
-                            
-                            <ActionButton onClick={() => setShowHelpModal(true)} hintText={`${t?.hints?.help || "Help"} [?]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.546-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} />
                         </div>
-                        <button onClick={() => setIsExpanded(false)} className="w-8 h-8 flex items-center justify-center bg-blue-600 rounded-lg text-white shadow-[0_4px_15px_rgba(37,99,235,0.3)] hover:bg-blue-500 transition-all duration-300 flex-shrink-0" aria-label={t?.hideOptions || "Collapse"}><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" /></svg></button>
+                        <button onClick={() => setIsExpanded(false)} className="w-8 h-8 flex items-center justify-center bg-blue-600 rounded-lg text-white shadow-[0_4px_15px_rgba(37,99,235,0.3)] hover:bg-blue-500 transition-all duration-300" aria-label={t?.hideOptions}><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" /></svg></button>
                     </div>
                     </div>
                 </div>
             </div>
             
-            <div className="p-3 md:p-5 pb-safe">
+            <div className="p-3 md:p-4 pb-safe">
               <div className="max-w-5xl mx-auto">
-                <div 
-                  className="bg-transparent min-h-[35vh] md:min-h-[220px]"
-                  role="tabpanel"
-                  id={`panel-${activeTab}`}
-                  aria-labelledby={`tab-${activeTab}`}
-                >
+                <div className="bg-transparent min-h-[25vh] md:min-h-[200px]" role="tabpanel">
                     {activeTab === 'visual' && <VisualSettingsPanel />}
                     {activeTab === 'input' && <AudioSettingsPanel />}
-                    {/* Updated render order to match visual tabs */}
                     {activeTab === 'text' && <CustomTextSettingsPanel />}
                     {activeTab === 'playback' && <PlaybackPanel />}
                     {activeTab === 'studio' && <StudioPanel />}

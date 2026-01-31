@@ -1,11 +1,8 @@
-
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 1.2.0
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-12 12:00
- * Changes: Added support for stereo (analyserR).
+ * Version: 2.0.5
+ * Author: Sut
+ * Updated: 2025-03-25 21:15
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -15,7 +12,7 @@ import { AdaptiveNoiseFilter } from '../../core/services/audioUtils';
 
 interface VisualizerCanvasProps {
   analyser: AnalyserNode | null;
-  analyserR?: AnalyserNode | null; // Optional Right Channel
+  analyserR?: AnalyserNode | null; 
   mode: VisualizerMode;
   colors: string[];
   settings: VisualizerSettings;
@@ -37,7 +34,6 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     propsRef.current = { mode, colors, settings };
   }, [mode, colors, settings]);
 
-  // Init Renderers
   useEffect(() => {
     renderersRef.current = createVisualizerRenderers();
     (Object.values(renderersRef.current) as IVisualizerRenderer[]).forEach((r) => {
@@ -45,32 +41,32 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     });
   }, []);
 
-  // Handle Resize via Observer
+  // Responsive Sharpness Logic
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const observer = new ResizeObserver(() => {
+    const updateSize = () => {
+      const dpr = window.devicePixelRatio || 1;
       const displayWidth = canvas.clientWidth;
       const displayHeight = canvas.clientHeight;
       
       if (displayWidth > 0 && displayHeight > 0) {
-          canvas.width = displayWidth;
-          canvas.height = displayHeight;
+          // Adjust for Retina/High-DPI
+          if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
+              canvas.width = displayWidth * dpr;
+              canvas.height = displayHeight * dpr;
+          }
       }
-    });
-    
+    };
+
+    const observer = new ResizeObserver(updateSize);
     observer.observe(canvas);
-    
-    if (canvas.clientWidth > 0) {
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-    }
+    updateSize();
 
     return () => observer.disconnect();
   }, []);
 
-  // Main Render Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !analyser) return;
@@ -79,53 +75,53 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
     if (!ctx) return;
 
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    // Stereo: Allocate buffer for Right channel if available
     const dataArrayR = analyserR ? new Uint8Array(analyserR.frequencyBinCount) : undefined;
 
     const renderLoop = () => {
       const { mode: currentMode, colors: currentColors, settings: currentSettings } = propsRef.current;
-      const { width, height } = canvas;
+      
+      // Handle physical scale vs logical scale
+      const dpr = window.devicePixelRatio || 1;
+      const logicalW = canvas.width / dpr;
+      const logicalH = canvas.height / dpr;
 
       analyser.getByteFrequencyData(dataArray);
       noiseFilterRef.current.process(dataArray);
       const isBeat = beatDetectorRef.current.detect(dataArray);
       
-      // Fetch Right Channel if available
       if (analyserR && dataArrayR) {
           analyserR.getByteFrequencyData(dataArrayR);
-          // Optional: Apply noise filter to Right channel too? 
-          // For now, assume Left filter state is sufficient or instantiate a second one.
-          // To keep it simple and performant, we might skip filtering R or reuse L's profile implicitly.
       }
 
       rotationRef.current += 0.005 * currentSettings.speed;
+
+      ctx.save();
+      ctx.scale(dpr, dpr); // Ensure all draw calls use logical units
 
       // Clear / Trails Logic
       if (currentSettings.trails) {
         if (currentSettings.albumArtBackground) {
             ctx.globalCompositeOperation = 'destination-out';
             ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-            ctx.fillRect(0, 0, width, height);
+            ctx.fillRect(0, 0, logicalW, logicalH);
             ctx.globalCompositeOperation = 'source-over';
         } else {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-            ctx.fillRect(0, 0, width, height);
+            ctx.fillRect(0, 0, logicalW, logicalH);
         }
       } else {
-        ctx.clearRect(0, 0, width, height);
+        ctx.clearRect(0, 0, logicalW, logicalH);
       }
 
       // Glow Logic
       const isSelfGlowingMode = 
         currentMode === VisualizerMode.NEBULA || 
-        currentMode === VisualizerMode.MACRO_BUBBLES ||
+        // @fix: Removed non-existent VisualizerMode.MACRO_BUBBLES
         currentMode === VisualizerMode.TUNNEL;
 
       if (currentSettings.glow && !isSelfGlowingMode) {
         ctx.shadowColor = currentColors[0] || '#ffffff';
         ctx.shadowBlur = 15 * currentSettings.sensitivity;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
       } else {
         ctx.shadowBlur = 0;
       }
@@ -136,18 +132,18 @@ const VisualizerCanvas: React.FC<VisualizerCanvasProps> = ({
           renderer.draw(
             ctx, 
             dataArray, 
-            width, 
-            height, 
+            logicalW, 
+            logicalH, 
             currentColors, 
             currentSettings, 
             rotationRef.current, 
             isBeat,
-            dataArrayR // Pass Right Channel
+            dataArrayR 
           );
         } catch (e) {}
       }
 
-      ctx.shadowBlur = 0;
+      ctx.restore();
       animationIdRef.current = requestAnimationFrame(renderLoop);
     };
 

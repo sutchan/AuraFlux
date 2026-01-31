@@ -1,10 +1,8 @@
-
 /**
  * File: core/types/visuals.ts
- * Version: 1.9.1
+ * Version: 2.1.0
  * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-20 15:30
+ * Updated: 2025-03-25 22:15 - Added AI Background settings.
  */
 
 import { Position, Region } from './common';
@@ -16,7 +14,7 @@ export enum VisualizerMode {
   BARS = 'BARS',
   DIGITAL_GRID = 'DIGITAL_GRID',
   SILK_WAVE = 'SILK_WAVE',
-  OCEAN_WAVE = 'OCEAN_WAVE', // New
+  OCEAN_WAVE = 'OCEAN_WAVE',
 
   // Classic / 2D Modes
   PARTICLES = 'PARTICLES',
@@ -26,13 +24,12 @@ export enum VisualizerMode {
   FLUID_CURVES = 'FLUID_CURVES',
   WAVEFORM = 'WAVEFORM',
   NEBULA = 'NEBULA', 
-  MACRO_BUBBLES = 'MACRO_BUBBLES',
   
   // WebGL Modes (High Fidelity)
   NEURAL_FLOW = 'NEURAL_FLOW',
   CUBE_FIELD = 'CUBE_FIELD',
   KINETIC_WALL = 'KINETIC_WALL', 
-  LIQUID = 'LIQUID'
+  RESONANCE_ORB = 'RESONANCE_ORB'
 }
 
 export interface VisualizerSettings {
@@ -63,7 +60,13 @@ export interface VisualizerSettings {
   albumArtDim?: number;
   albumArtBlur?: number;
   showAlbumArtOverlay: boolean;
-  showSongInfo: boolean; // Controls SongOverlay visibility
+  showSongInfo: boolean; 
+
+  // AI Background Settings
+  aiBgUrl: string;
+  showAiBg: boolean;
+  aiBgOpacity: number;
+  aiBgBlur: number;
 
   // Overlay Settings
   customText: string;

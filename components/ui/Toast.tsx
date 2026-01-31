@@ -1,8 +1,8 @@
 /**
  * File: components/ui/Toast.tsx
- * Version: 1.0.0
- * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Version: 1.8.23
+ * Author: Aura Flux Team
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
  */
 
 import React, { useEffect, useState } from 'react';

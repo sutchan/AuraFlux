@@ -1,11 +1,8 @@
-
 /**
  * File: core/services/renderers/FluidCurvesRenderer.ts
- * Version: 1.8.0
- * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-16 14:00
- * Changes: Enhanced parallax effect with bidirectional layer movement.
+ * Version: 1.8.23
+ * Author: Aura Flux Team
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';

@@ -1,8 +1,8 @@
+
 /**
  * File: components/ui/controls/ActionButton.tsx
- * Version: 1.0.6
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import React, { memo } from 'react';

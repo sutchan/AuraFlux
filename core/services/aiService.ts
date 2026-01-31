@@ -1,271 +1,126 @@
-
 /**
  * File: core/services/aiService.ts
- * Version: 3.2.2
- * Author: Aura Flux Team
- * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-19 20:00
- * Description: Robustness update: Localized error messages and isError flag.
+ * Version: 2.1.0
+ * Author: Sut
+ * Updated: 2025-03-25 22:15 - Added generateArtisticBackground logic.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { GEMINI_MODEL, REGION_NAMES, VISUALIZER_PRESETS } from '../constants';
-import { SongInfo, Language, Region, AIProvider, VisualizerMode } from '../types';
-import { generateFingerprint, saveToLocalCache, findLocalMatch } from './fingerprintService';
-import { TRANSLATIONS } from '../i18n';
+import { SongInfo, Language, AIProvider, Region } from '../types';
 
-const REQUEST_TIMEOUT_MS = 45000;
+const GEMINI_MODEL = 'gemini-3-flash-preview';
+const IMAGEN_MODEL = 'gemini-2.5-flash-image';
 
-const PROVIDER_PROFILES: Record<string, string> = {
-    GEMINI: "Role: Google Gemini. Style: Balanced, high-fidelity analysis. Focus on accurate metadata and holistic emotional context. Use rich, evocative language for moods.",
-    GROQ: "Role: Groq LPU Service. Style: Extremely fast, direct, and efficient. Utilizes models like Llama 3. Focus on low-latency, concise answers. Moods should be clear and to the point.",
-    OPENAI: "Role: GPT-4o. Style: Encyclopedic, precise, and professional. Prioritize technical genre accuracy and historical context. Moods should be descriptive and formal, e.g., 'Pensive Neoclassical Composition'.",
-    CLAUDE: "Role: Anthropic Claude 3. Style: Analytical, verbose, and nuanced. Focus on music theory, instrumentation, and complex emotional undertones. Describe moods with literary and precise language.",
-    DEEPSEEK: "Role: DeepSeek. Style: Technical, code-aware, and concise. Excel at identifying electronic subgenres and structural patterns. Moods should be direct and based on sonic texture, e.g., 'Syncopated, Glitchy, Minimal'.",
-    QWEN: "Role: Alibaba Qwen. Style: Globally-focused, multilingual, and culturally aware. Strong at identifying non-western and eclectic genres. Moods should reflect a broad cultural context.",
-};
-
-const RESPONSE_SCHEMA = {
+const SONG_SCHEMA = {
   type: Type.OBJECT,
   properties: {
-    title: { type: Type.STRING, description: "Track title or poetic audio description." },
-    artist: { type: Type.STRING, description: "Artist name or audio category/genre." },
-    lyricsSnippet: { type: Type.STRING, description: "Key lyrics, lyrical themes, or sensory description of the music's texture." },
-    mood: { type: Type.STRING, description: "Descriptive aesthetic mood summary (3-5 words) including genre hints." },
-    mood_en_keywords: { type: Type.STRING, description: "Canonical, comma-separated English keywords for styling (e.g., 'dark, industrial, driving')." },
-    identified: { type: Type.BOOLEAN, description: "True if it is a known commercial track." },
+    title: { type: Type.STRING, description: "Track title or poetic description." },
+    artist: { type: Type.STRING, description: "Artist or genre description." },
+    lyricsSnippet: { type: Type.STRING, description: "A key lyric or description of the sound texture." },
+    mood: { type: Type.STRING, description: "A 3-5 word aesthetic summary." },
+    mood_en_keywords: { type: Type.STRING, description: "Comma-separated keywords for visual styling." },
+    identified: { type: Type.BOOLEAN, description: "True if a known song." }
   },
   required: ['title', 'artist', 'mood', 'mood_en_keywords', 'identified']
 };
 
 const VISUAL_CONFIG_SCHEMA = {
-    type: Type.OBJECT,
-    properties: {
-        mode: { type: Type.STRING, description: "The most suitable VisualizerMode enum value." },
-        colors: { 
-            type: Type.ARRAY, 
-            description: "An array of 3 hex color strings representing the mood.",
-            items: { type: Type.STRING } 
-        },
-        speed: { type: Type.NUMBER, description: "Recommended playback speed multiplier (0.5 to 2.0)." },
-        sensitivity: { type: Type.NUMBER, description: "Recommended audio sensitivity (1.0 to 3.0)." },
-        glow: { type: Type.BOOLEAN, description: "Whether to enable glow effect." },
-        explanation: { type: Type.STRING, description: "Short explanation of why this visual style was chosen." }
-    },
-    required: ['mode', 'colors', 'speed', 'sensitivity', 'glow', 'explanation']
+  type: Type.OBJECT,
+  properties: {
+    mode: { type: Type.STRING, description: "Selected visual mode name." },
+    colors: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Array of 3 hex colors." },
+    speed: { type: Type.NUMBER, description: "Visual speed (0.1 to 3.0)" },
+    sensitivity: { type: Type.NUMBER, description: "Audio sensitivity (0.5 to 4.0)" },
+    glow: { type: Type.BOOLEAN },
+    explanation: { type: Type.STRING, description: "Short explanation of the aesthetic choice." }
+  },
+  required: ['mode', 'colors', 'speed', 'sensitivity', 'glow', 'explanation']
 };
 
-export const validateApiKey = async (provider: AIProvider, key: string): Promise<boolean> => {
-    if (!key || key.length < 5) return false;
+export const validateApiKey = async (provider: AIProvider, apiKey: string): Promise<boolean> => {
+    if (provider !== 'GEMINI') return true; 
+    if (!apiKey || !apiKey.startsWith('AIza')) return false;
     try {
-        if (provider === 'GEMINI') {
-            const client = new GoogleGenAI({ apiKey: key });
-            await client.models.generateContent({ model: GEMINI_MODEL, contents: 'ping' });
-            return true;
-        }
-        return true; 
+        const aiInstance = new GoogleGenAI({ apiKey });
+        const response = await aiInstance.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: "hi",
+            config: { maxOutputTokens: 5, thinkingConfig: { thinkingBudget: 0 } }
+        });
+        return !!response.text;
     } catch (e) {
+        console.error("[AI] Key Validation Failed:", e);
         return false;
     }
 };
 
-export const identifySongFromAudio = async (
-  base64Audio: string, 
-  mimeType: string, 
-  language: Language = 'en', 
-  region: Region = 'global',
-  provider: AIProvider = 'GEMINI',
-  customKey?: string
-): Promise<SongInfo | null> => {
-  if (provider === 'MOCK') {
-      await new Promise(r => setTimeout(r, 1000));
-      return { title: "Echoes of Eternity", artist: "Aura Synth", lyricsSnippet: "Floating in a digital dream...", mood: "Hypnotic Cyber", mood_en_keywords: 'hypnotic, cyber, ambient', identified: true, matchSource: 'MOCK' };
-  }
-
-  let features: number[] = [];
-  try {
-    features = await generateFingerprint(base64Audio);
-    const localMatch = findLocalMatch(features);
-    if (localMatch) return { ...localMatch, matchSource: 'LOCAL' };
-  } catch (e) {
-      console.warn("[AI] Fingerprint generation/matching failed:", e);
-  }
-
-  // Get translated strings for error messages
-  const t = TRANSLATIONS[language] || TRANSLATIONS['en'];
-  const errors = t.errors || {};
-
-  const apiKey = customKey || process.env.API_KEY;
-  if (!apiKey || apiKey.includes('YOUR_API_KEY')) {
-      return { 
-          title: errors.configMissing || "API Config Missing", 
-          artist: errors.sysAlert || "System Alert", 
-          lyricsSnippet: errors.configMissingDesc || "Please configure your API Key in the settings.", 
-          mood: "Configuration Required", 
-          mood_en_keywords: 'error, alert', 
-          identified: false, 
-          matchSource: 'MOCK',
-          isError: true
-      };
-  }
-
-  const regionName = region === 'global' ? 'Global' : (REGION_NAMES[region] || region);
-  const langMap: Record<string, string> = { en: 'English', zh: 'Simplified Chinese', tw: 'Traditional Chinese', ja: 'Japanese', es: 'Spanish', ko: 'Korean', de: 'German', fr: 'French', ru: 'Russian', ar: 'Arabic' };
-  const targetLang = langMap[language] || 'English';
-
-  const personaInstruction = PROVIDER_PROFILES[provider] || PROVIDER_PROFILES['GEMINI'];
-
-  // --- v1.7.43: Stricter Prompt Engineering for Accuracy ---
-  const systemInstruction = `
-    You are the "Aura Flux Synesthesia Intelligence".
-    ${personaInstruction}
-    
-    PRIMARY GOAL: Your main task is to identify the commercial song title and artist from the provided 6-second audio snippet. Use your tools for this.
-
-    SECONDARY GOAL (FALLBACK): ONLY IF you are absolutely certain no commercial track matches, then you must provide a poetic, synesthetic description of the soundscape.
-    
-    STRICT RULES:
-    1.  **Identification vs. Description**: 
-        *   If you successfully identify a commercial song, you MUST set \`"identified": true\`.
-        *   If you are describing the audio instead of identifying a specific track, you MUST set \`"identified": false\`. In this case, the "title" and "artist" fields should contain a CREATIVE DESCRIPTION (e.g., Title: "Velvet Static", Artist: "Lofi Ambient"), not a guess at a real song.
-    2.  **Translation**: The "mood" and "lyricsSnippet" fields MUST be translated into ${targetLang}.
-    3.  **Mood Field**: Provide a vivid 3-5 word summary combining emotion and genre (e.g., "Melancholic Cyberpunk Rain", "High-Energy Industrial Techno"). Avoid generic single words.
-    4.  **Mood Keywords Field**: The "mood_en_keywords" MUST contain 3-5 comma-separated, lowercase English keywords for styling (e.g., 'sad, futuristic, calm' or 'energetic, electronic, aggressive').
-    5.  **Lyrics/Texture Field**: If lyrics are audible, quote key lines. If instrumental, describe the visual texture, instrumentation, or genre elements (e.g., "Distorted synth arpeggios over a heavy bassline.").
-    6.  **Response Format**: You MUST return RAW JSON only. Do not wrap it in markdown.
-  `;
-
-  try {
-      const client = new GoogleGenAI({ apiKey });
-
-      const generatePromise = client.models.generateContent({
-          model: GEMINI_MODEL,
-          contents: [{ parts: [{ inlineData: { mimeType, data: base64Audio } }, { text: `Identify audio. Region: ${regionName}. Language: ${targetLang}.` }] }],
-          config: { 
-              tools: [{ googleSearch: {} }], 
-              systemInstruction: systemInstruction,
-              temperature: 0.7,
-              topP: 0.95,
-              topK: 40,
-              responseMimeType: "application/json",
-              responseSchema: RESPONSE_SCHEMA
-          }
-      });
-      
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("AI_TIMEOUT")), REQUEST_TIMEOUT_MS)
-      );
-
-      const response = await Promise.race([generatePromise, timeoutPromise]) as any;
-
-      let rawText = response.text || "";
-      // Robust cleaning: Handle ```json, ```JSON, or just ```
-      rawText = rawText.replace(/```(?:json)?/gi, "").replace(/```/g, "").trim();
-      
-      let songInfo: SongInfo;
-      try {
-        songInfo = JSON.parse(rawText);
-        
-        // Robustness: Fallback if AI omits the required styling keywords
-        if (!songInfo.mood_en_keywords) {
-            songInfo.mood_en_keywords = 'default';
-        }
-      } catch (jsonError) {
-        console.error("[AI] Robustness: Failed to parse JSON response.", jsonError, "Raw Text:", rawText);
-        throw new Error("Invalid JSON response from AI.");
-      }
-
-      const chunk = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.[0];
-      if (chunk?.web?.uri) songInfo.searchUrl = chunk.web.uri;
-      songInfo.matchSource = provider;
-      if (songInfo.identified && features.length > 0) saveToLocalCache(features, songInfo);
-      return songInfo;
-
-  } catch (error: any) {
-      console.error(`[AI] Identification failed:`, error.message);
-      
-      const errorMessage = error.toString().toLowerCase();
-      if (errorMessage.includes('api key not valid') || errorMessage.includes('permission denied') || (error.httpStatus === 403 || error.httpStatus === 400)) {
-        return { 
-          title: errors.apiKeyInvalid || "Invalid API Key", 
-          artist: errors.sysAlert || "System Alert", 
-          lyricsSnippet: errors.apiKeyInvalidDesc || `Your ${provider} API key appears to be invalid or lacks permissions.`, 
-          mood: "Configuration Error", 
-          mood_en_keywords: 'error, alert, invalid',
-          identified: false, 
-          matchSource: 'MOCK',
-          isError: true
-        };
-      }
-      
-      if (error.message === 'AI_TIMEOUT') {
-        return { 
-          title: errors.networkTimeout || "Request Timed Out", 
-          artist: errors.sysAlert || "System Alert", 
-          lyricsSnippet: errors.networkTimeoutDesc || "The AI service is taking too long to respond.", 
-          mood: "Network Issue", 
-          mood_en_keywords: 'error, alert, network',
-          identified: false, 
-          matchSource: 'MOCK',
-          isError: true
-        };
-      }
-      
-      return null;
-  }
+export const generateVisualConfigFromAudio = async (base64Audio: string, apiKey: string, language: Language = 'en'): Promise<any> => {
+    const key = apiKey || process.env.API_KEY;
+    if (!key) return null;
+    const aiInstance = new GoogleGenAI({ apiKey: key });
+    const systemInstruction = `Analyze the provided audio snippet. Determine the most appropriate visualizer settings to match the rhythm, genre, and mood. Return choices in JSON. Explanation in ${language}.`;
+    try {
+        const response = await aiInstance.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: [{ parts: [{ inlineData: { mimeType: 'audio/wav', data: base64Audio } }, { text: "Generate visual config for this audio." }] }],
+            config: { systemInstruction, responseMimeType: "application/json", responseSchema: VISUAL_CONFIG_SCHEMA }
+        });
+        return JSON.parse(response.text || "{}");
+    } catch (e) {
+        console.error("[AI] Visual Config Generation Failed:", e);
+        return null;
+    }
 };
 
-export const generateVisualConfigFromAudio = async (
-    base64Audio: string, 
-    customKey: string | undefined,
-    language: Language = 'en'
-): Promise<any> => {
-    const apiKey = customKey || process.env.API_KEY;
-    if (!apiKey) throw new Error("Missing API Key");
-
-    const validModes = Object.keys(VISUALIZER_PRESETS).join(', ');
-    const langMap: Record<string, string> = { en: 'English', zh: 'Simplified Chinese', tw: 'Traditional Chinese', ja: 'Japanese', es: 'Spanish', ko: 'Korean', de: 'German', fr: 'French', ru: 'Russian', ar: 'Arabic' };
-    const targetLang = langMap[language] || 'English';
-
-    const systemInstruction = `
-        You are a world-class VJ (Visual Jockey) and Creative Director. 
-        Your task is to analyze the provided audio segment and design the perfect visualizer configuration based solely on its sonic characteristics (genre, tempo, energy).
-        
-        CRITICAL RULE: **DO NOT** attempt to identify the specific song name, artist, or analyze the lyrics. Focus ONLY on the sound texture and rhythm.
-        
-        AVAILABLE MODES: [${validModes}]
-        
-        INSTRUCTIONS:
-        1. Analyze the audio for genre (e.g. Rock, EDM, Jazz), tempo (BPM), energy level, and emotional atmosphere.
-        2. Select the single most appropriate 'mode' from the list above.
-           - Use 'NEURAL_FLOW' or 'LIQUID' for organic, ambient, or complex textures.
-           - Use 'KINETIC_WALL' or 'CUBE_FIELD' for high-energy, rhythmic, or industrial beats.
-           - Use 'LASERS' or 'TUNNEL' for fast-paced electronic or synthwave.
-           - Use 'BARS' or 'WAVEFORM' for vocals or classic rock.
-        3. Create a custom 3-color palette (hex codes) that matches the mood (e.g., Neon for Cyberpunk, Pastels for Lo-fi).
-        4. Adjust 'speed' (0.5 - 3.0) based on tempo.
-        5. Adjust 'sensitivity' (1.0 - 4.0) based on dynamic range.
-        6. Explain your creative choice in one short sentence. IMPORTANT: Write the explanation in ${targetLang}.
-    `;
-
+/**
+ * Generates an artistic background image based on provided mood keywords.
+ */
+export const generateArtisticBackground = async (moodKeywords: string, apiKey: string): Promise<string | null> => {
+    const key = apiKey || process.env.API_KEY;
+    if (!key) return null;
+    
+    const aiInstance = new GoogleGenAI({ apiKey: key });
+    const prompt = `A highly detailed, professional, immersive digital art background that represents the mood: ${moodKeywords}. Abstract, cinematic lighting, aesthetic, high-fidelity, VJ style, 4k.`;
+    
     try {
-        const client = new GoogleGenAI({ apiKey });
-        const response = await client.models.generateContent({
-            model: GEMINI_MODEL,
-            contents: [{ parts: [{ inlineData: { mimeType: 'audio/wav', data: base64Audio } }, { text: "Design visual experience based on genre and mood." }] }],
+        const response = await aiInstance.models.generateContent({
+            model: IMAGEN_MODEL,
+            contents: { parts: [{ text: prompt }] },
             config: {
-                systemInstruction: systemInstruction,
-                responseMimeType: "application/json",
-                responseSchema: VISUAL_CONFIG_SCHEMA,
-                temperature: 0.8
+                imageConfig: {
+                    aspectRatio: "16:9"
+                }
             }
         });
         
-        const jsonStr = response.text?.replace(/```(?:json)?/gi, "").replace(/```/g, "").trim();
-        if (jsonStr) return JSON.parse(jsonStr);
-        throw new Error("Empty response");
+        // Find image part in the response
+        for (const part of response.candidates[0].content.parts) {
+            if (part.inlineData) {
+                return `data:image/png;base64,${part.inlineData.data}`;
+            }
+        }
+        return null;
     } catch (e) {
-        console.error("AI Director failed:", e);
-        throw e;
+        console.error("[AI] Background Generation Failed:", e);
+        return null;
+    }
+};
+
+export const identifySongFromAudio = async (base64Audio: string, mimeType: string, language: Language = 'en', region: Region = 'global', provider: AIProvider = 'GEMINI', apiKey?: string): Promise<SongInfo | null> => {
+    const key = apiKey || process.env.API_KEY;
+    if (!key) return null;
+    const aiInstance = new GoogleGenAI({ apiKey: key });
+    const systemInstruction = `You are an expert music identifier and visual director. Analyze the audio snippet. Identify the song if possible. Provide mood and English keywords for visualization. Region: ${region}. Language: ${language}.`;
+    try {
+        const response = await aiInstance.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: [{ parts: [{ inlineData: { mimeType, data: base64Audio } }, { text: "Identify this song." }] }],
+            config: { systemInstruction, responseMimeType: "application/json", responseSchema: SONG_SCHEMA }
+        });
+        const result = JSON.parse(response.text || "{}");
+        return { ...result, matchSource: provider };
+    } catch (e) {
+        console.error("[AI] Song Identification Failed:", e);
+        return null;
     }
 };

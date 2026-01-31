@@ -1,23 +1,30 @@
 /**
  * File: core/services/renderers/LasersRenderer.ts
- * Version: 1.7.32
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Version: 1.8.25
+ * Author: Sut
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
+ * Updated: 2025-03-24 23:10 - Fixed sensitivity bug by normalizing frequency bins.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
-import { getAverage } from '../audioUtils'; // Import getAverage
+import { getAverage } from '../audioUtils';
 
 export class LasersRenderer implements IVisualizerRenderer {
   init() {}
+  
   draw(ctx: RenderContext, data: Uint8Array, w: number, h: number, colors: string[], settings: VisualizerSettings, rotation: number, beat: boolean) {
-    if (colors.length === 0) return;
+    if (colors.length === 0 || data.length === 0) return;
     
-    // Apply sensitivity globally to audio features
-    const highs = getAverage(data, 100, 255) / 255 * settings.sensitivity;
-    const bass = getAverage(data, 0, 20) / 255 * settings.sensitivity;
-    const mids = getAverage(data, 20, 80) / 255 * settings.sensitivity;
+    const len = data.length;
+    // Normalized ranges instead of fixed indices
+    const highRangeStart = Math.floor(len * 0.4);
+    const bassRangeEnd = Math.floor(len * 0.05);
+    const midRangeStart = Math.floor(len * 0.1);
+    const midRangeEnd = Math.floor(len * 0.3);
+
+    const highs = getAverage(data, highRangeStart, len) / 255 * settings.sensitivity;
+    const bass = getAverage(data, 0, bassRangeEnd) / 255 * settings.sensitivity;
+    const mids = getAverage(data, midRangeStart, midRangeEnd) / 255 * settings.sensitivity;
     
     ctx.save(); 
     ctx.globalCompositeOperation = 'screen';
@@ -31,10 +38,11 @@ export class LasersRenderer implements IVisualizerRenderer {
     origins.forEach((origin, oIdx) => {
       const beams = (oIdx === 2) ? 6 : 8; 
       for (let i = 0; i < beams; i++) {
-        const freqVal = (data[oIdx * 16 + i * 2] || 0) / 255 * settings.sensitivity;
+        // Correctly map beam to a relative frequency segment
+        const binIdx = Math.floor(((i / beams) * 0.4 + (oIdx * 0.2)) * len);
+        const freqVal = (data[binIdx] || 0) / 255 * settings.sensitivity;
         
         const angleBase = (oIdx === 0 ? -0.1 : oIdx === 1 ? -Math.PI + 0.1 : -Math.PI/2);
-        // Wide sweep on beat, now reactive to sensitivity via bass
         const beatSweep = beat ? 0.5 : 0;
         const sweepRange = 1.2 + bass * 0.5 + beatSweep;
         
@@ -48,7 +56,6 @@ export class LasersRenderer implements IVisualizerRenderer {
         const finalAlpha = Math.min(Math.max(baseAlpha * (0.5 + bass * 2), 0.01), 1.0);
         if (finalAlpha < 0.02) continue;
 
-        // Base width scales with sensitivity, plus dynamic audio reactivity
         const coreWidth = settings.sensitivity + bass * 25 + mids * 5;
         
         if (settings.quality !== 'low') {

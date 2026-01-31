@@ -1,10 +1,8 @@
+
 /**
  * File: components/ui/controls/SettingsToggle.tsx
- * Version: 1.1.3
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 18:00
- * Description: Unified UI style with other controls (text-xs uppercase).
+ * Version: 1.8.23
+ * Author: Sut
  */
 
 import React, { memo } from 'react';

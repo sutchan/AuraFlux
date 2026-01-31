@@ -1,9 +1,8 @@
 /**
  * File: components/ui/controls/SegmentedControl.tsx
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: UI Polish - Floating Indicator
+ * Updated: 2025-03-25 15:20 - Added safety check for onChange
  */
 
 import React from 'react';
@@ -30,14 +29,13 @@ export const SegmentedControl = <T extends string | number>({ label, value, opti
           <span className="text-xs font-bold uppercase text-white/60 tracking-wider ml-1 block">{label}</span>
         </TooltipArea>
       )}
-      {/* Container: Darker background, inner shadow for depth */}
       <div className="relative flex bg-black/40 p-1 rounded-xl border border-white/5 shadow-inner">
         {options.map((opt) => {
           const isActive = opt.value === value;
           return (
             <button
               key={String(opt.value)}
-              onClick={() => onChange(opt.value)}
+              onClick={() => onChange?.(opt.value)}
               className={`relative z-10 flex-1 min-w-0 py-1.5 px-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors duration-200 truncate ${
                 isActive
                   ? 'text-white'
@@ -46,7 +44,6 @@ export const SegmentedControl = <T extends string | number>({ label, value, opti
             >
               {opt.label}
               
-              {/* Active Indicator: Absolute positioned background for the active item */}
               {isActive && (
                 <div className="absolute inset-0 bg-white/10 border border-white/10 rounded-lg shadow-sm -z-10 animate-fade-in-up duration-200" />
               )}

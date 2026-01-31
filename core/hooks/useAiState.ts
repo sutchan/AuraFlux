@@ -1,10 +1,8 @@
-
 /**
  * File: core/hooks/useAiState.ts
- * Version: 1.7.34
- * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-20 12:40
+ * Version: 1.8.23
+ * Author: Aura Flux Team
+ * Copyright (c) 2025 Aura Flux. All rights reserved.
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -17,13 +15,12 @@ const DEFAULT_SHOW_LYRICS = false;
 const DEFAULT_ENABLE_ANALYSIS = false;
 
 // Privacy Helper: Simple Base64 obfuscation to prevent shoulder-surfing leaks.
-// Note: This is not encryption. The key is still accessible in the browser.
 const encodeKey = (key: string) => `enc:${btoa(key)}`;
 const decodeKey = (str: string) => {
     if (typeof str === 'string' && str.startsWith('enc:')) {
         try { return atob(str.slice(4)); } catch (e) { return ''; }
     }
-    return str; // Backward compatibility for legacy plain-text keys
+    return str;
 };
 
 interface AiStateProps {
@@ -36,7 +33,7 @@ interface AiStateProps {
   initialSettings: VisualizerSettings;
   setSettings: React.Dispatch<React.SetStateAction<VisualizerSettings>>;
   onSongIdentified?: (song: SongInfo | null) => void;
-  currentSong?: SongInfo | null; // Passed from AudioContext to optimize
+  currentSong?: SongInfo | null;
 }
 
 export const useAiState = ({ 
@@ -47,17 +44,12 @@ export const useAiState = ({
 
   const [lyricsStyle, setLyricsStyle] = useState<LyricsStyle>(() => {
     const saved = getStorage('lyricsStyle', DEFAULT_LYRICS_STYLE);
-    // Robustness: Validate enum from storage. If invalid, fallback to default.
     return Object.values(LyricsStyle).includes(saved) ? saved : DEFAULT_LYRICS_STYLE;
   });
   
-  // Controls visibility of UI overlay (Lyrics/Song Info)
   const [showLyrics, setShowLyrics] = useState<boolean>(() => getStorage('showLyrics', DEFAULT_SHOW_LYRICS));
-  
-  // Controls background AI analysis loop (Genre/Mood/Identification)
   const [enableAnalysis, setEnableAnalysis] = useState<boolean>(() => getStorage('enableAnalysis', DEFAULT_ENABLE_ANALYSIS));
   
-  // Store API Keys per provider with obfuscation
   const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
       const raw = getStorage<Record<string, string>>('api_keys_v1', {});
       const decoded: Record<string, string> = {};
@@ -69,11 +61,9 @@ export const useAiState = ({
       return decoded;
   });
 
-  // Save keys encoded
   useEffect(() => {
       const encoded: Record<string, string> = {};
       Object.entries(apiKeys).forEach(([k, v]) => {
-          // FIX: Add type guard for `v` to satisfy TypeScript. `Object.entries` can return `unknown` for values.
           if (v && typeof v === 'string') {
             encoded[k] = encodeKey(v);
           }
@@ -81,12 +71,10 @@ export const useAiState = ({
       setStorage('api_keys_v1', encoded);
   }, [apiKeys, setStorage]);
 
-  // We pass 'enableAnalysis' as the "showLyrics" prop to useIdentification,
-  // effectively decoupling the loop from the UI visibility.
   const { isIdentifying, setCurrentSong, performIdentification } = useIdentification({
     language, region, provider, 
-    showLyrics: enableAnalysis, // Pass enableAnalysis here to control the loop
-    apiKey: apiKeys[provider], // Pass the custom key for current provider
+    isEnabled: enableAnalysis, 
+    apiKey: apiKeys[provider], 
     onSongUpdate: onSongIdentified
   });
 
@@ -105,12 +93,8 @@ export const useAiState = ({
   
   useEffect(() => {
     let interval: number;
-    
-    // Optimization: If we are playing a file and it already has full lyrics (e.g. from ID3),
-    // skip the AI loop to save API costs and avoid conflicts.
     const hasFileLyrics = currentSong?.matchSource === 'FILE' && !!currentSong?.lyrics;
 
-    // Trigger loop based on enableAnalysis, not showLyrics
     if (isListening && mediaStream && enableAnalysis && !isSimulating && !hasFileLyrics) {
       performIdentification(mediaStream);
       interval = window.setInterval(() => performIdentification(mediaStream), 20000);

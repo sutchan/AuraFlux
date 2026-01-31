@@ -1,9 +1,8 @@
 /**
  * File: core/hooks/useAudioPulse.ts
- * Version: 1.7.32
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 12:00
+ * Version: 1.8.23
+ * Author: Aura Flux Team
+ * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -21,10 +20,6 @@ interface UseAudioPulseProps {
   mode?: 'volume' | 'beat';
 }
 
-/**
- * 使用 CSS 变量应用音频响应式脉冲效果。
- * 支持 'volume' (振幅) 和 'beat' (节拍检测) 两种模式。
- */
 export const useAudioPulse = ({
   elementRef,
   analyser,
@@ -40,7 +35,6 @@ export const useAudioPulse = ({
   const beatScaleRef = useRef(1.0);
 
   useEffect(() => {
-    // Lazy init beat detector
     if (!beatDetectorRef.current) {
         beatDetectorRef.current = new BeatDetector();
     }
@@ -75,7 +69,6 @@ export const useAudioPulse = ({
         let scale = 1;
         let opacity = baseOpacity;
 
-        // Calculate average bass for breathing
         let bass = 0;
         const bassBins = 10;
         for (let i = 0; i < bassBins; i++) bass += dataArray[i];
@@ -83,27 +76,15 @@ export const useAudioPulse = ({
 
         if (mode === 'beat') {
             const isBeat = beatDetectorRef.current?.detect(dataArray);
-            
             if (isBeat) {
-                // Strong punch on beat
                 beatScaleRef.current = 1.0 + (pulseStrength * settings.sensitivity);
             }
-            // Smooth elastic decay (0.12 factor)
             beatScaleRef.current += (1.0 - beatScaleRef.current) * 0.12;
-            
-            // Enhanced breathing: allow bass to affect scale even between beats
-            // 0.3 factor makes it visible even at moderate volumes
             const breathing = bassNormalized * 0.3 * settings.sensitivity;
-            
-            // The final scale is the decay envelope + current bass pressure
             scale = beatScaleRef.current + breathing;
-            
-            // Dynamic opacity flash based on scale deviation
             const flash = (scale - 1.0) * opacityStrength; 
             opacity = Math.min(1, baseOpacity + flash);
-
         } else {
-            // Standard volume-based linear reaction
             scale = 1 + (bassNormalized * pulseStrength * settings.sensitivity);
             opacity = Math.min(1, (1.0 - opacityStrength + bassNormalized * opacityStrength) * baseOpacity);
         }
@@ -115,7 +96,6 @@ export const useAudioPulse = ({
     };
 
     requestRef.current = requestAnimationFrame(animate);
-
     return cleanup;
   }, [isEnabled, analyser, settings.sensitivity, pulseStrength, opacityStrength, baseOpacity, elementRef, mode]);
 };

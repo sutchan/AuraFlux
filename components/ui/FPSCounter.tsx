@@ -1,9 +1,8 @@
 /**
  * File: components/ui/FPSCounter.tsx
- * Version: 1.0.6
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-02-23 03:15
+ * Version: 1.8.23
+ * Author: Aura Flux Team
+ * Copyright (c) 2024 Aura Flux. All rights reserved.
  */
 
 import React, { useState, useEffect } from 'react';

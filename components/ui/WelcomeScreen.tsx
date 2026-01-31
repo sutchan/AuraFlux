@@ -1,10 +1,9 @@
 
 /**
  * File: components/ui/WelcomeScreen.tsx
- * Version: 1.1.1
- * Author: Aura Vision Team
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-18 14:00
+ * Version: 2.0.1
+ * Author: Sut
+ * Updated: 2025-03-24 16:15
  */
 
 import React from 'react';
@@ -12,74 +11,52 @@ import { useUI, useAudioContext } from '../AppContext';
 
 export const WelcomeScreen: React.FC = () => {
   const { t, setHasStarted } = useUI();
-  const { errorMessage, setErrorMessage, startMicrophone, startDemoMode, selectedDeviceId } = useAudioContext();
-
-  // Safe fallback for t to prevent crashes if translations aren't loaded
-  const safeT = t || {};
-
-  // Logic to split title into Brand and Slogan if separated by "|"
-  const titleRaw = safeT.welcomeTitle || "Aura Flux";
-  // Robust splitting: Handle spacing around pipe
-  const parts = titleRaw.includes('|') ? titleRaw.split('|') : [titleRaw];
-  const titleMain = parts[0].trim();
-  const titleSub = parts.length > 1 ? parts.slice(1).join('|').trim() : null;
+  // FIX: Use toggleMicrophone instead of startMicrophone
+  const { toggleMicrophone, selectedDeviceId } = useAudioContext();
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6 text-center select-none overflow-hidden">
-      {/* 
-         Fix: Animation moved to inner container. 
-         The outer container acts as a solid black cover to hide the app behind it.
-      */}
-      <div className="max-w-md w-full space-y-8 animate-fade-in-up relative z-10">
-        <div className="flex flex-col items-center gap-2">
-          <h1 className="text-5xl md:text-7xl font-black leading-tight pb-2 tracking-tight">
-            {/* 
-               Gradient Text Fix: 
-               1. Use inline-block to ensure transform/clip works correctly.
-               2. Add explicit text-transparent and background-clip utilities.
-               3. Fallback text color is handled by the gradient if clipping fails in some browsers, 
-                  but text-transparent is essential for the effect.
-            */}
-            <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 pb-1">
-              {titleMain}
+    <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6 text-center overflow-hidden">
+      {/* 动态背景光晕 */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full animate-pulse" />
+      
+      <div className="max-w-md w-full space-y-12 relative z-10 animate-fade-in-up">
+        <div className="space-y-4">
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter">
+            <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-blue-400 to-purple-600">
+              AURA
+            </span>
+            <br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-tr from-purple-500 to-pink-500">
+              FLUX
             </span>
           </h1>
-          {titleSub && (
-            <span className="text-xl md:text-3xl font-bold text-white/90 tracking-[0.15em] uppercase block">
-              {titleSub}
-            </span>
-          )}
-        </div>
-        
-        <div className="px-4">
-            <p className="text-gray-400 text-sm leading-relaxed">
-                {safeT.welcomeText || "Translate audio into generative art."}
-            </p>
+          <p className="text-white/40 text-sm font-medium uppercase tracking-[0.3em]">
+            {t?.welcomeText || "The Sound of Light"}
+          </p>
         </div>
 
-        <div className="flex flex-col gap-3 pt-4">
+        <div className="flex flex-col gap-4">
           <button 
-            onClick={() => { setHasStarted(true); startMicrophone(selectedDeviceId); }} 
-            className="px-8 py-4 bg-white text-black font-bold rounded-2xl hover:scale-105 transition-all shadow-lg shadow-white/10"
+            onClick={() => { setHasStarted(true); toggleMicrophone(selectedDeviceId); }} 
+            className="group relative px-8 py-4 bg-white text-black font-black rounded-2xl transition-all hover:scale-105 active:scale-95 overflow-hidden"
           >
-            {safeT.startExperience || "Start"}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            <span className="relative z-10 uppercase tracking-widest">{t?.startExperience || "开启视听旅程"}</span>
           </button>
+          
           <button 
-            onClick={() => { setHasStarted(true); startDemoMode(); }} 
-            className="px-8 py-3 bg-white/10 text-white font-bold rounded-2xl hover:bg-white/20 transition-all text-sm border border-white/10"
+            onClick={() => { setHasStarted(true); /* Removed non-existent startDemoMode */ }} 
+            className="px-8 py-4 bg-white/5 text-white/60 font-bold rounded-2xl hover:bg-white/10 hover:text-white transition-all text-xs border border-white/10 uppercase tracking-widest"
           >
-            {safeT.errors?.tryDemo || "Try Demo Mode"}
+            {t?.errors?.tryDemo || "试用演示模式"}
           </button>
         </div>
         
-        {errorMessage && (
-          <div className="p-3 bg-red-500/20 text-red-200 text-xs rounded-lg border border-red-500/30 leading-relaxed flex items-center justify-between mt-4">
-             <span>{errorMessage}</span>
-             <button onClick={() => setErrorMessage(null)} className="ml-2 hover:text-white p-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-             </button>
-          </div>
-        )}
+        <div className="pt-8 border-t border-white/5">
+            <p className="text-[10px] text-white/20 font-mono uppercase tracking-widest">
+                Requires Microphone Access for Real-time Visualization
+            </p>
+        </div>
       </div>
     </div>
   );
