@@ -1,13 +1,13 @@
 
 /**
  * File: core/constants/index.ts
- * Version: 1.9.9
+ * Version: 1.9.14
  * Author: Sut
  */
 
 import { VisualizerMode, SmartPreset } from '../types';
 
-export const APP_VERSION = '1.8.16';
+export const APP_VERSION = '1.8.22';
 export const GEMINI_MODEL = 'gemini-3-flash-preview';
 export const STORAGE_PREFIX = 'av_v1_';
 
@@ -61,6 +61,21 @@ export const AVAILABLE_FONTS = [
   { value: 'custom', label: '📂 Local / Custom Font...' }
 ];
 
+export const getFontOptions = (t: any) => {
+  const f = t?.fonts || {};
+  return [
+    { value: 'Inter, sans-serif', label: f.default || 'Inter (Default)' },
+    { value: 'system-ui, sans-serif', label: f.system || 'System UI' },
+    { value: '"JetBrains Mono", monospace', label: f.mono || 'JetBrains Mono' },
+    { value: '"Montserrat", sans-serif', label: f.modern || 'Montserrat' },
+    { value: '"Oswald", sans-serif', label: f.heavy || 'Oswald' },
+    { value: '"Playfair Display", serif', label: f.elegant || 'Playfair Display' },
+    { value: '"Courier New", monospace', label: f.retro || 'Courier New' },
+    { value: '"Times New Roman", serif', label: f.serif || 'Times New Roman' },
+    { value: 'custom', label: f.custom || '📂 Local / Custom Font...' }
+  ];
+};
+
 export const getPositionOptions = (t: any) => [
   { value: 'tl', label: t?.positions?.tl || 'Top Left' },
   { value: 'tc', label: t?.positions?.tc || 'Top Center' },
@@ -88,6 +103,9 @@ export const VISUALIZER_PRESETS: Record<string, { description: string }> = {
   [VisualizerMode.CUBE_FIELD]: { description: 'Infinite field of geometric blocks.' },
   [VisualizerMode.KINETIC_WALL]: { description: 'Massive LED stage wall with kinetic extrusions.' },
   [VisualizerMode.LIQUID]: { description: 'Abstract morphing sphere reacting to rhythm.' },
+  [VisualizerMode.DIGITAL_GRID]: { description: 'Curved LED wall spectrum analyzer.' },
+  [VisualizerMode.SILK_WAVE]: { description: 'Flowing ribbon of particles.' },
+  [VisualizerMode.OCEAN_WAVE]: { description: 'Retro-futuristic wireframe terrain.' },
 };
 
 export const SMART_PRESETS: Record<string, SmartPreset> = {
@@ -108,73 +126,86 @@ export const SMART_PRESETS: Record<string, SmartPreset> = {
   calm: {
     nameKey: 'calm',
     settings: {
-      mode: VisualizerMode.WAVEFORM,
-      colorTheme: COLOR_THEMES[4],
-      speed: 0.5,
-      sensitivity: 1.0,
-      glow: false,
+      mode: VisualizerMode.OCEAN_WAVE, // Updated to WebGL Ocean Wave
+      colorTheme: COLOR_THEMES[4], // Electric Blue
+      speed: 0.4,
+      sensitivity: 1.2,
+      glow: true,
       trails: true,
-      smoothing: 0.9,
-      includedModes: [VisualizerMode.WAVEFORM, VisualizerMode.FLUID_CURVES, VisualizerMode.LIQUID, VisualizerMode.NEBULA]
+      smoothing: 0.92,
+      includedModes: [VisualizerMode.OCEAN_WAVE, VisualizerMode.WAVEFORM, VisualizerMode.FLUID_CURVES, VisualizerMode.NEBULA]
     }
   },
   party: {
     nameKey: 'party',
     settings: {
       mode: VisualizerMode.KINETIC_WALL,
-      colorTheme: COLOR_THEMES[0],
-      speed: 1.5,
-      sensitivity: 2.0,
+      colorTheme: COLOR_THEMES[0], // Vaporwave
+      speed: 1.6,
+      sensitivity: 2.2,
       glow: true,
       trails: true,
       smoothing: 0.6,
-      includedModes: [VisualizerMode.KINETIC_WALL, VisualizerMode.LASERS, VisualizerMode.BARS, VisualizerMode.CUBE_FIELD, VisualizerMode.PLASMA]
+      includedModes: [VisualizerMode.KINETIC_WALL, VisualizerMode.DIGITAL_GRID, VisualizerMode.LASERS, VisualizerMode.CUBE_FIELD, VisualizerMode.PLASMA]
     }
   },
   ambient: {
     nameKey: 'ambient',
     settings: {
-      mode: VisualizerMode.NEBULA,
-      colorTheme: COLOR_THEMES[8],
+      mode: VisualizerMode.SILK_WAVE, // Updated to WebGL Silk Wave
+      colorTheme: COLOR_THEMES[8], // Royal Purple
       speed: 0.3,
       sensitivity: 1.2,
       glow: true,
       trails: true,
       smoothing: 0.95,
-      includedModes: [VisualizerMode.NEBULA, VisualizerMode.MACRO_BUBBLES, VisualizerMode.NEURAL_FLOW, VisualizerMode.PARTICLES]
+      includedModes: [VisualizerMode.SILK_WAVE, VisualizerMode.NEBULA, VisualizerMode.MACRO_BUBBLES, VisualizerMode.NEURAL_FLOW]
     }
   },
   cyberpunk: {
     nameKey: 'cyberpunk',
     settings: {
-      mode: VisualizerMode.LASERS,
-      colorTheme: COLOR_THEMES[1],
+      mode: VisualizerMode.DIGITAL_GRID, // Updated to Digital Grid
+      colorTheme: COLOR_THEMES[1], // Aurora
       speed: 1.2,
       sensitivity: 1.8,
       glow: true,
       trails: true,
       smoothing: 0.7,
-      includedModes: [VisualizerMode.LASERS, VisualizerMode.TUNNEL, VisualizerMode.RINGS]
+      includedModes: [VisualizerMode.DIGITAL_GRID, VisualizerMode.LASERS, VisualizerMode.TUNNEL, VisualizerMode.RINGS]
     }
   },
   retrowave: {
     nameKey: 'retrowave',
     settings: {
       mode: VisualizerMode.CUBE_FIELD,
-      colorTheme: COLOR_THEMES[2],
+      colorTheme: COLOR_THEMES[2], // Sunset
       speed: 1.0,
       sensitivity: 1.5,
       glow: true,
       trails: false,
       smoothing: 0.8,
-      includedModes: [VisualizerMode.CUBE_FIELD, VisualizerMode.TUNNEL, VisualizerMode.BARS]
+      includedModes: [VisualizerMode.CUBE_FIELD, VisualizerMode.OCEAN_WAVE, VisualizerMode.TUNNEL, VisualizerMode.BARS]
+    }
+  },
+  psychedelic: {
+    nameKey: 'psychedelic',
+    settings: {
+      mode: VisualizerMode.LIQUID,
+      colorTheme: COLOR_THEMES[11], // Cyber Lime
+      speed: 0.7,
+      sensitivity: 2.0,
+      glow: true,
+      trails: true,
+      smoothing: 0.85,
+      includedModes: [VisualizerMode.LIQUID, VisualizerMode.PLASMA, VisualizerMode.NEURAL_FLOW, VisualizerMode.TUNNEL]
     }
   },
   vocal: {
     nameKey: 'vocal',
     settings: {
       mode: VisualizerMode.BARS,
-      colorTheme: COLOR_THEMES[8], // Updated to Royal Purple (Index 8) as Index 20 is removed
+      colorTheme: COLOR_THEMES[8],
       speed: 0.8,
       sensitivity: 1.3,
       glow: false,

@@ -1,16 +1,17 @@
+
 /**
  * File: components/ui/LyricsOverlay.tsx
- * Version: 2.0.0
+ * Version: 2.0.2
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 15:00
+ * Updated: 2025-03-19 20:30
  * Description: Support for both AI snippets and fully synchronized LRC lyrics (from ID3/file).
  */
 
 import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { VisualizerSettings, SongInfo, LyricsStyle } from '../../core/types';
 import { useAudioPulse } from '../../core/hooks/useAudioPulse';
-import { useAudioContext } from '../AppContext';
+import { useAudioContext, useUI } from '../AppContext';
 
 interface LyricsOverlayProps {
   settings: VisualizerSettings;
@@ -27,7 +28,8 @@ interface LrcLine {
 
 // Helper: Parse LRC string to structured array
 const parseLrc = (lrc: string): LrcLine[] => {
-    const lines = lrc.split('\n');
+    // Normalize line endings to avoid issues with Windows/Mac encoded files
+    const lines = lrc.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
     const result: LrcLine[] = [];
     const timeRegex = /\[(\d{2}):(\d{2})(?:\.(\d{2,3}))?\]/;
 
@@ -50,9 +52,10 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { currentTime } = useAudioContext(); // Hook into playback time for syncing
+  const { t } = useUI();
   
   const isPreview = song?.matchSource === 'PREVIEW';
-  const isSystemError = song?.artist === "System Alert" || song?.title === "Quota Exceeded";
+  const isSystemError = !!song?.isError; // Use flag instead of string check
 
   // Prioritize full lyrics from file (ID3) over AI snippets
   const hasFullLyrics = !!song?.lyrics;
@@ -141,10 +144,17 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
           </div>
       );
   } else {
-      // --- Render: Static Text / AI Snippet ---
-      const text = (rawText || "").replace(/\[\d{2}:\d{2}(\.\d{1,3})?\]/g, '').trim();
-      // If full unsynced lyrics, show more lines but fade out
-      const lines = hasFullLyrics ? text.split('\n').slice(0, 12) : text.split('\n').slice(0, 6);
+      // --- Render: Static Text / AI Snippet / Unsynced ---
+      // Normalize line endings and strip tags if any remain
+      const text = (rawText || "")
+        .replace(/\[\d{2}:\d{2}(\.\d{1,3})?\]/g, '')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .trim();
+      
+      // If full unsynced lyrics, show more lines. If it's a snippet, show fewer.
+      const allLines = text.split('\n');
+      const lines = hasFullLyrics ? allLines.slice(0, 14) : allLines.slice(0, 6);
       
       let textClass = "";
       let fontStyle: React.CSSProperties = {
@@ -169,9 +179,9 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
 
       content = (
           <div className="select-none max-w-4xl text-center">
-             {isPreview && <div className="text-[9px] font-mono text-white/40 mb-2 uppercase tracking-widest">Layout Preview</div>}
+             {isPreview && <div className="text-[9px] font-mono text-white/40 mb-2 uppercase tracking-widest">{t?.lyricsPreview || "Layout Preview"}</div>}
              {lines.map((line, i) => <p key={i} className={textClass} style={fontStyle}>{line}</p>)}
-             {hasFullLyrics && lines.length < text.split('\n').length && (
+             {hasFullLyrics && lines.length < allLines.length && (
                  <p className="mt-4 text-xs text-white/30 animate-pulse">...</p>
              )}
           </div>
@@ -179,8 +189,6 @@ const LyricsOverlay: React.FC<LyricsOverlayProps> = ({ settings, song, showLyric
   }
 
   // --- Container Layout ---
-  // If synced, use fixed inset to allow scrolling container.
-  // If static, use existing positioning logic.
   const containerClass = isSynced 
       ? `fixed inset-0 z-10 flex flex-col items-center justify-center mask-fade-vertical pointer-events-none`
       : `pointer-events-none fixed inset-0 z-10 flex flex-col px-6 pt-24 pb-48 md:pb-32 pb-safe ${getPositionClasses(settings.lyricsPosition)}`;

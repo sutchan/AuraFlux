@@ -1,11 +1,11 @@
 
 /**
  * File: core/hooks/useAudio.ts
- * Version: 2.7.2
+ * Version: 2.7.4
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-16 16:30
- * Changes: Fixed toggleMicrophone to correctly stop capture when listening.
+ * Updated: 2025-03-19 20:30
+ * Changes: Robust USLT lyrics extraction from jsmediatags.
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -262,15 +262,35 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
           if (window.jsmediatags) {
               window.jsmediatags.read(file, {
                   onSuccess: (tag: any) => {
-                      const { title, artist, picture, lyrics } = tag.tags;
+                      const { title, artist, picture, lyrics, USLT } = tag.tags;
                       let albumArtUrl = undefined;
                       let lyricsText: string | undefined = undefined;
 
-                      // Extract Lyrics (USLT frame)
-                      if (typeof lyrics === 'string') {
-                          lyricsText = lyrics;
-                      } else if (typeof lyrics === 'object' && lyrics.lyrics) {
-                          lyricsText = lyrics.lyrics;
+                      // 1. Check 'lyrics' field (sometimes used directly)
+                      if (lyrics) {
+                          if (typeof lyrics === 'string') {
+                              lyricsText = lyrics;
+                          } else if (typeof lyrics === 'object' && 'lyrics' in lyrics) {
+                              lyricsText = lyrics.lyrics;
+                          }
+                      }
+                      
+                      // 2. Check 'USLT' field (Standard ID3v2 Unsynchronized Lyrics)
+                      if (!lyricsText && USLT) {
+                          const frames = Array.isArray(USLT) ? USLT : [USLT];
+                          for (const frame of frames) {
+                              // jsmediatags often nests the actual text in data.lyrics or just lyrics
+                              if (typeof frame === 'string') {
+                                  lyricsText = frame;
+                              } else if (typeof frame === 'object') {
+                                  if ('lyrics' in frame) {
+                                      lyricsText = frame.lyrics;
+                                  } else if (frame.data && 'lyrics' in frame.data) {
+                                      lyricsText = frame.data.lyrics;
+                                  }
+                              }
+                              if (lyricsText) break; // Found it
+                          }
                       }
 
                       if (picture) {
@@ -283,6 +303,7 @@ export const useAudio = ({ settings, language, setCurrentSong, t }: UseAudioProp
                               albumArtUrl = `data:${format};base64,${window.btoa(base64String)}`;
                           } catch (e) {}
                       }
+                      
                       resolve({
                           ...basicTrack,
                           title: title || basicTrack.title,

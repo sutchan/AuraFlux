@@ -1,7 +1,7 @@
 
 /**
  * File: components/App.tsx
- * Version: 1.9.4
+ * Version: 1.9.6
  * Author: Aura Flux Team
  */
 
@@ -65,16 +65,21 @@ const AppContent: React.FC = () => {
       }
   }, [importFiles]);
 
+  // --- Early Returns for App States ---
+  
   if (showOnboarding) {
     return <OnboardingOverlay language={language} setLanguage={setLanguage} onComplete={handleOnboardingComplete} />;
   }
 
+  if (isUnsupported) {
+      return <UnsupportedScreen />;
+  }
+
   if (!hasStarted) {
-    if (isUnsupported) {
-        return <UnsupportedScreen />;
-    }
     return <WelcomeScreen />;
   }
+
+  // --- Main App Logic ---
 
   const showAlbumArt = settings.albumArtBackground && currentSong?.albumArtUrl;
 
@@ -109,7 +114,7 @@ const AppContent: React.FC = () => {
                 style={{ 
                     backgroundImage: `url(${currentSong.albumArtUrl})`,
                     opacity: 1 - (settings.albumArtDim ?? 0.8), // Updated default fallback to 0.8
-                    filter: 'blur(20px) saturate(1.5)'
+                    filter: `blur(${settings.albumArtBlur ?? 20}px) saturate(1.5)`
                 }}
               />
               <div className="absolute inset-0 bg-black/40" /> 
@@ -150,7 +155,7 @@ const AppContent: React.FC = () => {
             
             <SongOverlay 
               song={currentSong} 
-              showLyrics={showLyrics} 
+              isVisible={settings.showSongInfo} 
               language={language} 
               onRetry={() => mediaStream && performIdentification(mediaStream)} 
               onClose={() => setCurrentSong(null)} 

@@ -1,9 +1,10 @@
+
 /**
  * File: components/controls/panels/SystemSettingsPanel.tsx
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: Sut
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 10:00
+ * Updated: 2025-03-20 10:00
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -11,6 +12,7 @@ import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { useVisuals, useUI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
+import { SegmentedControl } from '../../ui/controls/SegmentedControl';
 import { BentoCard } from '../../ui/layout/BentoCard';
 import { Language, VisualizerSettings } from '../../../core/types';
 import { useLocalStorage } from '../../../core/hooks/useLocalStorage';
@@ -132,18 +134,30 @@ export const SystemSettingsPanel: React.FC = () => {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 h-full">
       {/* Card 1: Interface */}
       <BentoCard title={systemPanel.interface || "Interface"}>
-        <div className="space-y-2">
-          <SettingsToggle 
-            label={settings.appTheme === 'light' ? (systemPanel.lightMode || "Light Theme") : (systemPanel.darkMode || "Dark Theme")} 
-            value={settings.appTheme === 'light'} 
-            onChange={() => handleSystemSettingChange('appTheme', settings.appTheme === 'light' ? 'dark' : 'light')} 
-            hintText={hints?.lightMode}
-            activeColor="green"
+        <div className="space-y-4">
+          <SegmentedControl 
+            label={systemPanel.uiMode || "Control Mode"}
+            value={settings.uiMode}
+            options={[
+                { value: 'simple', label: t?.common?.simple || 'SIMPLE' },
+                { value: 'advanced', label: t?.common?.advanced || 'ADVANCED' }
+            ]}
+            onChange={(val) => handleSystemSettingChange('uiMode', val)}
           />
-          <SettingsToggle label={t?.showTooltips || "Show Tooltips"} value={settings.showTooltips} onChange={() => handleSystemSettingChange('showTooltips', !settings.showTooltips)} hintText={hints?.showTooltips} />
-          <SettingsToggle label={t?.autoHideUi || "Auto-Hide Controls"} value={settings.autoHideUi} onChange={() => handleSystemSettingChange('autoHideUi', !settings.autoHideUi)} hintText={hints?.autoHideUi} />
-          <SettingsToggle label={t?.hideCursor || "Hide Cursor"} value={settings.hideCursor} onChange={() => handleSystemSettingChange('hideCursor', !settings.hideCursor)} hintText={hints?.hideCursor} />
-          <SettingsToggle label={t?.showFps || "Show FPS"} value={settings.showFps} onChange={() => handleSystemSettingChange('showFps', !settings.showFps)} hintText={hints?.showFps} />
+          
+          <div className="space-y-2 border-t border-white/5 pt-2">
+            <SettingsToggle 
+                label={settings.appTheme === 'light' ? (systemPanel.lightMode || "Light Theme") : (systemPanel.darkMode || "Dark Theme")} 
+                value={settings.appTheme === 'light'} 
+                onChange={() => handleSystemSettingChange('appTheme', settings.appTheme === 'light' ? 'dark' : 'light')} 
+                hintText={hints?.lightMode}
+                activeColor="green"
+            />
+            <SettingsToggle label={t?.showTooltips || "Show Tooltips"} value={settings.showTooltips} onChange={() => handleSystemSettingChange('showTooltips', !settings.showTooltips)} hintText={hints?.showTooltips} />
+            <SettingsToggle label={t?.autoHideUi || "Auto-Hide Controls"} value={settings.autoHideUi} onChange={() => handleSystemSettingChange('autoHideUi', !settings.autoHideUi)} hintText={hints?.autoHideUi} />
+            <SettingsToggle label={t?.hideCursor || "Hide Cursor"} value={settings.hideCursor} onChange={() => handleSystemSettingChange('hideCursor', !settings.hideCursor)} hintText={hints?.hideCursor} />
+            <SettingsToggle label={t?.showFps || "Show FPS"} value={settings.showFps} onChange={() => handleSystemSettingChange('showFps', !settings.showFps)} hintText={hints?.showFps} />
+          </div>
         </div>
       </BentoCard>
 

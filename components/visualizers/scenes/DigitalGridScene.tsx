@@ -1,13 +1,14 @@
 
 /**
  * File: components/visualizers/scenes/DigitalGridScene.tsx
- * Version: 3.14.0
+ * Version: 3.14.2
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
  * Description: GPU-Accelerated "Digital LED Wall" (Floating Active Blocks).
  * - Aesthetic: Smooth High-Fidelity Mosaic. Fluid transitions in brightness and activation.
  * - Animation: Center-Out Symmetric EQ with gentle digital shimmer.
  * - Layout: Responsive Curved Wall (Fills corners). Wide blocks.
+ * - Update v3.14.2: Reduced max sensitivity by 50%.
  */
 
 import React, { useRef, useMemo, useLayoutEffect } from 'react';
@@ -32,12 +33,13 @@ export const DigitalGridScene: React.FC<SceneProps> = ({ analyser, colors, setti
   const [c0, c1, c2] = smoothedColors;
   
   // --- 1. Dynamic Grid Configuration (Responsive) ---
-  const { RADIUS, GAP, BRICK_W, BRICK_H, COLS, ROWS, COUNT, ANGLE_STEP } = useMemo(() => {
+  const { RADIUS, GAP_X, GAP_Y, BRICK_W, BRICK_H, COLS, ROWS, COUNT, ANGLE_STEP } = useMemo(() => {
       const aspect = size.width / size.height;
       const isHighQuality = settings.quality !== 'low';
       
       const radius = 45; 
-      const gap = 0.25; 
+      const gapX = 0.25; 
+      const gapY = 0.12; // Reduced vertical gap (~50%) for denser stack
       
       // Adjust brick size based on quality
       // Double width blocks for "Wide Pixel" aesthetic
@@ -53,7 +55,7 @@ export const DigitalGridScene: React.FC<SceneProps> = ({ analyser, colors, setti
       
       // Vertical Coverage: Add 15% buffer for movement/shake
       const targetHeight = visibleHeightAtDepth * 1.15;
-      let rows = Math.ceil(targetHeight / (brickH + gap));
+      let rows = Math.ceil(targetHeight / (brickH + gapY));
       if (rows % 2 === 0) rows++; // Ensure odd number for center line
       
       // Horizontal Coverage: Calculate required arc length
@@ -61,7 +63,7 @@ export const DigitalGridScene: React.FC<SceneProps> = ({ analyser, colors, setti
       // The wall curves away, so we need a wider arc to cover the corners.
       // 1.2x multiplier is a heuristic that works well for this curvature/distance ratio.
       const targetArcLength = visibleWidthAtDepth * 1.2;
-      const colStep = brickW + gap;
+      const colStep = brickW + gapX;
       let cols = Math.ceil(targetArcLength / colStep);
       if (cols % 2 === 0) cols++; // Ensure symmetric
       
@@ -71,7 +73,8 @@ export const DigitalGridScene: React.FC<SceneProps> = ({ analyser, colors, setti
 
       return {
           RADIUS: radius,
-          GAP: gap,
+          GAP_X: gapX,
+          GAP_Y: gapY,
           BRICK_W: brickW,
           BRICK_H: brickH,
           COLS: cols,
@@ -123,7 +126,7 @@ export const DigitalGridScene: React.FC<SceneProps> = ({ analyser, colors, setti
       let i = 0;
       const totalArc = (COLS - 1) * ANGLE_STEP;
       const startAngle = -totalArc / 2;
-      const totalHeight = (ROWS - 1) * (BRICK_H + GAP);
+      const totalHeight = (ROWS - 1) * (BRICK_H + GAP_Y);
       const startY = -totalHeight / 2;
 
       for (let col = 0; col < COLS; col++) {
@@ -132,7 +135,7 @@ export const DigitalGridScene: React.FC<SceneProps> = ({ analyser, colors, setti
         for (let row = 0; row < ROWS; row++) {
           const x = Math.sin(theta) * RADIUS;
           const z = RADIUS - (Math.cos(theta) * RADIUS); 
-          const y = startY + row * (BRICK_H + GAP);
+          const y = startY + row * (BRICK_H + GAP_Y);
 
           dummy.position.set(x, y, z);
           dummy.lookAt(0, y, RADIUS); 
@@ -147,7 +150,7 @@ export const DigitalGridScene: React.FC<SceneProps> = ({ analyser, colors, setti
       meshRef.current.geometry.setAttribute('aLayout', layoutAttribute);
       meshRef.current.geometry.setAttribute('aRandom', randomAttribute);
     }
-  }, [dummy, COLS, ROWS, RADIUS, ANGLE_STEP, GAP, BRICK_W, BRICK_H, layoutAttribute, randomAttribute]);
+  }, [dummy, COLS, ROWS, RADIUS, ANGLE_STEP, GAP_Y, BRICK_W, BRICK_H, layoutAttribute, randomAttribute]);
 
   // --- 3. Audio Texture ---
   const dataArray = useMemo(() => new Uint8Array(analyser.frequencyBinCount), [analyser]);
@@ -197,7 +200,9 @@ export const DigitalGridScene: React.FC<SceneProps> = ({ analyser, colors, setti
       vRandom = aRandom;
 
       float audioVal = texture2D(uAudioTexture, vec2(aLayout.x * 0.9 + 0.02, 0.5)).r;
-      float intensity = audioVal * uSensitivity;
+      
+      // Reduced sensitivity by 50% for more controlled visualization
+      float intensity = audioVal * uSensitivity * 0.5;
       
       // --- Center-Out Logic ---
       // 0.0 at center, 1.0 at top/bottom edges

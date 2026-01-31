@@ -1,9 +1,10 @@
+
 /**
  * File: core/types/audio.ts
- * Version: 1.9.1
+ * Version: 1.9.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 15:00
+ * Updated: 2025-03-19 20:00
  */
 
 export enum LyricsStyle {
@@ -27,6 +28,7 @@ export interface SongInfo {
   searchUrl?: string;
   albumArtUrl?: string;
   matchSource?: 'AI' | 'LOCAL' | 'MOCK' | 'GEMINI' | 'OPENAI' | 'GROQ' | 'CLAUDE' | 'DEEPSEEK' | 'QWEN' | 'PREVIEW' | 'FILE';
+  isError?: boolean; // Flag to indicate system messages/errors
 }
 
 export interface Track extends SongInfo {

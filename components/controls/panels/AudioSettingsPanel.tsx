@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 2.4.3
+ * Version: 2.4.7
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 22:30
+ * Updated: 2025-03-20 14:40
  */
 
 import React, { useRef, useState, useEffect } from 'react';
@@ -24,7 +24,7 @@ export const AudioSettingsPanel: React.FC = () => {
       audioDevices, selectedDeviceId, onDeviceChange, toggleMicrophone, isListening, isPending,
       sourceType, fileStatus, fileName, getAudioSlice
   } = useAudioContext();
-  const { apiKeys, setApiKeys, showLyrics, setShowLyrics } = useAI();
+  const { apiKeys, setApiKeys, enableAnalysis, setEnableAnalysis } = useAI();
   const { t, showToast, language } = useUI();
   
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -39,7 +39,6 @@ export const AudioSettingsPanel: React.FC = () => {
   const audioPanel = t?.audioPanel || {};
   const toasts = t?.toasts || {};
   const aiProviders = t?.aiProviders || {};
-  const aiPanel = t?.aiPanel || {};
   const regions = t?.regions || {};
   const isAdvanced = settings.uiMode === 'advanced';
 
@@ -58,7 +57,7 @@ export const AudioSettingsPanel: React.FC = () => {
           const newKeys = { ...apiKeys };
           delete newKeys[provider];
           setApiKeys(newKeys);
-          showToast(aiPanel.keyCleared || "Key cleared", 'info');
+          showToast(audioPanel.keyCleared || "Key cleared", 'info');
           return;
       }
 
@@ -68,9 +67,9 @@ export const AudioSettingsPanel: React.FC = () => {
 
       if (isValid) {
           setApiKeys(prev => ({ ...prev, [provider]: inputKey }));
-          showToast(aiPanel.keySaved || "Key Verified & Saved", 'success');
+          showToast(audioPanel.keySaved || "Key Verified & Saved", 'success');
       } else {
-          showToast(aiPanel.keyInvalid || "Invalid Gemini API Key", 'error');
+          showToast(audioPanel.keyInvalid || "Invalid Gemini API Key", 'error');
           inputRef.current?.select();
       }
   };
@@ -83,7 +82,7 @@ export const AudioSettingsPanel: React.FC = () => {
   ];
 
   const deviceOptions = [
-    { value: '', label: t?.defaultMic || "Default Microphone" },
+    { value: '', label: audioPanel?.defaultMic || "Default Microphone" },
     ...audioDevices.map(d => ({ value: d.deviceId, label: d.label }))
   ];
 
@@ -141,7 +140,7 @@ export const AudioSettingsPanel: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
       {/* Card 1: Input Source (Microphone) */}
-      <BentoCard title={t?.audioInput || "Microphone"}>
+      <BentoCard title={audioPanel?.audioInput || "Audio Input"}>
          <div className="space-y-4">
              <div className="space-y-3 animate-fade-in-up">
                 <CustomSelect 
@@ -159,17 +158,17 @@ export const AudioSettingsPanel: React.FC = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                             <span className="truncate text-white/70 font-medium">{fileName || "Local Audio"}</span>
                         </div>
-                        <span className="text-[9px] font-black uppercase text-blue-400 tracking-wider">Active</span>
+                        <span className="text-[9px] font-black uppercase text-blue-400 tracking-wider">{audioPanel?.fileActive || "Active"}</span>
                     </div>
                 )}
 
-                <TooltipArea text={`${isListening ? t?.stopMic : t?.startMic} [Space]`}>
+                <TooltipArea text={`${isListening ? (audioPanel?.stop || "Stop") : (audioPanel?.start || "Start")} [Space]`}>
                     <button 
                         onClick={() => toggleMicrophone(selectedDeviceId)} 
                         disabled={isPending}
                         className={`w-full py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300 shadow-lg ${isListening ? 'bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/25' : 'bg-blue-600 text-white hover:bg-blue-500'} ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        {isPending ? '...' : (isListening ? (t?.stopMic || "Stop") : (sourceType === 'FILE' ? "Switch to Mic" : (t?.startMic || "Start")))}
+                        {isPending ? '...' : (isListening ? (audioPanel?.stop || "Stop") : (sourceType === 'FILE' ? (audioPanel?.switchToMic || "Switch to Mic") : (audioPanel?.start || "Start")))}
                     </button>
                 </TooltipArea>
              </div>
@@ -218,9 +217,9 @@ export const AudioSettingsPanel: React.FC = () => {
              {!isMock && (
                  <div className="bg-gradient-to-b from-white/5 to-transparent p-2 rounded-xl border border-white/10 space-y-1.5">
                      <div className="flex justify-between items-center">
-                         <span className="text-[9px] font-bold text-blue-200 uppercase tracking-widest">API Key</span>
+                         <span className="text-[9px] font-bold text-blue-200 uppercase tracking-widest">{audioPanel?.apiKey || "API Key"}</span>
                          <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${hasKey ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-yellow-500/10 text-yellow-500/80 border-yellow-500/20'}`}>
-                             {hasKey ? (aiPanel.saved || 'READY') : (aiPanel.missing || 'OPTIONAL')}
+                             {hasKey ? (audioPanel.saved || 'READY') : (audioPanel.missing || 'OPTIONAL')}
                          </span>
                      </div>
                      <div className="flex gap-1.5">
@@ -247,7 +246,7 @@ export const AudioSettingsPanel: React.FC = () => {
                             disabled={isValidating} 
                             className={`px-2 rounded-lg text-[9px] font-bold uppercase transition-all shrink-0 flex items-center justify-center min-w-[40px] ${hasKey ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg'}`}
                          >
-                             {isValidating ? '...' : (hasKey ? 'UPD' : 'SAVE')}
+                             {isValidating ? '...' : (hasKey ? (audioPanel.update || 'UPD') : (audioPanel.save || 'SAVE'))}
                          </button>
                      </div>
                  </div>
@@ -270,7 +269,14 @@ export const AudioSettingsPanel: React.FC = () => {
       >
           <div className="flex-grow space-y-4">
              <div className="bg-white/[0.03] p-2 rounded-xl border border-white/5 space-y-2">
-                 <SettingsToggle label={t?.showLyrics || "AI Synesthesia"} value={showLyrics} onChange={() => setShowLyrics(!showLyrics)} activeColor="green" hintText={`${hints?.lyrics || "Enable AI Lyrics"} [L]`} />
+                 {/* New decoupled AI Analysis switch */}
+                 <SettingsToggle 
+                    label={audioPanel?.enableAi || "AI Analysis"} 
+                    value={enableAnalysis} 
+                    onChange={() => setEnableAnalysis(!enableAnalysis)} 
+                    activeColor="green" 
+                    hintText={`${audioPanel?.enableAi || "AI Analysis"}`} 
+                 />
                  {isAdvanced && (
                      <div className="px-1 pb-1 animate-fade-in-up">
                         <CustomSelect 
@@ -288,7 +294,7 @@ export const AudioSettingsPanel: React.FC = () => {
                  <div className="p-3 bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl border border-white/10 animate-fade-in-up">
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-[10px] font-black uppercase tracking-widest text-blue-200">{audioPanel.aiDirector || "AI Auto-Director"}</span>
-                        <div className="px-1.5 py-0.5 bg-blue-500/20 rounded text-[9px] font-bold text-blue-300 border border-blue-500/30">GENERATE</div>
+                        <div className="px-1.5 py-0.5 bg-blue-500/20 rounded text-[9px] font-bold text-blue-300 border border-blue-500/30">{audioPanel?.generate || "GENERATE"}</div>
                     </div>
                     <button 
                         onClick={handleAiDirector}

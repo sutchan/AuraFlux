@@ -1,14 +1,15 @@
+
 /**
  * File: components/controls/panels/AiSettingsPanel.tsx
- * Version: 2.0.0
+ * Version: 2.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-11 10:00
+ * Updated: 2025-03-20 12:40
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { LyricsStyle, Region, Position, AIProvider } from '../../../core/types';
-import { REGION_NAMES, getPositionOptions, AVAILABLE_FONTS } from '../../../core/constants';
+import { REGION_NAMES, getPositionOptions, getFontOptions, AVAILABLE_FONTS } from '../../../core/constants';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { Slider } from '../../ui/controls/Slider';
@@ -71,8 +72,9 @@ export const AiSettingsPanel: React.FC = () => {
   const aiProviders = t?.aiProviders || {};
   
   const isAdvanced = settings.uiMode === 'advanced';
-  const positionOptions = getPositionOptions(t);
-  
+  const positionOptions = useMemo(() => getPositionOptions(t), [t]);
+  const localizedFonts = useMemo(() => getFontOptions(t), [t]);
+
   const handleLyricsPositionChange = (value: Position) => {
     setSettings({ ...settings, lyricsPosition: value });
   };
@@ -90,7 +92,7 @@ export const AiSettingsPanel: React.FC = () => {
       {/* Card 1: Core AI */}
       <BentoCard title={t?.tabs?.ai || "AI Recognition"} topRight={<BetaBadge label={common?.beta} />}>
         <div className="space-y-4">
-            <SettingsToggle label={t?.showLyrics || "Enable Recognition"} value={showLyrics} onChange={() => setShowLyrics(!showLyrics)} activeColor="green" hintText={`${hints?.lyrics || "Enable AI Lyrics"} [L]`} />
+            <SettingsToggle label={t?.showLyrics || "Show Lyrics"} value={showLyrics} onChange={() => setShowLyrics(!showLyrics)} activeColor="green" hintText={`${t?.showLyrics || "Show Lyrics"} [L]`} />
             
             {isAdvanced && (
                 <div className="space-y-3 pt-1 animate-fade-in-up">
@@ -170,7 +172,7 @@ export const AiSettingsPanel: React.FC = () => {
                     <CustomSelect 
                         label={t?.lyricsFont || "Font Family"} 
                         value={selectValue} 
-                        options={AVAILABLE_FONTS} 
+                        options={localizedFonts} 
                         hintText={hints?.lyricsFont}
                         onChange={(val) => {
                             if (val === 'custom') {

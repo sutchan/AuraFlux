@@ -1,11 +1,11 @@
 
 /**
  * File: components/AppContext.tsx
- * Version: 1.9.11
+ * Version: 1.9.13
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-16 10:20
- * Changes: Added OCEAN_WAVE to isThreeMode.
+ * Updated: 2025-03-20 15:30
+ * Changes: Added showSongInfo default.
  */
 
 import React, { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
@@ -24,7 +24,9 @@ const DEFAULT_SETTINGS: VisualizerSettings = {
   sensitivity: 1.5, speed: 1.0, glow: false, trails: true, 
   albumArtBackground: true, // Default Enabled
   albumArtDim: 0.8, 
+  albumArtBlur: 20, // Default Blur
   showAlbumArtOverlay: false, // Default Disabled
+  showSongInfo: true, // Default Enabled (Song Info Card)
   autoRotate: false, rotateInterval: 30, includedModes: Object.values(VisualizerMode), 
   cycleColors: true, colorInterval: 5, hideCursor: false, smoothing: 0.8, fftSize: 512, 
   quality: 'high', monitor: false, wakeLock: false, 
@@ -126,6 +128,7 @@ export const useAudioContext = () => {
 interface AIContextType {
   lyricsStyle: LyricsStyle; setLyricsStyle: React.Dispatch<React.SetStateAction<LyricsStyle>>;
   showLyrics: boolean; setShowLyrics: React.Dispatch<React.SetStateAction<boolean>>;
+  enableAnalysis: boolean; setEnableAnalysis: React.Dispatch<React.SetStateAction<boolean>>;
   isIdentifying: boolean;
   performIdentification: (stream: MediaStream) => Promise<void>;
   resetAiSettings: () => void;
@@ -192,7 +195,8 @@ const VisualsProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   
   const initialSettings = useMemo(() => {
       const savedSettings = getStorage<Partial<VisualizerSettings>>('settings', {});
-      return { ...DEFAULT_SETTINGS, ...savedSettings, showCustomText: savedSettings.showCustomText ?? false };
+      // Ensure showSongInfo defaults to true if undefined
+      return { ...DEFAULT_SETTINGS, ...savedSettings, showCustomText: savedSettings.showCustomText ?? false, showSongInfo: savedSettings.showSongInfo ?? true };
   }, [getStorage]);
 
   const { 
@@ -297,20 +301,21 @@ const AudioProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
 const AIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const { language, region } = useUI();
   const { settings, setSettings } = useVisuals();
-  const { isListening, isSimulating, mediaStream, setCurrentSong } = useAudioContext();
+  const { isListening, isSimulating, mediaStream, currentSong, setCurrentSong } = useAudioContext();
 
   const {
-    lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
+    lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, enableAnalysis, setEnableAnalysis, isIdentifying,
     performIdentification, resetAiSettings, apiKeys, setApiKeys
   } = useAiState({
       language, region, provider: settings.recognitionProvider,
       isListening, isSimulating, mediaStream, initialSettings: DEFAULT_SETTINGS, setSettings,
       onSongIdentified: setCurrentSong,
+      currentSong // Pass currentSong for optimization
   });
 
   return (
     <AIContext.Provider value={{
-      lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, isIdentifying,
+      lyricsStyle, setLyricsStyle, showLyrics, setShowLyrics, enableAnalysis, setEnableAnalysis, isIdentifying,
       performIdentification, resetAiSettings, apiKeys, setApiKeys
     }}>
       {children}

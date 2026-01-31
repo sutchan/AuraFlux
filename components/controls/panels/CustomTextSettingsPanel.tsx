@@ -1,21 +1,20 @@
 
 /**
  * File: components/controls/panels/CustomTextSettingsPanel.tsx
- * Version: 2.1.2
+ * Version: 2.3.0
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-13 12:30
+ * Updated: 2025-03-20 10:00
  */
 
-import React from 'react';
-import { AVAILABLE_FONTS, getPositionOptions } from '../../../core/constants';
+import React, { useMemo } from 'react';
+import { AVAILABLE_FONTS, getPositionOptions, getFontOptions } from '../../../core/constants';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
 import { Slider } from '../../ui/controls/Slider';
 import { CustomSelect } from '../../ui/controls/CustomSelect';
-import { PositionSelector } from '../../ui/controls/PositionSelector';
 import { BentoCard } from '../../ui/layout/BentoCard';
 import { useVisuals, useUI } from '../../AppContext';
-import { Position, LyricsStyle } from '../../../core/types';
+import { Position } from '../../../core/types';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 
 export const CustomTextSettingsPanel: React.FC = () => {
@@ -25,17 +24,13 @@ export const CustomTextSettingsPanel: React.FC = () => {
   const isAdvanced = settings.uiMode === 'advanced';
   const hints = t?.hints || {};
   const textSources = t?.textSources || {};
-  const lyricsStyles = t?.lyricsStyles || {};
   const textPanel = t?.textPanel || {};
   
-  const positionOptions = getPositionOptions(t);
+  const positionOptions = useMemo(() => getPositionOptions(t), [t]);
+  const localizedFonts = useMemo(() => getFontOptions(t), [t]);
 
-  const handleTextPositionChange = (value: Position) => {
-    setSettings({ ...settings, customTextPosition: value });
-  };
-
-  const handleLyricsPositionChange = (value: Position) => {
-    setSettings({ ...settings, lyricsPosition: value });
+  const handleTextPositionChange = (value: any) => {
+    setSettings({ ...settings, customTextPosition: value as Position });
   };
 
   const colorPresets = [
@@ -49,7 +44,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
   const selectValue = isPresetFont ? currentFont : 'custom';
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 h-full">
       {/* Card 1: Custom Text Content */}
       <BentoCard title={textPanel.overlay || "Custom Text Overlay"}>
         <div className="space-y-3">
@@ -90,54 +85,20 @@ export const CustomTextSettingsPanel: React.FC = () => {
                     <Slider label={t?.textRotation || "Rotate"} hintText={hints?.textRotation} value={settings.customTextRotation ?? 0} min={-180} max={180} step={5} onChange={(v: number) => setSettings({...settings, customTextRotation: v})} unit="°" />
                 </div>
             )}
-        </div>
-      </BentoCard>
-
-      {/* Card 2: AI Lyrics Appearance */}
-      <BentoCard title={t?.lyrics || "AI Info & Lyrics"}>
-        <div className="space-y-4">
-            <CustomSelect 
-              label={`${t?.styleTheme || "Display Style"}`} 
-              value={settings.lyricsStyle || LyricsStyle.KARAOKE} 
-              hintText={hints?.lyricsStyle} 
-              options={Object.values(LyricsStyle).map(s => ({ value: s, label: lyricsStyles[s] || s }))} 
-              onChange={(val) => setSettings({...settings, lyricsStyle: val as LyricsStyle})} 
-            />
             
-            {isAdvanced && (
-                <div className="space-y-3 animate-fade-in-up">
-                    <CustomSelect 
-                        label={t?.lyricsFont || "Lyrics Font"} 
-                        value={settings.lyricsFont || 'Inter, sans-serif'} 
-                        options={AVAILABLE_FONTS.filter(f => f.value !== 'custom')} 
-                        hintText={hints?.lyricsFont}
-                        onChange={(val) => setSettings({...settings, lyricsFont: val})} 
-                    />
-                    <Slider 
-                        label={t?.lyricsFontSize || "Font Size"} 
-                        hintText={hints?.lyricsFontSize}
-                        value={settings.lyricsFontSize ?? 4} 
-                        min={1} max={8} step={0.5} 
-                        onChange={(v: number) => setSettings({...settings, lyricsFontSize: v})} 
-                    />
-                    
-                    <div className="pt-2 border-t border-white/5">
-                        <TooltipArea text={hints?.lyricsPosition}>
-                            <PositionSelector
-                                label={t?.lyricsPosition || "Info Position"}
-                                value={settings.lyricsPosition}
-                                onChange={handleLyricsPositionChange}
-                                options={positionOptions}
-                                activeColor="green"
-                            />
-                        </TooltipArea>
-                    </div>
-                </div>
-            )}
+            <div className="pt-2 border-t border-white/5">
+                <CustomSelect
+                    label={t?.lyricsPosition || "Position"} 
+                    value={settings.customTextPosition || 'mc'}
+                    options={positionOptions}
+                    onChange={handleTextPositionChange}
+                    hintText={hints?.customTextPosition}
+                />
+            </div>
         </div>
       </BentoCard>
 
-      {/* Card 3: Advanced Typography & Color */}
+      {/* Card 2: Advanced Typography & Color */}
       <BentoCard 
         title={textPanel.appearance || "Custom Appearance"}
         action={
@@ -173,7 +134,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                             label={t?.textFont || "Custom Font"} 
                             value={selectValue} 
                             hintText={hints?.textFont} 
-                            options={AVAILABLE_FONTS} 
+                            options={localizedFonts} 
                             onChange={(val) => {
                                 if (val === 'custom') {
                                     setSettings({...settings, customTextFont: 'Arial'});
@@ -208,7 +169,7 @@ export const CustomTextSettingsPanel: React.FC = () => {
                         </div>
                         
                         {!settings.customTextCycleColor && (
-                            <div className="grid grid-cols-6 gap-2 p-0.5 animate-fade-in-up">
+                            <div className="grid grid-cols-6 gap-2 p-2 animate-fade-in-up">
                                 {colorPresets.map(c => ( <button key={c} onClick={() => setSettings({...settings, customTextColor: c})} className={`aspect-square rounded-full transition-all duration-300 ${settings.customTextColor === c ? 'ring-2 ring-white/80 scale-110' : 'opacity-60 hover:opacity-100'}`} style={{backgroundColor: c}} aria-label={`Color ${c}`} /> ))}
                             </div>
                         )}

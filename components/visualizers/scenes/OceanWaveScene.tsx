@@ -41,7 +41,10 @@ export const OceanWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, colo
   const Z_SPACING = 3.5;
   
   // --- Audio History Buffer ---
-  const bins = analyser.frequencyBinCount; 
+  // Fix: Explicitly use settings.fftSize to derive dimensions. 
+  // Relying on analyser.frequencyBinCount can cause race conditions during switching if React updates props out of sync.
+  // Standard FFT sizes are 512, 1024, 2048, 4096. Bin count is half.
+  const bins = settings.fftSize ? settings.fftSize / 2 : 256; 
   const texWidth = bins; 
   const texHeight = NUM_LINES;
   
@@ -58,15 +61,6 @@ export const OceanWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, colo
 
   const dummy = useMemo(() => new Object3D(), []);
   
-  // --- Instance Attributes ---
-  const instanceAttribs = useMemo(() => {
-      const indices = new Float32Array(NUM_LINES);
-      for(let i=0; i<NUM_LINES; i++) {
-          indices[i] = i / (NUM_LINES - 1); // Normalized 0..1
-      }
-      return indices;
-  }, [NUM_LINES]);
-
   useLayoutEffect(() => {
       if (meshRef.current) {
           for (let i = 0; i < NUM_LINES; i++) {
@@ -94,6 +88,7 @@ export const OceanWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, colo
   }), [audioTexture]);
 
   // Temp buffers for frame audio
+  // Must match the 'bins' derived from settings to ensure texture compatibility
   const tempL = useMemo(() => new Uint8Array(bins), [bins]);
   const tempR = useMemo(() => new Uint8Array(bins), [bins]);
 
@@ -102,11 +97,20 @@ export const OceanWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, colo
     historyData.copyWithin(texWidth, 0, historyData.length - texWidth);
 
     // 2. Fetch New Data
-    analyser.getByteFrequencyData(tempL);
-    if (analyserR) {
-        analyserR.getByteFrequencyData(tempR);
-    } else {
-        tempR.set(tempL); // Mono fallback
+    // Note: If analyser hasn't updated its size yet, this might return fewer bins
+    // than expected, but Uint8Array.set handles partial data safely (it just fills what it can).
+    // If analyser gives MORE data than expected, .set truncates.
+    // This prevents the buffer mismatch freeze.
+    try {
+        analyser.getByteFrequencyData(tempL);
+        if (analyserR) {
+            analyserR.getByteFrequencyData(tempR);
+        } else {
+            tempR.set(tempL); // Mono fallback
+        }
+    } catch (e) {
+        // Fallback for safety during context switching
+        return;
     }
 
     // 3. Fill Row 0 (Newest) - Center-Out Stereo Mapping with Smoothing
@@ -163,9 +167,7 @@ export const OceanWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, colo
       {!settings.albumArtBackground && <color attach="background" args={['#000000']} />}
       
       <instancedMesh ref={meshRef} args={[undefined, undefined, NUM_LINES]} position={[0, 0, 0]}>
-        <planeGeometry args={[LINE_WIDTH, LINE_HEIGHT, SEGMENTS_X, 1]}>
-            <instancedBufferAttribute attach="attributes-aLineProgress" args={[instanceAttribs, 1]} />
-        </planeGeometry>
+        <planeGeometry args={[LINE_WIDTH, LINE_HEIGHT, SEGMENTS_X, 1]} />
         <shaderMaterial
           side={DoubleSide}
           uniforms={uniforms}

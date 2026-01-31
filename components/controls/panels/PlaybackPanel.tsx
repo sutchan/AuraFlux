@@ -1,18 +1,22 @@
 
 /**
  * File: components/controls/panels/PlaybackPanel.tsx
- * Version: 2.1.9
+ * Version: 2.3.4
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 20:00
+ * Updated: 2025-03-20 16:00
  */
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { BentoCard } from '../../ui/layout/BentoCard';
-import { useAudioContext, useUI, useVisuals } from '../../AppContext';
+import { useAudioContext, useUI, useVisuals, useAI } from '../../AppContext';
 import { TooltipArea } from '../../ui/controls/Tooltip';
 import { SegmentedControl } from '../../ui/controls/SegmentedControl';
 import { SettingsToggle } from '../../ui/controls/SettingsToggle';
+import { CustomSelect } from '../../ui/controls/CustomSelect';
+import { Slider } from '../../ui/controls/Slider';
+import { LyricsStyle, Position } from '../../../core/types';
+import { AVAILABLE_FONTS, getPositionOptions, getFontOptions } from '../../../core/constants';
 
 export const PlaybackPanel: React.FC = () => {
   const { 
@@ -22,6 +26,7 @@ export const PlaybackPanel: React.FC = () => {
   } = useAudioContext();
   const { t } = useUI();
   const { colorTheme, settings, setSettings } = useVisuals();
+  const { showLyrics, setShowLyrics, resetAiSettings } = useAI();
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const activeTrackRef = useRef<HTMLDivElement>(null);
@@ -29,6 +34,10 @@ export const PlaybackPanel: React.FC = () => {
   // Theme color for active elements
   const themeColor = colorTheme?.[0] || '#3b82f6';
   const hints = t?.hints || {};
+  const lyricsStyles = t?.lyricsStyles || {};
+  const isAdvanced = settings.uiMode === 'advanced';
+  const positionOptions = useMemo(() => getPositionOptions(t), [t]);
+  const localizedFonts = useMemo(() => getFontOptions(t), [t]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -50,6 +59,10 @@ export const PlaybackPanel: React.FC = () => {
         activeTrackRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [currentIndex]);
+
+  const currentFont = settings.lyricsFont || 'Inter, sans-serif';
+  const isPresetFont = AVAILABLE_FONTS.some(f => f.value === currentFont);
+  const selectValue = isPresetFont ? currentFont : 'custom';
 
   // Playlist Header Actions
   const PlaylistActions = (
@@ -160,27 +173,7 @@ export const PlaybackPanel: React.FC = () => {
             ) : (
                 <div className="flex flex-col items-center justify-center flex-1 bg-white/[0.02] rounded-xl border border-white/5 border-dashed min-h-[200px] text-white/20 animate-pulse">
                     <svg className="w-8 h-8 mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
-                    <span className="text-[10px] font-bold uppercase tracking-widest">{t?.common?.empty || "No Active Track"}</span>
-                </div>
-            )}
-
-            {/* Visual Art Controls */}
-            {playlist.length > 0 && (
-                <div className="grid grid-cols-2 gap-2 px-1">
-                    <SettingsToggle 
-                        label={t?.albumArtBackground || "BG"} 
-                        value={!!settings.albumArtBackground} 
-                        onChange={() => setSettings(prev => ({ ...prev, albumArtBackground: !prev.albumArtBackground }))} 
-                        variant="clean"
-                        hintText={hints?.albumArtBackground}
-                    />
-                    <SettingsToggle 
-                        label={t?.overlayCover || "Cover"} 
-                        value={settings.showAlbumArtOverlay} 
-                        onChange={() => setSettings(prev => ({ ...prev, showAlbumArtOverlay: !prev.showAlbumArtOverlay }))} 
-                        variant="clean"
-                        hintText={hints?.overlayCover}
-                    />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">{t?.player?.noActiveTrack || t?.common?.empty || "No Active Track"}</span>
                 </div>
             )}
 
@@ -209,10 +202,10 @@ export const PlaybackPanel: React.FC = () => {
         </div>
       </BentoCard>
 
-      {/* Card 2 & 3: Library / Playlist */}
+      {/* Card 2: Library */}
       <BentoCard 
         title={`${t?.tabs?.playback || "Library"} (${playlist.length})`} 
-        className="md:col-span-2 h-full"
+        className="h-full" // Removed md:col-span-2
         action={PlaylistActions}
       >
         <div className="flex flex-col h-full">
@@ -306,6 +299,126 @@ export const PlaybackPanel: React.FC = () => {
                             </div>
                         );
                     })}
+                </div>
+            )}
+        </div>
+      </BentoCard>
+
+      {/* Card 3: AI Info & Lyrics */}
+      <BentoCard 
+        title={t?.lyrics || "AI Info & Lyrics"}
+        action={
+            <TooltipArea text={hints?.resetAi}>
+              <button onClick={resetAiSettings} className="p-1 text-white/30 hover:text-white transition-colors">
+                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+              </button>
+            </TooltipArea>
+        }
+      >
+        <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-2">
+                <SettingsToggle 
+                    label={t?.showLyrics || "Lyrics Overlay"} 
+                    value={showLyrics} 
+                    onChange={() => setShowLyrics(!showLyrics)} 
+                    activeColor="green" 
+                    hintText={`${t?.showLyrics || "Show Lyrics"} [L]`}
+                />
+                <SettingsToggle 
+                    label={t?.player?.info || "Song Info"}
+                    value={settings.showSongInfo}
+                    onChange={() => setSettings(prev => ({ ...prev, showSongInfo: !prev.showSongInfo }))}
+                    activeColor="blue"
+                    hintText={t?.player?.info || "Toggle Song Info Card"}
+                />
+            </div>
+
+            {/* Style & Position Row */}
+            <div className="grid grid-cols-2 gap-2">
+                <CustomSelect 
+                    label={`${t?.lyricsStyle || "Style"}`} 
+                    value={settings.lyricsStyle || LyricsStyle.KARAOKE} 
+                    hintText={hints?.lyricsStyle} 
+                    options={Object.values(LyricsStyle).map(s => ({ value: s, label: lyricsStyles[s] || s }))} 
+                    onChange={(val) => setSettings({...settings, lyricsStyle: val as LyricsStyle})} 
+                />
+                <CustomSelect
+                    label={t?.lyricsPosition || "Position"}
+                    value={settings.lyricsPosition}
+                    options={positionOptions}
+                    onChange={(val) => setSettings({ ...settings, lyricsPosition: val as Position })}
+                    hintText={hints?.lyricsPosition}
+                />
+            </div>
+
+            {/* Background Settings */}
+            <div className="bg-white/[0.03] rounded-xl p-2 border border-white/5 space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                    <SettingsToggle 
+                        label={t?.player?.bg || "BG"} 
+                        value={!!settings.albumArtBackground} 
+                        onChange={() => setSettings(prev => ({ ...prev, albumArtBackground: !prev.albumArtBackground }))} 
+                        variant="clean"
+                        hintText={hints?.albumArtBackground}
+                    />
+                    <SettingsToggle 
+                        label={t?.player?.cover || "Cover"} 
+                        value={settings.showAlbumArtOverlay} 
+                        onChange={() => setSettings(prev => ({ ...prev, showAlbumArtOverlay: !prev.showAlbumArtOverlay }))} 
+                        variant="clean"
+                        hintText={hints?.overlayCover}
+                    />
+                </div>
+                
+                {/* Blur Slider - Only if BG is enabled */}
+                {settings.albumArtBackground && (
+                     <div className="px-1 pb-1 animate-fade-in-up">
+                        <Slider 
+                            label={t?.player?.blur || "Blur"}
+                            value={settings.albumArtBlur ?? 20} 
+                            min={0} max={50} step={2} 
+                            onChange={(v) => setSettings({...settings, albumArtBlur: v})} 
+                        />
+                     </div>
+                )}
+            </div>
+            
+            {isAdvanced && (
+                <div className="space-y-3 animate-fade-in-up">
+                    <div>
+                        <CustomSelect 
+                            label={t?.lyricsFont || "Lyrics Font"} 
+                            value={selectValue} 
+                            options={localizedFonts} 
+                            hintText={hints?.lyricsFont}
+                            onChange={(val) => {
+                                if (val === 'custom') {
+                                    setSettings({...settings, lyricsFont: 'Arial'});
+                                } else {
+                                    setSettings({...settings, lyricsFont: val});
+                                }
+                            }} 
+                        />
+                        {selectValue === 'custom' && (
+                            <div className="mt-2 animate-fade-in-up">
+                                <input 
+                                    type="text" 
+                                    value={currentFont}
+                                    onChange={(e) => setSettings({...settings, lyricsFont: e.target.value})}
+                                    placeholder={hints?.enterLocalFont || "e.g. Arial"}
+                                    className="w-full bg-white/[0.04] rounded-xl px-3 py-2 text-xs font-medium text-white focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors"
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    <Slider 
+                        label={t?.lyricsFontSize || "Font Size"} 
+                        hintText={hints?.lyricsFontSize}
+                        value={settings.lyricsFontSize ?? 4} 
+                        min={1} max={8} step={0.5} 
+                        onChange={(v: number) => setSettings({...settings, lyricsFontSize: v})} 
+                    />
                 </div>
             )}
         </div>

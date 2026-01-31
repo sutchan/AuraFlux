@@ -1,9 +1,10 @@
+
 /**
  * File: components/ui/WelcomeScreen.tsx
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-10 22:30
+ * Updated: 2025-03-18 14:00
  */
 
 import React from 'react';
@@ -24,8 +25,12 @@ export const WelcomeScreen: React.FC = () => {
   const titleSub = parts.length > 1 ? parts.slice(1).join('|').trim() : null;
 
   return (
-    <div className="min-h-[100dvh] bg-black flex items-center justify-center p-6 text-center select-none">
-      <div className="max-w-md w-full space-y-8 animate-fade-in-up">
+    <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6 text-center select-none overflow-hidden">
+      {/* 
+         Fix: Animation moved to inner container. 
+         The outer container acts as a solid black cover to hide the app behind it.
+      */}
+      <div className="max-w-md w-full space-y-8 animate-fade-in-up relative z-10">
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-5xl md:text-7xl font-black leading-tight pb-2 tracking-tight">
             {/* 

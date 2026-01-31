@@ -1,10 +1,11 @@
 
 /**
  * File: components/ui/CustomTextOverlay.tsx
- * Version: 1.2.0
+ * Version: 1.2.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-12 10:00
+ * Updated: 2025-03-19 20:00
+ * Changes: Robust error checking with isError flag.
  */
 
 import React, { useRef, useEffect, useState } from 'react';
@@ -28,7 +29,7 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
 
   useEffect(() => {
     if (settings.textSource === 'CLOCK') {
-        const updateTime = () => setTimeString(new Date().toLocaleTimeString([], { hour12: false }));
+        const updateTime = () => setTimeString(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
         updateTime();
         const interval = setInterval(updateTime, 1000);
         return () => clearInterval(interval);
@@ -48,8 +49,8 @@ const CustomTextOverlay: React.FC<CustomTextOverlayProps> = ({ settings, analyse
       isSongMode = false;
   } else {
       // AUTO mode
-      // Show song info if available and valid; otherwise fallback to Custom Text.
-      isSongMode = !!(song && (song.title || song.artist) && song.artist !== 'System Alert');
+      // Show song info if available, valid, and NOT an error message.
+      isSongMode = !!(song && (song.title || song.artist) && !song.isError);
   }
   
   let mainText = '';

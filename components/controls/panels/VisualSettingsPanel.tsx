@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 2.1.1
+ * Version: 2.1.2
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 23:55
+ * Updated: 2025-03-19 12:00
  */
 
 import React from 'react';
@@ -35,6 +35,8 @@ export const VisualSettingsPanel: React.FC = () => {
   const modes = t?.modes || {};
   const qualities = t?.qualities || {};
   const presets = t?.presets || {};
+  const visualPanel = t?.visualPanel || {};
+  const localizedThemes = t?.themes || [];
   
   const isAdvanced = settings.uiMode === 'advanced';
 
@@ -87,7 +89,8 @@ export const VisualSettingsPanel: React.FC = () => {
                     <div className="grid grid-cols-6 gap-2 p-1">
                         {COLOR_THEMES.map((theme, idx) => {
                             const isActive = JSON.stringify(colorTheme) === JSON.stringify(theme);
-                            const name = THEME_NAMES[idx] || `Theme ${idx + 1}`;
+                            // Try localized name first, then English constant, then generic fallback
+                            const name = localizedThemes[idx] || THEME_NAMES[idx] || `Theme ${idx + 1}`;
                             return (
                                 <TooltipArea key={idx} text={name}>
                                     <button 
@@ -183,7 +186,7 @@ export const VisualSettingsPanel: React.FC = () => {
 
             <div className="pt-2 border-t border-white/5 space-y-4">
                 <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{t?.visualPanel?.display || "Display"}</span>
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{visualPanel.display || "Display"}</span>
                 </div>
                 
                 {isAdvanced ? (

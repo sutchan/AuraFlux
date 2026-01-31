@@ -1,10 +1,10 @@
 
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.7.9
+ * Version: 1.7.11
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-16 16:30
+ * Updated: 2025-03-20 12:30
  */
 
 import React, { useState, useEffect } from 'react';
@@ -44,16 +44,12 @@ interface ControlsProps {
 const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }) => {
   const { settings, setSettings, randomizeSettings, mode, setMode, setColorTheme } = useVisuals();
   const { showLyrics, setShowLyrics } = useAI();
-  const { toggleMicrophone, sourceType, togglePlayback, playNext, playPrev, selectedDeviceId } = useAudioContext();
+  const { toggleMicrophone, sourceType, togglePlayback, playNext, playPrev, selectedDeviceId, isPlaying } = useAudioContext();
   const { t, toggleFullscreen } = useUI();
 
   const [activeTab, setActiveTab] = useState<TabType>('visual');
   const [showHelpModal, setShowHelpModal] = useState(false);
   
-  const toggleTheme = () => {
-      setSettings(s => ({...s, appTheme: s.appTheme === 'light' ? 'dark' : 'light'}));
-  };
-
   // Updated tabs array order to match OpenSpec: Visual, Audio, Info Layer, Playback, Studio, System
   const tabs: TabType[] = settings.uiMode === 'simple' 
     ? ['visual', 'input', 'playback', 'system']
@@ -234,27 +230,31 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                     </div>
                     
                     <div className="flex items-center justify-between lg:justify-end gap-2 md:gap-3">
-                    <div className="bg-white/5 p-0.5 rounded-lg flex text-[10px] font-bold uppercase tracking-wider border border-white/5 flex-shrink-0">
-                        <TooltipArea text={t?.hints?.uiModeSimple}>
-                            <button onClick={() => setSettings({...settings, uiMode: 'simple'})} className={`px-2.5 py-1 rounded transition-all duration-300 ${settings.uiMode === 'simple' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/10'}`}>{t?.common?.simple || 'SIMPLE'}</button>
-                        </TooltipArea>
-                        <TooltipArea text={t?.hints?.uiModeAdvanced}>
-                            <button onClick={() => setSettings({...settings, uiMode: 'advanced'})} className={`px-2.5 py-1 rounded transition-all duration-300 ${settings.uiMode === 'advanced' ? 'bg-white text-black shadow-sm' : 'text-white/40 hover:text-white hover:bg-white/10'}`}>{t?.common?.advanced || 'ADVANCED'}</button>
-                        </TooltipArea>
-                    </div>
+                    
+                    {/* Quick Playback Controls (Replaced UI Mode Toggle) */}
+                    {sourceType === 'FILE' && (
+                        <div className="bg-white/5 p-0.5 rounded-lg flex items-center border border-white/5 shrink-0">
+                            <TooltipArea text={isPlaying ? t?.player?.pause : t?.player?.play}>
+                                <button onClick={togglePlayback} className="w-8 h-7 flex items-center justify-center rounded hover:bg-white/10 text-white/80 hover:text-white transition-colors">
+                                    {isPlaying ? (
+                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                    ) : (
+                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    )}
+                                </button>
+                            </TooltipArea>
+                            <div className="w-px h-4 bg-white/10 mx-0.5"></div>
+                            <TooltipArea text={t?.player?.next}>
+                                <button onClick={playNext} className="w-8 h-7 flex items-center justify-center rounded hover:bg-white/10 text-white/80 hover:text-white transition-colors">
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                                </button>
+                            </TooltipArea>
+                        </div>
+                    )}
+
                     <div className="w-px h-5 bg-white/10 mx-1 hidden lg:block"></div>
                     <div className="flex items-center gap-1.5">
                         <div className="hidden md:flex gap-1.5">
-                            <ActionButton onClick={() => setShowHelpModal(true)} hintText={`${t?.hints?.help || "Help"} [?]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.546-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} />
-                            
-                            <ActionButton onClick={toggleFullscreen} hintText={`${t?.hints?.fullscreen || "Fullscreen"} [F]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>} />
-                            
-                            <ActionButton onClick={toggleTheme} hintText={settings.appTheme === 'light' ? (t?.common?.themeDark || "Dark Mode") : (t?.common?.themeLight || "Light Mode")} icon={
-                                settings.appTheme === 'light' 
-                                ? <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-                                : <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                            } />
-                            
                             <ActionButton 
                                 onClick={randomizeSettings} 
                                 hintText={`${t?.hints?.randomize || "Randomize"} [R]`} 
@@ -264,6 +264,10 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                                     </svg>
                                 } 
                             />
+                            
+                            <ActionButton onClick={toggleFullscreen} hintText={`${t?.hints?.fullscreen || "Fullscreen"} [F]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>} />
+                            
+                            <ActionButton onClick={() => setShowHelpModal(true)} hintText={`${t?.hints?.help || "Help"} [?]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.546-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} />
                         </div>
                         <button onClick={() => setIsExpanded(false)} className="w-8 h-8 flex items-center justify-center bg-blue-600 rounded-lg text-white shadow-[0_4px_15px_rgba(37,99,235,0.3)] hover:bg-blue-500 transition-all duration-300 flex-shrink-0" aria-label={t?.hideOptions || "Collapse"}><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" /></svg></button>
                     </div>

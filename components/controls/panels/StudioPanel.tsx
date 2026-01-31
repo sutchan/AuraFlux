@@ -1,13 +1,13 @@
 
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 4.0.2
+ * Version: 4.0.3
  * Author: Aura Vision Team
  * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Updated: 2025-03-14 20:00
+ * Updated: 2025-03-20 16:00
  */
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useUI, useAudioContext, useVisuals, useAI } from '../../AppContext';
 import { useVideoRecorder, RecorderConfig } from '../../../core/hooks/useVideoRecorder';
@@ -19,7 +19,6 @@ import { TooltipArea } from '../../ui/controls/Tooltip';
 import { getAverage } from '../../../core/services/audioUtils';
 import { generateVisualConfigFromAudio } from '../../../core/services/aiService';
 import { VisualizerMode } from '../../../core/types';
-import { getPositionOptions } from '../../../core/constants';
 
 // Helper to format bytes
 const formatSize = (bytes: number) => {
@@ -40,11 +39,10 @@ export const StudioPanel: React.FC = () => {
   
   const { 
       audioContext, analyser, mediaStream, sourceType, 
-      isPlaying, currentSong, importFiles, getAudioSlice,
-      duration: fileDuration
+      isPlaying, currentSong, getAudioSlice
   } = useAudioContext();
   
-  const { settings, setSettings, mode, setMode, setColorTheme, setActivePreset } = useVisuals();
+  const { setSettings, mode, setMode, setColorTheme } = useVisuals();
   const { apiKeys } = useAI();
   
   const [resolution, setResolution] = useState<number | 'native'>('native');
@@ -71,9 +69,20 @@ export const StudioPanel: React.FC = () => {
   });
 
   const studio = t?.studioPanel || {};
-  const audioPanel = t?.audioPanel || {};
   const settingsLabels = studio.settings || {};
   const hints = studio.hints || {};
+
+  const handleResetStudio = useCallback(() => {
+    setResolution('native');
+    setAspectRatio('native');
+    setFps(30);
+    setBitrate(8000000);
+    setRecGain(1.0);
+    setFadeDuration(0);
+    setSyncStart(false);
+    setEnableCountdown(false);
+    setDurationPreset(0);
+  }, []);
 
   const supportedTypes = useMemo(() => {
       const types = getSupportedMimeTypes();
@@ -81,17 +90,11 @@ export const StudioPanel: React.FC = () => {
           setMimeType(types[0]);
       }
       return types;
-  }, []); 
+  }, [getSupportedMimeTypes, mimeType]); 
 
   const previewUrl = useMemo(() => {
       return recordedBlob ? URL.createObjectURL(recordedBlob) : null;
   }, [recordedBlob]);
-
-  useEffect(() => {
-      return () => {
-          if (previewUrl) URL.revokeObjectURL(previewUrl);
-      };
-  }, [previewUrl]);
 
   useEffect(() => {
       if (isRecording || !isArmed) {
@@ -168,35 +171,6 @@ export const StudioPanel: React.FC = () => {
       if (armCheckInterval.current) clearInterval(armCheckInterval.current);
   };
 
-  const handleAiDirector = async () => {
-      const apiKey = apiKeys['GEMINI'] || process.env.API_KEY;
-      if (!apiKey) {
-          showToast(t?.toasts?.aiDirectorReq || 'Gemini API Key required.', 'error');
-          return;
-      }
-      setIsAnalyzing(true);
-      try {
-          const wavBlob = await getAudioSlice(15);
-          if (!wavBlob) throw new Error("Failed capture.");
-          const reader = new FileReader();
-          reader.readAsDataURL(wavBlob);
-          reader.onloadend = async () => {
-              const base64Audio = (reader.result as string).split(',')[1];
-              const config = await generateVisualConfigFromAudio(base64Audio, apiKey, language);
-              if (config) {
-                  if (config.mode) setMode(config.mode as VisualizerMode);
-                  if (config.colors) setColorTheme(config.colors);
-                  setSettings(prev => ({ ...prev, speed: config.speed || prev.speed, sensitivity: config.sensitivity || prev.sensitivity, glow: config.glow ?? prev.glow }));
-                  showToast(`AI: ${config.explanation}`, 'success');
-              }
-              setIsAnalyzing(false);
-          };
-      } catch (e) {
-          showToast(t?.toasts?.aiFail || 'Analysis Failed.', 'error');
-          setIsAnalyzing(false);
-      }
-  };
-
   const handleSaveVideo = () => {
       if (!recordedBlob) return;
       const url = URL.createObjectURL(recordedBlob);
@@ -266,7 +240,16 @@ export const StudioPanel: React.FC = () => {
         {isCountingDown && <div className="absolute inset-0 z-20 bg-black/80 flex items-center justify-center backdrop-blur-sm rounded-2xl"><span className="text-6xl font-black text-white animate-ping">{countdownVal}</span></div>}
         
         {/* Card 1: Output Config */}
-        <BentoCard title={studio.videoConfig || "Video Configuration"}>
+        <BentoCard 
+            title={studio.videoConfig || "Video Configuration"}
+            action={
+                <TooltipArea text={t?.hints?.resetStudio || "Reset Studio"}>
+                  <button onClick={handleResetStudio} className="p-1 text-white/30 hover:text-white transition-colors">
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  </button>
+                </TooltipArea>
+            }
+        >
             <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-2">
                     <CustomSelect label={settingsLabels.resolution} value={resolution} onChange={(val) => setResolution(val === 'native' ? 'native' : Number(val))} 

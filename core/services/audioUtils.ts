@@ -1,9 +1,10 @@
+
 /**
  * File: core/services/audioUtils.ts
- * Version: 1.7.46
+ * Version: 1.8.20
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-05 17:00
+ * Updated: 2025-03-18 12:00
  */
 
 export function getAverage(data: Uint8Array, start: number, end: number) {
@@ -27,12 +28,24 @@ export function applySoftCompression(val: number, power: number = 0.75): number 
 
 /**
  * Adaptive Noise Filter
+ * Features:
+ * - Dynamic Noise Floor Learning: Fast attack for silence, slow decay for noise drift.
+ * - Signal Discrimination: Prevents learning loud music as noise.
+ * - Spectral Tilt: Applies stronger gating to high frequencies to remove hiss.
  */
 export class AdaptiveNoiseFilter {
   private noiseProfile: Float32Array;
-  private readonly alphaUp = 0.0005; 
-  private readonly alphaDown = 0.05; 
-  private readonly sensitivityMargin = 5; 
+  
+  // Adaptation rates
+  private readonly alphaUp = 0.001;   // Slow drift up (to adapt to rising environmental noise)
+  private readonly alphaDown = 0.1;   // Fast drop (to quickly recognize silence)
+  
+  // Base threshold offset (0-255 scale)
+  private readonly sensitivityMargin = 10; 
+  
+  // Signal-to-Noise ratio threshold to pause adaptation
+  // If signal is this much louder than noise floor, we assume it's music and stop learning it as noise.
+  private readonly musicThreshold = 15; 
 
   constructor(fftSize: number = 512) {
     this.noiseProfile = new Float32Array(fftSize).fill(0);
@@ -44,53 +57,91 @@ export class AdaptiveNoiseFilter {
       this.noiseProfile = new Float32Array(len).fill(0);
     }
 
-    if (len > 0) data[0] = 0;
+    if (len > 0) data[0] = 0; // Kill DC Offset
 
     for (let i = 1; i < len; i++) {
       const val = data[i];
       const floor = this.noiseProfile[i];
+      const diff = val - floor;
 
-      if (val < floor) {
-        this.noiseProfile[i] = floor * (1 - this.alphaDown) + val * this.alphaDown;
+      // --- 1. Smart Noise Floor Update ---
+      if (diff < 0) {
+        // Signal is quieter than current noise profile -> It's a new lower noise floor.
+        // Update quickly to capture silence gaps.
+        this.noiseProfile[i] = floor + diff * this.alphaDown;
+      } else if (diff > this.musicThreshold) {
+        // Signal is significantly louder -> Likely music/speech.
+        // Do NOT update noise floor (or update extremely slowly) to preserve dynamics.
+        // This prevents the filter from "eating" the music during sustained loud parts.
       } else {
-        this.noiseProfile[i] = floor * (1 - this.alphaUp) + val * this.alphaUp;
+        // Signal is slightly above noise -> Likely rising environmental noise (e.g., fan spinning up).
+        // Drift up slowly.
+        this.noiseProfile[i] = floor + diff * this.alphaUp;
       }
 
-      const spectralTilt = (i / len) * 3; 
+      // --- 2. Threshold Calculation with Spectral Tilt ---
+      // Hiss/Static is usually high frequency. We apply a stricter threshold for higher bins.
+      // 0 at bass, +8 at max treble.
+      const spectralTilt = (i / len) * 8.0; 
       const threshold = this.noiseProfile[i] + this.sensitivityMargin + spectralTilt;
 
+      // --- 3. Gating & Expansion ---
       let newVal = val - threshold;
+      
       if (newVal <= 0) {
-        newVal = 0;
+        newVal = 0; // Hard gate for sub-threshold noise
       } else {
-        newVal *= 1.1; 
+        // Slight expansion to pop the signal out of the black background
+        newVal *= 1.15; 
       }
+      
       data[i] = newVal > 255 ? 255 : Math.floor(newVal);
     }
   }
 }
 
 /**
- * Peak Limiter Utility
+ * Peak Limiter Utility with Headroom Management
  * Tracks recent peaks and provides a normalization factor.
+ * Includes "Fatigue" logic to lower gain during sustained loud passages.
  */
 export class DynamicPeakLimiter {
-    private maxPeak = 0.1;
-    private decay = 0.992; // Slow decay (approx 3-4 seconds to reset)
+    private maxPeak = 0.5;
+    private decay = 0.995; // Slow peak decay
+    private fatigue = 0.0; // Tracks sustained loudness
 
     process(currentEnergy: number): number {
-        // Update peak
+        // 1. Peak Envelope Follower
         if (currentEnergy > this.maxPeak) {
-            this.maxPeak = currentEnergy;
+            this.maxPeak = currentEnergy; // Instant attack
         } else {
-            this.maxPeak *= this.decay;
+            this.maxPeak *= this.decay; // Decay
         }
 
-        // Clamp peak floor to avoid boosting noise
-        const effectivePeak = Math.max(this.maxPeak, 0.25);
+        // Ensure strictly positive floor to avoid division by zero
+        const safePeak = Math.max(this.maxPeak, 0.1);
+
+        // 2. Fatigue / Headroom Logic
+        // If current energy consistently pushes against the peak ceiling (Wall of Sound),
+        // we build up "fatigue" to lower the gain. This creates headroom for transients.
+        const threshold = safePeak * 0.85;
+        if (currentEnergy > threshold) {
+            // Build up fatigue linearly
+            this.fatigue += 0.005;
+        } else {
+            // Recover from fatigue exponentially
+            this.fatigue *= 0.98;
+        }
+        // Cap fatigue (max 50% extra headroom/gain reduction)
+        this.fatigue = Math.max(0, Math.min(this.fatigue, 0.5));
+
+        // 3. Calculate Gain
+        // We effectively raise the ceiling based on fatigue.
+        // Example: Peak=1.0, Fatigue=0.5 -> Effective Ceiling = 1.5 -> Gain = 0.66
+        const effectiveCeiling = safePeak * (1.0 + this.fatigue);
         
         // Return normalization factor
-        return 1.0 / effectivePeak;
+        return 1.0 / effectiveCeiling;
     }
 }
 

@@ -1,9 +1,10 @@
+
 /**
  * File: core/hooks/useAiState.ts
- * Version: 1.7.33
- * Author: Sut
- * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-04 11:00
+ * Version: 1.7.34
+ * Author: Aura Vision Team
+ * Copyright (c) 2025 Aura Vision. All rights reserved.
+ * Updated: 2025-03-20 12:40
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -13,6 +14,7 @@ import { LyricsStyle, Language, Region, VisualizerSettings, AIProvider, SongInfo
 
 const DEFAULT_LYRICS_STYLE = LyricsStyle.KARAOKE;
 const DEFAULT_SHOW_LYRICS = false;
+const DEFAULT_ENABLE_ANALYSIS = false;
 
 // Privacy Helper: Simple Base64 obfuscation to prevent shoulder-surfing leaks.
 // Note: This is not encryption. The key is still accessible in the browser.
@@ -34,11 +36,12 @@ interface AiStateProps {
   initialSettings: VisualizerSettings;
   setSettings: React.Dispatch<React.SetStateAction<VisualizerSettings>>;
   onSongIdentified?: (song: SongInfo | null) => void;
+  currentSong?: SongInfo | null; // Passed from AudioContext to optimize
 }
 
 export const useAiState = ({ 
   language, region, provider, isListening, 
-  isSimulating, mediaStream, initialSettings, setSettings, onSongIdentified
+  isSimulating, mediaStream, initialSettings, setSettings, onSongIdentified, currentSong
 }: AiStateProps) => {
   const { getStorage, setStorage } = useLocalStorage();
 
@@ -47,7 +50,12 @@ export const useAiState = ({
     // Robustness: Validate enum from storage. If invalid, fallback to default.
     return Object.values(LyricsStyle).includes(saved) ? saved : DEFAULT_LYRICS_STYLE;
   });
+  
+  // Controls visibility of UI overlay (Lyrics/Song Info)
   const [showLyrics, setShowLyrics] = useState<boolean>(() => getStorage('showLyrics', DEFAULT_SHOW_LYRICS));
+  
+  // Controls background AI analysis loop (Genre/Mood/Identification)
+  const [enableAnalysis, setEnableAnalysis] = useState<boolean>(() => getStorage('enableAnalysis', DEFAULT_ENABLE_ANALYSIS));
   
   // Store API Keys per provider with obfuscation
   const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
@@ -73,8 +81,11 @@ export const useAiState = ({
       setStorage('api_keys_v1', encoded);
   }, [apiKeys, setStorage]);
 
-  const { isIdentifying, currentSong, setCurrentSong, performIdentification } = useIdentification({
-    language, region, provider, showLyrics,
+  // We pass 'enableAnalysis' as the "showLyrics" prop to useIdentification,
+  // effectively decoupling the loop from the UI visibility.
+  const { isIdentifying, setCurrentSong, performIdentification } = useIdentification({
+    language, region, provider, 
+    showLyrics: enableAnalysis, // Pass enableAnalysis here to control the loop
     apiKey: apiKeys[provider], // Pass the custom key for current provider
     onSongUpdate: onSongIdentified
   });
@@ -87,18 +98,29 @@ export const useAiState = ({
   useEffect(() => {
     setStorage('showLyrics', showLyrics);
   }, [showLyrics, setStorage]);
+
+  useEffect(() => {
+    setStorage('enableAnalysis', enableAnalysis);
+  }, [enableAnalysis, setStorage]);
   
   useEffect(() => {
     let interval: number;
-    if (isListening && mediaStream && showLyrics && !isSimulating) {
+    
+    // Optimization: If we are playing a file and it already has full lyrics (e.g. from ID3),
+    // skip the AI loop to save API costs and avoid conflicts.
+    const hasFileLyrics = currentSong?.matchSource === 'FILE' && !!currentSong?.lyrics;
+
+    // Trigger loop based on enableAnalysis, not showLyrics
+    if (isListening && mediaStream && enableAnalysis && !isSimulating && !hasFileLyrics) {
       performIdentification(mediaStream);
       interval = window.setInterval(() => performIdentification(mediaStream), 20000);
     }
     return () => clearInterval(interval);
-  }, [isListening, mediaStream, showLyrics, performIdentification, isSimulating]);
+  }, [isListening, mediaStream, enableAnalysis, performIdentification, isSimulating, currentSong]);
 
   const resetAiSettings = useCallback(() => {
     setShowLyrics(DEFAULT_SHOW_LYRICS);
+    setEnableAnalysis(DEFAULT_ENABLE_ANALYSIS);
     setLyricsStyle(DEFAULT_LYRICS_STYLE);
     setSettings(p => ({
       ...p,
@@ -112,6 +134,7 @@ export const useAiState = ({
   return {
     lyricsStyle, setLyricsStyle,
     showLyrics, setShowLyrics,
+    enableAnalysis, setEnableAnalysis,
     isIdentifying,
     currentSong, setCurrentSong,
     performIdentification,

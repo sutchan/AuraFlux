@@ -1,3 +1,4 @@
+
 # OpenSpec: AI 集成规范
 
 ## 1. 模型与工具配置
@@ -49,5 +50,10 @@ AI 必须返回严格的 JSON 格式。
 3. **健壮性解析 (v1.7.37):** 对 AI 返回的 JSON 字符串进行安全的 `try-catch` 解析。捕获特定的 API 错误（如无效密钥、超时）并返回一个用户友好的 `SongInfo` 对象供 UI 显示。
 4. **Mock 模式:** 若 API Key 无效或未提供，返回模拟数据。
 
+## 6. 控制逻辑 (v1.8.22)
+- **AI Analysis (enableAnalysis):** 控制后台循环分析（情绪、流派、识别）。此开关位于“输入 (Audio)”面板。
+- **Show Lyrics (showLyrics):** 控制前台 UI 覆盖层（歌词、曲目信息）的可见性。此开关位于“媒体库 (Library)”面板。
+- **解耦设计:** 允许用户在不显示 UI 的情况下利用 AI 分析结果驱动视觉效果（如色彩、速度），或者仅显示本地 ID3 歌词而不调用 AI。
+
 ---
-*Aura Flux AI Integration - Version 1.8.3*
+*Aura Flux AI Integration - Version 1.8.22*

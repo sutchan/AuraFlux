@@ -1,6 +1,7 @@
+
 /*
  * File: assets/styles/index.css
- * Version: 1.8.0
+ * Version: 1.8.1
  * Author: Sut
  */
 
@@ -14,6 +15,8 @@ body {
   overflow: hidden;
   background-color: #000;
   font-family: 'Inter', sans-serif;
+  /* Tell browser to use dark theme for native elements like scrollbars */
+  color-scheme: dark; 
 }
 
 /* Custom scrollbar for lyrics */
@@ -27,18 +30,19 @@ body {
 
 /* Sleek custom scrollbar for settings panels */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 5px; /* Increased from 4px to 5px for better usability */
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.25); /* Increased contrast from 0.15 to 0.25 */
   border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.1); /* Add subtle border for definition */
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.6); /* Slightly brighter hover state */
 }
 
 /* Mask fade effect for horizontal scrolling lists */
@@ -88,6 +92,7 @@ input[type=range]:active::-webkit-slider-thumb {
   --bg-color: #f3f4f6;
   --text-main: #111827;
   --panel-bg: #ffffff;
+  color-scheme: light; /* Reset for light mode */
 }
 
 .light-theme body {

@@ -1,17 +1,18 @@
 
 /**
  * File: core/services/aiService.ts
- * Version: 3.2.1
+ * Version: 3.2.2
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-13 13:00
- * Description: Robustness update: Fallback for missing mood_en_keywords and localized visual config explanation.
+ * Updated: 2025-03-19 20:00
+ * Description: Robustness update: Localized error messages and isError flag.
  */
 
 import { GoogleGenAI, Type } from "@google/genai";
 import { GEMINI_MODEL, REGION_NAMES, VISUALIZER_PRESETS } from '../constants';
 import { SongInfo, Language, Region, AIProvider, VisualizerMode } from '../types';
 import { generateFingerprint, saveToLocalCache, findLocalMatch } from './fingerprintService';
+import { TRANSLATIONS } from '../i18n';
 
 const REQUEST_TIMEOUT_MS = 45000;
 
@@ -90,9 +91,22 @@ export const identifySongFromAudio = async (
       console.warn("[AI] Fingerprint generation/matching failed:", e);
   }
 
+  // Get translated strings for error messages
+  const t = TRANSLATIONS[language] || TRANSLATIONS['en'];
+  const errors = t.errors || {};
+
   const apiKey = customKey || process.env.API_KEY;
   if (!apiKey || apiKey.includes('YOUR_API_KEY')) {
-      return { title: "API Config Missing", artist: "System Alert", lyricsSnippet: "Please configure your API Key in the settings to enable AI recognition.", mood: "Configuration Required", mood_en_keywords: 'error, alert', identified: false, matchSource: 'MOCK' };
+      return { 
+          title: errors.configMissing || "API Config Missing", 
+          artist: errors.sysAlert || "System Alert", 
+          lyricsSnippet: errors.configMissingDesc || "Please configure your API Key in the settings.", 
+          mood: "Configuration Required", 
+          mood_en_keywords: 'error, alert', 
+          identified: false, 
+          matchSource: 'MOCK',
+          isError: true
+      };
   }
 
   const regionName = region === 'global' ? 'Global' : (REGION_NAMES[region] || region);
@@ -173,25 +187,27 @@ export const identifySongFromAudio = async (
       const errorMessage = error.toString().toLowerCase();
       if (errorMessage.includes('api key not valid') || errorMessage.includes('permission denied') || (error.httpStatus === 403 || error.httpStatus === 400)) {
         return { 
-          title: "Invalid API Key", 
-          artist: "System Alert", 
-          lyricsSnippet: `Your ${provider} API key appears to be invalid or lacks permissions. Please verify it in the AI settings panel.`, 
+          title: errors.apiKeyInvalid || "Invalid API Key", 
+          artist: errors.sysAlert || "System Alert", 
+          lyricsSnippet: errors.apiKeyInvalidDesc || `Your ${provider} API key appears to be invalid or lacks permissions.`, 
           mood: "Configuration Error", 
           mood_en_keywords: 'error, alert, invalid',
           identified: false, 
-          matchSource: 'MOCK' 
+          matchSource: 'MOCK',
+          isError: true
         };
       }
       
       if (error.message === 'AI_TIMEOUT') {
         return { 
-          title: "Request Timed Out", 
-          artist: "System Alert", 
-          lyricsSnippet: "The AI service is taking too long to respond. This might be due to network issues or high server load. Please try again in a moment.", 
+          title: errors.networkTimeout || "Request Timed Out", 
+          artist: errors.sysAlert || "System Alert", 
+          lyricsSnippet: errors.networkTimeoutDesc || "The AI service is taking too long to respond.", 
           mood: "Network Issue", 
           mood_en_keywords: 'error, alert, network',
           identified: false, 
-          matchSource: 'MOCK' 
+          matchSource: 'MOCK',
+          isError: true
         };
       }
       

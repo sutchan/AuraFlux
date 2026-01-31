@@ -1,9 +1,11 @@
+
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.2.2
+ * Version: 1.3.0
  * Author: Aura Vision Team
  * Copyright (c) 2024 Aura Vision. All rights reserved.
- * Updated: 2025-03-09 13:00
+ * Updated: 2025-03-20 15:30
+ * Description: Decoupled from "Show Lyrics" toggle. Now controlled by "Song Info" setting.
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -14,13 +16,13 @@ import { useAudioPulse } from '../../core/hooks/useAudioPulse';
 interface SongOverlayProps {
   song: SongInfo | null;
   language: Language;
-  showLyrics: boolean;
+  isVisible: boolean; // Renamed from showLyrics to be generic
   onRetry: () => void;
   onClose: () => void;
   analyser?: AnalyserNode | null;
   sensitivity?: number;
   showAlbumArt?: boolean;
-  isIdle?: boolean; // New prop for auto-hide
+  isIdle?: boolean;
 }
 
 const getMoodStyle = (keywords: string | undefined | null) => {
@@ -61,22 +63,23 @@ const getMoodStyle = (keywords: string | undefined | null) => {
   };
 };
 
-const getProviderLabel = (source: string | undefined) => {
+const getProviderLabel = (source: string | undefined, t: any) => {
+    const labels = t?.songOverlay?.provider || {};
     switch(source) {
         case 'OPENAI': return 'GPT-4o';
-        case 'LOCAL': return 'Local Cache';
-        case 'MOCK': return 'Simulation';
-        case 'FILE': return 'ID3 Tag';
+        case 'LOCAL': return labels.local || 'Local Cache';
+        case 'MOCK': return labels.mock || 'Simulation';
+        case 'FILE': return labels.id3 || 'ID3 Tag';
         case 'GEMINI': 
         default: return 'Gemini 3.0';
     }
 };
 
-const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, onRetry, onClose, analyser, sensitivity = 1.0, showAlbumArt = true, isIdle = false }) => {
+const SongOverlay: React.FC<SongOverlayProps> = ({ song, isVisible, language, onRetry, onClose, analyser, sensitivity = 1.0, showAlbumArt = true, isIdle = false }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const moodStyle = useMemo(() => song ? getMoodStyle(song.mood_en_keywords || song.mood) : getMoodStyle('default'), [song]);
   
-  const isEnabled = showLyrics && !!song && (song.identified || !!song.mood || !!song.title) && song.matchSource !== 'PREVIEW';
+  const isEnabled = isVisible && !!song && (song.identified || !!song.mood || !!song.title) && song.matchSource !== 'PREVIEW';
 
   useAudioPulse({
     elementRef: containerRef,
@@ -89,11 +92,11 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
   if (!isEnabled || !song) return null;
   const t = TRANSLATIONS[language] || TRANSLATIONS['en'];
 
-  const isApiError = song.artist === "System Alert";
+  const isApiError = !!song.isError; // Use flag instead of string check
   const displayTitle = song.title;
-  const displayArtist = isApiError ? null : (song.identified ? song.artist : (song.artist || "Analyzing..."));
+  const displayArtist = isApiError ? null : (song.identified ? song.artist : (song.artist || (t.audioPanel?.analyzing || "Analyzing...")));
   const isConfidenceLow = !song.identified && !isApiError;
-  const sourceLabel = getProviderLabel(song.matchSource);
+  const sourceLabel = getProviderLabel(song.matchSource, t);
   const albumArt = song.albumArtUrl;
 
   return (
@@ -169,7 +172,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, showLyrics, language, o
             {song.searchUrl && song.identified && (
                 <a href={song.searchUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-white/50 hover:text-blue-300 transition-colors bg-white/5 hover:bg-white/10 px-2 py-1 rounded">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-                    <span>Google Search</span>
+                    <span>{t.songOverlay?.googleSearch || "Google Search"}</span>
                 </a>
             )}
             <button 

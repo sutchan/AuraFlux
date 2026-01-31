@@ -1,7 +1,7 @@
 
 /**
  * File: components/visualizers/scenes/SilkWaveScene.tsx
- * Version: 3.0.0
+ * Version: 3.0.1
  * Author: Sut
  * Copyright (c) 2025 Aura Vision. All rights reserved.
  * Description: "Fiber Optic" Aesthetic Upgrade - Sparse Edition with Depth of Field.
@@ -9,6 +9,7 @@
  * - Physics: Low-frequency noise for zero sharp angles.
  * - Visuals: Highly sparse stochastic blinking tips.
  * - DOF: Focal plane effect creates blurry lines at distance.
+ * - Update v3.0.1: Optimized to 5 layers for cleaner aesthetic and performance.
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -35,8 +36,8 @@ export const SilkWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, color
   // Configuration:
   // High segment count for smoothness
   const SEGMENTS_X = settings.quality === 'high' ? 300 : (settings.quality === 'med' ? 200 : 100);
-  // Moderate layer count for "sparse" but rich look
-  const LAYERS_Z = settings.quality === 'high' ? 60 : (settings.quality === 'med' ? 40 : 25);
+  // Optimized to 5 layers for "Spectral Silk" sparse aesthetic
+  const LAYERS_Z = 5;
   
   // Ribbon Dimensions
   const RIBBON_WIDTH = 160;
@@ -49,7 +50,7 @@ export const SilkWaveScene: React.FC<SceneProps> = ({ analyser, analyserR, color
     const idx = new Float32Array(LAYERS_Z);
 
     for (let i = 0; i < LAYERS_Z; i++) {
-      idx[i] = i / (LAYERS_Z - 1);
+      idx[i] = i / Math.max(1, LAYERS_Z - 1);
       
       // Split channels: Top half vs Bottom half (or interleaved)
       ch[i] = i % 2 === 0 ? 1.0 : -1.0; 

@@ -15,6 +15,7 @@
 - **边界条件测试**: 测试空音频输入、超长文件名及断网情况下的降级处理。
 - **WebGL 恢复**: 模拟上下文丢失自动恢复。
 - **i18n 完整性 (v1.8.16):** 验证所有 10 种语言包的键值完整性，特别是 `player` (播放控制) 和 `audio` (音频设置) 部分。
+- **FFT 切换稳定性 (v1.8.22):** 在播放高频音频时快速切换 FFT Size (512 -> 4096)，验证 `OceanWaveScene` 是否出现纹理撕裂或页面卡死。
 
 ## 3. 回归测试清单
 - [x] 10种语言切换无乱码或缺失键值 (v1.8.16 Verified)。
@@ -22,6 +23,7 @@
 - [ ] AI 导演功能在无 API Key 时的提示。
 - [x] 智能预设颜色索引在主题列表缩减后的兼容性 (v1.8.11 Verified)。
 - [x] 细胞漂移模式 (Cellular Drift) 在高分辨率屏幕上的性能验证 (v1.8.16 Verified)。
+- [x] Ocean Wave 模式下 FFT 尺寸热切换稳定性 (v1.8.22 Verified)。
 
 ---
-*Aura Flux Testing & Validation - Version 1.8.16*
+*Aura Flux Testing & Validation - Version 1.8.22*
