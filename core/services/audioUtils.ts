@@ -1,7 +1,8 @@
 /**
  * File: core/services/audioUtils.ts
- * Version: 1.8.25
+ * Version: 1.8.51
  * Author: Sut
+ * Updated: 2025-03-26 01:25 - Fixed class property syntax error for ESBuild compatibility.
  */
 
 export function getAverage(data: Uint8Array, start: number, end: number) {
@@ -45,7 +46,11 @@ export class AdaptiveNoiseFilter {
 }
 
 export class DynamicPeakLimiter {
-    private maxPeak = 0.5, decay = 0.995, fatigue = 0.0;
+    // @fix: ESBuild requires separate declarations for properties with access modifiers
+    private maxPeak: number = 0.5;
+    private decay: number = 0.995;
+    private fatigue: number = 0.0;
+
     process(currentEnergy: number): number {
         if (currentEnergy > this.maxPeak) this.maxPeak = currentEnergy;
         else this.maxPeak *= this.decay;
