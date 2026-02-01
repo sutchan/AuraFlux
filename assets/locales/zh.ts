@@ -1,3 +1,4 @@
+
 export const zh = {
   common: {
     confirmClear: '确定要清空播放列表吗？',
@@ -57,7 +58,8 @@ export const zh = {
     NEURAL_FLOW: '神经网络',
     CUBE_FIELD: '量子方阵',
     KINETIC_WALL: '动感光墙',
-    RESONANCE_ORB: '共鸣天体'
+    RESONANCE_ORB: '共鸣天体',
+    RIPPLES: '动感涟漪'
   },
   modeDescriptions: {
     PLASMA: '平滑流动的色彩混合。',
@@ -75,7 +77,8 @@ export const zh = {
     NEURAL_FLOW: 'WebGL 驱动的有机流体模拟。',
     CUBE_FIELD: '无限几何方块场。',
     KINETIC_WALL: '具有动感挤出的巨型 LED 舞台墙。',
-    RESONANCE_ORB: '随节奏剧烈脉动与形变的共鸣内核。'
+    RESONANCE_ORB: '随节奏剧烈脉动与形变的共鸣内核。',
+    RIPPLES: '由节奏触发的催眠扩散圆环。'
   },
   presets: {
     title: '视觉核心调优',
@@ -106,6 +109,7 @@ export const zh = {
     stopping: '正在停止...',
     settings: {
       resolution: '分辨率',
+      aspectRatio: '画面比例',
       resNative: '原生分辨率',
       fps: '帧率',
       bitrate: '码率',
@@ -144,6 +148,7 @@ export const zh = {
     analyze: '生成视觉配置',
     analyzing: '正在分析频谱...',
     apiKey: 'API Key',
+    apiKeyPlaceholder: 'Gemini Key...',
     generate: '生成',
     keySaved: 'API Key 已验证保存',
     keyInvalid: '无效的 API Key',
@@ -171,7 +176,11 @@ export const zh = {
     behavior: '应用行为',
     lightMode: '浅色主题',
     darkMode: '深色主题',
-    uiMode: '控制界面模式'
+    uiMode: '控制界面模式',
+    interaction: 'Interaction',
+    performance: 'System & Performance',
+    localization: 'Appearance & Localization',
+    factoryReset: 'Factory Reset All Settings'
   },
   config: {
     title: '数据备份与快照管理',
@@ -198,6 +207,8 @@ export const zh = {
     speed: '流动速度',
     glow: '辉光强度',
     trails: '运动拖尾',
+    autoRotate: 'Toggle automatic engine cycling',
+    cycleColors: 'Cycle through all color themes automatically',
     excludeFromAutoRotate: '从自动轮播中排除',
     includeInAutoRotate: '加入自动轮播',
     resetVisual: '重置视觉调优',
@@ -219,6 +230,7 @@ export const zh = {
     subtitle: '光之旋律',
     selectLanguage: '选择您的语言',
     features: {
+      title: '核心功能',
       visuals: { title: '生成式艺术', desc: '15+ 种基于多线程 WebGL 加速的渲染引擎。' },
       ai: { title: 'AI 通感', desc: '由 Gemini 驱动的实时情绪分析与动态歌词。' },
       privacy: { title: '本地隐私优先', desc: '所有音频处理与分析均在您的设备本地完成。' }
@@ -226,6 +238,11 @@ export const zh = {
     shortcuts: {
       title: '快捷 VJ 控制',
       desc: '掌握这些快捷键以像专家一样操作'
+    },
+    sections: {
+      essentials: '基础控制',
+      visual: '视觉创作',
+      advanced: '高级功能'
     },
     back: '上一步',
     next: '下一步',
@@ -238,6 +255,11 @@ export const zh = {
     howItWorksTitle: '快速开始',
     shortcutsTitle: '键盘快捷键',
     gesturesTitle: '触摸手势',
+    gestureItems: {
+      swipeMode: '左右滑动：更换模式',
+      swipeSens: '上下滑动：调整灵敏度',
+      longPress: '长按：AI 信息'
+    },
     projectInfoTitle: '我们的愿景',
     aboutDescription: 'Aura Flux 是一个实时通感引擎，将音频频率转化为生成式 3D 艺术。',
     coreTech: '技术栈',
@@ -284,6 +306,9 @@ export const zh = {
   welcomeTitle: 'Aura Flux',
   welcomeText: '将音频频率转化为情感视觉。',
   startExperience: '开启视听旅程',
+  welcomeScreen: {
+    micPermission: '实时可视化需要麦克风访问权限'
+  },
   errors: {
     tryDemo: '进入演示模拟模式',
     accessDenied: '需要麦克风访问权限',
@@ -382,6 +407,7 @@ export const zh = {
   wrongSong: '重试通感分析',
   songOverlay: {
     googleSearch: '外部搜索',
+    aiSynesthesia: 'AI 通感',
     provider: {
       local: '本地缓存',
       mock: '模拟',

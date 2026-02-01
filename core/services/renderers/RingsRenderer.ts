@@ -3,7 +3,6 @@
  * Version: 1.8.25
  * Author: Sut
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-24 23:20 - Normalized spectral distribution for rings.
  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';

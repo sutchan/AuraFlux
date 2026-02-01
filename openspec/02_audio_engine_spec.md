@@ -1,41 +1,18 @@
 # OpenSpec: 音频引擎规范
 
-## 1. 采集规范
-- **采样源:** 
-  - `MICROPHONE`: `navigator.mediaDevices.getUserMedia`
-  - `FILE`: 本地文件解码 (`AudioContext.decodeAudioData`)
-- **约束配置:** 
-  ```json
-  {
-    "echoCancellation": false,
-    "noiseSuppression": false,
-    "autoGainControl": false
-  }
-  ```
-- **格式兼容性 (MIME Types):**
-  - 优先: `audio/webm;codecs=opus` (Chrome/Firefox)
-  - 回退: `audio/mp4` (iOS Safari 17+), `audio/aac`。
-  - *策略：* 运行时动态检测 `MediaRecorder.isTypeSupported` 以选择最佳格式。
+## 1. 信号流拓扑
+- **双模输入:** 
+  - `MICROPHONE`: 低延迟实时捕获。
+  - `FILE`: 高保真本地解码，支持 ID3 元数据解析。
+- **立体声处理:** 引入左右声道独立 AnalyserNode，支持立体声可视化特效（如 Ocean Wave, Silk Wave）。
 
-## 2. 路由拓扑 (Routing Topology)
-- **麦克风模式:** `Source (Mic) -> AnalyserNode (FFT)` (无输出，防回授)
-- **文件模式 (v1.8.0):** `AudioBufferSourceNode -> AnalyserNode (FFT) -> Destination (Speakers)`
-- **内录模式 (Studio):** `AnalyserNode -> MediaStreamDestination`，确保录制纯净音频。
-- **生命周期管理:** 
-  - 监听 `visibilitychange` 事件。当页面重新获得焦点时，强制调用 `AudioContext.resume()` 以修复 iOS 设备上的静音问题。
+## 2. 信号增强算法
+- **智能疲劳补偿 (Fatigue System):** 在持续高分贝音频下自动增加 Headroom，防止视觉效果持续触顶。
+- **自适应降噪:** 通过 `AdaptiveNoiseFilter` 动态学习底噪，提升弱信号下的可视化纯净度。
+- **频谱标准化:** 根据 FFT Size 动态映射 Bass/Mids/Highs，确保视觉反馈在 512 与 4096 采样率下表现一致。
 
-## 3. 频谱分析 (Real-time FFT)
-- **FFT Size:** 默认 512 (UI 可调至 4096)。
-- **Smoothing:** 默认 0.8。
-- **数据流:** Uint8Array 频域数据每帧发送至渲染线程。
-
-## 4. 采样标准化 (v1.8.25 Standard)
-- **索引映射原则**: 严禁在渲染逻辑中使用硬编码的数组索引（如 `data[10]`）。
-- **归一化算法**: 必须根据 `analyser.frequencyBinCount` 动态计算偏移。
-  - 低音 (Bass): `[0, length * 0.06]`
-  - 中音 (Mids): `[length * 0.1, length * 0.3]`
-  - 高音 (Highs): `[length * 0.4, length * 0.8]`
-- **目的**: 确保用户切换 FFT Size (512 -> 4096) 时，视觉反馈的频谱分布保持一致。
+## 3. 存储与状态
+- 使用 **IndexedDB** 存储用户导入的音轨，实现跨会话的播放列表持久化。
 
 ---
-*Aura Flux Audio Engine - Version 1.8.25*
+*Aura Flux Audio Engine - Version 1.8.62*

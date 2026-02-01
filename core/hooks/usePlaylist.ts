@@ -6,7 +6,8 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { Track, PlaybackMode, SongInfo } from '../types';
-import { loadPlaylistFromDB, saveTrackToDB, clearPlaylistDB } from '../services/playlistService';
+// @fix: Import `removeTrackFromDB` to handle playlist item deletion from IndexedDB.
+import { loadPlaylistFromDB, saveTrackToDB, clearPlaylistDB, removeTrackFromDB } from '../services/playlistService';
 import { extractMetadata } from '../services/metadataService';
 
 export const usePlaylist = (setCurrentSong: (s: SongInfo | null) => void) => {
@@ -45,12 +46,38 @@ export const usePlaylist = (setCurrentSong: (s: SongInfo | null) => void) => {
     return (currentIndex + 1) % playlist.length;
   }, [playlist, currentIndex, playbackMode]);
 
+  // @fix: Implement `removeFromPlaylist` to correctly manage playlist state and persistence.
+  const removeFromPlaylist = useCallback(async (index: number) => {
+    const trackToRemove = playlist[index];
+    if (trackToRemove) {
+      await removeTrackFromDB(trackToRemove.id);
+    }
+    setPlaylist(p => {
+      const newPlaylist = p.filter((_, i) => i !== index);
+      if (index === currentIndex) {
+        if (newPlaylist.length === 0) {
+          setCurrentIndex(-1);
+          setCurrentSong(null);
+        } else if (index >= newPlaylist.length) {
+          setCurrentIndex(newPlaylist.length - 1);
+          setCurrentSong(newPlaylist[newPlaylist.length - 1]);
+        } else {
+          setCurrentSong(newPlaylist[index]);
+        }
+      } else if (index < currentIndex) {
+        setCurrentIndex(ci => ci - 1);
+      }
+      return newPlaylist;
+    });
+  }, [playlist, currentIndex, setCurrentSong]);
+
   return {
     playlist, setPlaylist,
     currentIndex, setCurrentIndex,
     playbackMode, setPlaybackMode,
     importFiles, getNextIndex, 
     getPrevIndex: () => playlist.length === 0 ? -1 : (currentIndex - 1 + playlist.length) % playlist.length,
-    clearPlaylist: () => { clearPlaylistDB(); setPlaylist([]); setCurrentIndex(-1); setCurrentSong(null); }
+    clearPlaylist: () => { clearPlaylistDB(); setPlaylist([]); setCurrentIndex(-1); setCurrentSong(null); },
+    removeFromPlaylist
   };
 };

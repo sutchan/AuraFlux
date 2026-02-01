@@ -1,8 +1,8 @@
 /**
  * File: core/constants/visualThemes.ts
- * Version: 2.0.4
+ * Version: 2.0.5
  * Author: Sut
- * Updated: 2025-03-25 21:05 - Removed MACRO_BUBBLES.
+ * Updated: 2025-07-18 14:00
  */
 
 import { VisualizerMode } from '../types';
@@ -38,4 +38,5 @@ export const VISUALIZER_PRESETS: Record<string, { description: string }> = {
   [VisualizerMode.DIGITAL_GRID]: { description: 'LED wall.' },
   [VisualizerMode.SILK_WAVE]: { description: 'Fiber optic.' },
   [VisualizerMode.OCEAN_WAVE]: { description: 'Pulsar terrain.' },
+  [VisualizerMode.RIPPLES]: { description: 'Concentric beat ripples.' },
 };

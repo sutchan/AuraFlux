@@ -1,8 +1,9 @@
+
 /**
  * File: components/controls/panels/StudioPanel.tsx
- * Version: 2.1.2
+ * Version: 2.2.2
  * Author: Aura Flux Team
- * Updated: 2025-03-25 23:05 - Extreme height optimization for Studio containers.
+ * Updated: 2025-07-18 13:00
  */
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -18,10 +19,58 @@ import { getAverage } from '../../../core/services/audioUtils';
 const formatSize = (b: number) => b === 0 ? '0 MB' : `${(b/(1024*1024)).toFixed(1)} MB`;
 const formatDur = (s: number) => `${Math.floor(s/60).toString().padStart(2,'0')}:${Math.floor(s%60).toString().padStart(2,'0')}`;
 
+const ArmedVisualizer: React.FC<{ analyser: AnalyserNode | null }> = ({ analyser }) => {
+    const barsRef = useRef<(HTMLDivElement | null)[]>([]);
+    
+    useEffect(() => {
+        if (!analyser) return;
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        let animFrameId: number;
+
+        const render = () => {
+            analyser.getByteFrequencyData(data);
+            const bass = getAverage(data, 0, 10) / 255;
+            const mid = getAverage(data, 20, 80) / 255;
+            
+            barsRef.current.forEach((bar, i) => {
+                if (bar) {
+                    const level = (i < 4) ? bass : mid;
+                    bar.style.transform = `scaleY(${Math.max(0.1, level * 2.5)})`;
+                }
+            });
+            animFrameId = requestAnimationFrame(render);
+        };
+        render();
+        return () => cancelAnimationFrame(animFrameId);
+    }, [analyser]);
+
+    return (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-48 h-48 relative animate-pulse-slow">
+                {Array.from({ length: 8 }).map((_, i) => (
+                    <div 
+                        key={i}
+                        className="absolute w-2 h-10 bg-blue-500/50 rounded-full origin-bottom"
+                        /* @fix: Ref callback must return void or a cleanup function. Returning the assignment result (HTMLDivElement) is invalid in React 19 / TypeScript. */
+                        ref={el => { barsRef.current[i] = el; }}
+                        style={{ 
+                            left: '50%', 
+                            top: '50%',
+                            transform: `rotate(${i * 45}deg) translateY(-80px) scaleY(0.1)`,
+                            transition: 'transform 0.1s ease-out'
+                        }} 
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
+
 export const StudioPanel: React.FC = () => {
   const { t, showToast } = useUI();
   const { audioContext, analyser, mediaStream, sourceType, isPlaying, currentSong } = useAudioContext();
   const [resolution, setResolution] = useState<number | 'native'>('native');
+  const [aspectRatio, setAspectRatio] = useState<number | 'native'>('native');
   const [fps, setFps] = useState(30);
   const [bitrate, setBitrate] = useState(8000000);
   const [mimeType, setMimeType] = useState('video/webm; codecs=vp9');
@@ -33,12 +82,12 @@ export const StudioPanel: React.FC = () => {
   const armCheckInterval = useRef<number | null>(null);
 
   const { isRecording, isProcessing, isFadingOut, recordedBlob, duration, size, startRecording, stopRecording, discardRecording, getSupportedMimeTypes } = useVideoRecorder({
-      audioContext, analyser, mediaStream, showToast, sourceType, t
+      audioContext, analyser, mediaStream, sourceType, t, showToast
   });
 
-  const studio = t?.studioPanel || {};
-  const labels = studio.settings || {};
-  const hints = studio.hints || {};
+  const studio = t.studioPanel;
+  const labels = studio.settings;
+  const hints = studio.hints;
 
   const supportedTypes = useMemo(() => {
       const types = getSupportedMimeTypes();
@@ -50,7 +99,7 @@ export const StudioPanel: React.FC = () => {
 
   const triggerRecording = () => {
       setIsArmed(false);
-      const doStart = () => startRecording({ resolution, aspectRatio: 'native', fps, bitrate, mimeType, recGain, fadeDuration: 0 });
+      const doStart = () => startRecording({ resolution, aspectRatio, fps, bitrate, mimeType, recGain, fadeDuration: 0 });
       if (enableCountdown) {
           let count = 3; setCountdownVal(count);
           const timer = setInterval(() => { count--; if (count > 0) setCountdownVal(count); else { clearInterval(timer); setCountdownVal(0); doStart(); } }, 1000);
@@ -67,10 +116,10 @@ export const StudioPanel: React.FC = () => {
         }, 50);
     }
     return () => { if (armCheckInterval.current) clearInterval(armCheckInterval.current); armCheckInterval.current = null; };
-  }, [isArmed, sourceType, isPlaying, analyser]);
+  }, [isArmed, sourceType, isPlaying, analyser, triggerRecording]);
 
   const getFormatLabel = (mime: string) => {
-      const f = t?.studioPanel?.formats || {};
+      const f = t.studioPanel.formats;
       if (mime.includes('vp9')) return f.vp9 || 'WebM (VP9)';
       if (mime.includes('vp8')) return f.vp8 || 'WebM (VP8)';
       if (mime.includes('avc1')) return f.mp4_h264 || 'MP4 (Social)';
@@ -104,12 +153,12 @@ export const StudioPanel: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-full max-h-[360px] overflow-hidden">
-        {/* Left: Configuration Column - Tightly Stacked */}
         <div className="flex flex-col gap-1.5 h-full">
             <BentoCard title={studio.videoConfig} className="p-2.5 flex-none">
                 <div className="space-y-1.5">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                         <CustomSelect label={labels.resolution} value={resolution} onChange={(v)=>setResolution(v==='native'?'native':Number(v))} options={[{value:'native',label:labels.resNative},{value:720,label:'720p'},{value:1080,label:'1080p'},{value:2160,label:'4K'}]}/>
+                        <CustomSelect label={labels.aspectRatio || "Aspect"} value={aspectRatio} onChange={(v)=>setAspectRatio(v==='native'?'native':Number(v))} options={[{value:'native',label:labels.resNative},{value:16/9,label:'16:9'},{value:9/16,label:'9:16'},{value:1,label:'1:1'}]}/>
                         <CustomSelect label={labels.fps} value={fps} onChange={(v)=>setFps(Number(v))} options={[{value:30,label:'30 FPS'},{value:60,label:'60 FPS'}]}/>
                     </div>
                     <div className="grid grid-cols-1 gap-1.5">
@@ -130,30 +179,35 @@ export const StudioPanel: React.FC = () => {
             </BentoCard>
         </div>
 
-        {/* Right: Record Control - Center Focused */}
-        <BentoCard className="flex flex-col items-center justify-center p-3 h-full">
-            <div className="relative group mb-2">
-                {isRecording && <div className="absolute inset-0 rounded-full border-2 border-red-500 animate-ping opacity-20 scale-150" />}
+        <BentoCard className="flex flex-col items-center justify-center p-3 h-full overflow-hidden">
+            <div className="relative group mb-2 flex items-center justify-center w-24 h-24">
+                {isArmed && <ArmedVisualizer analyser={analyser} />}
+                {isRecording && <div className="absolute inset-[-10px] rounded-full border-2 border-red-500 animate-pulse opacity-40 scale-150" />}
                 <button 
                     onClick={isRecording?stopRecording:()=>isArmed?setIsArmed(false):syncStart?setIsArmed(true):triggerRecording()} 
-                    className={`w-16 h-16 md:w-20 md:h-20 rounded-full border-[4px] transition-all flex items-center justify-center relative z-10 ${isRecording?'bg-red-900/10 border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.4)]':'bg-white/5 border-white/10 hover:border-red-500/50'}`}
+                    className={`w-20 h-20 rounded-full border-4 transition-all flex items-center justify-center relative z-10 duration-300 ease-in-out ${
+                        isRecording ? 'bg-red-900/10 border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.4)]' : 
+                        isArmed ? 'bg-blue-900/10 border-blue-500 shadow-[0_0_40px_rgba(59,130,246,0.4)] animate-pulse' :
+                        'bg-white/5 border-white/10 hover:border-red-500/50'
+                    }`}
                 >
                     {isProcessing ? (
                         <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin" />
                     ) : (
-                        <div className={`transition-all duration-500 ${isRecording ? 'w-5 h-5 bg-red-500 rounded-lg animate-pulse' : 'w-8 h-8 md:w-10 md:h-10 bg-red-600 rounded-full hover:scale-110 shadow-lg'}`} />
+                        <div className={`transition-all duration-300 ${
+                            isRecording ? 'w-5 h-5 bg-red-500 rounded-lg animate-pulse-slow' : 
+                            isArmed ? 'w-6 h-6 bg-blue-500 rounded-full animate-pulse' :
+                            'w-10 h-10 bg-red-600 rounded-full group-hover:scale-110 shadow-lg'
+                        }`} />
                     )}
                 </button>
             </div>
             
-            <div className="text-center">
-                <div className="text-sm md:text-lg font-black uppercase tracking-[0.25em] text-white leading-tight">
-                    {isRecording ? formatDur(duration) : isFadingOut ? (studio.stopping || "Stopping...") : isProcessing ? (studio.processing || "Processing...") : isArmed ? (studio.arming || "Arming...") : (studio.start || "START REC")}
+            <div className="text-center h-10 flex flex-col justify-center">
+                <div className="text-lg font-black uppercase tracking-[0.25em] text-white leading-tight transition-opacity duration-300">
+                    {isRecording ? formatDur(duration) : isFadingOut ? (studio.stopping) : isProcessing ? (studio.processing) : isArmed ? (studio.arming) : (studio.start)}
                 </div>
                 {isRecording && <div className="text-[9px] font-mono text-white/40 animate-pulse mt-1">{formatSize(size)}</div>}
-                {!isRecording && !isProcessing && !isArmed && (
-                    <p className="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-1 font-bold">4K Studio Pipeline</p>
-                )}
             </div>
             {countdownVal > 0 && <div className="absolute inset-0 z-20 bg-black/70 flex items-center justify-center rounded-2xl"><span className="text-5xl font-black text-white animate-ping">{countdownVal}</span></div>}
         </BentoCard>

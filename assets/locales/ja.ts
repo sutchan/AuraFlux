@@ -1,3 +1,4 @@
+
 export const ja = {
   common: {
     confirmClear: 'プレイリストをクリアしますか？',
@@ -57,7 +58,8 @@ export const ja = {
     NEURAL_FLOW: 'ニューラル',
     CUBE_FIELD: '量子フィールド',
     KINETIC_WALL: 'キネティック・ウォール',
-    RESONANCE_ORB: '共鳴天体'
+    RESONANCE_ORB: '共鳴天体',
+    RIPPLES: 'リップル'
   },
   modeDescriptions: {
     PLASMA: '滑らかに流れる色のブレンド。',
@@ -75,7 +77,8 @@ export const ja = {
     NEURAL_FLOW: 'WebGLによる有機流体シミュレーション。',
     CUBE_FIELD: '無限の幾何学ブロックフィールド。',
     KINETIC_WALL: '動的な押し出しを持つ巨大なLEDステージウォール。',
-    RESONANCE_ORB: 'リズムに反応して激しく変形する共鳴核。'
+    RESONANCE_ORB: 'リズムに反応して激しく変形する共鳴核。',
+    RIPPLES: 'リズムによって引き起こされる催眠的な拡大円。'
   },
   presets: {
     title: 'ビジュアル・コア調整',
@@ -106,6 +109,7 @@ export const ja = {
     stopping: '停止中...',
     settings: {
       resolution: '解像度',
+      aspectRatio: 'アスペクト比',
       resNative: 'ネイティブ',
       fps: 'FPS',
       bitrate: 'ビットレート',
@@ -144,6 +148,7 @@ export const ja = {
     analyze: 'ビジュアル生成',
     analyzing: 'スペクトル分析中...',
     apiKey: 'APIキー',
+    apiKeyPlaceholder: 'Gemini キー...',
     generate: '生成',
     keySaved: 'APIキー保存完了',
     keyInvalid: '無効なAPIキー',
@@ -154,7 +159,13 @@ export const ja = {
     save: '保存'
   },
   visualPanel: {
-    display: '画質と表示設定'
+    display: '画質と表示設定',
+    aiBg: 'AI インスピレーション背景',
+    generateBg: 'AI背景を生成',
+    regenerate: 'アートを再生成',
+    showBg: 'AIレイヤーを有効化',
+    opacity: '不透明度',
+    bgGenerated: 'アートが正常に生成されました'
   },
   textPanel: {
     overlay: 'テキスト・レイヤー制御',
@@ -165,7 +176,11 @@ export const ja = {
     behavior: 'アプリの動作',
     lightMode: 'ライトテーマ',
     darkMode: 'ダークテーマ',
-    uiMode: '制御モード'
+    uiMode: '制御モード',
+    interaction: 'Interaction',
+    performance: 'System & Performance',
+    localization: 'Appearance & Localization',
+    factoryReset: 'Factory Reset All Settings'
   },
   config: {
     title: 'データとプリセット管理',
@@ -190,8 +205,10 @@ export const ja = {
     help: 'ヘルプ',
     toggleMic: 'マイク切替',
     speed: '流動速度',
-    glow: 'グロー强度',
+    glow: 'グロー強度',
     trails: 'モーション残像',
+    autoRotate: '自動エンジン循環の切り替え',
+    cycleColors: 'すべてのカラーテーマを自動循環',
     excludeFromAutoRotate: '自動回転から除外',
     includeInAutoRotate: '自動回転に含める',
     resetVisual: 'ビジュアルリセット',
@@ -213,6 +230,7 @@ export const ja = {
     subtitle: '光の旋律',
     selectLanguage: '言語を選択してください',
     features: {
+      title: 'Core Features',
       visuals: { title: 'ジェネレーティブ・アート', desc: 'マルチスレッドWebGLによる15種類以上のエンジン。' },
       ai: { title: 'AI 共感覚', desc: 'Geminiによるリアルタイム感情分析と歌詞表示。' },
       privacy: { title: 'ローカルプライバシー', desc: '音声処理はすべてデバイス内で完結します。' }
@@ -220,6 +238,11 @@ export const ja = {
     shortcuts: {
       title: 'クイックVJ操作',
       desc: 'ホットキーでビジュアルを支配する'
+    },
+    sections: {
+      essentials: 'Essentials',
+      visual: 'Visual Creation',
+      advanced: 'Advanced'
     },
     back: '戻る',
     next: '次へ',
@@ -232,6 +255,11 @@ export const ja = {
     howItWorksTitle: '使い方',
     shortcutsTitle: 'キーボードショートカット',
     gesturesTitle: 'タッチジェスチャー',
+    gestureItems: {
+      swipeMode: '左右スワイプ: モード切替',
+      swipeSens: '上下スワイプ: 感度調整',
+      longPress: '長押し: AI情報'
+    },
     projectInfoTitle: 'ビジョン',
     aboutDescription: 'Aura Fluxは、オーディオ周波数を生成的な3Dアートに変換するリアルタイム共感覚エンジンです。',
     coreTech: '技術スタック',
@@ -278,6 +306,9 @@ export const ja = {
   welcomeTitle: 'Aura Flux',
   welcomeText: '感情の周波数を可視化する。',
   startExperience: '体験を開始',
+  welcomeScreen: {
+    micPermission: 'リアルタイム視覚化にはマイクアクセスが必要です'
+  },
   errors: {
     tryDemo: 'デモ・シミュレーション',
     accessDenied: 'マイクへのアクセス権限が必要です',
@@ -376,6 +407,7 @@ export const ja = {
   wrongSong: '共感覚を再試行',
   songOverlay: {
     googleSearch: '外部検索',
+    aiSynesthesia: 'AI Synesthesia',
     provider: {
       local: 'キャッシュ',
       mock: 'シム',

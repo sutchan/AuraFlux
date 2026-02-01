@@ -1,17 +1,17 @@
 
-
 /**
- * File: components/ui/OnboardingOverlay.tsx
- * Version: 1.8.23
- * Author: Sut
+ * File: components/ui/onboarding/OnboardingOverlay.tsx
+ * Version: 1.8.25
+ * Author: Aura Flux Team
+ * Updated: 2025-07-18 13:00
  */
 
 import React, { useState } from 'react';
-import { Language } from '../../core/types';
-import { TRANSLATIONS } from '../../core/i18n';
-import { APP_VERSION } from '../../core/constants';
-import { FeatureCard } from './onboarding/FeatureCard';
-import { ShortcutRow } from './onboarding/ShortcutRow';
+import { Language } from '../../../core/types';
+import { TRANSLATIONS } from '../../../core/i18n';
+import { APP_VERSION } from '../../../core/constants';
+import { FeatureCard } from './FeatureCard';
+import { ShortcutRow } from './ShortcutRow';
 
 interface OnboardingOverlayProps {
   language: Language;
@@ -29,20 +29,26 @@ const LANGUAGES: { value: Language; label: string }[] = [
 export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ language, setLanguage, onComplete }) => {
   const [step, setStep] = useState(0);
   
-  // FIX: Ensure translation objects `t` and `h` always have a valid fallback to `en`, preventing type errors.
   const en = TRANSLATIONS['en'];
   const current = TRANSLATIONS[language] || en;
 
-  const t = current.onboarding || en.onboarding;
-  const h = current.helpModal?.shortcutItems || en.helpModal.shortcutItems;
+  // Use direct access as we trust the types from TRANSLATIONS
+  const t = current.onboarding;
+  const tEn = en.onboarding;
 
-  // Helper to safely get nested feature strings
+  const h = current.helpModal.shortcutItems;
+  const hEn = en.helpModal.shortcutItems;
+
   const getFeature = (section: string, key: 'title' | 'desc') => {
     // @ts-ignore
-    return t.features?.[section]?.[key] || en.onboarding.features[section]?.[key] || '';
+    return t.features[section]?.[key] || tEn.features[section]?.[key] || '';
   };
+  
+  const getSection = (key: string) => {
+      // @ts-ignore
+      return t.sections[key] || tEn.sections[key] || key;
+  }
 
-  const isZh = language === 'zh' || language === 'tw';
   const sectionTitleClass = "text-[10px] font-black uppercase text-white/30 tracking-widest mt-5 mb-2 px-1 first:mt-0";
 
   return (
@@ -50,7 +56,6 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ language, 
       <div className="w-full max-w-2xl bg-[#0a0a0c] border border-white/10 rounded-3xl overflow-hidden shadow-2xl relative flex flex-col min-h-[500px] animate-fade-in-up">
         <div className="p-8 pb-4 text-center z-10">
           <h1 className="text-3xl font-black mb-2">
-            {/* Added inline-block and pb-1 to ensure gradient text renders correctly in all browsers */}
             <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-purple-400 pb-1">
               {step === 0 ? 'Aura Flux' : t.welcome}
             </span>
@@ -70,7 +75,7 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ language, 
           )}
           {step === 1 && (
             <div className="space-y-6 animate-fade-in-up">
-              <h2 className="text-xl font-bold text-white text-center mb-4">{t.features?.title}</h2>
+              <h2 className="text-xl font-bold text-white text-center mb-4">{t.features.title}</h2>
               <div className="grid gap-4">
                 <FeatureCard icon={<svg className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 00-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>} 
                     title={getFeature('visuals', 'title')} 
@@ -89,32 +94,29 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ language, 
           )}
           {step === 2 && (
             <div className="animate-fade-in-up h-full flex flex-col">
-              <div className="text-center mb-4 shrink-0"><h2 className="text-xl font-bold text-white mb-1">{t.shortcuts?.title}</h2><p className="text-white/50 text-xs">{t.shortcuts?.desc}</p></div>
+              <div className="text-center mb-4 shrink-0"><h2 className="text-xl font-bold text-white mb-1">{t.shortcuts.title}</h2><p className="text-white/50 text-xs">{t.shortcuts.desc}</p></div>
               
               <div className="overflow-y-auto custom-scrollbar flex-1 pr-2 -mr-2">
-                  {/* Essentials */}
-                  <h3 className={sectionTitleClass}>{isZh ? '基础控制' : 'Essentials'}</h3>
+                  <h3 className={sectionTitleClass}>{getSection('essentials')}</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    <ShortcutRow k="Space" label={h.toggleMic} />
-                    <ShortcutRow k="F" label={h.fullscreen} />
-                    <ShortcutRow k="H" label={h.hideUi} />
-                    <ShortcutRow k="?" label={h.help} />
+                    <ShortcutRow k="Space" label={h.toggleMic || hEn.toggleMic} />
+                    <ShortcutRow k="F" label={h.fullscreen || hEn.fullscreen} />
+                    <ShortcutRow k="H" label={h.hideUi || hEn.hideUi} />
+                    <ShortcutRow k="?" label={h.help || hEn.help} />
                   </div>
 
-                  {/* VJ Creative */}
-                  <h3 className={sectionTitleClass}>{isZh ? '视觉创作' : 'Visual Creation'}</h3>
+                  <h3 className={sectionTitleClass}>{getSection('visual')}</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    <ShortcutRow k="R" label={h.randomize} />
-                    <ShortcutRow k="← →" label={h.changeMode} />
-                    <ShortcutRow k="[ ]" label={h.changeTheme} />
-                    <ShortcutRow k="Shift + ↑↓" label={h.speed} />
+                    <ShortcutRow k="R" label={h.randomize || hEn.randomize} />
+                    <ShortcutRow k="← →" label={h.changeMode || hEn.changeMode} />
+                    <ShortcutRow k="[ ]" label={h.changeTheme || hEn.changeTheme} />
+                    <ShortcutRow k="Shift + ↑↓" label={h.speed || hEn.speed} />
                   </div>
 
-                  {/* Advanced */}
-                  <h3 className={sectionTitleClass}>{isZh ? '高级功能' : 'Advanced'}</h3>
+                  <h3 className={sectionTitleClass}>{getSection('advanced')}</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    <ShortcutRow k="L" label={h.lyrics} />
-                    <ShortcutRow k="1 - 6" label={h.tabs} />
+                    <ShortcutRow k="L" label={h.lyrics || hEn.lyrics} />
+                    <ShortcutRow k="1 - 6" label={h.tabs || hEn.tabs} />
                   </div>
               </div>
             </div>

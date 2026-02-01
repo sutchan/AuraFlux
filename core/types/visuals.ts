@@ -1,8 +1,8 @@
 /**
  * File: core/types/visuals.ts
- * Version: 2.1.0
+ * Version: 2.1.3
  * Author: Sut
- * Updated: 2025-03-25 22:15 - Added AI Background settings.
+ * Updated: 2025-07-18 14:45
  */
 
 import { Position, Region } from './common';
@@ -24,6 +24,7 @@ export enum VisualizerMode {
   FLUID_CURVES = 'FLUID_CURVES',
   WAVEFORM = 'WAVEFORM',
   NEBULA = 'NEBULA', 
+  RIPPLES = 'RIPPLES',
   
   // WebGL Modes (High Fidelity)
   NEURAL_FLOW = 'NEURAL_FLOW',
@@ -118,7 +119,7 @@ export interface SmartPreset {
   };
 }
 
-export type RenderContext = any; 
+export type RenderContext = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D; 
 
 export interface IVisualizerRenderer {
   init(canvas: any): void;

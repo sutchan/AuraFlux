@@ -1,31 +1,20 @@
-
 # OpenSpec: 系统架构规范
 
 ## 1. 核心技术栈
 - **Build System:** Vite 6.0 (Rollup)
 - **Runtime:** React 19.0.0
 - **Language:** TypeScript 5.7
-- **Styling:** Tailwind CSS 3.4 (PostCSS)
-- **Engine:** 
-  - **2D (Optimized):** OffscreenCanvas API + Web Workers (ESM 模块化加载)
-  - **3D:** Three.js (**^0.182.0**) / @react-three/fiber v9
-    *   *CDN Strategy (Importmap):* 外部依赖通过 `importmap` 从 CDN (`esm.sh`) 加载，构建配置中标记为 `external` 以优化加载速度。
-  - **Media Processing:** `jsmediatags` (v3.9.5)
-    *   *Hybrid Strategy:* 针对 ID3 标签解析库，为避免 `esm.sh` 的 Node.js 模块解析错误，采用传统的 `<script>` 标签直接从 CDNJS 加载，并通过全局 `window.jsmediatags` 对象访问。此库在 `vite.config.ts` 中被显式排除。
-- **Intelligence:** Google Gemini 3 (Flash Preview)
-- **Audio:** Web Audio API (实时频域分析) + OfflineAudioContext (指纹与切片提取) + AudioWorklet (特征提取 v1.6.4)
+- **Engines:** 参考 [03 视觉生成渲染规范](./03_rendering_spec.md)。
+- **Intelligence:** 参考 [04 AI 智能与语义规范](./04_ai_integration_spec.md)。
+- **Audio Logic:** Web Audio API (实时分析) + IndexedDB (持久化播放列表)。
 
-## 2. 模块解析与 Worker 策略
-- **Worker 导入:** 必须使用显式相对路径。
-- **离屏架构:** 渲染线程 (Worker) 独立处理 2D Canvas 绘图，主线程仅负责音频采样与状态管理。
-- **数值安全性 (v1.6.62):** Shader 引入 `epsilon` 保护机制，防止 en 极低或归零状态下产生 `NaN` 导致渲染黑屏。
+## 2. 线程解耦策略
+- **主线程:** 负责 UI 状态、AI 通信、音频采集路由。
+- **Worker 线程:** 处理 2D Canvas 的高频绘图逻辑，避免 UI 阻塞。
+- **GPU 线程:** 承载 R3F 的 3D 渲染管线。
 
-## 3. 并发与生命周期健壮性
-- **React 19 Compatibility:** 全面支持 Concurrent Mode。
-- **Web GL Context:** 实现了上下文丢失自动恢复监听。
-- **渲染画质适配 (v1.7.9):** 
-  - 为 Kinetic Wall 引入动态长宽比适配算法。
-  - 为 ThreeVisualizer 引入核心组件记忆化策略，减少 R3F 协调开销。
+## 3. 数值安全性
+- 全面引入 `epsilon` 保护和 `DynamicPeakLimiter` 类，确保在极端音频输入下渲染不产生 NaN 崩溃。
 
 ---
-*Aura Flux Architecture - Version 1.8.11*
+*Aura Flux Architecture - Version 1.8.62*

@@ -1,9 +1,9 @@
 /**
  * File: core/services/aiService.ts
- * Version: 2.1.0
+ * Version: 2.1.1
  * Author: Sut
- * Updated: 2025-03-25 22:15 - Added generateArtisticBackground logic.
- */
+ * Updated: 2025-07-16 18:00
+  */
 
 import { GoogleGenAI, Type } from "@google/genai";
 import { SongInfo, Language, AIProvider, Region } from '../types';
@@ -16,12 +16,13 @@ const SONG_SCHEMA = {
   properties: {
     title: { type: Type.STRING, description: "Track title or poetic description." },
     artist: { type: Type.STRING, description: "Artist or genre description." },
+    lyrics: { type: Type.STRING, description: "Full unsynchronized lyrics for the song, if available." },
     lyricsSnippet: { type: Type.STRING, description: "A key lyric or description of the sound texture." },
     mood: { type: Type.STRING, description: "A 3-5 word aesthetic summary." },
     mood_en_keywords: { type: Type.STRING, description: "Comma-separated keywords for visual styling." },
     identified: { type: Type.BOOLEAN, description: "True if a known song." }
   },
-  required: ['title', 'artist', 'mood', 'mood_en_keywords', 'identified']
+  required: ['title', 'artist', 'mood', 'mood_en_keywords', 'identified', 'lyricsSnippet']
 };
 
 const VISUAL_CONFIG_SCHEMA = {
@@ -110,11 +111,11 @@ export const identifySongFromAudio = async (base64Audio: string, mimeType: strin
     const key = apiKey || process.env.API_KEY;
     if (!key) return null;
     const aiInstance = new GoogleGenAI({ apiKey: key });
-    const systemInstruction = `You are an expert music identifier and visual director. Analyze the audio snippet. Identify the song if possible. Provide mood and English keywords for visualization. Region: ${region}. Language: ${language}.`;
+    const systemInstruction = `You are an expert music identifier and visual director. Analyze the audio snippet. Identify the song if possible. Provide mood and English keywords for visualization. If a known song is identified, you MUST try to provide its full, unsynchronized lyrics. Region: ${region}. Language: ${language}.`;
     try {
         const response = await aiInstance.models.generateContent({
             model: GEMINI_MODEL,
-            contents: [{ parts: [{ inlineData: { mimeType, data: base64Audio } }, { text: "Identify this song." }] }],
+            contents: [{ parts: [{ inlineData: { mimeType, data: base64Audio } }, { text: "Identify this song and provide lyrics if possible." }] }],
             config: { systemInstruction, responseMimeType: "application/json", responseSchema: SONG_SCHEMA }
         });
         const result = JSON.parse(response.text || "{}");

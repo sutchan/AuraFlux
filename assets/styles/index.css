@@ -1,8 +1,8 @@
-
 /*
  * File: assets/styles/index.css
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: Sut
+ * Updated: 2025-07-18 16:00
  */
 
 @tailwind base;
@@ -11,7 +11,7 @@
 
 @layer base {
   body {
-    @apply bg-black text-white antialiased overflow-hidden;
+    @apply bg-white text-black dark:bg-black dark:text-white antialiased overflow-hidden transition-colors duration-500;
     font-family: 'Inter', sans-serif;
   }
 }
@@ -26,10 +26,10 @@
     width: 4px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-white/5 rounded-full;
+    @apply bg-black/5 dark:bg-white/5 rounded-full;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-white/20 rounded-full hover:bg-blue-500/50 transition-colors;
+    @apply bg-black/20 dark:bg-white/20 rounded-full hover:bg-blue-500/50 transition-colors;
   }
 
   /* 脉冲动画 */
@@ -45,7 +45,7 @@
 
 /* 玻璃拟态卡片 */
 .glass-panel {
-  @apply bg-black/40 backdrop-blur-2xl border border-white/10 shadow-2xl;
+  @apply bg-white/40 dark:bg-black/40 backdrop-blur-2xl border border-black/10 dark:border-white/10 shadow-2xl;
 }
 
 /* 渐变文本修正 */

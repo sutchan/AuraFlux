@@ -1,9 +1,8 @@
-
 /**
  * File: components/ui/WelcomeScreen.tsx
- * Version: 2.0.1
+ * Version: 2.0.2
  * Author: Sut
- * Updated: 2025-03-24 16:15
+ * Updated: 2025-07-16 16:30
  */
 
 import React from 'react';
@@ -11,7 +10,6 @@ import { useUI, useAudioContext } from '../AppContext';
 
 export const WelcomeScreen: React.FC = () => {
   const { t, setHasStarted } = useUI();
-  // FIX: Use toggleMicrophone instead of startMicrophone
   const { toggleMicrophone, selectedDeviceId } = useAudioContext();
 
   return (
@@ -45,7 +43,7 @@ export const WelcomeScreen: React.FC = () => {
           </button>
           
           <button 
-            onClick={() => { setHasStarted(true); /* Removed non-existent startDemoMode */ }} 
+            onClick={() => { setHasStarted(true); }} 
             className="px-8 py-4 bg-white/5 text-white/60 font-bold rounded-2xl hover:bg-white/10 hover:text-white transition-all text-xs border border-white/10 uppercase tracking-widest"
           >
             {t?.errors?.tryDemo || "试用演示模式"}
@@ -54,7 +52,7 @@ export const WelcomeScreen: React.FC = () => {
         
         <div className="pt-8 border-t border-white/5">
             <p className="text-[10px] text-white/20 font-mono uppercase tracking-widest">
-                Requires Microphone Access for Real-time Visualization
+                {t?.welcomeScreen?.micPermission || "Requires Microphone Access for Real-time Visualization"}
             </p>
         </div>
       </div>

@@ -2,17 +2,24 @@
  * File: components/visualizers/scenes/KineticWallScene.tsx
  * Version: 1.8.46
  * Author: Sut
- * Updated: 2025-03-25 15:46 - Fixed reactive stale closure.
  */
 
 import React, { useRef, useMemo, useLayoutEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
-import { InstancedMesh, MeshStandardMaterial, DataTexture, RedFormat, UnsignedByteType, LinearFilter, InstancedBufferAttribute, Color, Object3D, Shader } from 'three';
+// @fix: Removed Shader from import as it's not exported from 'three' in some environments. A local type definition for Shader is now used.
+import { InstancedMesh, MeshStandardMaterial, DataTexture, RedFormat, UnsignedByteType, LinearFilter, InstancedBufferAttribute, Color, Object3D } from 'three';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
 
 interface SceneProps { analyser: AnalyserNode; colors: string[]; settings: VisualizerSettings; }
+
+// @fix: Local type definition for the shader object used in onBeforeCompile to avoid import issues.
+type Shader = {
+  uniforms: { [key: string]: any };
+  vertexShader: string;
+  fragmentShader: string;
+};
 
 export const KineticWallScene: React.FC<SceneProps> = ({ analyser, colors, settings }) => {
   const meshRef = useRef<InstancedMesh>(null);

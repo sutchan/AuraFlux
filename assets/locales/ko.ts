@@ -1,3 +1,4 @@
+
 export const ko = {
   common: {
     confirmClear: '재생 목록을 비우시겠습니까?',
@@ -57,7 +58,8 @@ export const ko = {
     NEURAL_FLOW: '뉴럴 플로우',
     CUBE_FIELD: '퀀텀 필드',
     KINETIC_WALL: '키네틱 월',
-    RESONANCE_ORB: '공명 천체'
+    RESONANCE_ORB: '공명 천체',
+    RIPPLES: '리플'
   },
   modeDescriptions: {
     PLASMA: '부드럽게 흐르는 색상 블렌딩.',
@@ -75,7 +77,8 @@ export const ko = {
     NEURAL_FLOW: 'WebGL 기반 유기 유체 시뮬레이션.',
     CUBE_FIELD: '무한한 기하학적 블록 필드.',
     KINETIC_WALL: '동적 돌출이 있는 거대 LED 무대 벽.',
-    RESONANCE_ORB: '리듬에 맞춰 격렬하게 변형되는 맥동하는 공명핵.'
+    RESONANCE_ORB: '리듬에 맞춰 격렬하게 변형되는 맥동하는 공명핵.',
+    RIPPLES: '리듬에 의해 촉발되는 최면적인 확장 원.'
   },
   presets: {
     title: '비주얼 핵심 튜닝',
@@ -106,6 +109,7 @@ export const ko = {
     stopping: '중지 중...',
     settings: {
       resolution: '해상도',
+      aspectRatio: '화면 비율',
       resNative: '기본 해상도',
       fps: 'FPS',
       bitrate: '비트레이트',
@@ -144,6 +148,7 @@ export const ko = {
     analyze: '비주얼 생성',
     analyzing: '주파수 분석 중...',
     apiKey: 'API 키',
+    apiKeyPlaceholder: 'Gemini 키...',
     generate: '생성',
     keySaved: 'API 키 저장됨',
     keyInvalid: '유효하지 않은 API 키',
@@ -154,7 +159,13 @@ export const ko = {
     save: '저장'
   },
   visualPanel: {
-    display: '화질 및 디스플레이 설정'
+    display: '화질 및 디스플레이 설정',
+    aiBg: 'AI 영감 배경',
+    generateBg: 'AI 배경 생성',
+    regenerate: '아트 재생성',
+    showBg: 'AI 레이어 활성화',
+    opacity: '불투명도',
+    bgGenerated: '아트 생성 성공'
   },
   textPanel: {
     overlay: '텍스트 레이어 제어',
@@ -165,7 +176,11 @@ export const ko = {
     behavior: '앱 동작',
     lightMode: '라이트 테마',
     darkMode: '다크 테마',
-    uiMode: '제어 인터페이스'
+    uiMode: '제어 인터페이스',
+    interaction: 'Interaction',
+    performance: 'System & Performance',
+    localization: 'Appearance & Localization',
+    factoryReset: 'Factory Reset All Settings'
   },
   config: {
     title: '데이터 및 프리셋 관리',
@@ -192,6 +207,8 @@ export const ko = {
     speed: '흐름 속도',
     glow: '글로우 강도',
     trails: '모션 잔상',
+    autoRotate: '자동 엔진 순환 토글',
+    cycleColors: '모든 색상 테마 자동 순환',
     excludeFromAutoRotate: '자동 순환에서 제외',
     includeInAutoRotate: '자동 순환에 포함',
     resetVisual: '비주얼 튜닝 초기화',
@@ -213,6 +230,7 @@ export const ko = {
     subtitle: '빛의 선율',
     selectLanguage: '언어를 선택하세요',
     features: {
+      title: 'Core Features',
       visuals: { title: '생성 예술', desc: '멀티스레드 WebGL 기반의 15개 이상의 렌더링 엔진.' },
       ai: { title: 'AI 공감각', desc: 'Gemini 기반의 실시간 무드 분석 및 가사.' },
       privacy: { title: '로컬 프라이버시', desc: '모든 오디오 처리는 기기 내에서만 이루어집니다.' }
@@ -220,6 +238,11 @@ export const ko = {
     shortcuts: {
       title: '빠른 VJ 제어',
       desc: '단축키로 비주얼라이저를 마스터하세요'
+    },
+    sections: {
+      essentials: 'Essentials',
+      visual: 'Visual Creation',
+      advanced: 'Advanced'
     },
     back: '이전',
     next: '다음 단계',
@@ -232,6 +255,11 @@ export const ko = {
     howItWorksTitle: '시작하기',
     shortcutsTitle: '키보드 단축키',
     gesturesTitle: '터치 제스처',
+    gestureItems: {
+      swipeMode: '좌우 스와이프: 모드 변경',
+      swipeSens: '상하 스와이프: 감도 조정',
+      longPress: '길게 누르기: AI 정보'
+    },
     projectInfoTitle: '우리의 비전',
     aboutDescription: 'Aura Flux는 오디오 주파수를 생성형 3D 아트로 변환하는 실시간 공감각 엔진입니다.',
     coreTech: '기술 스택',
@@ -278,6 +306,9 @@ export const ko = {
   welcomeTitle: 'Aura Flux',
   welcomeText: '감정의 주파수를 가시화합니다.',
   startExperience: '몰입 모드 시작',
+  welcomeScreen: {
+    micPermission: '실시간 시각화를 위해 마이크 접근 권한이 필요합니다'
+  },
   errors: {
     tryDemo: '데모 시뮬레이션',
     accessDenied: '마이크 액세스 권한이 필요합니다',
@@ -376,6 +407,7 @@ export const ko = {
   wrongSong: '공감각 재시도',
   songOverlay: {
     googleSearch: '외부 검색',
+    aiSynesthesia: 'AI Synesthesia',
     provider: {
       local: '캐시',
       mock: '심',

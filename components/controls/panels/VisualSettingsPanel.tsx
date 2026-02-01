@@ -1,8 +1,8 @@
 /**
  * File: components/controls/panels/VisualSettingsPanel.tsx
- * Version: 2.1.0
+ * Version: 2.2.2
  * Author: Sut
- * Updated: 2025-03-25 22:15 - Added AI Background controls.
+ * Updated: 2025-07-16 19:00
  */
 
 import React, { useState } from 'react';
@@ -34,11 +34,7 @@ export const VisualSettingsPanel: React.FC = () => {
   
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const hints = t?.hints || {};
-  const modes = t?.modes || {};
-  const presets = t?.presets || {};
   const localizedThemes = t?.themes || [];
-  const visualPanel = t?.visualPanel || {};
   
   const isAdvanced = settings.uiMode === 'advanced';
 
@@ -61,7 +57,7 @@ export const VisualSettingsPanel: React.FC = () => {
           const imgUrl = await generateArtisticBackground(mood, apiKey);
           if (imgUrl) {
               setSettings(p => ({ ...p, aiBgUrl: imgUrl, showAiBg: true }));
-              showToast(t?.aiPanel?.bgGenerated || "Background Generated", 'success');
+              showToast(t?.visualPanel?.bgGenerated || "Background Generated", 'success');
           } else {
               throw new Error("Empty image");
           }
@@ -84,23 +80,23 @@ export const VisualSettingsPanel: React.FC = () => {
   };
 
   const presetOptions = [
-    { value: '', label: presets.select || 'Choose a mood...' },
+    { value: '', label: t?.presets?.select || 'Choose a mood...' },
     ...Object.values(SMART_PRESETS).map(p => ({
       value: p.nameKey,
-      label: presets[p.nameKey] || p.nameKey
+      label: t?.presets?.[p.nameKey] || p.nameKey
     }))
   ];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:items-start">
       {/* Column 1: Core Tuning */}
       <div className="space-y-3">
         <BentoCard 
-            title={presets.title || "Visual Core"}
+            title={t?.presets?.title || "Visual Core"}
             className="py-2.5"
             action={
-                <TooltipArea text={hints?.resetVisual}>
-                <button onClick={resetVisualSettings} className="p-1 text-white/30 hover:text-white transition-colors">
+                <TooltipArea text={t?.hints?.resetVisual}>
+                <button onClick={resetVisualSettings} className="p-1 text-black/30 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                 </button>
                 </TooltipArea>
@@ -108,7 +104,7 @@ export const VisualSettingsPanel: React.FC = () => {
         >
             <div className="space-y-3">
                 <CustomSelect 
-                    label={presets.hint || "Vibe Selector"}
+                    label={t?.presets?.hint || "Vibe Selector"}
                     value={activePreset}
                     options={presetOptions}
                     onChange={(val) => {
@@ -117,15 +113,27 @@ export const VisualSettingsPanel: React.FC = () => {
                     }}
                 />
                 
-                <div className="pt-0">
+                <div className="pt-2 border-t border-black/5 dark:border-white/5 space-y-3">
+                    <div className="grid grid-cols-2 gap-4">
+                        <Slider label={t?.speed || "Motion"} value={settings.speed} min={0.1} max={3.0} step={0.1} onChange={(v)=>handleVisualSettingChange('speed', v)} />
+                        <Slider label={t?.sensitivity || "React"} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v)=>handleVisualSettingChange('sensitivity', v)} />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                        <SettingsToggle label={t?.glow || "Bloom"} value={settings.glow} onChange={()=>handleVisualSettingChange('glow', !settings.glow)} activeColor="blue" />
+                        <SettingsToggle label={t?.trails || "Motion"} value={settings.trails} onChange={()=>handleVisualSettingChange('trails', !settings.trails)} activeColor="blue" />
+                    </div>
+                </div>
+
+                <div className="pt-2 border-t border-black/5 dark:border-white/5">
                     <div className="flex justify-between items-center mb-1">
-                        <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">{t?.styleTheme || "Theme"}</span>
+                        <span className="text-[10px] font-black text-black/30 dark:text-white/30 uppercase tracking-widest">{t?.styleTheme || "Theme"}</span>
                         <SettingsToggle 
                             label={t?.cycleColors || "Cycle"} 
                             value={settings.cycleColors} 
                             onChange={() => handleVisualSettingChange('cycleColors', !settings.cycleColors)} 
                             variant="clean"
-                            hintText={hints?.cycleColors}
+                            hintText={t?.hints?.cycleColors}
                         />
                     </div>
                     {!settings.cycleColors ? (
@@ -138,7 +146,7 @@ export const VisualSettingsPanel: React.FC = () => {
                                         key={idx}
                                         onClick={() => setColorTheme(theme)}
                                         title={name}
-                                        className={`w-full aspect-square rounded-full transition-all duration-300 relative overflow-hidden flex items-center justify-center ${isActive ? 'ring-2 ring-white scale-110 shadow-lg z-10' : 'opacity-50 hover:opacity-100 hover:scale-110'}`}
+                                        className={`w-full aspect-square rounded-full transition-all duration-300 relative overflow-hidden flex items-center justify-center ${isActive ? 'ring-2 ring-black dark:ring-white scale-110 shadow-lg z-10' : 'opacity-50 hover:opacity-100 hover:scale-110'}`}
                                     >
                                         <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom right, ${theme[0]}, ${theme[1]})` }} />
                                     </button>
@@ -157,20 +165,22 @@ export const VisualSettingsPanel: React.FC = () => {
                         </div>
                     )}
                 </div>
-
-                <div className="pt-2 border-t border-white/5 space-y-3">
-                    <div className="grid grid-cols-2 gap-4">
-                        <Slider label={t?.speed || "Motion"} value={settings.speed} min={0.1} max={3.0} step={0.1} onChange={(v)=>handleVisualSettingChange('speed', v)} />
-                        <Slider label={t?.sensitivity || "React"} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v)=>handleVisualSettingChange('sensitivity', v)} />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                        <SettingsToggle label={t?.glow || "Bloom"} value={settings.glow} onChange={()=>handleVisualSettingChange('glow', !settings.glow)} activeColor="blue" />
-                        <SettingsToggle label={t?.trails || "Motion"} value={settings.trails} onChange={()=>handleVisualSettingChange('trails', !settings.trails)} activeColor="blue" />
-                    </div>
-                </div>
             </div>
         </BentoCard>
+
+        {isAdvanced && (
+            <BentoCard title={t?.visualPanel?.display || "Display Engine"} className="py-2.5 animate-fade-in-up">
+                <div className="grid grid-cols-2 gap-4">
+                    <Slider label={t?.smoothing || "Inertia"} value={settings.smoothing} min={0} max={0.95} step={0.01} onChange={(v)=>handleVisualSettingChange('smoothing', v)} />
+                    <SegmentedControl 
+                        label={t?.visualPanel?.display || "Fidelity"}
+                        value={settings.quality}
+                        options={[{value:'low',label:'LOW'},{value:'med',label:'MED'},{value:'high',label:'HIGH'}]}
+                        onChange={(val)=>handleVisualSettingChange('quality', val)}
+                    />
+                </div>
+            </BentoCard>
+        )}
 
         {/* AI Background Card */}
         <BentoCard title={t?.visualPanel?.aiBg || "AI Inspiration Background"} className="py-2.5">
@@ -179,7 +189,7 @@ export const VisualSettingsPanel: React.FC = () => {
                     <button 
                         onClick={handleGenerateAiBg} 
                         disabled={isGenerating}
-                        className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 border border-white/10 ${isGenerating ? 'bg-white/5 text-white/40' : 'bg-white text-black hover:scale-[1.01]'}`}
+                        className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 border border-black/10 dark:border-white/10 ${isGenerating ? 'bg-black/5 dark:bg-white/5 text-black/40 dark:text-white/40' : 'bg-black dark:bg-white text-white dark:text-black hover:scale-[1.01]'}`}
                     >
                         <svg className={`h-3 w-3 ${isGenerating ? 'animate-spin' : ''}`} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd"/></svg>
                         {isGenerating ? t?.audioPanel?.analyzing : (settings.aiBgUrl ? t?.visualPanel?.regenerate : t?.visualPanel?.generateBg)}
@@ -192,7 +202,7 @@ export const VisualSettingsPanel: React.FC = () => {
                 </div>
                 
                 {settings.aiBgUrl && (
-                    <div className="pt-2 border-t border-white/5 space-y-3 animate-fade-in-up">
+                    <div className="pt-2 border-t border-black/5 dark:border-white/5 space-y-3 animate-fade-in-up">
                         <SettingsToggle label={t?.visualPanel?.showBg || "Show Background"} value={settings.showAiBg} onChange={() => handleVisualSettingChange('showAiBg', !settings.showAiBg)} variant="clean" />
                         <div className="grid grid-cols-2 gap-4">
                             <Slider label={t?.visualPanel?.opacity || "Opacity"} value={settings.aiBgOpacity} min={0} max={1} step={0.05} onChange={(v) => handleVisualSettingChange('aiBgOpacity', v)} />
@@ -216,7 +226,7 @@ export const VisualSettingsPanel: React.FC = () => {
                             <Slider label="" value={settings.rotateInterval || 30} min={5} max={120} step={5} onChange={(v) => handleVisualSettingChange('rotateInterval', v)} unit="s" />
                         </div>
                     )}
-                    <SettingsToggle label="" value={settings.autoRotate} onChange={() => handleVisualSettingChange('autoRotate', !settings.autoRotate)} variant="clean" hintText={hints?.autoRotate} />
+                    <SettingsToggle label="" value={settings.autoRotate} onChange={() => handleVisualSettingChange('autoRotate', !settings.autoRotate)} variant="clean" hintText={t?.hints?.autoRotate} />
                 </div>
             }
         >
@@ -225,7 +235,7 @@ export const VisualSettingsPanel: React.FC = () => {
                     <VisualizerPreview 
                         key={mode} 
                         mode={mode} 
-                        name={modes[mode] || mode} 
+                        name={t?.modes?.[mode] || mode} 
                         isActive={currentMode === mode}
                         isIncluded={settings.includedModes ? settings.includedModes.includes(mode) : true}
                         onClick={() => setMode(mode)}
@@ -234,20 +244,6 @@ export const VisualSettingsPanel: React.FC = () => {
                 ))}
             </div>
         </BentoCard>
-
-        {isAdvanced && (
-            <BentoCard title={visualPanel.display || "Display Engine"} className="py-2.5">
-                <div className="grid grid-cols-2 gap-4 animate-fade-in-up">
-                    <Slider label={t?.smoothing || "Inertia"} value={settings.smoothing} min={0} max={0.95} step={0.01} onChange={(v)=>handleVisualSettingChange('smoothing', v)} />
-                    <SegmentedControl 
-                        label={visualPanel.display || "Fidelity"}
-                        value={settings.quality}
-                        options={[{value:'low',label:'LOW'},{value:'med',label:'MED'},{value:'high',label:'HIGH'}]}
-                        onChange={(val)=>handleVisualSettingChange('quality', val)}
-                    />
-                </div>
-            </BentoCard>
-        )}
       </div>
     </div>
   );

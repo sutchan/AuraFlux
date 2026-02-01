@@ -57,7 +57,8 @@ export const tw = {
     NEURAL_FLOW: '神經網絡',
     CUBE_FIELD: '量子方陣',
     KINETIC_WALL: '動感光牆',
-    RESONANCE_ORB: '共鳴天體'
+    RESONANCE_ORB: '共鳴天體',
+    RIPPLES: '動感漣漪'
   },
   modeDescriptions: {
     PLASMA: '平滑流動的色彩混合。',
@@ -75,7 +76,8 @@ export const tw = {
     NEURAL_FLOW: 'WebGL 驅動的有機流體模擬。',
     CUBE_FIELD: '無限幾何方塊場。',
     KINETIC_WALL: '具有動感擠出的巨型 LED 舞台牆。',
-    RESONANCE_ORB: '隨節奏劇烈脈動與形變的共鳴內核。'
+    RESONANCE_ORB: '隨節奏劇烈脈動與形變的共鳴內核。',
+    RIPPLES: '由節奏觸發的催眠擴散圓環。'
   },
   presets: {
     title: '視覺核心調優',
@@ -106,6 +108,7 @@ export const tw = {
     stopping: '正在停止...',
     settings: {
       resolution: '解析度',
+      aspectRatio: '畫面比例',
       resNative: '原生解析度',
       fps: '幀率',
       bitrate: '碼率',
@@ -144,6 +147,7 @@ export const tw = {
     analyze: '生成視覺配置',
     analyzing: '正在分析頻譜...',
     apiKey: 'API Key',
+    apiKeyPlaceholder: 'Gemini Key...',
     generate: '生成',
     keySaved: 'API Key 已驗證儲存',
     keyInvalid: '無效的 API Key',
@@ -154,7 +158,13 @@ export const tw = {
     save: '儲存'
   },
   visualPanel: {
-    display: '顯示配置'
+    display: '顯示配置',
+    aiBg: 'AI 靈感生成背景',
+    generateBg: '生成 AI 藝術背景',
+    regenerate: '重新創作背景',
+    showBg: '顯示 AI 圖層',
+    opacity: '不透明度',
+    bgGenerated: '藝術背景已生成'
   },
   textPanel: {
     overlay: '文字圖層控制',
@@ -165,7 +175,11 @@ export const tw = {
     behavior: '應用行為',
     lightMode: '淺色主題',
     darkMode: '深色主題',
-    uiMode: '控制介面模式'
+    uiMode: '控制介面模式',
+    interaction: '互動',
+    performance: '系統與效能',
+    localization: '外觀與在地化',
+    factoryReset: '恢復原廠設定'
   },
   config: {
     title: '數據備份與快照管理',
@@ -192,6 +206,8 @@ export const tw = {
     speed: '流動速度',
     glow: '輝光強度',
     trails: '運動拖尾',
+    autoRotate: '切換自動引擎循環',
+    cycleColors: '自動循環所有色彩主題',
     excludeFromAutoRotate: '從自動輪播中排除',
     includeInAutoRotate: '加入自動輪播',
     resetVisual: '重置視覺調優',
@@ -213,6 +229,7 @@ export const tw = {
     subtitle: '光之旋律',
     selectLanguage: '選擇您的語言',
     features: {
+      title: '核心功能',
       visuals: { title: '生成式藝術', desc: '15+ 種基於多線程 WebGL 加速的渲染引擎。' },
       ai: { title: 'AI 通感', desc: '由 Gemini 驅動的實時情緒分析與動態歌詞。' },
       privacy: { title: '本地隱私優先', desc: '所有音訊處理與分析均在您的裝置本地完成。' }
@@ -220,6 +237,11 @@ export const tw = {
     shortcuts: {
       title: '快捷 VJ 控制',
       desc: '掌握這些快捷鍵以像專家一樣操作'
+    },
+    sections: {
+      essentials: '基礎控制',
+      visual: '視覺創作',
+      advanced: '進階功能'
     },
     back: '上一步',
     next: '下一步',
@@ -232,6 +254,11 @@ export const tw = {
     howItWorksTitle: '快速開始',
     shortcutsTitle: '鍵盤快捷鍵',
     gesturesTitle: '觸控手勢',
+    gestureItems: {
+      swipeMode: '左右滑動：更換模式',
+      swipeSens: '上下滑動：調整靈敏度',
+      longPress: '長按：AI 資訊'
+    },
     projectInfoTitle: '我們的願景',
     aboutDescription: 'Aura Flux 是一個實時通感引擎，將音訊頻率轉化為生成式 3D 藝術。',
     coreTech: '技術棧',
@@ -278,6 +305,10 @@ export const tw = {
   welcomeTitle: 'Aura Flux',
   welcomeText: '將音訊頻率轉化為情感視覺。',
   startExperience: '開啟視聽旅程',
+  // FIX: Added missing welcomeScreen key to match TranslationSchema type
+  welcomeScreen: {
+    micPermission: '即時視覺化需要麥克風權限'
+  },
   errors: {
     tryDemo: '進入演示模擬模式',
     accessDenied: '需要麥克風訪問權限',
@@ -376,6 +407,7 @@ export const tw = {
   wrongSong: '重試通感分析',
   songOverlay: {
     googleSearch: '外部搜尋',
+    aiSynesthesia: 'AI 通感',
     provider: {
       local: '本地快取',
       mock: '模擬',

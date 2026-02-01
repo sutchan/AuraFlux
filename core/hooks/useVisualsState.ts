@@ -2,7 +2,6 @@
  * File: core/hooks/useVisualsState.ts
  * Version: 2.1.0
  * Author: Sut
- * Updated: 2025-03-25 22:15 - Added AI Background defaults.
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';

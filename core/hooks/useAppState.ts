@@ -1,7 +1,8 @@
 /**
  * File: core/hooks/useAppState.ts
- * Version: 1.8.23
+ * Version: 1.8.25
  * Author: Sut
+ * Updated: 2025-07-16 16:30
  */
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
@@ -12,6 +13,7 @@ import { TRANSLATIONS } from '../i18n';
 const DEFAULT_LANGUAGE: Language = 'en';
 const SUPPORTED_LANGUAGES: Language[] = ['en', 'zh', 'tw', 'ja', 'es', 'ko', 'de', 'fr', 'ar', 'ru'];
 const SUPPORTED_REGIONS: Region[] = ['global', 'US', 'CN', 'JP', 'KR', 'EU', 'LATAM'];
+type HelpTab = 'guide' | 'shortcuts' | 'about';
 
 const detectBrowserLanguage = (): Language => {
   if (typeof navigator === 'undefined') return DEFAULT_LANGUAGE;
@@ -53,6 +55,10 @@ export const useAppState = () => {
     return (saved && SUPPORTED_REGIONS.includes(saved)) ? saved : detectDefaultRegion(language);
   });
 
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [helpModalInitialTab, setHelpModalInitialTab] = useState<HelpTab>('guide');
+  const [isDragging, setIsDragging] = useState(false);
+
   useEffect(() => {
     const dir = language === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dir = dir;
@@ -93,6 +99,9 @@ export const useAppState = () => {
     region, setRegion,
     t,
     manageWakeLock,
-    resetSettings
+    resetSettings,
+    showHelpModal, setShowHelpModal,
+    helpModalInitialTab, setHelpModalInitialTab,
+    isDragging, setIsDragging
   };
 };

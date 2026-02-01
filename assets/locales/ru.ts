@@ -57,7 +57,8 @@ export const ru = {
     NEURAL_FLOW: 'Нейропоток',
     CUBE_FIELD: 'Квантовое Поле',
     KINETIC_WALL: 'Кинетическая Стена',
-    RESONANCE_ORB: 'Резонансная Сфера'
+    RESONANCE_ORB: 'Резонансная Сфера',
+    RIPPLES: 'Рябь'
   },
   modeDescriptions: {
     PLASMA: 'Плавное смешивание цветов.',
@@ -75,7 +76,8 @@ export const ru = {
     NEURAL_FLOW: 'Органическая симуляция жидкости на WebGL.',
     CUBE_FIELD: 'Бесконечное поле геометрических блоков.',
     KINETIC_WALL: 'Массивная LED-сцена с кинетической экструзией.',
-    RESONANCE_ORB: 'Пульсирующее резонансное ядро, яростно меняющее форму.'
+    RESONANCE_ORB: 'Пульсирующее резонансное ядро, яростно меняющее форму.',
+    RIPPLES: 'Гипнотические расширяющиеся круги, вызванные ритмом.'
   },
   presets: {
     title: 'Настройка Визуального Ядра',
@@ -106,6 +108,7 @@ export const ru = {
     stopping: 'ОСТАНОВКА...',
     settings: {
       resolution: 'Разрешение',
+      aspectRatio: 'Соотношение',
       resNative: 'Нативное',
       fps: 'FPS',
       bitrate: 'Битрейт',
@@ -144,6 +147,7 @@ export const ru = {
     analyze: 'Создать Визуал',
     analyzing: 'Анализ Спектра...',
     apiKey: 'API Ключ',
+    apiKeyPlaceholder: 'Ключ Gemini...',
     generate: 'Создать',
     keySaved: 'Ключ сохранен',
     keyInvalid: 'Неверный ключ API',
@@ -171,7 +175,11 @@ export const ru = {
     behavior: 'Поведение Приложения',
     lightMode: 'Светлая тема',
     darkMode: 'Тёмная тема',
-    uiMode: 'Режим Интерфейса'
+    uiMode: 'Режим Интерфейса',
+    interaction: 'Interaction',
+    performance: 'System & Performance',
+    localization: 'Appearance & Localization',
+    factoryReset: 'Factory Reset All Settings'
   },
   config: {
     title: 'Управление Данными и Пресетами',
@@ -198,6 +206,8 @@ export const ru = {
     speed: 'Скорость потока',
     glow: 'Интенсивность свечения',
     trails: 'Шлейфы движения',
+    autoRotate: 'Toggle automatic engine cycling',
+    cycleColors: 'Cycle through all color themes automatically',
     excludeFromAutoRotate: 'Исключить из авто-смены',
     includeInAutoRotate: 'Включить в авто-смену',
     resetVisual: 'Сброс Визуала',
@@ -219,6 +229,7 @@ export const ru = {
     subtitle: 'Звук Света',
     selectLanguage: 'Выберите язык',
     features: {
+      title: 'Core Features',
       visuals: { title: 'Генеративное Искусство', desc: '15+ движков на многопоточном WebGL.' },
       ai: { title: 'ИИ Синестезия', desc: 'Анализ настроения в реальном времени с Gemini 3.0.' },
       privacy: { title: 'Локальная Приватность', desc: 'Обработка происходит на вашем устройстве.' }
@@ -226,6 +237,11 @@ export const ru = {
     shortcuts: {
       title: 'VJ Управление',
       desc: 'Управляйте визуалом горячими клавишами'
+    },
+    sections: {
+      essentials: 'Essentials',
+      visual: 'Visual Creation',
+      advanced: 'Advanced'
     },
     back: 'Назад',
     next: 'Далее',
@@ -238,6 +254,11 @@ export const ru = {
     howItWorksTitle: 'С чего начать',
     shortcutsTitle: 'Горячие клавиши',
     gesturesTitle: 'Жесты',
+    gestureItems: {
+      swipeMode: 'Swipe Left/Right: Change Mode',
+      swipeSens: 'Swipe Up/Down: Adjust Sensitivity',
+      longPress: 'Long Press: AI Info'
+    },
     projectInfoTitle: 'Видение',
     aboutDescription: 'Aura Flux — это движок синестезии реального времени, превращающий аудиочастоты в генеративное 3D-искусство.',
     coreTech: 'Стек',
@@ -284,6 +305,9 @@ export const ru = {
   welcomeTitle: 'Aura Flux',
   welcomeText: 'Визуализация частоты эмоций.',
   startExperience: 'Начать Погружение',
+  welcomeScreen: {
+    micPermission: 'Требуется доступ к микрофону для визуализации'
+  },
   errors: {
     tryDemo: 'Демо-режим',
     accessDenied: 'Нужен доступ к микрофону',
@@ -382,6 +406,7 @@ export const ru = {
   wrongSong: 'Повторить ИИ',
   songOverlay: {
     googleSearch: 'Поиск',
+    aiSynesthesia: 'AI Synesthesia',
     provider: {
       local: 'Кэш',
       mock: 'Сим',

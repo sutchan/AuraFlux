@@ -2,7 +2,6 @@
  * File: core/hooks/useAudioReactive.ts
  * Version: 1.8.46
  * Author: Sut
- * Updated: 2025-03-25 15:45 - Fixed stale closures by returning a reactive features object.
  */
 
 import { useRef, useMemo } from 'react';

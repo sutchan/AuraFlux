@@ -3,29 +3,31 @@
 
 All notable changes to the **Aura Flux** project will be documented in this file.
 
-## [v1.8.22]
+## [v1.8.62] - 2025-07-18
 
-### 🐛 Bug Fixes & Stability
-*   **Ocean Wave Stability:** Fixed a critical bug where changing the FFT Size while in Ocean Wave mode would cause the visualizer to freeze due to buffer size mismatch.
-*   **AI Control Decoupling:** Decoupled the "Show Lyrics" toggle from the "AI Analysis" background process.
-    *   **AI Analysis (Input Panel):** Controls whether Gemini actively listens to and analyzes the audio for genre, mood, and metadata.
-    *   **Show Lyrics (Library Panel):** Controls only the visibility of the UI overlay (lyrics text and song info card).
-    *   This allows users to enjoy AI-driven visual reactivity (mood-based colors/speed) without the text overlay cluttering the screen.
+### 🐛 Bug Fixes
+*   **Localization Completeness:** Fixed untranslated `visualPanel` keys in Japanese, Spanish, Korean, German, and French locale files, ensuring consistent UI text across all supported languages.
+*   **Worker Path Resolution:** Explicitly converted the `VisualizerWorker` import in `VisualizerCanvas.tsx` to use a relative path (`../../core/workers/...`) instead of a path alias (`@/`). This resolves the `Failed to resolve module specifier` error encountered in browser environments where build-time aliases were not correctly applied to worker instantiation.
+*   **Entry Point Paths:** Updated `index.tsx` to use relative imports for `App` and `ErrorBoundary` components, ensuring robust module loading across all development and preview modes.
 
-## [v1.8.21]
+### 🧹 Housekeeping
+*   **Version Synchronization:** Updated version numbers across all project documentation to `1.8.62`.
 
-### 🚀 Visual Engine Optimization
-*   **Silk Wave (WebGL):** Optimized the "Silk Wave" visualizer mode by significantly reducing the layer count to 5. This provides a cleaner, more distinct "fiber optic" aesthetic and improves performance on all devices while maintaining the stereo separation effect.
+## [v1.8.61] - 2025-07-18
 
-## [v1.8.20]
+### 🐛 Bug Fixes
+*   **Localization Syntax Error:** Fixed a critical `Uncaught SyntaxError` caused by truncated Russian (`ru.ts`) and Arabic (`ar.ts`) locale files. Restored the full, syntactically correct content for both files, resolving the application's failure to load.
 
-### 🔊 Audio Engine
-*   **Dynamic Headroom Management:** Upgraded `DynamicPeakLimiter` with an intelligent "Fatigue" system. When audio volume remains consistently high (e.g., modern "brick-wall" mastering), the engine automatically increases headroom. This lowers the base visual intensity, allowing peaks and transients to still punch through, effectively solving the "stuck at 100%" issue.
+### 🧹 Housekeeping
+*   **Version Synchronization:** Updated version numbers across all project documentation to `1.8.61`.
 
-## [v1.8.19]
+## [v1.8.60] - 2025-07-18
 
-### 🚀 Visual Engine Optimization
-*   **Digital Grid:** Reduced maximum sensitivity by 50% to prevent visual over-saturation at high volumes, ensuring the "LED Wall" effect remains distinct and controlled.
+### 🐛 Bug Fixes
+*   **Module Path Resolution:** Fixed a critical "Failed to resolve module specifier" error by changing the CSS import in `index.tsx` from a path alias (`@/`) to a relative path (`./`). This ensures compatibility with browser-based preview environments that do not fully resolve aliases for non-JS/TS module imports.
 
-## [v1.8.18]
+### 🧹 Housekeeping
+*   **Version Synchronization:** Updated version numbers across all project documentation and specification files to `1.8.60` to maintain consistency.
+
+## [v1.8.58] - 2025-07-17
 ...

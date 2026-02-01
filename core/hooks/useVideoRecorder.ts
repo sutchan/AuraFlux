@@ -2,7 +2,6 @@
  * File: core/hooks/useVideoRecorder.ts
  * Version: 1.8.39
  * Author: Sut
- * Updated: 2025-03-25 00:20 - Fixed AudioContext mismatch error in recording graph.
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react';

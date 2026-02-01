@@ -3,7 +3,6 @@
  * Version: 2.1.1
  * Author: Sut
  * Description: "Lumina Silk" - Optimized fluid ribbons with staggered pulses to avoid clumping.
- * Updated: 2025-03-25 22:45 - Decoupled pulse phase per line using instance randomness.
  */
 
 import React, { useRef, useMemo } from 'react';

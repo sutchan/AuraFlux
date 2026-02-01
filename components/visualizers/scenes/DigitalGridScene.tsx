@@ -2,15 +2,22 @@
  * File: components/visualizers/scenes/DigitalGridScene.tsx
  * Version: 1.8.28
  * Author: Sut
- * Updated: 2025-03-25 15:58 - Fixed audio feature destructuring.
  */
 
 import React, { useRef, useMemo, useLayoutEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { InstancedMesh, Object3D, Color, InstancedBufferAttribute, DataTexture, RedFormat, UnsignedByteType, LinearFilter, DoubleSide, Shader } from 'three';
+// @fix: Removed Shader from import as it's not exported from 'three' in some environments. A local type definition for Shader is now used.
+import { InstancedMesh, Object3D, Color, InstancedBufferAttribute, DataTexture, RedFormat, UnsignedByteType, LinearFilter, DoubleSide } from 'three';
 import { MeshReflectorMaterial } from '@react-three/drei';
 import { VisualizerSettings } from '../../../core/types';
 import { useAudioReactive } from '../../../core/hooks/useAudioReactive';
+
+// @fix: Local type definition for the shader object used in onBeforeCompile to avoid import issues.
+type Shader = {
+  uniforms: { [key: string]: any };
+  vertexShader: string;
+  fragmentShader: string;
+};
 
 export const DigitalGridScene: React.FC<{ analyser: AnalyserNode; colors: string[]; settings: VisualizerSettings; }> = ({ analyser, colors, settings }) => {
   const meshRef = useRef<InstancedMesh>(null), { size } = useThree();

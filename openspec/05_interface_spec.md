@@ -1,40 +1,17 @@
-
 # OpenSpec: UI/UX 与交互规范
 
-## 1. 视觉层级 (Z-Index)
-- **Z-0:** 核心渲染器 (Canvas/WebGL)。
-- **Z-10:** 歌词覆盖层 (`LyricsOverlay`)。
-- **Z-20:** 歌曲信息徽章 (`SongOverlay`)。
-- **Z-100:** 自定义文字层 (`CustomTextOverlay`)。
-- **Z-110:** 迷你控制条 (`MiniControls`)。
-- **Z-120:** 扩展设置面板 (`Controls Panel`)。
+## 1. 布局理念
+- **Bento Layout:** 设置面板采用响应式网格，每个功能区作为一个独立的 Bento 卡片。
+- **Full-Bleed Canvas:** 从 v1.8.63 开始，取消了主画布的圆角限制。在非展开模式下，视觉效果填满整个视口；在展开模式下，主视图以 0.98x 比例悬浮，提供沉浸式反馈。
 
-## 2. 交互状态与闲置检测
-- **Idle Timeout:** 3000ms。
-- **Mini Bar 转换:** 闲置时透明度降低至 `0.12`。
+## 2. 4K Studio 录制管线
+- 内置 `MediaRecorder` 集成，支持原生分辨率、60FPS 及自定义比特率录制。
+- **混音引擎:** 支持录音增益调节及自动化淡入淡出，确保导出的视频音频完美无爆音。
+- **鲁棒性:** 在上下文丢失或硬件不支持的情况下，自动显示回退提示。
 
-## 3. 控制面板布局规范 (Panel Layouts)
-- **UI 模式:** 切换 `Simple` (简洁) 和 `Advanced` (专业) 模式。
-- **标签页顺序:** `Visual`, `Audio` (原 Input), `Info Layer` (原 Text), `Playback` (媒体库), `Studio`, `System`。
-- **迷你播放列表 (v1.8.12):**
-  - **高度限制:** `max-h-[340px]` (约 6 行可见)。
-  - **行为:** 位于屏幕底部中央，点击外部自动关闭。
-
-## 4. 输入映射
-### 键盘 (Desktop)
-- `Space`: `toggleMicrophone`
-- `R`: `randomizeSettings`
-- `F`: `toggleFullscreen`
-- `L`: `setShowLyrics`
-- `H`: `toggleExpanded`
-- `N`: `playNext` (仅文件模式)
-- `P`: `playPrev` (仅文件模式)
-
-## 5. 文件与导出规范 (v1.8.6)
-- **录制文件名生成:**
-  - 自动将歌曲元数据 (Title/Artist) 嵌入文件名。
-  - **Unicode 支持:** 完整支持中文、日文等非 ASCII 字符。
-  - **清洗规则:** 仅移除操作系统保留字符 (`< > : " / \ | ? *`)，其余字符保留，以确保文件名的可读性和兼容性。
+## 3. 跨平台交互
+- **桌面端:** 深度集成键盘快捷键 (1-6 切换标签, R 随机化, F 全屏, H 切换 HUD)。
+- **移动端:** 模拟长按触发 AI 信息、左右滑动切换模式、上下滑动调整灵敏度的触控手势。
 
 ---
-*Aura Flux Interface - Version 1.8.12*
+*Aura Flux Interface - Version 1.8.65*

@@ -1,8 +1,8 @@
-
 /**
  * File: components/ui/SongOverlay.tsx
- * Version: 1.8.23
+ * Version: 1.8.25
  * Author: Sut
+ * Updated: 2025-07-16 20:00
  */
 
 import React, { useRef, useMemo } from 'react';
@@ -89,8 +89,7 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, isVisible, language, on
   if (!isEnabled || !song) return null;
   const t = TRANSLATIONS[language] || TRANSLATIONS['en'];
 
-  const isApiError = !!song.isError; // Use flag instead of string check
-  const displayTitle = song.title;
+  const isApiError = !!song.isError;
   const displayArtist = isApiError ? null : (song.identified ? song.artist : (song.artist || (t.audioPanel?.analyzing || "Analyzing...")));
   const isConfidenceLow = !song.identified && !isApiError;
   const sourceLabel = getProviderLabel(song.matchSource, t);
@@ -113,13 +112,11 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, isVisible, language, on
         </button>
 
         <div className="relative z-10 flex gap-4 items-start">
-            {/* Album Art Section */}
             {albumArt && showAlbumArt && (
                 <div className="shrink-0 relative group/art self-center">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden shadow-lg border border-white/10 relative z-10 bg-white/5">
                         <img src={albumArt} alt="Album Art" className="w-full h-full object-cover transition-transform duration-700 group-hover/art:scale-110" />
                     </div>
-                    {/* Glow behind art */}
                     <div className="absolute inset-0 bg-white/20 blur-xl rounded-full opacity-0 group-hover/art:opacity-40 transition-opacity duration-500 -z-10" />
                 </div>
             )}
@@ -128,19 +125,18 @@ const SongOverlay: React.FC<SongOverlayProps> = ({ song, isVisible, language, on
                 {isConfidenceLow && (
                 <div className="text-[9px] font-bold text-white/40 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
-                    AI Synesthesia
+                    {t?.songOverlay?.aiSynesthesia || 'AI Synesthesia'}
                 </div>
                 )}
                 
-                {/* Title and Artist forced to new lines with generous spacing */}
                 <div className="flex flex-col gap-1">
                     <h2 className={`text-white text-lg md:text-2xl font-bold tracking-tight leading-tight break-words drop-shadow-md`}>
-                    {displayTitle}
+                        {song.identified ? song.title : displayArtist}
                     </h2>
-                    {displayArtist && (
-                    <p className={`text-blue-300 text-sm md:text-base font-medium truncate opacity-90`}>
-                        {displayArtist}
-                    </p>
+                    {song.identified && displayArtist && (
+                        <p className={`text-blue-300 text-sm md:text-base font-medium truncate opacity-90`}>
+                            {displayArtist}
+                        </p>
                     )}
                 </div>
                 

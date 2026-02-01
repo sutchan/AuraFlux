@@ -1,10 +1,7 @@
 /**
  * File: core/services/playlistService.ts
  * Version: 1.0.1
- * Author: Aura Vision Team
- * Copyright (c) 2025 Aura Vision. All rights reserved.
- * Description: IndexedDB wrapper for persisting audio tracks (files + metadata).
- * Updated: Robust error handling for SecurityError/Permission denied.
+ * Author: Aura Flux Team
  */
 
 import { Track } from '../types';

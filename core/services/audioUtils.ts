@@ -2,8 +2,7 @@
  * File: core/services/audioUtils.ts
  * Version: 1.8.51
  * Author: Sut
- * Updated: 2025-03-26 01:25 - Fixed class property syntax error for ESBuild compatibility.
- */
+  */
 
 export function getAverage(data: Uint8Array, start: number, end: number) {
   let sum = 0;

@@ -3,7 +3,6 @@
  * Version: 1.9.6
  * Author: Sut
  * Description: "Resonance Orb" - High-fidelity reactive sphere with fixed real-time feature access.
- * Updated: 2025-03-25 17:10 - Fixed audio lag by accessing features inside useFrame and increased deformation scale.
  */
 
 import React, { useRef, useMemo, Suspense } from 'react';

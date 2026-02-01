@@ -1,31 +1,14 @@
-# OpenSpec: 持久化与本地化规范
+# OpenSpec: 持久化与国际化规范
 
-## 1. 持久化存储 (LocalStorage)
-- **前缀:** `av_v1_`。
-- **健壮性策略:** 读取 Enum、语言、区域等类型进行白名单校验，色盘数组进行完整性校验，以防止因本地存储数据陈旧或损坏导致的应用程序崩溃。
-- **版本控制:** 关键数据结构变更时，应通过版本号前缀进行隔离或迁移。
+## 1. 存储设计
+- **Prefix:** `av_v1_`。
+- **LocalStorage:** 存储设置项、AI 密钥及 UI 状态。
+- **IndexedDB:** 存储大体积音频文件，支持持久化媒体库（AuraFluxDB）。
 
-## 2. 国际化 (i18n) 与自动检测
-- **检测策略:** 优先查询 `navigator.languages`。
-- **支持列表 (10种语言):**
-  - **英语 (en)**: 基准语言。
-  - **简体中文 (zh)** / **繁體中文 (tw)**
-  - **日语 (ja)** / **韩语 (ko)**
-  - **西班牙语 (es)** / **德语 (de)** / **法语 (fr)** / **俄语 (ru)**
-  - **阿拉伯语 (ar)**: 支持 RTL 布局。
-- **本地化深度:** 
-  - 核心术语 "Beta" 在日韩等亚洲语言中需使用本地化写法 (如 "ベータ", "베타") 以提升亲和力。
-  - **v1.8.4 更新:** 
-    - 录制工作室 (Studio Panel) 视频格式名称已完全本地化，包括 `vp9`, `mp4_h264` 等技术细节的友好描述。
-    - AI 提供商列表已扩展支持 "ID3 Tag" (本地元数据) 的多语言显示。
-    - 自动巡航 (Auto-Rotate) 工具提示文本已补充翻译。
-
-## 3. 专业术语标准化
-- **AI Synesthesia** -> AI 通感识别 / AI Synesthesia。
-- **Visualizer Mode** -> 视觉引擎。
-- **Wake Lock** -> 屏幕常亮 / 防休眠。
-- **Edge Intelligence** -> 边缘计算 / 边缘智能。
-- **ID3 Tag** -> ID3 标签 / ID3 Tag / Étiquette ID3。
+## 2. 国际化 (v1.8.65)
+- **支持语言 (10种):** English (EN), 简体中文 (ZH), 繁體中文 (TW), 日本語 (JA), Español (ES), 한국어 (KO), Deutsch (DE), Français (FR), العربية (AR), Русский (RU)。
+- **完整性审计:** 已完成所有语言包的 key-value 对齐，确保 `welcomeScreen`, `visualPanel`, `studioPanel` 等字段在非英语环境下无缺失。
+- **特殊布局:** 完整支持 **RTL (阿拉伯语)** 镜像布局，自动检测浏览器语言并设置文档方向。
 
 ---
-*Aura Flux Storage & i18n - Version 1.8.4*
+*Aura Flux Storage & i18n - Version 1.8.65*

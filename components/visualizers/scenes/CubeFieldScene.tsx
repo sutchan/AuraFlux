@@ -3,7 +3,6 @@
  * Version: 1.8.24
  * Author: Sut
  * Copyright (c) 2024 Aura Flux. All rights reserved.
- * Updated: 2025-03-25 15:58 - Fixed audio feature destructuring.
  */
 
 import React, { useRef, useMemo } from 'react';

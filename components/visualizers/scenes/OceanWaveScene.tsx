@@ -3,7 +3,6 @@
  * Version: 1.8.45
  * Author: Sut
  * Description: "Joy Division" Style Pulsar Terrain with scrolling history.
- * Updated: 2025-03-25 15:58 - Fixed audio feature destructuring.
  */
 
 import React, { useRef, useMemo, useLayoutEffect } from 'react';

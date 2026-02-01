@@ -1,34 +1,20 @@
 # OpenSpec: 渲染规范
 
-## 1. 节拍检测算法 (True Beat Detection)
-- **算法:** 谱通量 (Spectral Flux) 差分分析。
-- **逻辑:** 输出 `isBeat` 布尔值，驱动视觉元素的瞬时爆发。
+## 1. 核心引擎分类
+- **WebGL 3D (High Fidelity):** 
+  - 架构: 基于 React Three Fiber 与 Three.js。
+  - 重点模式: Resonance Orb, Kinetic Wall, Ocean Wave, Silk Wave。
+- **Offscreen 2D (Optimized):**
+  - 架构: 使用 OffscreenCanvas API 与 Web Workers 实现主线程零阻塞绘图。
+  - 经典模式: Nebula, Plasma, Lasers, Digital Waveform, Ripples。
 
-## 2. 2D 策略模式渲染器 (Worker-Compatible)
-- **Digital Waveform (v3.0.0):** 
-  - **动态增益:** 引入 `autoGainScale` 持续跟踪历史最大能级。
-  - **天花板保护:** 振幅系数受 `applySoftCompression` 限制，确保波形不会因大音量而拍扁或超出视口。
-- **Frequency Bars (v1.2.0):** 
-  - **非线性映射:** 采用 $v^{0.8}$ 幂定律映射，提升中低音细节感，压制高音量瞬间的“触顶”现象。
-  - **视觉约束 (v1.8.3):** 自动巡航/随机模式下强制关闭 Glow 与 Trails。
-- **Macro Bubbles (v2.1.0):** 引入 Sprite 缓存与软体物理模拟。
-- **Tunnel (v2.2.0):**
-  - **响应式缩放:** 基础半径动态设定为 `Math.min(w, h) * 0.35`，确保主体在任意宽高比设备上均能充满画面短边。
-  - **几何闭合:** 采用 Painter's Algorithm (Z-Sorting) 与线性分段连接，确保线框连接处无缝隙。
-- **Deep Nebula (v1.7.36):**
-  - **动态背景:** 引入基于主题色的动态径向渐变背景，增强场景深度。
-  - **双色粒子:** 气体云粒子现在由两种主题色混合渲染，提升色彩丰富度。
-  - **节拍响应增强:** 强化了粒子大小、亮度和全局闪光对音乐节拍的响应强度。
+## 2. 性能与精度
+- **动态 DPR:** 根据 `quality` 设置自动调节 (0.8x 至 1.5x)。
+- **数值保护:** 渲染循环内置 Epsilon 检查，防止纹理坐标越界导致的黑屏。
 
-## 3. 3D WebGL 渲染 (v1.8.25 Global Update)
-- **Ocean Wave (Stereo Terrain):**
-  - **风格:** "Joy Division" 风格的层叠波形图 (Ridge Plot / Pulsar Chart)。
-  - **立体声:** 左侧网格映射左声道，右侧映射右声道，低音汇聚于中央。
-  - **遮挡技术:** 使用不透明 Shader，将波形主体渲染为黑色以遮挡后方线条，创造纯粹的线条悬浮感，摒弃杂乱的 Wireframe 网格。
-  - **视角优化:** 采用 20+ 高度俯视视角，确保在高增益状态下后端地形依然可见。
-- **Neural Flow / Cube Field / Kinetic Wall:**
-  - **动态峰值限制器 (Peak Limiter):** 所有 3D 场景的驱动特征（Bass/Mids/Treble）现在经过 `DynamicPeakLimiter` 处理。
-  - **软膝盖压缩:** 在传递给着色器前，通过 $v^{0.7}$ 压缩曲线调整，确保在极高音量下 3D 位移依然保持线性动态。
+## 3. 视觉导演 (Beat Sync)
+- **节拍检测:** 使用频谱通量算法，驱动全局 Bloom、相机抖动及物理参数瞬时爆发。
+- **背景增强:** 支持 Imagen 驱动的 AI 艺术图层与专辑封面模糊图层。
 
 ---
-*Aura Flux Rendering - Version 1.8.25*
+*Aura Flux Rendering - Version 1.8.62*

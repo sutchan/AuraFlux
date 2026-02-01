@@ -1,8 +1,8 @@
 /**
  * File: components/controls/Controls.tsx
- * Version: 1.8.33
- * Author: Aura Vision Team
- * Updated: 2025-03-24 19:10 - Fix touch interaction
+ * Version: 1.9.0
+ * Author: Sut
+ * Updated: 2025-07-18 16:00
  */
 
 import React, { useState, useEffect } from 'react';
@@ -13,11 +13,10 @@ import { CustomTextSettingsPanel } from './panels/CustomTextSettingsPanel';
 import { AudioSettingsPanel } from './panels/AudioSettingsPanel';
 import { StudioPanel } from './panels/StudioPanel';
 import { PlaybackPanel } from './panels/PlaybackPanel';
-import { HelpModal } from '../ui/HelpModal';
 import { useVisuals, useAI, useAudioContext, useUI } from '../AppContext';
 import { BottomBar } from './BottomBar';
 import { TooltipArea } from '../ui/controls/Tooltip';
-import { VISUALIZER_PRESETS, COLOR_THEMES } from '../../core/constants';
+import { VISUALIZER_PRESETS } from '../../core/constants';
 import { VisualizerMode } from '../../core/types';
 
 type TabType = 'visual' | 'input' | 'playback' | 'text' | 'studio' | 'system';
@@ -38,13 +37,12 @@ interface ControlsProps {
 }
 
 const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }) => {
-  const { settings, setSettings, randomizeSettings, mode, setMode, setColorTheme } = useVisuals();
-  const { showLyrics, setShowLyrics } = useAI();
+  const { settings, setSettings, randomizeSettings, mode, setMode } = useVisuals();
+  const { setShowLyrics } = useAI();
   const { toggleMicrophone, sourceType, togglePlayback, playNext, playPrev, selectedDeviceId, isPlaying } = useAudioContext();
-  const { t, toggleFullscreen } = useUI();
+  const { t, toggleFullscreen, showHelpModal, setShowHelpModal, setHelpModalInitialTab } = useUI();
 
   const [activeTab, setActiveTab] = useState<TabType>('visual');
-  const [showHelpModal, setShowHelpModal] = useState(false);
   
   const tabs: TabType[] = settings.uiMode === 'simple' 
     ? ['visual', 'input', 'playback', 'system']
@@ -72,13 +70,20 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
             break;
         case 'KeyF': toggleFullscreen(); break;
         case 'KeyR': randomizeSettings(); break;
-        case 'KeyL': setShowLyrics(!showLyrics); break;
+        case 'KeyL': setShowLyrics(prev => !prev); break;
         case 'KeyH': setIsExpanded(prev => !prev); break;
         case 'KeyG': setSettings(s => ({ ...s, glow: !s.glow })); break;
         case 'KeyT': setSettings(s => ({ ...s, trails: !s.trails })); break;
         case 'Escape': 
             if (showHelpModal) setShowHelpModal(false);
             else if (isExpanded) setIsExpanded(false); 
+            break;
+        case 'Slash':
+            if (e.shiftKey) { // '?'
+                e.preventDefault();
+                setHelpModalInitialTab('guide');
+                setShowHelpModal(true);
+            }
             break;
         case 'KeyN': if (sourceType === 'FILE') playNext(); break;
         case 'KeyP': if (sourceType === 'FILE') playPrev(); break;
@@ -124,7 +129,7 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [settings, showLyrics, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, isExpanded, showHelpModal, setIsExpanded, toggleFullscreen, tabs, selectedDeviceId]);
+  }, [settings, toggleMicrophone, randomizeSettings, setShowLyrics, setSettings, sourceType, togglePlayback, playNext, playPrev, mode, setMode, isExpanded, showHelpModal, setIsExpanded, toggleFullscreen, tabs, selectedDeviceId, setShowHelpModal, setHelpModalInitialTab]);
 
   return (
     <>
@@ -136,17 +141,17 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
       />
       
       {isExpanded && (
-        <div className="fixed bottom-0 left-0 w-full z-[120] bg-[#050505]/85 backdrop-blur-xl border-t border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col animate-fade-in-up pointer-events-auto touch-auto">
+        <div className="fixed bottom-0 left-0 w-full z-[120] bg-white/85 dark:bg-[#050505]/85 backdrop-blur-xl border-t border-black/10 dark:border-white/10 transition-all duration-700 shadow-[0_-25px_100px_rgba(0,0,0,0.2)] dark:shadow-[0_-25px_100px_rgba(0,0,0,0.9)] opacity-100 flex flex-col animate-fade-in-up pointer-events-auto touch-auto">
           <div className="max-h-[85dvh] md:max-h-[60vh] overflow-y-auto custom-scrollbar relative flex flex-col">
             
-            <div className="sticky top-0 z-50 bg-[#0a0a0c] border-b border-white/10 px-4 md:px-6 py-2 shadow-xl">
+            <div className="sticky top-0 z-50 bg-white/90 dark:bg-[#0a0a0c]/90 border-b border-black/10 dark:border-white/10 px-4 md:px-6 py-2 shadow-xl transition-colors">
                 <div className="max-w-5xl mx-auto flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-2">
-                    <div className="flex bg-white/[0.04] p-0.5 rounded-lg overflow-x-auto max-w-full scrollbar-hide gap-0.5 mask-fade-right touch-pan-x" role="tablist">
+                    <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-0.5 rounded-lg overflow-x-auto max-w-full scrollbar-hide gap-0.5 mask-fade-right touch-pan-x" role="tablist">
                     {tabs.map((tab, index) => (
                         <TooltipArea key={tab} text={`${t?.tabs?.[tab] || tab} [${index + 1}]`} className="flex-shrink-0">
                             <button 
                             onClick={() => setActiveTab(tab)} 
-                            className={`px-3 py-1.5 md:px-4 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all duration-300 w-full h-full whitespace-nowrap flex items-center gap-1.5 ${activeTab === tab ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>
+                            className={`px-3 py-1.5 md:px-4 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all duration-300 w-full h-full whitespace-nowrap flex items-center gap-1.5 ${activeTab === tab ? 'bg-blue-600 text-white shadow-lg' : 'text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'}`}>
                             {TAB_ICONS[tab]}
                             <span>{t?.tabs?.[tab] || tab}</span>
                             </button>
@@ -156,22 +161,22 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                     
                     <div className="flex items-center justify-between lg:justify-end gap-2 md:gap-3">
                     {sourceType === 'FILE' && (
-                        <div className="bg-white/5 p-0.5 rounded-lg flex items-center border border-white/5 shrink-0">
+                        <div className="bg-black/5 dark:bg-white/5 p-0.5 rounded-lg flex items-center border border-black/5 dark:border-white/5 shrink-0">
                             <TooltipArea text={isPlaying ? t?.player?.pause : t?.player?.play}>
-                                <button onClick={togglePlayback} className="w-8 h-7 flex items-center justify-center rounded hover:bg-white/10 text-white/80 hover:text-white transition-colors">
+                                <button onClick={togglePlayback} className="w-8 h-7 flex items-center justify-center rounded hover:bg-black/10 dark:hover:bg-white/10 text-black/80 dark:text-white/80 hover:text-black dark:hover:text-white transition-colors">
                                     {isPlaying ? <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> : <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>}
                                 </button>
                             </TooltipArea>
-                            <div className="w-px h-4 bg-white/10 mx-0.5"></div>
+                            <div className="w-px h-4 bg-black/10 dark:bg-white/10 mx-0.5"></div>
                             <TooltipArea text={t?.player?.next}>
-                                <button onClick={playNext} className="w-8 h-7 flex items-center justify-center rounded hover:bg-white/10 text-white/80 hover:text-white transition-colors">
+                                <button onClick={playNext} className="w-8 h-7 flex items-center justify-center rounded hover:bg-black/10 dark:hover:bg-white/10 text-black/80 dark:text-white/80 hover:text-black dark:hover:text-white transition-colors">
                                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
                                 </button>
                             </TooltipArea>
                         </div>
                     )}
 
-                    <div className="w-px h-5 bg-white/10 mx-1 hidden lg:block"></div>
+                    <div className="w-px h-5 bg-black/10 dark:bg-white/10 mx-1 hidden lg:block"></div>
                     <div className="flex items-center gap-1.5">
                         <div className="hidden md:flex gap-1.5">
                             <ActionButton onClick={randomizeSettings} hintText={`${t?.hints?.randomize || "Randomize"} [R]`} icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>} />
@@ -183,7 +188,7 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
                 </div>
             </div>
             
-            <div className="p-3 md:p-4 pb-safe">
+            <div className="p-3 md:p-4 pb-safe transition-colors">
               <div className="max-w-5xl mx-auto">
                 <div className="bg-transparent min-h-[25vh] md:min-h-[200px]" role="tabpanel">
                     {activeTab === 'visual' && <VisualSettingsPanel />}
@@ -198,7 +203,6 @@ const Controls: React.FC<ControlsProps> = ({ isExpanded, setIsExpanded, isIdle }
           </div>
         </div>
       )}
-      {showHelpModal && <HelpModal onClose={() => setShowHelpModal(false)} />}
     </>
   );
 };

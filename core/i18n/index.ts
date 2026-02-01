@@ -10,6 +10,8 @@ import { fr } from '../../assets/locales/fr';
 import { ar } from '../../assets/locales/ar';
 import { ru } from '../../assets/locales/ru';
 
-export const TRANSLATIONS: Record<Language, any> = {
+export type TranslationSchema = typeof en;
+
+export const TRANSLATIONS: Record<Language, TranslationSchema> = {
   en, zh, tw, ja, es, ko, de, fr, ar, ru
 };

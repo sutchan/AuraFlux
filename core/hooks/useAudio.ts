@@ -1,8 +1,8 @@
 /**
  * File: core/hooks/useAudio.ts
- * Version: 1.8.50
+ * Version: 1.8.54
  * Author: Sut
- * Updated: 2025-03-25 00:10 - Added navigator.mediaDevices checks and context state auto-recovery.
+ * Updated: 2025-07-18 14:15
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -15,9 +15,10 @@ interface UseAudioProps {
   language: Language;
   setCurrentSong: React.Dispatch<React.SetStateAction<SongInfo | null>>;
   t?: any;
+  showToast: (message: string, type?: 'success' | 'info' | 'error') => void;
 }
 
-export const useAudio = ({ settings, setCurrentSong, t }: UseAudioProps) => {
+export const useAudio = ({ settings, setCurrentSong, t, showToast }: UseAudioProps) => {
   const safeFftSize = settings?.fftSize || 512;
   const safeSmoothing = settings?.smoothing ?? 0.8;
 
@@ -105,7 +106,7 @@ export const useAudio = ({ settings, setCurrentSong, t }: UseAudioProps) => {
 
   const toggleMicrophone = useCallback(async (deviceId?: string) => {
     if (!navigator.mediaDevices) {
-        alert(t?.errors?.accessDenied || "Microphone access not supported in this browser context.");
+        showToast(t?.errors?.accessDenied || "Microphone access is required.", 'error');
         return;
     }
 
@@ -117,11 +118,20 @@ export const useAudio = ({ settings, setCurrentSong, t }: UseAudioProps) => {
         await stopAll();
         setSourceType('MICROPHONE');
         const ctx = await ensureContext();
-        const constraints = (deviceId || selectedDeviceId) 
-            ? { audio: { deviceId: { exact: deviceId || selectedDeviceId } } } 
-            : { audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } };
-            
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        
+        let stream: MediaStream;
+        try {
+            // Try with preferred constraints first
+            const constraints = (deviceId || selectedDeviceId) 
+                ? { audio: { deviceId: { exact: deviceId || selectedDeviceId } } } 
+                : { audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } };
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (err) {
+            console.warn("[Audio] Preferred constraints failed, retrying with default...", err);
+            // Fallback to simple request if constraints fail (e.g. echoCancellation not supported)
+            stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        }
+
         setMediaStream(stream);
         const source = ctx.createMediaStreamSource(stream);
         micSourceNodeRef.current = source;
@@ -129,13 +139,24 @@ export const useAudio = ({ settings, setCurrentSong, t }: UseAudioProps) => {
         if (analyserRRef.current) source.connect(analyserRRef.current);
         if (deviceId) setSelectedDeviceId(deviceId);
         setIsListening(true);
-      } catch (e) {
+      } catch (e: any) {
+          if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
+              showToast(t?.errors?.accessDenied || "Microphone access was denied.", 'error');
+          } else {
+              showToast("Failed to access microphone.", 'error');
+          }
           console.error("[Audio] Microphone access denied:", e);
       } finally {
           setIsPending(false);
       }
     }
-  }, [isListening, sourceType, stopAll, ensureContext, selectedDeviceId, t]);
+  }, [isListening, sourceType, stopAll, ensureContext, selectedDeviceId, t, showToast]);
+
+  useEffect(() => {
+    if (pl.playlist.length === 0 && sourceType === 'FILE' && !isListening) {
+      toggleMicrophone();
+    }
+  }, [pl.playlist.length, sourceType, isListening, toggleMicrophone]);
 
   const playFileBuffer = useCallback(async () => {
     if (!audioBufferRef.current) return;
@@ -172,11 +193,46 @@ export const useAudio = ({ settings, setCurrentSong, t }: UseAudioProps) => {
 
   useEffect(() => { playTrackByIndexRef.current = playTrackByIndex; }, [playTrackByIndex]);
 
+  const playNext = useCallback(() => {
+    if (pl.playlist.length === 0) return;
+    const nextIndex = pl.getNextIndex();
+    if (nextIndex !== -1) {
+        playTrackByIndexRef.current(nextIndex);
+    }
+  }, [pl.playlist.length, pl.getNextIndex]);
+
+  const playPrev = useCallback(() => {
+    if (pl.playlist.length === 0) return;
+    const prevIndex = pl.getPrevIndex();
+    if (prevIndex !== -1) {
+        playTrackByIndexRef.current(prevIndex);
+    }
+  }, [pl.playlist.length, pl.getPrevIndex]);
+  
+  const togglePlayback = useCallback(() => {
+    if (isPlaying) {
+        if (audioContextRef.current && fileSourceNodeRef.current) {
+            cancelAnimationFrame(rafRef.current);
+            const suspendTime = audioContextRef.current.currentTime - startTimeRef.current;
+            if (audioBufferRef.current) {
+                pausedAtRef.current = suspendTime > 0 ? suspendTime % audioBufferRef.current.duration : 0;
+            }
+            try { fileSourceNodeRef.current.stop(); } catch(e) {}
+            fileSourceNodeRef.current = null;
+            setIsPlaying(false);
+        }
+    } else {
+        playFileBuffer();
+    }
+  }, [isPlaying, playFileBuffer]);
+
   return {
     sourceType, analyser, analyserR, isListening, isPending, mediaStream, audioDevices,
     selectedDeviceId, onDeviceChange: setSelectedDeviceId,
     isPlaying, duration, currentTime, ...pl, toggleMicrophone, playTrackByIndex,
-    togglePlayback: () => isPlaying ? (fileSourceNodeRef.current?.stop(), setIsPlaying(false)) : playFileBuffer(),
+    playNext,
+    playPrev,
+    togglePlayback,
     seekFile: (t: number) => { if (fileSourceNodeRef.current) try { fileSourceNodeRef.current.stop(); } catch(e) {} pausedAtRef.current = t; if (isPlaying) playFileBuffer(); else setCurrentTime(t); },
     getAudioSlice: async (s = 15) => audioBufferRef.current ? audioBufferToWav(audioBufferRef.current) : null,
     audioContext: audioContextRef.current

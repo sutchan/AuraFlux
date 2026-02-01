@@ -1,9 +1,7 @@
-
 /**
  * File: components/ui/ErrorBoundary.tsx
  * Version: 1.8.26
  * Author: Sut
- * Updated: 2025-03-25 12:35 - Fix 'props' missing error by explicitly declaring the property in the class.
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';

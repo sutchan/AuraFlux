@@ -3,8 +3,7 @@
  * Version: 1.8.25
  * Author: Sut
  * Copyright (c) 2025 Aura Flux. All rights reserved.
- * Updated: 2025-03-24 23:10 - Fixed sensitivity bug by normalizing frequency bins.
- */
+  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
 import { getAverage } from '../audioUtils';

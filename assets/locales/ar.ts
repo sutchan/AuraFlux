@@ -1,6 +1,6 @@
 /**
  * File: assets/locales/ar.ts
- * Version: 2.1.0
+ * Version: 2.1.1
  * Author: Sut
  */
 
@@ -63,7 +63,8 @@ export const ar = {
     NEURAL_FLOW: 'تدفق عصبي',
     CUBE_FIELD: 'حقل كمي',
     KINETIC_WALL: 'جدار حركي',
-    RESONANCE_ORB: 'جرم الرنين'
+    RESONANCE_ORB: 'جرم الرنين',
+    RIPPLES: 'تموجات'
   },
   modeDescriptions: {
     PLASMA: 'مزيج ألوان سلس وانسيابي.',
@@ -81,7 +82,8 @@ export const ar = {
     NEURAL_FLOW: 'محاكاة سائل عضوي عبر WebGL.',
     CUBE_FIELD: 'حقل لا نهائي من الكتل الهندسية.',
     KINETIC_WALL: 'جدار مسرح LED ضخم مع بثق حركي.',
-    RESONANCE_ORB: 'نواة نابضة تتحول بعنف مع الإيقاع.'
+    RESONANCE_ORB: 'نواة نابضة تتحول بعنف مع الإيقاع.',
+    RIPPLES: 'دوائر منومة تتوسع مع الإيقاع.'
   },
   presets: {
     title: 'ضبط المحرك البصري',
@@ -112,6 +114,7 @@ export const ar = {
     stopping: 'جاري الإيقاف...',
     settings: {
       resolution: 'الدقة',
+      aspectRatio: 'نسبة العرض',
       resNative: 'الدقة الأصلية',
       fps: 'إطارات',
       bitrate: 'معدل البت',
@@ -150,6 +153,7 @@ export const ar = {
     analyze: 'إنشاء مرئيات',
     analyzing: 'جاري تحليل الطيف...',
     apiKey: 'مفتاح API',
+    apiKeyPlaceholder: 'مفتاح Gemini...',
     generate: 'توليد',
     keySaved: 'تم التحقق من المفتاح',
     keyInvalid: 'مفتاح غير صالح',
@@ -177,7 +181,11 @@ export const ar = {
     behavior: 'سلوك التطبيق',
     lightMode: 'سمة فاتحة',
     darkMode: 'سمة داكنة',
-    uiMode: 'وضع التحكم'
+    uiMode: 'وضع التحكم',
+    interaction: 'Interaction',
+    performance: 'System & Performance',
+    localization: 'Appearance & Localization',
+    factoryReset: 'Factory Reset All Settings'
   },
   config: {
     title: 'إدارة البيانات واللقطات',
@@ -204,6 +212,8 @@ export const ar = {
     speed: 'سرعة التدفق',
     glow: 'كثافة التوهج',
     trails: 'ذيول الحركة',
+    autoRotate: 'Toggle automatic engine cycling',
+    cycleColors: 'Cycle through all color themes automatically',
     excludeFromAutoRotate: 'استبعاد من التدوير',
     includeInAutoRotate: 'تضمين في التدوير',
     resetVisual: 'إعادة ضبط المرئيات',
@@ -225,6 +235,7 @@ export const ar = {
     subtitle: 'صوت الضوء',
     selectLanguage: 'اختر لغتك',
     features: {
+      title: 'Core Features',
       visuals: { title: 'فن توليدي', desc: 'أكثر من 15 محرك عرض مدعوم بـ WebGL.' },
       ai: { title: 'حس مرافق AI', desc: 'تحليل المشاعر والكلمات بواسطة Gemini 3.0.' },
       privacy: { title: 'خصوصية محلية', desc: 'تتم المعالجة بالكامل على جهازك.' }
@@ -232,6 +243,11 @@ export const ar = {
     shortcuts: {
       title: 'تحكم VJ سريع',
       desc: 'أتقن العرض باستخدام هذه الاختصارات'
+    },
+    sections: {
+      essentials: 'Essentials',
+      visual: 'Visual Creation',
+      advanced: 'Advanced'
     },
     back: 'السابق',
     next: 'الخطوة التالية',
@@ -244,6 +260,11 @@ export const ar = {
     howItWorksTitle: 'البداية السريعة',
     shortcutsTitle: 'اختصارات لوحة المفاتيح',
     gesturesTitle: 'إيماءات اللمس',
+    gestureItems: {
+      swipeMode: 'Swipe Left/Right: Change Mode',
+      swipeSens: 'Swipe Up/Down: Adjust Sensitivity',
+      longPress: 'Long Press: AI Info'
+    },
     projectInfoTitle: 'رؤيتنا',
     aboutDescription: 'Aura Flux هو محرك حس مرافق في الوقت الفعلي يحول الترددات الصوتية إلى فن ثلاثي الأبعاد توليدي.',
     coreTech: 'التقنيات',
@@ -290,6 +311,9 @@ export const ar = {
   welcomeTitle: 'Aura Flux',
   welcomeText: 'تصوير تردد المشاعر بصرياً.',
   startExperience: 'دخول الوضع الانغماسي',
+  welcomeScreen: {
+    micPermission: 'يتطلب الوصول إلى الميكروفون للvisualisation في الوقت الحقيقي'
+  },
   errors: {
     tryDemo: 'دخل وضع المحاكاة',
     accessDenied: 'مطلوب إذن الميكروفون',
@@ -388,6 +412,7 @@ export const ar = {
   wrongSong: 'إعادة الحس المرافق',
   songOverlay: {
     googleSearch: 'بحث خارجي',
+    aiSynesthesia: 'AI Synesthesia',
     provider: {
       local: 'ذاكرة مؤقتة',
       mock: 'محاكاة',

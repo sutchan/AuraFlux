@@ -57,7 +57,8 @@ export const en = {
     NEURAL_FLOW: 'Neural Flow',
     CUBE_FIELD: 'Quantum Field',
     KINETIC_WALL: 'Kinetic Wall',
-    RESONANCE_ORB: 'Resonance Orb'
+    RESONANCE_ORB: 'Resonance Orb',
+    RIPPLES: 'Ripples'
   },
   modeDescriptions: {
     PLASMA: 'Smooth fluid-like color blending.',
@@ -75,7 +76,8 @@ export const en = {
     NEURAL_FLOW: 'Organic fluid simulation powered by WebGL.',
     CUBE_FIELD: 'Infinite field of geometric blocks.',
     KINETIC_WALL: 'Massive LED stage wall with kinetic extrusions.',
-    RESONANCE_ORB: 'A pulsating core that morphs violently with rhythm.'
+    RESONANCE_ORB: 'A pulsating core that morphs violently with rhythm.',
+    RIPPLES: 'Hypnotic expanding circles triggered by rhythm.'
   },
   presets: {
     title: 'Visual Core Tuning',
@@ -106,6 +108,7 @@ export const en = {
     stopping: 'STOPPING...',
     settings: {
       resolution: 'Resolution',
+      aspectRatio: 'Aspect Ratio',
       resNative: 'Native',
       fps: 'FPS',
       bitrate: 'Bitrate',
@@ -144,6 +147,7 @@ export const en = {
     analyze: 'Generate Visuals',
     analyzing: 'Analyzing Spectrum...',
     apiKey: 'API Key',
+    apiKeyPlaceholder: 'Gemini Key...',
     generate: 'GENERATE',
     keySaved: 'Key Verified & Saved',
     keyInvalid: 'Invalid API Key',
@@ -171,7 +175,11 @@ export const en = {
     behavior: 'App Behavior',
     lightMode: 'Light Theme',
     darkMode: 'Dark Theme',
-    uiMode: 'Control Interface'
+    uiMode: 'Control Interface',
+    interaction: 'Interaction',
+    performance: 'System & Performance',
+    localization: 'Appearance & Localization',
+    factoryReset: 'Factory Reset All Settings'
   },
   config: {
     title: 'Data & Preset Management',
@@ -198,6 +206,8 @@ export const en = {
     speed: 'Flow Speed',
     glow: 'Bloom Intensity',
     trails: 'Motion Trails',
+    autoRotate: 'Toggle automatic engine cycling',
+    cycleColors: 'Cycle through all color themes automatically',
     excludeFromAutoRotate: 'Exclude from Auto-Rotate',
     includeInAutoRotate: 'Include in Auto-Rotate',
     resetVisual: 'Reset Visual Tuning',
@@ -219,6 +229,7 @@ export const en = {
     subtitle: 'The Sound of Light',
     selectLanguage: 'Select Your Language',
     features: {
+      title: 'Core Features',
       visuals: { title: 'Generative Art', desc: '15+ rendering engines powered by multi-threaded WebGL.' },
       ai: { title: 'AI Synesthesia', desc: 'Real-time mood analysis and lyrics powered by Gemini 3.0.' },
       privacy: { title: 'Local-First Privacy', desc: 'All audio processing happens entirely on your device.' }
@@ -226,6 +237,11 @@ export const en = {
     shortcuts: {
       title: 'Quick VJ Controls',
       desc: 'Master the visualizer with these hotkeys'
+    },
+    sections: {
+      essentials: 'Essentials',
+      visual: 'Visual Creation',
+      advanced: 'Advanced'
     },
     back: 'Previous',
     next: 'Next Step',
@@ -238,6 +254,11 @@ export const en = {
     howItWorksTitle: 'Getting Started',
     shortcutsTitle: 'Keyboard Shortcuts',
     gesturesTitle: 'Touch Gestures',
+    gestureItems: {
+      swipeMode: 'Swipe Left/Right: Change Mode',
+      swipeSens: 'Swipe Up/Down: Adjust Sensitivity',
+      longPress: 'Long Press: AI Info'
+    },
     projectInfoTitle: 'Our Vision',
     aboutDescription: 'Aura Flux is a real-time synesthesia engine that transmutes audio frequencies into generative 3D art.',
     coreTech: 'Core Stack',
@@ -284,6 +305,9 @@ export const en = {
   welcomeTitle: 'Aura Flux',
   welcomeText: 'Visualizing the frequency of emotion.',
   startExperience: 'Enter Immersive Mode',
+  welcomeScreen: {
+    micPermission: 'Requires Microphone Access for Real-time Visualization'
+  },
   errors: {
     tryDemo: 'Enter Demo Simulation',
     accessDenied: 'Microphone permissions required',
@@ -382,6 +406,7 @@ export const en = {
   wrongSong: 'Retry Synesthesia',
   songOverlay: {
     googleSearch: 'External Lookup',
+    aiSynesthesia: 'AI Synesthesia',
     provider: {
       local: 'Cache',
       mock: 'Sim',

@@ -1,8 +1,7 @@
 /**
  * File: components/visualizers/VisualizerCanvas.tsx
- * Version: 2.0.5
+ * Version: 1.8.58
  * Author: Sut
- * Updated: 2025-03-25 21:15
  */
 
 import React, { useRef, useEffect } from 'react';

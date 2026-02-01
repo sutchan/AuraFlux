@@ -1,3 +1,4 @@
+
 export const de = {
   common: {
     confirmClear: 'Möchten Sie die Wiedergabeliste wirklich leeren?',
@@ -57,7 +58,8 @@ export const de = {
     NEURAL_FLOW: 'Neuronaler Fluss',
     CUBE_FIELD: 'Quantenfeld',
     KINETIC_WALL: 'Kinetische Wand',
-    RESONANCE_ORB: 'Resonanz-Orb'
+    RESONANCE_ORB: 'Resonanz-Orb',
+    RIPPLES: 'Ripples'
   },
   modeDescriptions: {
     PLASMA: 'Sanft fließende Farbmischung.',
@@ -75,7 +77,8 @@ export const de = {
     NEURAL_FLOW: 'Organische Fluidsimulation mit WebGL.',
     CUBE_FIELD: 'Unendliches Feld geometrischer Blöcke.',
     KINETIC_WALL: 'Massive LED-Bühnenwand mit kinetischen Extrusionen.',
-    RESONANCE_ORB: 'Ein pulsierender Kern, der sich heftig mit dem Rhythmus morpht.'
+    RESONANCE_ORB: 'Ein pulsierender Kern, der sich heftig mit dem Rhythmus morpht.',
+    RIPPLES: 'Hypnotisch expandierende Kreise, ausgelöst durch den Rhythmus.'
   },
   presets: {
     title: 'Visuelle Kernabstimmung',
@@ -106,6 +109,7 @@ export const de = {
     stopping: 'STOPPEN...',
     settings: {
       resolution: 'Auflösung',
+      aspectRatio: 'Seitenverhältnis',
       resNative: 'Nativ',
       fps: 'FPS',
       bitrate: 'Bitrate',
@@ -144,6 +148,7 @@ export const de = {
     analyze: 'Visuals generieren',
     analyzing: 'Spektrum analysieren...',
     apiKey: 'API-Schlüssel',
+    apiKeyPlaceholder: 'Gemini-Schlüssel...',
     generate: 'Generieren',
     keySaved: 'Schlüssel gespeichert',
     keyInvalid: 'Ungültiger API-Schlüssel',
@@ -154,7 +159,13 @@ export const de = {
     save: 'SPEICHERN'
   },
   visualPanel: {
-    display: 'Qualität & Anzeige'
+    display: 'Qualität & Anzeige',
+    aiBg: 'KI-Inspirationshintergrund',
+    generateBg: 'KI-Hintergrund generieren',
+    regenerate: 'Kunst neu generieren',
+    showBg: 'KI-Ebene aktivieren',
+    opacity: 'Deckkraft',
+    bgGenerated: 'Kunst erfolgreich generiert'
   },
   textPanel: {
     overlay: 'Text-Layer-Steuerung',
@@ -165,7 +176,11 @@ export const de = {
     behavior: 'App-Verhalten',
     lightMode: 'Helles Design',
     darkMode: 'Dunkles Design',
-    uiMode: 'Oberflächenmodus'
+    uiMode: 'Oberflächenmodus',
+    interaction: 'Interaction',
+    performance: 'System & Performance',
+    localization: 'Appearance & Localization',
+    factoryReset: 'Factory Reset All Settings'
   },
   config: {
     title: 'Daten- & Preset-Verwaltung',
@@ -192,6 +207,8 @@ export const de = {
     speed: 'Geschwindigkeit',
     glow: 'Leuchtintensität',
     trails: 'Bewegungsspuren',
+    autoRotate: 'Autom. Moduswechsel',
+    cycleColors: 'Autom. Farbzyklus',
     excludeFromAutoRotate: 'Vom Auto-Wechsel ausschließen',
     includeInAutoRotate: 'In Auto-Wechsel einbeziehen',
     resetVisual: 'Visuals zurücksetzen',
@@ -213,6 +230,7 @@ export const de = {
     subtitle: 'Der Klang des Lichts',
     selectLanguage: 'Sprache wählen',
     features: {
+      title: 'Core Features',
       visuals: { title: 'Generative Kunst', desc: '15+ Rendering-Engines mit WebGL.' },
       ai: { title: 'KI Synästhesie', desc: 'Echtzeit-Stimmungsanalyse durch Gemini 3.0.' },
       privacy: { title: 'Edge Privacy', desc: 'Verarbeitung erfolgt lokal auf Ihrem Gerät.' }
@@ -220,6 +238,11 @@ export const de = {
     shortcuts: {
       title: 'VJ-Schnellsteuerung',
       desc: 'Beherrschen Sie den Visualizer mit diesen Tasten'
+    },
+    sections: {
+      essentials: 'Essentials',
+      visual: 'Visual Creation',
+      advanced: 'Advanced'
     },
     back: 'Zurück',
     next: 'Weiter',
@@ -232,6 +255,11 @@ export const de = {
     howItWorksTitle: 'Erste Schritte',
     shortcutsTitle: 'Tastenkombinationen',
     gesturesTitle: 'Gesten',
+    gestureItems: {
+      swipeMode: 'Links/Rechts wischen: Moduswechsel',
+      swipeSens: 'Hoch/Runter wischen: Empfindlichkeit',
+      longPress: 'Langes Drücken: KI-Info'
+    },
     projectInfoTitle: 'Vision',
     aboutDescription: 'Aura Flux ist eine Echtzeit-Synästhesie-Engine, die Audiofrequenzen in generative 3D-Kunst verwandelt.',
     coreTech: 'Stack',
@@ -278,6 +306,9 @@ export const de = {
   welcomeTitle: 'Aura Flux',
   welcomeText: 'Frequenzen von Emotionen visualisieren.',
   startExperience: 'Eintauchen',
+  welcomeScreen: {
+    micPermission: 'Benötigt Mikrofonzugriff für Echtzeit-Visualisierung'
+  },
   errors: {
     tryDemo: 'Demo-Modus starten',
     accessDenied: 'Mikrofonzugriff verweigert',
@@ -376,6 +407,7 @@ export const de = {
   wrongSong: 'Synästhesie wdh.',
   songOverlay: {
     googleSearch: 'Suche',
+    aiSynesthesia: 'AI Synesthesia',
     provider: {
       local: 'Cache',
       mock: 'Sim',

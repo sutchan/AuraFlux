@@ -1,30 +1,10 @@
 # OpenSpec: 测试与验证规范
 
-## 1. 测试策略
-- **单元测试**: 核心服务逻辑验证。
-- **集成测试**: 音频采集 -> AI 识别 -> UI 展示链路验证。
-- **手动测试**: 新版本发布前的全量功能回归。
-
-## 2. 鲁棒性验证
-- **音频错误处理 (v1.8.25):**
-  - **Context 恢复:** 监听 `statechange` 并在状态变为 `suspended` 时尝试自愈恢复。
-  - **内存安全:** `stopAll` 强制销毁所有临时 `GainNode` 和 `SourceNode`，防止在长时运行后产生内存泄漏。
-  - **麦克风拒绝:** 在浏览器级别拒绝麦克风权限，验证应用是否显示本地化的用户友好错误提示 ("权限被拒绝" / "Access denied") 而不是崩溃。
-  - **文件元数据:** 加载无 ID3 标签的音频文件，验证播放器是否优雅降级显示为 "Unknown Track" (本地化)。
-- **存储防御测试**: 模拟旧版本数据自动补全。
-- **边界条件测试**: 测试空音频输入、超长文件名及断网情况下的降级处理。
-- **WebGL 恢复**: 模拟上下文丢失自动恢复。
-- **i18n 完整性 (v1.8.25):** 验证所有 10 种语言包的键值完整性，特别是 `player` (播放控制) 和 `audio` (音频设置) 部分。
-- **FFT 切换稳定性 (v1.8.22):** 在播放高频音频时快速切换 FFT Size (512 -> 4096)，验证 `OceanWaveScene` 是否出现纹理撕裂或页面卡死。
-
-## 3. 回归测试清单
-- [x] 10种语言切换无乱码或缺失键值 (v1.8.25 Verified)。
-- [x] 立体海浪模式在高灵敏度下视角无遮挡 (v1.8.25 Verified)。
-- [x] 录制功能在 Safari/Chrome 上均可生成有效视频文件。
-- [ ] AI 导演功能在无 API Key 时的提示。
-- [x] 智能预设颜色索引在主题列表缩减后的兼容性 (v1.8.11 Verified)。
-- [x] 细胞漂移模式 (Cellular Drift) 在高分辨率屏幕上的性能验证 (v1.8.16 Verified)。
-- [x] Ocean Wave 模式下 FFT 尺寸热切换稳定性 (v1.8.25 Robustness Patch Applied)。
+## 1. 健壮性自检
+- [x] **FFT Size 稳定性:** 在 3D 模式下热切换采样率无崩溃。
+- [x] **Context 恢复:** 锁屏或标签页切回后 AudioContext 自动恢复。
+- [x] **移动端适配:** 在 iOS Safari 和 Android Chrome 上实现 60FPS 渲染。
+- [x] **API 错误处理:** 无密钥或配额用尽时显示优雅的 Mock 数据。
 
 ---
-*Aura Flux Testing & Validation - Version 1.8.25*
+*Aura Flux Testing & Validation - Version 1.8.62*

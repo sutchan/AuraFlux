@@ -2,8 +2,7 @@
  * File: core/services/renderers/BarsRenderer.ts
  * Version: 1.9.4
  * Author: Sut
- * Description: Snappy Spectrum Analyzer with 50% sensitivity optimization for better headroom.
- */
+  */
 
 import { IVisualizerRenderer, VisualizerSettings, RenderContext } from '../../types/index';
 import { getAverage, applySoftCompression } from '../audioUtils';

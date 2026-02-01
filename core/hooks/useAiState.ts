@@ -1,20 +1,21 @@
 /**
  * File: core/hooks/useAiState.ts
- * Version: 1.8.23
+ * Version: 1.8.24
  * Author: Aura Flux Team
  * Copyright (c) 2025 Aura Flux. All rights reserved.
+ * Updated: 2025-07-16 19:00
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { useIdentification } from './useIdentification';
 import { LyricsStyle, Language, Region, VisualizerSettings, AIProvider, SongInfo } from '../types';
+import { identifySongFromAudio } from '../services/aiService';
 
 const DEFAULT_LYRICS_STYLE = LyricsStyle.KARAOKE;
 const DEFAULT_SHOW_LYRICS = false;
 const DEFAULT_ENABLE_ANALYSIS = false;
 
-// Privacy Helper: Simple Base64 obfuscation to prevent shoulder-surfing leaks.
 const encodeKey = (key: string) => `enc:${btoa(key)}`;
 const decodeKey = (str: string) => {
     if (typeof str === 'string' && str.startsWith('enc:')) {
@@ -34,11 +35,12 @@ interface AiStateProps {
   setSettings: React.Dispatch<React.SetStateAction<VisualizerSettings>>;
   onSongIdentified?: (song: SongInfo | null) => void;
   currentSong?: SongInfo | null;
+  getAudioSlice: (s?: number) => Promise<Blob | null>;
 }
 
 export const useAiState = ({ 
   language, region, provider, isListening, 
-  isSimulating, mediaStream, initialSettings, setSettings, onSongIdentified, currentSong
+  isSimulating, mediaStream, initialSettings, setSettings, onSongIdentified, currentSong, getAudioSlice
 }: AiStateProps) => {
   const { getStorage, setStorage } = useLocalStorage();
 
@@ -60,6 +62,8 @@ export const useAiState = ({
       }
       return decoded;
   });
+  
+  const [isLocalIdentifying, setIsLocalIdentifying] = useState(false);
 
   useEffect(() => {
       const encoded: Record<string, string> = {};
@@ -102,6 +106,33 @@ export const useAiState = ({
     return () => clearInterval(interval);
   }, [isListening, mediaStream, enableAnalysis, performIdentification, isSimulating, currentSong]);
 
+  useEffect(() => {
+    const triggerFileIdentification = async () => {
+        if (currentSong && currentSong.matchSource === 'FILE' && !currentSong.lyrics && enableAnalysis && !isIdentifying && !isLocalIdentifying) {
+            const audioBlob = await getAudioSlice(15);
+            if (audioBlob) {
+                setIsLocalIdentifying(true);
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = async () => {
+                    const base64Audio = (reader.result as string).split(',')[1];
+                    const apiKey = apiKeys[provider];
+                    const result = await identifySongFromAudio(base64Audio, 'audio/wav', language, region, provider, apiKey);
+                    if (result && (result.lyrics || result.identified)) {
+                        const finalTitle = result.identified ? result.title : currentSong.title;
+                        const finalArtist = result.identified ? result.artist : currentSong.artist;
+                        const updatedSong = { ...currentSong, ...result, title: finalTitle, artist: finalArtist };
+                        onSongIdentified?.(updatedSong);
+                    }
+                    setIsLocalIdentifying(false);
+                };
+            }
+        }
+    };
+    triggerFileIdentification();
+  }, [currentSong, enableAnalysis, isIdentifying, isLocalIdentifying, getAudioSlice, onSongIdentified, language, region, provider, apiKeys]);
+
+
   const resetAiSettings = useCallback(() => {
     setShowLyrics(DEFAULT_SHOW_LYRICS);
     setEnableAnalysis(DEFAULT_ENABLE_ANALYSIS);
@@ -119,7 +150,7 @@ export const useAiState = ({
     lyricsStyle, setLyricsStyle,
     showLyrics, setShowLyrics,
     enableAnalysis, setEnableAnalysis,
-    isIdentifying,
+    isIdentifying: isIdentifying || isLocalIdentifying,
     currentSong, setCurrentSong,
     performIdentification,
     resetAiSettings,

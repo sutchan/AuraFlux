@@ -1,14 +1,14 @@
 /**
  * File: components/visualizers/ThreeVisualizer.tsx
- * Version: 1.9.6
+ * Version: 1.9.7
  * Author: Sut
- * Updated: 2025-03-25 17:05 - Updated LIQUID to RESONANCE_ORB.
  */
 
 import React, { Suspense, useMemo, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { EffectComposer, Bloom, Noise } from '@react-three/postprocessing';
 import { VisualizerMode, VisualizerSettings } from '../../core/types';
+import { BLOOM_CONFIG } from '../../core/constants';
 import { 
     KineticWallScene, 
     LiquidSphereScene, 
@@ -61,17 +61,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
   }), []);
 
   const bloomIntensity = useMemo(() => {
-      const base = 2.0;
-      switch (mode) {
-          case VisualizerMode.KINETIC_WALL: return base * 1.5;
-          case VisualizerMode.RESONANCE_ORB: return base * 1.5;
-          case VisualizerMode.CUBE_FIELD: return base * 1.2;
-          case VisualizerMode.NEURAL_FLOW: return base * 1.5;
-          case VisualizerMode.DIGITAL_GRID: return base * 1.8; 
-          case VisualizerMode.SILK_WAVE: return base * 1.4;
-          case VisualizerMode.OCEAN_WAVE: return base * 2.0; 
-          default: return base;
-      }
+      return BLOOM_CONFIG[mode] || 2.0;
   }, [mode]);
 
   const postProcessingEffects = useMemo(() => {
@@ -102,22 +92,14 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
     const sceneProps = { analyser, analyserR, colors, settings };
 
     switch (mode) {
-        case VisualizerMode.KINETIC_WALL:
-            return <KineticWallScene {...sceneProps} />;
-        case VisualizerMode.RESONANCE_ORB:
-            return <LiquidSphereScene {...sceneProps} />;
-        case VisualizerMode.CUBE_FIELD:
-            return <CubeFieldScene {...sceneProps} />;
-        case VisualizerMode.NEURAL_FLOW:
-            return <NeuralFlowScene {...sceneProps} />;
-        case VisualizerMode.DIGITAL_GRID:
-            return <DigitalGridScene {...sceneProps} />;
-        case VisualizerMode.SILK_WAVE:
-            return <SilkWaveScene {...sceneProps} />;
-        case VisualizerMode.OCEAN_WAVE:
-            return <OceanWaveScene {...sceneProps} />;
-        default:
-            return <NeuralFlowScene {...sceneProps} />;
+        case VisualizerMode.KINETIC_WALL: return <KineticWallScene {...sceneProps} />;
+        case VisualizerMode.RESONANCE_ORB: return <LiquidSphereScene {...sceneProps} />;
+        case VisualizerMode.CUBE_FIELD: return <CubeFieldScene {...sceneProps} />;
+        case VisualizerMode.NEURAL_FLOW: return <NeuralFlowScene {...sceneProps} />;
+        case VisualizerMode.DIGITAL_GRID: return <DigitalGridScene {...sceneProps} />;
+        case VisualizerMode.SILK_WAVE: return <SilkWaveScene {...sceneProps} />;
+        case VisualizerMode.OCEAN_WAVE: return <OceanWaveScene {...sceneProps} />;
+        default: return <NeuralFlowScene {...sceneProps} />;
     }
   }, [mode, analyser, analyserR, colors, settings]);
 
@@ -137,11 +119,7 @@ const ThreeVisualizer: React.FC<ThreeVisualizerProps> = ({ analyser, analyserR, 
         }}
       >
         <BackgroundController isTransparent={!!settings.albumArtBackground} />
-        
-        <Suspense fallback={null}>
-            {activeScene}
-        </Suspense>
-        
+        <Suspense fallback={null}>{activeScene}</Suspense>
         {postProcessingEffects}
       </Canvas>
     </div>
