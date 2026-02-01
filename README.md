@@ -2,6 +2,8 @@
 
 ### AI-Powered 3D Music Visualizer & Synesthesia Engine (v1.8.66)
 
+[Live Demo](https://aura.tanox.net) | [简体中文](./README_ZH.md)
+
 Aura Flux is a professional-grade web application that transmutes audio frequencies into high-fidelity generative art. Powered by **React 18**, **Three.js**, and **Google Gemini 3 AI**, it offers a seamless blend of performance and intelligence.
 
 ## 🚀 Key Features

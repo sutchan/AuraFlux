@@ -2,6 +2,8 @@
 
 ### AI 驱动的 3D 音乐可视化与通感分析引擎 (v1.8.66)
 
+[在线演示](https://aura.tanox.net) | [English](./README.md)
+
 Aura Flux 是一款专业级的 Web 应用程序，可将音频频率转化为高保真生成艺术。基于 **React 18**、**Three.js** 和 **Google Gemini 3 AI** 构建，实现了极致性能与人工智能的完美融合。
 
 ## 🚀 核心特性

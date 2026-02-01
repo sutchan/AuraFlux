@@ -17,6 +17,9 @@
 - **HUD (Head-Up Display):**
   - 包含实时频率脉动的 Song Overlay。
   - 基于 `useAudioPulse` 的动态歌词叠层（Standard, Karaoke, Minimal 风格）。
+- **图层管理交互优化:**
+  - **文字锚点定位:** 采用高效的**下拉菜单 (Dropdown)** 替代网格按钮，显著降低视觉冗余，提高在小屏幕上的操作精准度。
+  - **实时预览:** 调整位置后立即反映在 UI 上，确保“所见即所得”。
 
 ## 3. 4K Studio 录制
 - **导出管线:** 使用 `MediaRecorder` 集成，支持 WebM (VP9/VP8) 与 MP4 (H.264) 编码。
