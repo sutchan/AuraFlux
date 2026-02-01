@@ -1,4 +1,3 @@
-
 export const de = {
   common: {
     confirmClear: 'Möchten Sie die Wiedergabeliste wirklich leeren?',
@@ -177,10 +176,10 @@ export const de = {
     lightMode: 'Helles Design',
     darkMode: 'Dunkles Design',
     uiMode: 'Oberflächenmodus',
-    interaction: 'Interaction',
-    performance: 'System & Performance',
-    localization: 'Appearance & Localization',
-    factoryReset: 'Factory Reset All Settings'
+    interaction: 'Interaktion',
+    performance: 'System & Leistung',
+    localization: 'Erscheinungsbild & Sprache',
+    factoryReset: 'Alle Einstellungen zurücksetzen'
   },
   config: {
     title: 'Daten- & Preset-Verwaltung',
@@ -207,8 +206,8 @@ export const de = {
     speed: 'Geschwindigkeit',
     glow: 'Leuchtintensität',
     trails: 'Bewegungsspuren',
-    autoRotate: 'Autom. Moduswechsel',
-    cycleColors: 'Autom. Farbzyklus',
+    autoRotate: 'Automatischer Engine-Zyklus',
+    cycleColors: 'Alle Farbthemen automatisch durchlaufen',
     excludeFromAutoRotate: 'Vom Auto-Wechsel ausschließen',
     includeInAutoRotate: 'In Auto-Wechsel einbeziehen',
     resetVisual: 'Visuals zurücksetzen',

@@ -1,4 +1,3 @@
-
 export const ko = {
   common: {
     confirmClear: '재생 목록을 비우시겠습니까?',
@@ -177,15 +176,15 @@ export const ko = {
     lightMode: '라이트 테마',
     darkMode: '다크 테마',
     uiMode: '제어 인터페이스',
-    interaction: 'Interaction',
-    performance: 'System & Performance',
-    localization: 'Appearance & Localization',
-    factoryReset: 'Factory Reset All Settings'
+    interaction: '상호작용',
+    performance: '시스템 및 성능',
+    localization: '외관 및 지역화',
+    factoryReset: '모든 설정 초기화'
   },
   config: {
     title: '데이터 및 프리셋 관리',
     export: '내보내기 (JSON)',
-    import: '가져오기 (JSON)',
+    import: '입력하기 (JSON)',
     library: '로컬 스냅샷 라이브러리',
     save: '커밋',
     delete: '삭제',
@@ -207,7 +206,7 @@ export const ko = {
     speed: '흐름 속도',
     glow: '글로우 강도',
     trails: '모션 잔상',
-    autoRotate: '자동 엔진 순환 토글',
+    autoRotate: '엔진 자동 순환 토글',
     cycleColors: '모든 색상 테마 자동 순환',
     excludeFromAutoRotate: '자동 순환에서 제외',
     includeInAutoRotate: '자동 순환에 포함',
@@ -256,9 +255,9 @@ export const ko = {
     shortcutsTitle: '키보드 단축키',
     gesturesTitle: '터치 제스처',
     gestureItems: {
-      swipeMode: '좌우 스와이프: 모드 변경',
-      swipeSens: '상하 스와이프: 감도 조정',
-      longPress: '길게 누르기: AI 정보'
+      swipeMode: 'Swipe Left/Right: Change Mode',
+      swipeSens: 'Swipe Up/Down: Adjust Sensitivity',
+      longPress: 'Long Press: AI Info'
     },
     projectInfoTitle: '우리의 비전',
     aboutDescription: 'Aura Flux는 오디오 주파수를 생성형 3D 아트로 변환하는 실시간 공감각 엔진입니다.',
@@ -446,5 +445,5 @@ export const ko = {
     bc: '하단 중앙',
     br: '좌측 하단'
   },
-  lyricsPreview: '레이아웃 미리보기'
+  lyricsPreview: '레이항 미리보기'
 };

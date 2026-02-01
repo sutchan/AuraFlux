@@ -1,18 +1,24 @@
-# OpenSpec: 音频引擎规范
+# OpenSpec: 音频引擎规范 (02)
 
 ## 1. 信号流拓扑
-- **双模输入:** 
-  - `MICROPHONE`: 低延迟实时捕获。
-  - `FILE`: 高保真本地解码，支持 ID3 元数据解析。
-- **立体声处理:** 引入左右声道独立 AnalyserNode，支持立体声可视化特效（如 Ocean Wave, Silk Wave）。
+系统采用双模音频输入链路，支持立体声分离处理：
+- **实时模式 (LIVE):** `MediaDevices.getUserMedia` -> `MediaStreamSource` -> `Splitter` -> `Dual Analysers`。
+- **离线模式 (FILE):** `ArrayBuffer` -> `AudioContext.decodeAudioData` -> `BufferSource` -> `Analysers` -> `Destination`。
 
-## 2. 信号增强算法
-- **智能疲劳补偿 (Fatigue System):** 在持续高分贝音频下自动增加 Headroom，防止视觉效果持续触顶。
-- **自适应降噪:** 通过 `AdaptiveNoiseFilter` 动态学习底噪，提升弱信号下的可视化纯净度。
-- **频谱标准化:** 根据 FFT Size 动态映射 Bass/Mids/Highs，确保视觉反馈在 512 与 4096 采样率下表现一致。
+## 2. 信号处理算法
+- **采样精度:** FFT Size 可在 512 至 2048 之间动态切换，默认平衡点为 1024。
+- **立体声分离度:** 系统维护两个独立的 `AnalyserNode` (L/R)。
+  - `Left Channel`: 驱动 2D/3D 效果的左半部及整体色相。
+  - `Right Channel`: 驱动右半部对称性或次要形变参数。
+- **自适应降噪 (Adaptive Noise Filter):** 实时学习环境底噪的频率分布，从频谱数组中动态减去噪声偏移量。
+- **动态峰值限制器 (Dynamic Peak Limiter):** 自动追踪信号最大值并引入衰减因子，确保视觉能量始终保持在有效动态范围内。
+- **软压缩 (Soft Compression):** 对提取出的特征值进行 `Math.pow(val, power)` 处理，增强低动态部分的视觉感知。
 
-## 3. 存储与状态
-- 使用 **IndexedDB** 存储用户导入的音轨，实现跨会话的播放列表持久化。
+## 3. 媒体持久化与采集
+- **IndexedDB (AuraFluxDB):** 使用 IndexedDB 存储音频原始 Blob 及其解析出的元数据（Title, Artist, AlbumArt）。
+- **音频分片 (Audio Slicer):** 支持提取当前播放流的 15 秒 PCM 片段并转换为 WAV 格式，用于 AI 通感分析。
+- **ID3 提取:** 集成 `jsmediatags` 实时提取文件元数据。
 
 ---
-*Aura Flux Audio Engine - Version 1.8.62*
+*Aura Flux Audio Engine Specification - Version 1.8.66*
+*Author: Sut*

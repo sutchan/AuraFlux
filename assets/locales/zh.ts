@@ -1,4 +1,3 @@
-
 export const zh = {
   common: {
     confirmClear: '确定要清空播放列表吗？',
@@ -6,7 +5,7 @@ export const zh = {
     dropFiles: '拖放音频文件',
     unknownTrack: '未知曲目',
     unknownArtist: '未知艺术家',
-    beta: '测试版',
+    beta: 'BETA',
     queue: '播放队列',
     empty: '空',
     simple: '简洁',
@@ -177,10 +176,10 @@ export const zh = {
     lightMode: '浅色主题',
     darkMode: '深色主题',
     uiMode: '控制界面模式',
-    interaction: 'Interaction',
-    performance: 'System & Performance',
-    localization: 'Appearance & Localization',
-    factoryReset: 'Factory Reset All Settings'
+    interaction: '交互体验',
+    performance: '系统与性能',
+    localization: '外观与国际化',
+    factoryReset: '恢复出厂设置'
   },
   config: {
     title: '数据备份与快照管理',
@@ -207,8 +206,8 @@ export const zh = {
     speed: '流动速度',
     glow: '辉光强度',
     trails: '运动拖尾',
-    autoRotate: 'Toggle automatic engine cycling',
-    cycleColors: 'Cycle through all color themes automatically',
+    autoRotate: '切换自动引擎轮转',
+    cycleColors: '色彩自动循环',
     excludeFromAutoRotate: '从自动轮播中排除',
     includeInAutoRotate: '加入自动轮播',
     resetVisual: '重置视觉调优',

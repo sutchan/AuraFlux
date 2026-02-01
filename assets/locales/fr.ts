@@ -1,4 +1,3 @@
-
 export const fr = {
   common: {
     confirmClear: 'Voulez-vous vraiment effacer la playlist ?',
@@ -178,9 +177,9 @@ export const fr = {
     darkMode: 'Thème Sombre',
     uiMode: 'Mode Interface',
     interaction: 'Interaction',
-    performance: 'System & Performance',
-    localization: 'Appearance & Localization',
-    factoryReset: 'Factory Reset All Settings'
+    performance: 'Système & Performance',
+    localization: 'Apparence & Localisation',
+    factoryReset: 'Réinitialiser tous les paramètres'
   },
   config: {
     title: 'Gestion des Données',
@@ -207,8 +206,8 @@ export const fr = {
     speed: 'Vitesse',
     glow: 'Intensité Bloom',
     trails: 'Trainées de Mouvement',
-    autoRotate: 'Cycle Auto',
-    cycleColors: 'Cycle Couleurs',
+    autoRotate: 'Cycle automatique des moteurs',
+    cycleColors: 'Cycle automatique des thèmes de couleur',
     excludeFromAutoRotate: 'Exclure de la rotation',
     includeInAutoRotate: 'Inclure dans la rotation',
     resetVisual: 'Réinitialiser Visuels',
@@ -296,7 +295,7 @@ export const fr = {
     canvasNotFound: 'Contexte perdu',
     audioNotReady: 'Initialisation audio',
     noVideoFormat: 'Codec non supporté',
-    processing: 'Encodage Vidéo HD...',
+    processing: 'Encodage Vidéo HT...',
     reviewReady: 'Traitement Terminé !',
     exportFail: 'Échec export',
     shareFail: 'Partage non supporté',

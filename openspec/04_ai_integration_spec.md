@@ -1,15 +1,23 @@
-# OpenSpec: AI 集成规范
+# OpenSpec: AI 智能与语义规范 (04)
 
-## 1. 智能服务矩阵
-- **Gemini 3 Flash:**
-  - **实时识别:** 4秒片段识别、情绪提取、歌词同步。
-  - **AI 导演:** 分析音频 BPM 和能量，自动切换渲染引擎和色彩主题。
-- **Gemini 2.5 Flash Image:**
-  - **灵感背景:** 根据歌曲情绪关键词生成高保真 16:9 艺术壁纸。
+## 1. AI 驱动核心
+系统深度集成 **Google Gemini 3 Flash** 与 **Gemini 2.5 Flash Image**，构建完整的“通感转译”链路。
 
-## 2. 通信架构
-- **Structured Output:** 强一致性 JSON 响应，基于 `responseSchema` 保证字段稳定性。
-- **隐私保护:** 密钥 Base64 混淆存储，所有音频处理在边缘完成，仅发送特征片段至 AI。
+## 2. 核心功能链路
+- **AI 通感分析 (Song Identification):** 
+  - 提取 15s 音频片段，识别曲目、风格与情绪。
+  - 协议包含：`title`, `artist`, `lyrics`, `mood_en_keywords`, `identified`。
+- **AI 视觉导演 (Visual Director):** 
+  - 根据音频特征自动选择最优视觉模式、配色方案（Hex Array）及运动速度。
+- **AI 灵感背景 (Imagen Background):** 
+  - 基于识别到的 `mood_en_keywords` 调用 Gemini 2.5 Flash Image 生成 16:9 的艺术背景图。
+  - 支持模糊度 (Blur) 与透明度 (Opacity) 实时调节。
+
+## 3. 数据安全与隐私
+- **边缘计算优先:** 所有的频谱处理与特征提取在客户端完成。
+- **密钥管理 (BYOK):** 支持用户输入自己的 API Key，通过 `validateApiKey` 进行握手验证，加密存储于 LocalStorage。
+- **容错处理:** 在 API 不可用或配额用尽时，自动回退到本地模拟模式 (MOCK) 或 ID3 标签提取。
 
 ---
-*Aura Flux AI Integration - Version 1.8.62*
+*Aura Flux AI Integration Specification - Version 1.8.66*
+*Author: Sut*

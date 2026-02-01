@@ -135,7 +135,7 @@ export const ar = {
       recGain: 'زيادة حجم صوت التسجيل الداخلي',
       fade: 'تلاشي الصوت تلقائياً عند الإيقاف',
       syncStart: 'بدء التسجيل عند اكتشاف صوت الموسيقى',
-      countdown: 'عد تنازلي بصري 3 ثوان'
+      countdown: '3 ثواني'
     }
   },
   audioPanel: {
@@ -182,10 +182,10 @@ export const ar = {
     lightMode: 'سمة فاتحة',
     darkMode: 'سمة داكنة',
     uiMode: 'وضع التحكم',
-    interaction: 'Interaction',
-    performance: 'System & Performance',
-    localization: 'Appearance & Localization',
-    factoryReset: 'Factory Reset All Settings'
+    interaction: 'التفاعل',
+    performance: 'النظام والأداء',
+    localization: 'المظهر والتوطين',
+    factoryReset: 'إعادة ضبط جميع الإعدادات'
   },
   config: {
     title: 'إدارة البيانات واللقطات',
@@ -212,8 +212,8 @@ export const ar = {
     speed: 'سرعة التدفق',
     glow: 'كثافة التوهج',
     trails: 'ذيول الحركة',
-    autoRotate: 'Toggle automatic engine cycling',
-    cycleColors: 'Cycle through all color themes automatically',
+    autoRotate: 'تبديل آلي للمحركات',
+    cycleColors: 'تدوير ثيمات الألوان آلياً',
     excludeFromAutoRotate: 'استبعاد من التدوير',
     includeInAutoRotate: 'تضمين في التدوير',
     resetVisual: 'إعادة ضبط المرئيات',
@@ -348,7 +348,7 @@ export const ar = {
   quality: 'جودة العرض',
   sensitivity: 'وصول الصوت',
   smoothing: 'القصور الذاتي',
-  fftSize: 'كثافة الطيف',
+  fftSize: 'خوارزمية الطيف',
   recognitionSource: 'نموذج ذكاء AI',
   simulatedDemo: 'محاكاة محلية',
   region: 'منطقة المحتوى',
@@ -361,7 +361,7 @@ export const ar = {
   textSource: 'منطق المصدر',
   customTextPlaceholder: 'أدخل نصاً مخصصاً',
   textSize: 'الحجم العام',
-  textRotation: 'الميل / الدوران',
+  textRotation: 'الدوران',
   textAudioReactive: 'نبض إيقاعي',
   text3D: 'ظل عميق',
   textFont: 'الخطوط',

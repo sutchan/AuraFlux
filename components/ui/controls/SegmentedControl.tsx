@@ -1,8 +1,7 @@
 /**
  * File: components/ui/controls/SegmentedControl.tsx
  * Version: 1.2.0
- * Author: Aura Vision Team
- * Updated: 2025-07-18 16:00
+ * Author: Sut
  */
 
 import React from 'react';

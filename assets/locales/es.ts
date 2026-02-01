@@ -1,4 +1,3 @@
-
 export const es = {
   common: {
     confirmClear: '¿Seguro que quieres borrar la lista?',
@@ -177,10 +176,10 @@ export const es = {
     lightMode: 'Tema Claro',
     darkMode: 'Tema Oscuro',
     uiMode: 'Interfaz de Control',
-    interaction: 'Interaction',
-    performance: 'System & Performance',
-    localization: 'Appearance & Localization',
-    factoryReset: 'Factory Reset All Settings'
+    interaction: 'Interacción',
+    performance: 'Sistema y Rendimiento',
+    localization: 'Apariencia y Localización',
+    factoryReset: 'Restablecer todos los ajustes'
   },
   config: {
     title: 'Gestión de Datos y Ajustes',
@@ -207,8 +206,8 @@ export const es = {
     speed: 'Velocidad',
     glow: 'Resplandor',
     trails: 'Estelas',
-    autoRotate: 'Toggle automatic engine cycling',
-    cycleColors: 'Cycle through all color themes automatically',
+    autoRotate: 'Alternar rotación automática',
+    cycleColors: 'Ciclar temas de color automáticamente',
     excludeFromAutoRotate: 'Excluir de Rotación',
     includeInAutoRotate: 'Incluir en Rotación',
     resetVisual: 'Reiniciar Visuales',

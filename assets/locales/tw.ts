@@ -176,7 +176,7 @@ export const tw = {
     lightMode: '淺色主題',
     darkMode: '深色主題',
     uiMode: '控制介面模式',
-    interaction: '互動',
+    interaction: '互動體驗',
     performance: '系統與效能',
     localization: '外觀與在地化',
     factoryReset: '恢復原廠設定'
@@ -206,7 +206,7 @@ export const tw = {
     speed: '流動速度',
     glow: '輝光強度',
     trails: '運動拖尾',
-    autoRotate: '切換自動引擎循環',
+    autoRotate: '切換自動引擎輪轉',
     cycleColors: '自動循環所有色彩主題',
     excludeFromAutoRotate: '從自動輪播中排除',
     includeInAutoRotate: '加入自動輪播',
@@ -305,7 +305,6 @@ export const tw = {
   welcomeTitle: 'Aura Flux',
   welcomeText: '將音訊頻率轉化為情感視覺。',
   startExperience: '開啟視聽旅程',
-  // FIX: Added missing welcomeScreen key to match TranslationSchema type
   welcomeScreen: {
     micPermission: '即時視覺化需要麥克風權限'
   },

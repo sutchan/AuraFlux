@@ -2,7 +2,6 @@
  * File: components/controls/BottomBar.tsx
  * Version: 1.9.0
  * Author: Sut
- * Updated: 2025-07-18 16:00
  */
 
 import React, { useState, useRef, useEffect } from 'react';

@@ -2,7 +2,6 @@
  * File: components/ui/controls/SettingsToggle.tsx
  * Version: 1.9.0
  * Author: Sut
- * Updated: 2025-07-18 16:00
  */
 
 import React, { memo } from 'react';

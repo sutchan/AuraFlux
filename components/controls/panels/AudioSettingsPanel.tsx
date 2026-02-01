@@ -1,8 +1,8 @@
 /**
  * File: components/controls/panels/AudioSettingsPanel.tsx
- * Version: 2.0.5
+ * Version: 2.1.0
  * Author: Sut
- * Updated: 2025-07-16 16:30
+ * Updated: 2025-07-18 22:00
  */
 
 import React, { useRef, useState, useEffect } from 'react';
@@ -32,7 +32,6 @@ export const AudioSettingsPanel: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isAdvanced = settings.uiMode === 'advanced';
-
   const currentProvider = settings.recognitionProvider || 'GEMINI';
   const hasKey = !!apiKeys[currentProvider];
   const isMock = currentProvider === 'MOCK';
@@ -99,84 +98,163 @@ export const AudioSettingsPanel: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:items-start">
-      <BentoCard title={t?.audioPanel?.audioInput || "Signal Input"} className="py-2.5">
-         <div className="space-y-3">
-            <CustomSelect label={t?.audioPanel?.mic} value={selectedDeviceId} options={deviceOptions} onChange={onDeviceChange} />
-            {sourceType === 'FILE' && (
-                <div className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[10px] flex items-center justify-between font-black uppercase tracking-widest">
-                    <span className="truncate max-w-[120px] text-blue-300">{fileName || "Local Stream"}</span>
-                    <span className="text-blue-400/50">{t?.audioPanel?.fileActive || "ACTIVE"}</span>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch">
+      {/* Column 1: Signal & Capture (5 cols) */}
+      <div className="lg:col-span-5 flex flex-col gap-3">
+        <BentoCard 
+            title={t?.audioPanel?.audioInput || "Signal Architecture"}
+            action={
+                <TooltipArea text={t?.hints?.resetAudio}>
+                    <button onClick={resetAudioSettings} className="p-1.5 text-black/30 dark:text-white/30 hover:text-blue-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    </button>
+                </TooltipArea>
+            }
+        >
+            <div className="space-y-5">
+                <div className="space-y-4">
+                    <CustomSelect label={t?.audioPanel?.mic} value={selectedDeviceId} options={deviceOptions} onChange={onDeviceChange} />
+                    
+                    {sourceType === 'FILE' && (
+                        <div className="px-4 py-2.5 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-between animate-fade-in-up">
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-[8px] font-black text-blue-400 uppercase tracking-widest">{t?.audioPanel?.fileActive || "ACTIVE STREAM"}</span>
+                                <span className="text-[10px] font-bold text-blue-200 truncate pr-2 uppercase">{fileName || "Local Session"}</span>
+                            </div>
+                            <div className="shrink-0 w-2 h-2 bg-blue-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+                        </div>
+                    )}
+
+                    <button 
+                        onClick={() => toggleMicrophone(selectedDeviceId)} 
+                        disabled={isPending}
+                        className={`group relative w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.25em] transition-all overflow-hidden shadow-xl ${
+                            isListening 
+                            ? 'bg-red-500 text-white shadow-red-500/20' 
+                            : 'bg-black dark:bg-white text-white dark:text-black hover:scale-[1.02] active:scale-95'
+                        }`}
+                    >
+                        {isPending ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                <span>LOADING</span>
+                            </div>
+                        ) : (
+                            <span className="relative z-10">
+                                {isListening ? (t?.audioPanel?.stop || "STOP CAPTURE") : (t?.audioPanel?.start || "START CAPTURE")}
+                            </span>
+                        )}
+                        <div className={`absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity ${isListening ? 'hidden' : ''}`} />
+                    </button>
                 </div>
-            )}
-            <button onClick={() => toggleMicrophone(selectedDeviceId)} disabled={isPending}
-                className={`w-full py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-lg ${isListening ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-blue-600 text-white hover:scale-[1.01]'}`}>
-                {isPending ? '...' : (isListening ? (t?.audioPanel?.stop || "STOP") : (t?.audioPanel?.start || "START"))}
-            </button>
-            <div className="pt-2 border-t border-white/5 space-y-3">
-                <Slider label={t?.sensitivity || "Sensitivity"} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v)=>handleAudioSettingChange('sensitivity', v)} />
-                {isAdvanced && (
-                    <div className="grid grid-cols-2 gap-4 animate-fade-in-up pt-1">
-                        <Slider label={t?.smoothing || "Decay"} value={settings.smoothing} min={0} max={0.95} step={0.01} onChange={(v)=>handleAudioSettingChange('smoothing', v)} />
-                        <CustomSelect label={t?.fftSize || "FFT"} value={settings.fftSize} options={[{value:512,label:'512'},{value:1024,label:'1024'},{value:2048,label:'2048'}]} onChange={(v)=>handleAudioSettingChange('fftSize', v)} />
-                    </div>
-                )}
-            </div>
-         </div>
-      </BentoCard>
 
-      <BentoCard 
-        title={t?.audioPanel?.analysisAi || "Intelligence"}
-        className="py-2.5"
-        action={
-            <TooltipArea text={t?.hints?.resetAudio}>
-              <button onClick={resetAudioSettings} className="p-1 text-white/30 hover:text-white transition-colors">
-                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-              </button>
-            </TooltipArea>
-        }
-      >
-        <div className="space-y-3">
-            <div className="bg-white/[0.03] p-2.5 rounded-2xl border border-white/5 space-y-2">
-                <SettingsToggle label={t?.audioPanel?.enableAi || "Live AI Analysis"} value={enableAnalysis} onChange={()=>setEnableAnalysis(!enableAnalysis)} activeColor="green" />
-                {enableAnalysis && isAdvanced && (
-                    <div className="animate-fade-in-up pt-1">
-                        <CustomSelect label={t?.region} value={settings.region || 'global'} options={Object.keys(REGION_NAMES).map(r=>({value:r,label:t?.regions?.[r]||r}))} onChange={(v)=>setSettings({...settings,region:v as Region})} />
-                    </div>
-                )}
+                <div className="pt-4 border-t border-black/5 dark:border-white/5 grid gap-5">
+                    <Slider label={t?.sensitivity || "Gain"} value={settings.sensitivity} min={0.5} max={4.0} step={0.1} onChange={(v)=>handleAudioSettingChange('sensitivity', v)} />
+                    {isAdvanced && (
+                        <div className="grid grid-cols-2 gap-4 animate-fade-in-up">
+                            <Slider label={t?.smoothing || "Inertia"} value={settings.smoothing} min={0} max={0.95} step={0.01} onChange={(v)=>handleAudioSettingChange('smoothing', v)} />
+                            <CustomSelect label={t?.fftSize || "FFT Size"} value={settings.fftSize} options={[{value:512,label:'512 (Fast)'},{value:1024,label:'1024 (Balanced)'},{value:2048,label:'2048 (Pro)'}]} onChange={(v)=>handleAudioSettingChange('fftSize', v)} />
+                        </div>
+                    )}
+                </div>
             </div>
-            
-            {enableAnalysis && (
-              <div className="bg-blue-600/5 p-2.5 rounded-2xl border border-blue-500/10 space-y-3 animate-fade-in-up">
-                  <CustomSelect 
-                      label={t?.recognitionSource || "AI Provider"} 
-                      value={currentProvider} 
-                      options={Object.keys(t?.aiProviders || {}).map(p => ({ value: p, label: t?.aiProviders?.[p] }))} 
-                      onChange={(v) => handleAudioSettingChange('recognitionProvider', v as AIProvider)}
-                  />
-                  {!isMock && (
-                      <div className="pt-2 border-t border-blue-500/10 space-y-2">
-                          <div className="flex justify-between items-center px-1"><span className="text-[9px] font-black text-blue-300 uppercase tracking-widest">{t?.audioPanel?.apiKey}</span>{hasKey && <span className="text-[8px] font-black text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">{t?.audioPanel?.saved || "READY"}</span>}</div>
-                          <div className="flex gap-2">
-                              <div className="relative flex-1">
-                                  <input type={showKey?"text":"password"} value={inputKey} onChange={(e)=>setInputKey(e.target.value)} placeholder={t?.audioPanel?.apiKeyPlaceholder || "Gemini Key..."} className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white placeholder-white/20 focus:border-blue-500 font-mono outline-none" />
-                                  <button onClick={()=>setShowKey(!showKey)} className="absolute right-2 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 transition-opacity"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/></svg></button>
-                              </div>
-                              <button onClick={handleSaveKey} disabled={isValidating} className={`px-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${hasKey?'bg-white/5 text-white':'bg-blue-600 text-white'}`}>{isValidating ? '...' : (hasKey ? (t?.audioPanel?.update || 'UPD') : (t?.audioPanel?.save || 'SAVE'))}</button>
-                          </div>
+        </BentoCard>
+      </div>
+
+      {/* Column 2: AI Intelligence & Synergy (7 cols) */}
+      <div className="lg:col-span-7 flex flex-col gap-3">
+        <BentoCard title={t?.audioPanel?.analysisAi || "Neural Engine"}>
+            <div className="space-y-6">
+                {/* AI Master Toggle & Region */}
+                <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between bg-black/[0.04] dark:bg-white/[0.04] p-4 rounded-2xl border border-black/5 dark:border-white/5">
+                    <div className="flex-1">
+                        <SettingsToggle label={t?.audioPanel?.enableAi || "Live Synergy"} value={enableAnalysis} onChange={()=>setEnableAnalysis(!enableAnalysis)} activeColor="green" variant="clean" />
+                    </div>
+                    {enableAnalysis && isAdvanced && (
+                        <div className="w-full sm:w-48 animate-fade-in-up">
+                            <CustomSelect label={t?.region} value={settings.region || 'global'} options={Object.keys(REGION_NAMES).map(r=>({value:r,label:t?.regions?.[r]||r}))} onChange={(v)=>setSettings({...settings,region:v as Region})} />
+                        </div>
+                    )}
+                </div>
+                
+                {/* AI Provider & API Key Section */}
+                {enableAnalysis && (
+                  <div className="space-y-5 animate-fade-in-up">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <CustomSelect 
+                              label={t?.recognitionSource || "AI Protocol"} 
+                              value={currentProvider} 
+                              options={Object.keys(t?.aiProviders || {}).map(p => ({ value: p, label: t?.aiProviders?.[p] }))} 
+                              onChange={(v) => handleAudioSettingChange('recognitionProvider', v as AIProvider)}
+                          />
+                          {!isMock && (
+                            <div className="flex flex-col justify-end">
+                                <div className="flex justify-between items-center mb-1.5 px-1">
+                                    <span className="text-[9px] font-black text-black/30 dark:text-white/30 uppercase tracking-widest">{t?.audioPanel?.apiKey}</span>
+                                    {hasKey && <span className="text-[8px] font-black text-green-500 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20 uppercase">{t?.audioPanel?.saved || "READY"}</span>}
+                                </div>
+                                <div className="flex gap-2">
+                                    <div className="relative flex-1 group/input">
+                                        <input 
+                                            ref={inputRef}
+                                            type={showKey?"text":"password"} 
+                                            value={inputKey} 
+                                            onChange={(e)=>setInputKey(e.target.value)} 
+                                            placeholder={t?.audioPanel?.apiKeyPlaceholder || "Gemini Key..."} 
+                                            className="w-full h-10 bg-black/[0.04] dark:bg-black/60 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-xs text-black dark:text-white placeholder-black/20 dark:placeholder-white/20 focus:border-blue-500/50 font-mono outline-none transition-all group-hover/input:border-black/20 dark:group-hover/input:border-white/20" 
+                                        />
+                                        <button onClick={()=>setShowKey(!showKey)} className="absolute right-3 top-1/2 -translate-y-1/2 text-black/20 dark:text-white/20 hover:text-blue-500 transition-colors">
+                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/></svg>
+                                        </button>
+                                    </div>
+                                    <button 
+                                        onClick={handleSaveKey} 
+                                        disabled={isValidating} 
+                                        className={`h-10 px-5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                                            hasKey ? 'bg-black/[0.04] dark:bg-white/5 text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white' : 'bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-500/20'
+                                        }`}
+                                    >
+                                        {isValidating ? '...' : (hasKey ? (t?.audioPanel?.update || 'UPD') : (t?.audioPanel?.save || 'SAVE'))}
+                                    </button>
+                                </div>
+                            </div>
+                          )}
                       </div>
-                  )}
-              </div>
-            )}
 
-            {sourceType === 'FILE' && fileStatus === 'ready' && (
-                <button onClick={handleAiDirector} disabled={isAnalyzing} className={`w-full py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 border border-white/10 transition-all ${isAnalyzing ? 'bg-white/5 text-white/40' : 'bg-white text-black hover:scale-[1.01]'}`}>
-                    <svg className={`h-3 w-3 ${isAnalyzing ? 'animate-spin' : ''}`} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd"/></svg>
-                    {isAnalyzing ? t?.audioPanel?.analyzing : t?.audioPanel?.aiDirector}
-                </button>
-            )}
+                      {sourceType === 'FILE' && fileStatus === 'ready' && (
+                        <div className="pt-4 border-t border-black/5 dark:border-white/5 animate-fade-in-up">
+                            <button 
+                                onClick={handleAiDirector} 
+                                disabled={isAnalyzing} 
+                                className={`w-full py-4 rounded-2xl text-xs font-black uppercase tracking-[0.25em] flex items-center justify-center gap-3 border transition-all ${
+                                    isAnalyzing 
+                                    ? 'bg-black/5 dark:bg-white/5 text-black/20 dark:text-white/20 border-transparent' 
+                                    : 'bg-blue-500/5 text-blue-600 dark:text-blue-400 border-blue-500/20 hover:bg-blue-500/10 hover:border-blue-500/40 hover:scale-[1.01]'
+                                }`}
+                            >
+                                <svg className={`h-4 w-4 ${isAnalyzing ? 'animate-spin' : 'animate-pulse'}`} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd"/></svg>
+                                {isAnalyzing ? t?.audioPanel?.analyzing : t?.audioPanel?.aiDirector}
+                            </button>
+                        </div>
+                      )}
+                  </div>
+                )}
+            </div>
+        </BentoCard>
+
+        {/* Informational Hint Card */}
+        <div className="bg-black/5 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-2xl p-4 flex gap-4 items-center group transition-colors hover:bg-black/[0.07] dark:hover:bg-white/[0.04]">
+            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div className="flex-1 min-w-0">
+                <h4 className="text-[10px] font-black text-black/60 dark:text-white/60 uppercase tracking-widest mb-0.5">{t?.audioPanel?.analysisAi || "通感分析指南"}</h4>
+                <p className="text-[10px] text-black/30 dark:text-white/30 leading-relaxed truncate group-hover:whitespace-normal group-hover:break-words transition-all">
+                    {t?.helpModal?.howItWorksSteps?.[3] || "Enable AI Synesthesia to analyze the soul of the track and automatically tune visuals."}
+                </p>
+            </div>
         </div>
-      </BentoCard>
+      </div>
     </div>
   );
 };

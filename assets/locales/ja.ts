@@ -1,4 +1,3 @@
-
 export const ja = {
   common: {
     confirmClear: 'プレイリストをクリアしますか？',
@@ -177,10 +176,10 @@ export const ja = {
     lightMode: 'ライトテーマ',
     darkMode: 'ダークテーマ',
     uiMode: '制御モード',
-    interaction: 'Interaction',
-    performance: 'System & Performance',
-    localization: 'Appearance & Localization',
-    factoryReset: 'Factory Reset All Settings'
+    interaction: 'インタラクション',
+    performance: 'システムとパフォーマンス',
+    localization: '外観とローカライズ',
+    factoryReset: 'すべての設定をリセット'
   },
   config: {
     title: 'データとプリセット管理',
@@ -286,7 +285,7 @@ export const ja = {
       '音源を選択：マイク（システム音声/Spotify）またはファイル（ローカル曲）。',
       '矢印キーまたはビジュアルパネルを使用して、さまざまなモードを探索します。',
       'スマートプリセットを使用して、雰囲気を一瞬で切り替えます。',
-      'AI共感覚（Lキー）を有効にして、曲のムードを分析します。',
+      'AI共感覚（Lキー）を有効にして、ムードを分析します。',
       'スタジオタブであなたの作品を録画します。'
     ]
   },

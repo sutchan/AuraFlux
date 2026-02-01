@@ -1,7 +1,16 @@
-
 # Changelog
 
 All notable changes to the **Aura Flux** project will be documented in this file.
+
+## [v1.8.66] - 2025-07-18
+
+### 🚀 Features & Refinements
+*   **Full Specification Sync:** Synchronized all code features (Hybrid Rendering, Studio recording, AI Synergy) into the `openspec/` documentation system.
+*   **Version Update:** Updated application version to `v1.8.66` across all manifests and documentation.
+*   **Metadata Polish:** Enhanced `metadata.json` with versioning information.
+
+### 🧹 Housekeeping
+*   **Documentation Audit:** Verified that `01_architecture` through `09_marketing` accurately reflect the current technical state of the application.
 
 ## [v1.8.62] - 2025-07-18
 
@@ -14,20 +23,4 @@ All notable changes to the **Aura Flux** project will be documented in this file
 *   **Version Synchronization:** Updated version numbers across all project documentation to `1.8.62`.
 
 ## [v1.8.61] - 2025-07-18
-
-### 🐛 Bug Fixes
-*   **Localization Syntax Error:** Fixed a critical `Uncaught SyntaxError` caused by truncated Russian (`ru.ts`) and Arabic (`ar.ts`) locale files. Restored the full, syntactically correct content for both files, resolving the application's failure to load.
-
-### 🧹 Housekeeping
-*   **Version Synchronization:** Updated version numbers across all project documentation to `1.8.61`.
-
-## [v1.8.60] - 2025-07-18
-
-### 🐛 Bug Fixes
-*   **Module Path Resolution:** Fixed a critical "Failed to resolve module specifier" error by changing the CSS import in `index.tsx` from a path alias (`@/`) to a relative path (`./`). This ensures compatibility with browser-based preview environments that do not fully resolve aliases for non-JS/TS module imports.
-
-### 🧹 Housekeeping
-*   **Version Synchronization:** Updated version numbers across all project documentation and specification files to `1.8.60` to maintain consistency.
-
-## [v1.8.58] - 2025-07-17
 ...

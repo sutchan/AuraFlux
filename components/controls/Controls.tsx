@@ -2,7 +2,6 @@
  * File: components/controls/Controls.tsx
  * Version: 1.9.0
  * Author: Sut
- * Updated: 2025-07-18 16:00
  */
 
 import React, { useState, useEffect } from 'react';

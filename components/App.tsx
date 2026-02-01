@@ -2,7 +2,6 @@
  * File: components/App.tsx
  * Version: 1.8.65
  * Author: Sut
- * Updated: 2025-07-18 17:00
  */
 
 import React, { useState, useEffect, Suspense, lazy } from 'react';

@@ -1,20 +1,29 @@
-# OpenSpec: 渲染规范
+# OpenSpec: 视觉生成渲染规范 (03)
 
-## 1. 核心引擎分类
-- **WebGL 3D (High Fidelity):** 
-  - 架构: 基于 React Three Fiber 与 Three.js。
-  - 重点模式: Resonance Orb, Kinetic Wall, Ocean Wave, Silk Wave。
-- **Offscreen 2D (Optimized):**
-  - 架构: 使用 OffscreenCanvas API 与 Web Workers 实现主线程零阻塞绘图。
-  - 经典模式: Nebula, Plasma, Lasers, Digital Waveform, Ripples。
+## 1. 3D 渲染管线 (React Three Fiber)
+- **场景管理:** 包含 `KineticWall`, `LiquidSphere` (Resonance Orb), `CubeField`, `NeuralFlow`, `DigitalGrid`, `SilkWave`, `OceanWave`。
+- **几何体优化:**
+  - **Instancing:** 针对 `CubeField` 和 `KineticWall`，使用 `InstancedMesh` 将绘制调用减少至 1 次。
+  - **Roundness:** `KineticWall` 采用 `RoundedBoxGeometry` 提升视觉质感。
+- **着色器扩展:**
+  - 利用 `onBeforeCompile` 注入自定义 GLSL 逻辑，实现基于 `DataTexture` 的实时频谱映射。
+  - 支持 Fresnel 菲涅尔反射与自定义 Emissive 能量场。
+- **后处理滤镜:**
+  - **Bloom:** 采用 Mipmap Blur 算法实现高亮扩散，强度根据模式动态配置（3.0 - 4.0）。
+  - **Dithering:** 消除 8-bit 色彩带。
 
-## 2. 性能与精度
-- **动态 DPR:** 根据 `quality` 设置自动调节 (0.8x 至 1.5x)。
-- **数值保护:** 渲染循环内置 Epsilon 检查，防止纹理坐标越界导致的黑屏。
+## 2. 2D 渲染引擎 (Canvas 2D)
+- **多引擎策略:** 包含 `Bars`, `Rings`, `Particles`, `Tunnel`, `Plasma`, `Lasers`, `FluidCurves`, `Waveform`, `Nebula`, `Ripples`。
+- **渲染特性:**
+  - **运动残影 (Trails):** 支持 `destination-out` 渐进式擦除。
+  - **混合模式:** 大量应用 `screen` 和 `lighter` 模式增强发光感。
+  - **自适应 DPI:** 自动根据设备像素比 (DPR) 调整画布分辨率。
 
-## 3. 视觉导演 (Beat Sync)
-- **节拍检测:** 使用频谱通量算法，驱动全局 Bloom、相机抖动及物理参数瞬时爆发。
-- **背景增强:** 支持 Imagen 驱动的 AI 艺术图层与专辑封面模糊图层。
+## 3. 节拍同步与特征提取
+- **通量检测 (Spectral Flux):** 计算两帧之间频谱能量的正向变化，聚焦低频段。
+- **自适应阈值:** 根据 `fluxHistory` 移动平均值动态调整触发灵敏度。
+- **特征工程:** 提取 `bass`, `mids`, `treble`, `volume`, `energyL`, `energyR` 六大核心维度驱动参数。
 
 ---
-*Aura Flux Rendering - Version 1.8.62*
+*Aura Flux Rendering Specification - Version 1.8.66*
+*Author: Sut*

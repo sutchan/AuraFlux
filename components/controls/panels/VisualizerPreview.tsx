@@ -2,7 +2,6 @@
  * File: components/controls/panels/VisualizerPreview.tsx
  * Version: 2.1.0
  * Author: Sut
- * Updated: 2025-07-18 16:00
  */
 
 import React, { memo } from 'react';
